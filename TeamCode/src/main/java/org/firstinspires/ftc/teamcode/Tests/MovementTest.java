@@ -1,22 +1,20 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import android.app.Activity;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.teamcode.Movement;
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 @Autonomous(name = "Movement Test", group = "test")
 public class MovementTest extends LinearOpMode {
 
     DcMotor motor;
     DcMotor encoder;
-//    DcMotor lf;
-//    DcMotor lb;
-//    DcMotor rf;
-//    DcMotor rb;
-//
+
     @Override
     public void runOpMode() throws InterruptedException {
         motor = hardwareMap.dcMotor.get("motor");
@@ -24,42 +22,35 @@ public class MovementTest extends LinearOpMode {
 
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        encoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor.setPower(730);
-        motor.setTargetPosition(1000);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        waitForStart();
+
+        int encoders = (1*1120);
+        motor.setPower(1);
+        encoder.setTargetPosition(encoders);
+
 
         while (!shouldStop()) {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
-            for (int x = 0; x < motors.length; x++) {
-                if (!motors[x].isBusy() || (Math.abs(motors[x].getCurrentPosition()-position[x]) < 50)) {
-                    break;
-                }
+            if (!encoder.isBusy() || (Math.abs(encoder.getCurrentPosition()-encoders) < 10)) {
+                break;
             }
             Thread.sleep(10);
         }
-        for (DcMotor motor : motors) {
-            motor.setPower(0);
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        motor.setPower(0);
     }
-//        lf = hardwareMap.dcMotor.get("leftFront");
-//        lb = hardwareMap.dcMotor.get("leftBack");
-//        rf = hardwareMap.dcMotor.get("rightFront");
-//        rb = hardwareMap.dcMotor.get("rightBack");
-//
-//        rf.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rb.setDirection(DcMotorSimple.Direction.REVERSE);
-//        lf.setDirection(DcMotorSimple.Direction.FORWARD);
-//        lb.setDirection(DcMotorSimple.Direction.FORWARD);
-//
-//        Movement mv = new Movement(lf, lb, rf, rb);
-//
-//        mv.translateDistance(0.7, 10);
+    public static boolean shouldStop() {
+        Activity currActivity = AppUtil.getInstance().getActivity();
+        OpModeManagerImpl manager = OpModeManagerImpl.getOpModeManagerOfActivity(currActivity);
+        OpMode currentOpMode = manager.getActiveOpMode();
+        return currentOpMode instanceof LinearOpMode &&
+                ((LinearOpMode) currentOpMode).isStarted() &&
+                ((LinearOpMode) currentOpMode).isStopRequested();
     }
 }
