@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+@Deprecated
 public class Movement {
     DcMotorEx lf;
     DcMotorEx lb;
