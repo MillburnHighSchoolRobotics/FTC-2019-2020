@@ -29,8 +29,8 @@ public class Movement {
     DcMotorEx x1; //encoders
     DcMotorEx x2;
     DcMotorEx y1;
-    double ticksPerRev = 1120;
-    double wheelRadius = 2;
+    public static double ticksPerRev = 1120;
+    public static double wheelRadius = 2;
     public Movement(DcMotor lf, DcMotor lb, DcMotor rf, DcMotor rb, DcMotor x1, DcMotor x2, DcMotor y1) {
         this.lf = (DcMotorEx)lf;
         this.lb = (DcMotorEx)lb;
@@ -76,21 +76,21 @@ public class Movement {
             RB = (power * POWER_MATRIX[6][3] * scale);
         }
         //int encoder = ;
-        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        moveToPosition(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {x1, x2, y1}, new double[] {-LF,-LB,RF,RB}, new double[] {x, y});
+        x1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        x2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        y1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        moveToPosition(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {x1, x2, y1}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
     }
-    public void moveToPosition(DcMotor[] motors, DcMotor[] encoders, double[] power, double[] vector) throws InterruptedException {
+    public void moveToPosition(DcMotor[] motors, DcMotor[] encoders, double[] power, int[] vector) throws InterruptedException {
 
 
 
-
+        encoders[0].setTargetPosition(vector[0]);
+        encoders[1].setTargetPosition(vector[0]);
+        encoders[2].setTargetPosition(vector[1]);
         for (int x = 0; x < motors.length; x++) {
             motors[x].setPower(power[x]);
             motors[x].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            encoders[x].setTargetPosition(position[x]);
             encoders[x].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
@@ -99,7 +99,7 @@ public class Movement {
                 throw new InterruptedException();
             }
             for (int x = 0; x < motors.length; x++) {
-                if (!encoders[x].isBusy() || (Math.abs(encoders[x].getCurrentPosition()-position[x]) < 50)) {
+                if (!encoders[x].isBusy() || (Math.abs(encoders[x].getCurrentPosition()-vector[x]) < 50)) {
                     break;
                 }
             }
@@ -111,8 +111,8 @@ public class Movement {
         }
     }
 
-    public static double distanceToEncoder(double distance) {
-        return distance / (Math.PI*2);
+    public static int distanceToEncoder(double distance) {
+        return (int)(distance/(2*Math.PI*wheelRadius) * ticksPerRev);
     }
     public static boolean shouldStop() {
         Activity currActivity = AppUtil.getInstance().getActivity();
