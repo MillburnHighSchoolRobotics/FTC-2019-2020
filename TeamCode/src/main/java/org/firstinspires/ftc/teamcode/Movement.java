@@ -26,24 +26,23 @@ public class Movement {
     DcMotorEx lb;
     DcMotorEx rf;
     DcMotorEx rb;
-    DcMotorEx x1; //encoders
-    DcMotorEx x2;
-    DcMotorEx y1;
+    DcMotorEx ex1; //encoders
+    DcMotorEx ex2;
+    DcMotorEx ey;
     public static double ticksPerRev = 1120;
     public static double wheelRadius = 2;
-    public Movement(DcMotor lf, DcMotor lb, DcMotor rf, DcMotor rb, DcMotor x1, DcMotor x2, DcMotor y1) {
+    public Movement(DcMotor lf, DcMotor lb, DcMotor rf, DcMotor rb, DcMotor ex1, DcMotor ex2, DcMotor ey) {
         this.lf = (DcMotorEx)lf;
         this.lb = (DcMotorEx)lb;
         this.rf = (DcMotorEx)rf;
         this.rb = (DcMotorEx)rb;
-        this.x1 = (DcMotorEx)x1;
-        this.x2 = (DcMotorEx)x2;
-        this.y1 = (DcMotorEx)y1;
+        this.ex1 = (DcMotorEx)ex1;
+        this.ex2 = (DcMotorEx)ex2;
+        this.ey = (DcMotorEx)ey;
     }
     public void translate(double x, double y, double power) throws InterruptedException {
-        double distance = Math.sqrt(x*x + y*y);
+//        double distance = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
         double theta = Math.atan(x/y);
-
         double scale;
         if (theta < 0) theta += 360;
         double RF = 0, RB = 0, LF = 0, LB = 0;
@@ -75,23 +74,15 @@ public class Movement {
             RF = (power * POWER_MATRIX[6][2]);
             RB = (power * POWER_MATRIX[6][3] * scale);
         }
-        //int encoder = ;
-        x1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        x2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        y1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        moveToPosition(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {x1, x2, y1}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
+        moveToPosition(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {ex1, ex2, ey}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
     }
     public void moveToPosition(DcMotor[] motors, DcMotor[] encoders, double[] power, int[] vector) throws InterruptedException {
-
-
-
         encoders[0].setTargetPosition(vector[0]);
         encoders[1].setTargetPosition(vector[0]);
         encoders[2].setTargetPosition(vector[1]);
+
         for (int x = 0; x < motors.length; x++) {
             motors[x].setPower(power[x]);
-            motors[x].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            encoders[x].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
         while (!shouldStop()) {
@@ -107,7 +98,6 @@ public class Movement {
         }
         for (DcMotor motor : motors) {
             motor.setPower(0);
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
 
