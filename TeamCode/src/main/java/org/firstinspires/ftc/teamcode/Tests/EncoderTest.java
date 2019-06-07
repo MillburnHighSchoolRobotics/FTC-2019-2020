@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Movement;
 
-@Autonomous(name = "Movement Test", group = "test")
-public class MovementTest extends LinearOpMode {
+@Autonomous(name = "Encoder Test", group = "test")
+public class EncoderTest extends LinearOpMode {
 
     DcMotor encoder;
 
@@ -22,6 +22,8 @@ public class MovementTest extends LinearOpMode {
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         waitForStart();
-        Log.d("encoderPosition", String.valueOf(encoder.getCurrentPosition()));
+        while (true) {
+            Log.d("encoderPosition", String.valueOf(encoder.getCurrentPosition()));
+        }
     }
 }
