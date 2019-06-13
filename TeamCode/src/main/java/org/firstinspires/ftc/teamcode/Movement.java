@@ -22,26 +22,26 @@ public class Movement {
             {-1, 1, 1, -1},
             {0, 1, 1, 0}
     };
-    DcMotorEx lf; //motors
+    DcMotorEx lf;
     DcMotorEx lb;
     DcMotorEx rf;
     DcMotorEx rb;
-    DcMotorEx ex1; //encoders
+    DcMotorEx ex1;
     DcMotorEx ex2;
     DcMotorEx ey;
-    public static double ticksPerRev = 1120;
-    public static double wheelRadius = 2;
-    public Movement(DcMotor lf, DcMotor lb, DcMotor rf, DcMotor rb, DcMotor ex1, DcMotor ex2, DcMotor ey) {
-        this.lf = (DcMotorEx)lf;
-        this.lb = (DcMotorEx)lb;
-        this.rf = (DcMotorEx)rf;
-        this.rb = (DcMotorEx)rb;
-        this.ex1 = (DcMotorEx)ex1;
-        this.ex2 = (DcMotorEx)ex2;
-        this.ey = (DcMotorEx)ey;
+    double angle = 0;
+    public static double ticks = 360*4;
+    public static double wheelDiameter = 60/25.4;
+    public Movement(DcMotorEx lf, DcMotorEx lb, DcMotorEx rf, DcMotorEx rb, DcMotorEx ex1, DcMotorEx ex2, DcMotorEx ey) {
+        this.lf = lf;
+        this.lb = lb;
+        this.rf = rf;
+        this.rb = rb;
+        this.ex1 = ex1;
+        this.ex2 = ex2;
+        this.ey = ey;
     }
     public void translate(double x, double y, double power) throws InterruptedException {
-//        double distance = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
         double theta = Math.atan(x/y);
         double scale;
         if (theta < 0) theta += 360;
@@ -74,23 +74,26 @@ public class Movement {
             RF = (power * POWER_MATRIX[6][2]);
             RB = (power * POWER_MATRIX[6][3] * scale);
         }
-        moveToPosition(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {ex1, ex2, ey}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
+        moveWithEncoders(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {ex1, ex2, ey}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
     }
-    public void moveToPosition(DcMotor[] motors, DcMotor[] encoders, double[] power, int[] vector) throws InterruptedException {
-        encoders[0].setTargetPosition(vector[0]);
-        encoders[1].setTargetPosition(vector[0]);
-        encoders[2].setTargetPosition(vector[1]);
+    public void moveWithEncoders(DcMotor[] motors, DcMotor[] encoders, double[] power, int[] vector) throws InterruptedException {
+        int[] pos1 = new int[] {encoders[0].getCurrentPosition(), encoders[1].getCurrentPosition(), encoders[2].getCurrentPosition()};
+        int[] pos2 = new int[] {vector[0]+pos1[0], vector[0]+pos1[1], vector[1]+pos1[2]};
 
-        for (int x = 0; x < motors.length; x++) {
-            motors[x].setPower(power[x]);
+        for (int e = 0; e < encoders.length; e++) {
+            encoders[e].setTargetPosition(pos2[e]);
+        }
+
+        for (int m = 0; m < motors.length; m++) {
+            motors[m].setPower(power[m]);
         }
 
         while (!shouldStop()) {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
-            for (int x = 0; x < motors.length; x++) {
-                if (!encoders[x].isBusy() || (Math.abs(encoders[x].getCurrentPosition()-vector[x]) < 50)) {
+            for (int e = 0; e < encoders.length; e++) {
+                if (!encoders[e].isBusy() || (Math.abs(encoders[e].getCurrentPosition()-pos2[e]) < 50)) {
                     break;
                 }
             }
@@ -101,8 +104,15 @@ public class Movement {
         }
     }
 
+    public void rotate(double totalDegree) {
+
+    }
     public static int distanceToEncoder(double distance) {
-        return (int)(distance/(2*Math.PI*wheelRadius) * ticksPerRev);
+        double circumferenceRaw = Math.PI*wheelDiameter;
+        double circumferenceScaled = circumferenceRaw*(48.0/32.0);
+        double rotations = distance/circumferenceScaled;
+        int encoders = (int)(Math.round(rotations* ticks));
+        return encoders;
     }
     public static boolean shouldStop() {
         Activity currActivity = AppUtil.getInstance().getActivity();
