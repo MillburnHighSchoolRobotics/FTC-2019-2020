@@ -5,11 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class RotationMonitor extends MonitorThread {
-    private static final String TAG = "RotationMonitor";
     private DcMotorEx ex1;
     private DcMotorEx ex2;
     public RotationMonitor(Thread thread, HardwareMap hardwareMap) {
-        super(thread, hardwareMap);
+        super(thread, hardwareMap, "RotationMonitor");
         ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         ex1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -19,6 +18,6 @@ public class RotationMonitor extends MonitorThread {
     }
     @Override
     protected void loop() {
-        ThreadManager.getInstance().setValue("angle", 0);
+        setValue("rotation", 0);
     }
 }

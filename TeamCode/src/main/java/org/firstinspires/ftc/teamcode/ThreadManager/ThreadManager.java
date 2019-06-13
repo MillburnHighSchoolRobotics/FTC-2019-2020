@@ -11,8 +11,6 @@ import java.util.Map;
 
 public class ThreadManager {
     private HashMap<String, MonitorThread> monitorThreads;
-    private HashMap<String, Object> values;
-    private HashMap<String, Thread> owners;
 
     private HardwareMap hardwareMap;
     private LinearOpMode currentAuton;
@@ -20,8 +18,6 @@ public class ThreadManager {
     static final String TAG = "ThreadManager";
     public ThreadManager() {
         this.monitorThreads = new HashMap<>();
-        this.values = new HashMap<>();
-        this.owners = new HashMap<>();
         this.hardwareMap = null;
         this.currentAuton = null;
     }
@@ -36,11 +32,9 @@ public class ThreadManager {
             }
         }
         monitorThreads.clear();
-        values.clear();
-        owners.clear();
     }
 
-    public synchronized void provision(String name, Class<? extends MonitorThread> threadClass, Object... args) {
+    public synchronized void setupThread(String name, Class<? extends MonitorThread> threadClass, Object... args) {
         Object[] passedArgs = new Object[args.length + 2];
         passedArgs[0] = Thread.currentThread();
         passedArgs[1] = hardwareMap;
@@ -60,29 +54,19 @@ public class ThreadManager {
         t.start();
     }
 
-    public synchronized void setValue(String name, Object value) {
-        if (!values.containsKey(name)) {
-            if (!monitorThreads.containsValue(Thread.currentThread())) {
-                Log.e(TAG, "Failed to set " + name + " to " + Thread.currentThread() + " since it is not a registered MonitorThread");
-            } else {
-                values.put(name, value);
-                owners.put(name, Thread.currentThread());
-                Log.d(TAG, "Setting new thread as owner of " + name + ": " + Thread.currentThread());
-            }
-        } else if (owners.get(name) == Thread.currentThread()) {
-            values.put(name, value);
-        } else {
-            Log.e(TAG, "Unable to set " + name + " since it is not owned by " + Thread.currentThread().getName());
-        }
-    }
-
     public synchronized Object getValue(String name) {
-        return values.get(name);
+        Object val = null;
+        for (Map.Entry<String, MonitorThread> monitorThread : monitorThreads.entrySet()) {
+            if (monitorThread.getValue().getValues().containsKey(name)) {
+                val = monitorThread.getValue().getValues().get(name);
+            }
+        }
+        return val;
     }
 
     public synchronized <T> T getValue(String name, Class<T> type) {
-        Object obj = values.get(name);
-        return obj == null ? null : type.cast(obj);
+        Object val = this.getValue(name);
+        return val == null ? null : type.cast(val);
     }
 
     public synchronized void remove(String name) {
@@ -96,7 +80,6 @@ public class ThreadManager {
         return INSTANCE;
     }
 
-
     public void setHardwareMap(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
     }
@@ -104,7 +87,6 @@ public class ThreadManager {
     public LinearOpMode getCurrentAuton() {
         return currentAuton;
     }
-
 
     public void setCurrentAuton(LinearOpMode currentAuton) {
         this.currentAuton = currentAuton;

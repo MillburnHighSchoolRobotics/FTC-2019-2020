@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -43,9 +45,9 @@ public class RotationTest extends LinearOpMode {
         Movement mv = new Movement(lf,lb,rf,rb,ex1,ex2,ey);
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
-        manager.provision("RotationMonitor", RotationMonitor.class);
+        manager.setupThread("RotationMonitor", RotationMonitor.class);
         waitForStart();
 
-
+        Log.d("Rotation",ThreadManager.getInstance().getValue("rotation", String.class));
     }
 }

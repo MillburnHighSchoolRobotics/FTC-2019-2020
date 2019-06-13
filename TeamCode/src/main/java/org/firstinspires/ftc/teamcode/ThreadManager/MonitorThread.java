@@ -4,12 +4,17 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.HashMap;
+
 public abstract class MonitorThread extends Thread {
     protected final Thread thread;
     protected final HardwareMap hardwareMap;
-    public MonitorThread(Thread thread, HardwareMap hardwareMap) {
+    protected volatile HashMap values;
+    private String TAG;
+    public MonitorThread(Thread thread, HardwareMap hardwareMap, String TAG) {
         this.thread = thread;
         this.hardwareMap = hardwareMap;
+        this.TAG = TAG;
     }
     @Override
     public void run() {
@@ -28,4 +33,12 @@ public abstract class MonitorThread extends Thread {
         }
     }
     protected abstract void loop();
+
+    protected synchronized void setValue(String key, Object value) {
+        values.put(key,value);
+        Log.d(TAG, "Setting value of " + key + " to " + value.toString());
+    }
+    protected synchronized HashMap getValues() {
+        return values;
+    }
 }

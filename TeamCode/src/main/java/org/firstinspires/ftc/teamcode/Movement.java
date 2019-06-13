@@ -80,10 +80,6 @@ public class Movement {
         int[] pos1 = new int[] {encoders[0].getCurrentPosition(), encoders[1].getCurrentPosition(), encoders[2].getCurrentPosition()};
         int[] pos2 = new int[] {vector[0]+pos1[0], vector[0]+pos1[1], vector[1]+pos1[2]};
 
-        for (int e = 0; e < encoders.length; e++) {
-            encoders[e].setTargetPosition(pos2[e]);
-        }
-
         for (int m = 0; m < motors.length; m++) {
             motors[m].setPower(power[m]);
         }
