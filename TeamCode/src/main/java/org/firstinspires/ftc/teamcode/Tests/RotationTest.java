@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Movement;
-import org.firstinspires.ftc.teamcode.ThreadManager.RotationMonitor;
+import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
 import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
 
 @Autonomous(name = "Rotation Test", group = "test")
@@ -45,7 +45,7 @@ public class RotationTest extends LinearOpMode {
         Movement mv = new Movement(lf,lb,rf,rb,ex1,ex2,ey);
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
-        manager.setupThread("RotationMonitor", RotationMonitor.class);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
         waitForStart();
 
         Log.d("Rotation",ThreadManager.getInstance().getValue("rotation", String.class));
