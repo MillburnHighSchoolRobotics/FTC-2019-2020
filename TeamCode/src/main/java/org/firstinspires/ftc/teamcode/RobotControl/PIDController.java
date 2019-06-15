@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.RobotControl;
 
 import android.util.Log;
-
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.Movement;
+import org.firstinspires.ftc.teamcode.RobotControl.Movement;
 import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
 import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
 
