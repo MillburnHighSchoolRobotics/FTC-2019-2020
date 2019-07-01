@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
 
 public class Movement {
     public static final int[][] POWER_MATRIX = { //for each of the directions
@@ -100,9 +101,6 @@ public class Movement {
         }
     }
 
-    public void rotate(double totalDegree) {
-
-    }
     public static int distanceToEncoder(double distance) {
         double circumferenceRaw = Math.PI*wheelDiameter;
         double circumferenceScaled = circumferenceRaw*(48.0/32.0);

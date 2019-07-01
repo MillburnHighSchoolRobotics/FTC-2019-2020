@@ -15,6 +15,7 @@ public abstract class MonitorThread extends Thread {
         this.thread = thread;
         this.hardwareMap = hardwareMap;
         this.TAG = TAG;
+        values = new HashMap<>();
     }
     @Override
     public void run() {

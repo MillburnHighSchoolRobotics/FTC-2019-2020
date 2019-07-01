@@ -48,6 +48,9 @@ public class RotationTest extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
         waitForStart();
 
-        Log.d("Rotation",ThreadManager.getInstance().getValue("rotation", String.class));
+        while (true) {
+            telemetry.addData("PositionMonitor", ThreadManager.getInstance().getValue("rotation", Float.class));
+            telemetry.update();
+        }
     }
 }
