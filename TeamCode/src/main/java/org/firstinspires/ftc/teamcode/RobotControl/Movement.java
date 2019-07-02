@@ -30,7 +30,8 @@ public class Movement {
     DcMotorEx ex1;
     DcMotorEx ex2;
     DcMotorEx ey;
-    double angle = 0;
+
+
     public static double ticks = 360*4;
     public static double wheelDiameter = 60/25.4;
     public Movement(DcMotorEx lf, DcMotorEx lb, DcMotorEx rf, DcMotorEx rb, DcMotorEx ex1, DcMotorEx ex2, DcMotorEx ey) {
@@ -41,6 +42,12 @@ public class Movement {
         this.ex1 = ex1;
         this.ex2 = ex2;
         this.ey = ey;
+    }
+    public static double getDistanceTravelled(int encoder) { //REEEEE fix
+        double circumferenceRaw = Math.PI*wheelDiameter;
+        double circumferenceScaled = circumferenceRaw*(32.0/48.0);
+        double distance = (circumferenceScaled * encoder)/ticks;
+        return distance; //return inches
     }
     public void translate(double x, double y, double power) throws InterruptedException {
         double theta = Math.atan(x/y);

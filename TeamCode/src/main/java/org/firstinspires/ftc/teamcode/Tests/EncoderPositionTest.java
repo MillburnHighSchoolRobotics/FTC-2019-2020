@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.RobotControl.Movement;
+
 @Autonomous(name = "Encoder Position Test", group = "test")
 public class EncoderPositionTest extends LinearOpMode {
 
@@ -17,7 +19,7 @@ public class EncoderPositionTest extends LinearOpMode {
         encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
         while (true) {
-            telemetry.addData("encoderPosition", String.valueOf(encoder.getCurrentPosition()));
+            telemetry.addData("encoderPosition", String.valueOf(Movement.getDistanceTravelled(encoder.getCurrentPosition())));
             telemetry.update();
         }
     }

@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.RobotControl.Movement;
 import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
 import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
 
-@Autonomous(name = "Rotation Test", group = "test")
-public class RotationTest extends LinearOpMode {
+@Autonomous(name = "Position Test", group = "test")
+public class PositionTest extends LinearOpMode {
 
     DcMotorEx lf;
     DcMotorEx lb;
@@ -49,7 +49,9 @@ public class RotationTest extends LinearOpMode {
         waitForStart();
 
         while (true) {
-            telemetry.addData("PositionMonitor", ThreadManager.getInstance().getValue("theta", Double.class));
+            telemetry.addData("theta", ThreadManager.getInstance().getValue("theta", Double.class));
+            telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
+            telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
             telemetry.update();
         }
     }
