@@ -127,7 +127,7 @@ public class PositionMonitor extends MonitorThread {
 
             x += localOffsetX;
             y += localOffsetY;
-            theta = currentTheta*(180/Math.PI);
+            theta = localOffsetTheta *180/Math.PI;//currentTheta*(180/Math.PI);
         }
     }
 }
