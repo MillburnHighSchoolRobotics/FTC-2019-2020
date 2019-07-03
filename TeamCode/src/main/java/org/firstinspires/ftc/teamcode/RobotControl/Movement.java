@@ -46,7 +46,7 @@ public class Movement {
     public static double getDistanceTravelled(int encoder) { //REEEEE fix
         double circumferenceRaw = Math.PI*wheelDiameter;
         double circumferenceScaled = circumferenceRaw*(32.0/48.0);
-        double distance = (circumferenceScaled * encoder)/ticks;
+        double distance = circumferenceScaled * (encoder/ticks);
         return distance; //return inches
     }
     public void translate(double x, double y, double power) throws InterruptedException {
