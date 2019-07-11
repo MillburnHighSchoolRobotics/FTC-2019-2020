@@ -43,12 +43,6 @@ public class Movement {
         this.ex2 = ex2;
         this.ey = ey;
     }
-    public static double getDistanceTravelled(int encoder) { //REEEEE fix
-        double circumferenceRaw = Math.PI*wheelDiameter;
-        double circumferenceScaled = circumferenceRaw*(32.0/48.0);
-        double distance = circumferenceScaled * (encoder/ticks);
-        return distance; //return inches
-    }
     public void translate(double x, double y, double power) throws InterruptedException {
         double theta = Math.atan(x/y);
         double scale;
@@ -114,6 +108,16 @@ public class Movement {
         double rotations = distance/circumferenceScaled;
         int encoders = (int)(Math.round(rotations* ticks));
         return encoders;
+    }
+
+    public static double encoderToDistance(double encoder) {
+        double circumferenceRaw = Math.PI*wheelDiameter;
+        double circumferenceScaled = circumferenceRaw*(32.0/48.0);
+        double distance = circumferenceScaled * (encoder/ticks);
+        return distance; //return inches
+    }
+    public static double toDegrees(double radians) {
+        return radians * (180/Math.PI);
     }
     public static boolean shouldStop() {
         Activity currActivity = AppUtil.getInstance().getActivity();

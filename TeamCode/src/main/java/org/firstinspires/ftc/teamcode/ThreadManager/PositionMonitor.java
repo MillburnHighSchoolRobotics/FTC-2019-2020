@@ -11,8 +11,6 @@ public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
     private final String imuTag = "imu";
     private final BNO055IMU imu;
-    private float rotation = 0;
-    private int turns;
     private DcMotorEx ex1;
     private DcMotorEx ex2;
     private DcMotorEx ey;
@@ -27,6 +25,7 @@ public class PositionMonitor extends MonitorThread {
     double x = 0;
     double y = 0;
     double theta = 0;
+    int rotation = 0;
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap) {
         super(thread, hardwareMap, TAG);
@@ -43,7 +42,6 @@ public class PositionMonitor extends MonitorThread {
         synchronized (this.imu) {
             this.imu.initialize(parameters);
         }
-        turns = 0;
         ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
@@ -56,32 +54,33 @@ public class PositionMonitor extends MonitorThread {
     }
     @Override
     protected void loop() {
-//        float newRot;
+//        float newTheta;
 //        synchronized (imu) {
-//            newRot = imu.getAngularOrientation().firstAngle;
+//            newTheta = imu.getAngularOrientation().firstAngle;
 //        }
-//        if (Math.abs(newRot - rotation) > 180) {
-//            if (newRot > 0) {
-//                turns--;
+//        if (Math.abs(newTheta - theta) > 180) {
+//            if (newTheta > 0) {
+//                rotation--;
 //            } else {
-//                turns++;
+//                rotation++;
 //            }
 //        }
-//        rotation = newRot;
+//        theta = newTheta;
 //
 //
 //
-//        Log.d(TAG, "Rotation: " + turns + " turns, " + rotation + " degrees");
-//        setValue("rotation", rotation);
+//        Log.d(TAG, "Rotation: " + rotation + " theta, " + theta + " degrees");
+//        setValue("theta", theta);
         updatePosition();
-        setValue("theta", theta);
+        setValue("theta", Movement.toDegrees(theta));
         setValue("x", x);
         setValue("y", y);
+        setValue("rotation", rotation);
     }
     protected void updatePosition() {
-        double ex1Pos = Movement.getDistanceTravelled(ex1.getCurrentPosition());
-        double ex2Pos = -Movement.getDistanceTravelled(ex2.getCurrentPosition());
-        double eyPos = Movement.getDistanceTravelled(ey.getCurrentPosition());
+        double ex1Pos = Movement.encoderToDistance(ex1.getCurrentPosition());
+        double ex2Pos = -Movement.encoderToDistance(ex2.getCurrentPosition());
+        double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
         double deltaEX1 = ex1Pos-ex1PosLast;
         double deltaEX2 = ex2Pos-ex2PosLast;
         double deltaEY = eyPos-eyPosLast;
@@ -89,8 +88,8 @@ public class PositionMonitor extends MonitorThread {
         if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
             double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
 
-            double deltaX = (deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta);
-            double deltaY = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
+            double deltaX = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
+            double deltaY = (deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta);
 
             theta += deltaTheta;
             if (theta >= 2 * Math.PI) {
@@ -101,8 +100,8 @@ public class PositionMonitor extends MonitorThread {
                 rotation --;
             }
 
-            x += deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
-            y += deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
+            x += deltaY * Math.sin(theta) + deltaX * Math.cos(theta);
+            y += deltaY * Math.cos(theta) - deltaX * Math.sin(theta);
 
             ex1PosLast = ex1Pos;
             ex2PosLast = ex2Pos;

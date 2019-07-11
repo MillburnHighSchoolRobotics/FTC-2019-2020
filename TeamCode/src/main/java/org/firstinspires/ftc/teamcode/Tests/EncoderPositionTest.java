@@ -19,7 +19,7 @@ public class EncoderPositionTest extends LinearOpMode {
         encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
         while (true) {
-            telemetry.addData("encoderPosition", String.valueOf(Movement.getDistanceTravelled(encoder.getCurrentPosition())));
+            telemetry.addData("encoderPosition", String.valueOf(Movement.encoderToDistance(encoder.getCurrentPosition())));
             telemetry.update();
         }
     }
