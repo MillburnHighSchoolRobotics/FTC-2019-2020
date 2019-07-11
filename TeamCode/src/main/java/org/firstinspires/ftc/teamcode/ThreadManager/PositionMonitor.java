@@ -11,7 +11,7 @@ public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
     private final String imuTag = "imu";
     private final BNO055IMU imu;
-    private float rotation;
+    private float rotation = 0;
     private int turns;
     private DcMotorEx ex1;
     private DcMotorEx ex2;
@@ -89,15 +89,18 @@ public class PositionMonitor extends MonitorThread {
         if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
             double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
 
-            double deltaX = (-offsetY * Math.sin(deltaTheta)) + ((deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta));
+            double deltaX = (deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta);
             double deltaY = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
 
-           theta += deltaTheta;
+            theta += deltaTheta;
             if (theta >= 2 * Math.PI) {
                 theta -=  2* Math.PI;
+                rotation ++;
             } else if (theta < 0) {
                 theta += 2 * Math.PI;
+                rotation --;
             }
+
             x += deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
             y += deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
 
