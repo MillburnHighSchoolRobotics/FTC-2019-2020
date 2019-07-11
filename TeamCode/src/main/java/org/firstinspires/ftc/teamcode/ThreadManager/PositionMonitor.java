@@ -20,14 +20,9 @@ public class PositionMonitor extends MonitorThread {
     double ex1PosLast = 0;
     double ex2PosLast = 0;
     double eyPosLast = 0;
-    double ex1PosLastReset = 0;
-    double ex2PosLastReset = 0;
-    double thetaLastReset = 0;
     double offsetX1 = 7.75; // the left right distance form the tracking center ot the x1 tracking wheel
     double offsetX2 = 7.75; // the left right distance from the tracking center to the x2 tracking wheel
     double offsetY = 5; // the forward backward distance from the tracking center to the back tracking wheel
-    double lastTheta = 0;
-    double encoderTolerance = 5;
 
     double x = 0;
     double y = 0;
@@ -87,47 +82,55 @@ public class PositionMonitor extends MonitorThread {
         double ex1Pos = Movement.getDistanceTravelled(ex1.getCurrentPosition());
         double ex2Pos = -Movement.getDistanceTravelled(ex2.getCurrentPosition());
         double eyPos = Movement.getDistanceTravelled(ey.getCurrentPosition());
-        double deltaX1 = ex1Pos-ex1PosLast;
-        double deltaX2 = ex2Pos-ex2PosLast;
-        double deltaY = eyPos-eyPosLast;
-        ex1PosLast = ex1Pos;
-        ex2PosLast = ex2Pos;
-        eyPosLast = eyPos;
+        double deltaEX1 = ex1Pos-ex1PosLast;
+        double deltaEX2 = ex2Pos-ex2PosLast;
+        double deltaEY = eyPos-eyPosLast;
 
-        if (!((deltaX1 == 0) && (deltaX2 == 0) && (deltaY == 0))) {
-            double deltaResetX1 = ex1Pos-ex1PosLastReset;
-            double deltaResetX2 = ex2Pos-ex2PosLastReset;
+        if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
+            double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
 
-            double currentTheta = thetaLastReset + (deltaResetX1-deltaResetX2)/(offsetX1+offsetX2); //radians
-            double deltaTheta = currentTheta - lastTheta;
-            lastTheta = currentTheta;
+            double deltaX = (-offsetY * Math.sin(deltaTheta)) + ((deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta));
+            double deltaY = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
 
-            double localOffsetX;
-            double localOffsetY;
-            if (Math.abs(deltaTheta) < encoderTolerance) {
-                localOffsetX = deltaY;
-                localOffsetY = deltaX2;
-            } else {
-                localOffsetX = 2 * Math.sin(deltaTheta/2) * ((deltaY/deltaTheta) + offsetY);
-                localOffsetY = 2 * Math.sin(deltaTheta/2) * ((deltaX2/deltaTheta) + offsetX2);
+           theta += deltaTheta;
+            if (theta >= 2 * Math.PI) {
+                theta -=  2* Math.PI;
+            } else if (theta < 0) {
+                theta += 2 * Math.PI;
             }
+            x += deltaX * Math.cos(theta) - deltaY * Math.sin(theta);
+            y += deltaX * Math.sin(theta) + deltaY * Math.cos(theta);
 
-            double localOffsetR = Math.sqrt(Math.pow(localOffsetX,2)+Math.pow(localOffsetY,2));
-            double localOffsetTheta = 0;
-            if ((localOffsetY >= 0) && (localOffsetR != 0)) {
-                localOffsetTheta = Math.acos(localOffsetX/localOffsetR);
-            } else if (localOffsetR != 0) {
-                localOffsetTheta = -Math.acos(localOffsetX/localOffsetR);
-            }
+            ex1PosLast = ex1Pos;
+            ex2PosLast = ex2Pos;
+            eyPosLast = eyPos;
 
-            localOffsetTheta -= (lastTheta + (deltaTheta/2));
-
-            localOffsetX = localOffsetR * Math.cos(localOffsetTheta);
-            localOffsetY = localOffsetR * Math.sin(localOffsetTheta);
-
-            x += localOffsetX;
-            y += localOffsetY;
-            theta = localOffsetTheta *180/Math.PI;//currentTheta*(180/Math.PI);
+//            double localOffsetX;
+//            double localOffsetY;
+//            if (Math.abs(deltaTheta) < encoderTolerance) {
+//                localOffsetX = deltaY;
+//                localOffsetY = deltaX2;
+//            } else {
+//                localOffsetX = 2 * Math.sin(deltaTheta/2) * ((deltaY/deltaTheta) + offsetY);
+//                localOffsetY = 2 * Math.sin(deltaTheta/2) * ((deltaX2/deltaTheta) + offsetX2);
+//            }
+//
+//            double localOffsetR = Math.sqrt(Math.pow(localOffsetX,2)+Math.pow(localOffsetY,2));
+//            double localOffsetTheta = 0;
+//            if ((localOffsetY >= 0) && (localOffsetR != 0)) {
+//                localOffsetTheta = Math.acos(localOffsetX/localOffsetR);
+//            } else if (localOffsetR != 0) {
+//                localOffsetTheta = -Math.acos(localOffsetX/localOffsetR);
+//            }
+//
+//            localOffsetTheta -= (lastTheta + (deltaTheta/2));
+//
+//            localOffsetX = localOffsetR * Math.cos(localOffsetTheta);
+//            localOffsetY = localOffsetR * Math.sin(localOffsetTheta);
+//
+//            x += localOffsetX;
+//            y += localOffsetY;
+//            theta = currentTheta*(180/Math.PI);
         }
     }
 }
