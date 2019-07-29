@@ -14,7 +14,7 @@ public class EncoderPositionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        encoder = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        encoder = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
