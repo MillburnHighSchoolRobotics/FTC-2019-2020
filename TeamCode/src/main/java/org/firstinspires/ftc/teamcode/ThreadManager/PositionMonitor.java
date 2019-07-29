@@ -81,12 +81,16 @@ public class PositionMonitor extends MonitorThread {
         double ex1Pos = Movement.encoderToDistance(ex1.getCurrentPosition());
         double ex2Pos = -Movement.encoderToDistance(ex2.getCurrentPosition());
         double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
+        Log.d("FPS", "ex1 pos (inches): " + ex1Pos);
+        Log.d("FPS", "ex2 pos (inches): " + ex2Pos);
+        Log.d("FPS", "ey pos (inches): " + eyPos);
         double deltaEX1 = ex1Pos-ex1PosLast;
         double deltaEX2 = ex2Pos-ex2PosLast;
         double deltaEY = eyPos-eyPosLast;
 
         if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
             double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
+            Log.d("FPS", "change in theta (radians): " + deltaTheta);
 
             double deltaX = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
             double deltaY = (deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta);
@@ -106,6 +110,8 @@ public class PositionMonitor extends MonitorThread {
             ex1PosLast = ex1Pos;
             ex2PosLast = ex2Pos;
             eyPosLast = eyPos;
+
+            Log.d("FPS", "Theta (radians): " + theta);
 
 //            double localOffsetX;
 //            double localOffsetY;
