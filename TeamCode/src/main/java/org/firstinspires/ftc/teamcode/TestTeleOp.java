@@ -38,10 +38,10 @@ public class TestTeleOp extends OpMode {
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         lf.setDirection(REVERSE);
         lb.setDirection(REVERSE);
     }

@@ -52,6 +52,9 @@ public class FieldPositioningSystemTest extends LinearOpMode {
             telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
             telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
             telemetry.addData("rotation", ThreadManager.getInstance().getValue("rotation", Integer.class));
+            telemetry.addData("ex1", ex1.getCurrentPosition());
+            telemetry.addData("ex2", ex2.getCurrentPosition());
+            telemetry.addData("ey", ey.getCurrentPosition());
             telemetry.update();
         }
     }
