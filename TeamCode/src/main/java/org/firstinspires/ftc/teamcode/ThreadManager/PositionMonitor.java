@@ -20,7 +20,7 @@ public class PositionMonitor extends MonitorThread {
     double eyPosLast = 0;
     double offsetX1 = 7.75; // the left right distance form the tracking center ot the x1 tracking wheel
     double offsetX2 = 7.75; // the left right distance from the tracking center to the x2 tracking wheel
-    double offsetY = 5; // the forward backward distance from the tracking center to the back tracking wheel
+    double offsetY = 6.25; // the forward backward distance from the tracking center to the back tracking wheel
 
     double x = 0;
     double y = 0;
@@ -92,25 +92,30 @@ public class PositionMonitor extends MonitorThread {
             double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
             Log.d("FPS", "change in theta (radians): " + deltaTheta);
 
-            double deltaX = (0.5 * (deltaEX1+ deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
-            double deltaY = (deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta);
+            double deltaX = (0.5 * (deltaEX1 + deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
+            double deltaY = ((deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta));
+
+            Log.d("FPS", "deltaX: " + deltaX);
+            Log.d("FPS", "deltaY: " + deltaY);
 
             theta += deltaTheta;
             if (theta >= 2 * Math.PI) {
-                theta -=  2* Math.PI;
+                theta -=  2 * Math.PI;
                 rotation ++;
             } else if (theta < 0) {
                 theta += 2 * Math.PI;
                 rotation --;
             }
 
-            x += deltaY * Math.sin(theta) + deltaX * Math.cos(theta);
-            y += deltaY * Math.cos(theta) - deltaX * Math.sin(theta);
+            x += (deltaY * Math.sin(theta) + deltaX * Math.cos(theta));
+            y += (deltaY * Math.cos(theta) - deltaX * Math.sin(theta));
 
             ex1PosLast = ex1Pos;
             ex2PosLast = ex2Pos;
             eyPosLast = eyPos;
 
+            Log.d("FPS", "X: " + x);
+            Log.d("FPS", "Y: " + y);
             Log.d("FPS", "Theta (radians): " + theta);
 
 //            double localOffsetX;
