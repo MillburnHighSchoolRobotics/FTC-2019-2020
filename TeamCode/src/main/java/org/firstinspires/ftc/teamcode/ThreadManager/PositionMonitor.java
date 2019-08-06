@@ -18,9 +18,8 @@ public class PositionMonitor extends MonitorThread {
     double ex1PosLast = 0;
     double ex2PosLast = 0;
     double eyPosLast = 0;
-    double offsetX1 = 7.75; // the left right distance form the tracking center ot the x1 tracking wheel
-    double offsetX2 = 7.75; // the left right distance from the tracking center to the x2 tracking wheel
-    double offsetY = 6.25; // the forward backward distance from the tracking center to the back tracking wheel
+    double offsetX = 15; // the left right distance from the x1 tracking wheel to the x1 tracking wheel
+    double offsetY = 5; // the forward backward distance from the tracking center to the back tracking wheel
 
     double x = 0;
     double y = 0;
@@ -67,10 +66,9 @@ public class PositionMonitor extends MonitorThread {
 //        }
 //        theta = newTheta;
 //
-//
-//
 //        Log.d(TAG, "Rotation: " + rotation + " theta, " + theta + " degrees");
 //        setValue("theta", theta);
+
         updatePosition();
         setValue("theta", Movement.toDegrees(theta));
         setValue("x", x);
@@ -81,22 +79,22 @@ public class PositionMonitor extends MonitorThread {
         double ex1Pos = Movement.encoderToDistance(ex1.getCurrentPosition());
         double ex2Pos = -Movement.encoderToDistance(ex2.getCurrentPosition());
         double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
-        Log.d("FPS", "ex1 pos (inches): " + ex1Pos);
-        Log.d("FPS", "ex2 pos (inches): " + ex2Pos);
-        Log.d("FPS", "ey pos (inches): " + eyPos);
+        Log.d(TAG, "ex1 pos (inches): " + ex1Pos);
+        Log.d(TAG, "ex2 pos (inches): " + ex2Pos);
+        Log.d(TAG, "ey pos (inches): " + eyPos);
         double deltaEX1 = ex1Pos-ex1PosLast;
         double deltaEX2 = ex2Pos-ex2PosLast;
         double deltaEY = eyPos-eyPosLast;
 
         if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
-            double deltaTheta = (deltaEX1-deltaEX2)/(offsetX1+offsetX2); //radians
-            Log.d("FPS", "change in theta (radians): " + deltaTheta);
+            double deltaTheta = (deltaEX1-deltaEX2)/offsetX; //radians
+            Log.d(TAG, "change in theta (radians): " + deltaTheta);
 
             double deltaX = (0.5 * (deltaEX1 + deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
             double deltaY = ((deltaEY - offsetY * deltaTheta) * Math.cos(deltaTheta));
 
-            Log.d("FPS", "deltaX: " + deltaX);
-            Log.d("FPS", "deltaY: " + deltaY);
+            Log.d(TAG, "deltaX: " + deltaX);
+            Log.d(TAG, "deltaY: " + deltaY);
 
             theta += deltaTheta;
             if (theta >= 2 * Math.PI) {
@@ -114,9 +112,15 @@ public class PositionMonitor extends MonitorThread {
             ex2PosLast = ex2Pos;
             eyPosLast = eyPos;
 
-            Log.d("FPS", "X: " + x);
-            Log.d("FPS", "Y: " + y);
-            Log.d("FPS", "Theta (radians): " + theta);
+            Log.d(TAG, "X: " + x);
+            Log.d(TAG, "Y: " + y);
+            Log.d(TAG, "Theta (radians): " + theta);
+
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 //            double localOffsetX;
 //            double localOffsetY;

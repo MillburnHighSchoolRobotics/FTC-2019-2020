@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
 import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
 
-@Autonomous(name = "This is to prove david that the fps works", group = "test")
+@Autonomous(name = "FPS Test", group = "test")
 public class FieldPositioningSystemTest extends LinearOpMode {
 
     DcMotorEx lf;

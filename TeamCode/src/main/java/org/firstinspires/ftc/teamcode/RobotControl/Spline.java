@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Created by Sahil Shah on 10/12/2018.
- * Our spline system.
+ * Our cubic spline system.
  */
 public class Spline {
     private static double[][] x_interpolant;

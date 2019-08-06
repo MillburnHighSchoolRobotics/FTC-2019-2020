@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -30,6 +31,12 @@ public class Movement {
     DcMotorEx ex1;
     DcMotorEx ex2;
     DcMotorEx ey;
+
+    final double p = 0.009;
+    final double i = 0.003;
+    final double d = 0.0075;
+
+    final double thetaRange = 2;
 
 
     public static double ticks = 360*4;
@@ -78,6 +85,39 @@ public class Movement {
         }
         moveWithEncoders(new DcMotor[] {lf,lb,rf,rb}, new DcMotor[] {ex1, ex2, ey}, new double[] {-LF,-LB,RF,RB}, new int[] {distanceToEncoder(x), distanceToEncoder(y)});
     }
+
+    public void rotateTo(double angle) throws InterruptedException {
+        ElapsedTime time = new ElapsedTime();
+        PIDController pidController = new PIDController(p, i, d, 1, angle);
+
+        double lastTime = -1;
+
+        while (!shouldStop()) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+
+            double output = pidController.getPIDOutput(ThreadManager.getInstance().getValue("theta", Double.class));
+
+            if (Math.abs(ThreadManager.getInstance().getValue("theta", Double.class) - angle) < thetaRange) {
+                if (lastTime < 0) lastTime = time.milliseconds();
+                else if (time.milliseconds() - lastTime > 200) { // ensures the bot is slow when it reaches the theta threshold
+                    stop();
+                    break;
+                }
+            } else {
+                lastTime = -1;
+            }
+
+            lf.setPower(-1 * output);
+            lb.setPower(-1 * output);
+            rf.setPower(1 * output);
+            rb.setPower(1 * output);
+
+            Thread.sleep(5);
+        }
+    }
+
     public void moveWithEncoders(DcMotor[] motors, DcMotor[] encoders, double[] power, int[] vector) throws InterruptedException {
         int[] pos1 = new int[] {encoders[0].getCurrentPosition(), encoders[1].getCurrentPosition(), encoders[2].getCurrentPosition()};
         int[] pos2 = new int[] {vector[0]+pos1[0], vector[0]+pos1[1], vector[1]+pos1[2]};
@@ -118,6 +158,12 @@ public class Movement {
     }
     public static double toDegrees(double radians) {
         return radians * (180/Math.PI);
+    }
+    public void stop() {
+        lf.setPower(0);
+        lb.setPower(0);
+        rf.setPower(0);
+        rb.setPower(0);
     }
     public static boolean shouldStop() {
         Activity currActivity = AppUtil.getInstance().getActivity();
