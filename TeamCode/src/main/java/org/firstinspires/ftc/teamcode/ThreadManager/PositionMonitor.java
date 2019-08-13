@@ -18,7 +18,7 @@ public class PositionMonitor extends MonitorThread {
     double ex1PosLast = 0;
     double ex2PosLast = 0;
     double eyPosLast = 0;
-    double offsetX = 15; // the left right distance from the x1 tracking wheel to the x1 tracking wheel
+    double offsetX = 15.53; // the left right distance from the x1 tracking wheel to the x1 tracking wheel
     double offsetY = 5; // the forward backward distance from the tracking center to the back tracking wheel
 
     double x = 0;
