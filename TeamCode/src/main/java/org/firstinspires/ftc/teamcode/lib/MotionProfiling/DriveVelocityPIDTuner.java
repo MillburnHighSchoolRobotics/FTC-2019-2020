@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RoadRunners.MotionProfiling;
+package org.firstinspires.ftc.teamcode.lib.MotionProfiling;
 
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -9,14 +9,14 @@ import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.RoadRunners.DriveConstants;
-import org.firstinspires.ftc.teamcode.RoadRunners.DriveBase;
-import org.firstinspires.ftc.teamcode.RoadRunners.MohanBot;
+import org.firstinspires.ftc.teamcode.lib.DriveConstants;
+import org.firstinspires.ftc.teamcode.lib.DriveBase;
+import org.firstinspires.ftc.teamcode.lib.MohanBot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.RoadRunners.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-

@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import static org.firstinspires.ftc.teamcode.RobotControl.Movement.shouldStop;
-import static org.firstinspires.ftc.teamcode.RobotControl.Movement.ticks;
-import static org.firstinspires.ftc.teamcode.RobotControl.Movement.wheelDiameter;
+import static org.firstinspires.ftc.teamcode.autonomous.Movement.shouldStop;
+import static org.firstinspires.ftc.teamcode.autonomous.Movement.ticks;
+import static org.firstinspires.ftc.teamcode.autonomous.Movement.wheelDiameter;
 
 @Autonomous(name = "Single Encoder Movement Test", group = "test")
 public class SingleEncoderMovementTest extends LinearOpMode {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotControl;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 
 import android.app.Activity;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 public class Movement {
     public static final int[][] POWER_MATRIX = { //for each of the directions

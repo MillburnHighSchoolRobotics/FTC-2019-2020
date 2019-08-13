@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.RobotControl.Movement;
+import org.firstinspires.ftc.teamcode.autonomous.Movement;
 
 @Autonomous(name = "Encoder Position Test", group = "test")
 public class EncoderPositionTest extends LinearOpMode {

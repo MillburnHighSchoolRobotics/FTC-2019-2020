@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.ThreadManager;
+package org.firstinspires.ftc.teamcode.threads;
 
 import android.util.Log;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.teamcode.RobotControl.Movement;
+import org.firstinspires.ftc.teamcode.autonomous.Movement;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";

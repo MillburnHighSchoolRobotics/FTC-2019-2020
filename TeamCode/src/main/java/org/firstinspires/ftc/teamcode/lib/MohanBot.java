@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RoadRunners;
+package org.firstinspires.ftc.teamcode.lib;
 
 
 
@@ -9,14 +9,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
-import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.RoadRunners.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.lib.DriveConstants.encoderTicksToInches;
 
 
 public class MohanBot extends DriveBase {

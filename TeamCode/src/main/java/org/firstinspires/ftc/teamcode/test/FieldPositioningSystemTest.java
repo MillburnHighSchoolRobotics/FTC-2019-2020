@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-import org.firstinspires.ftc.teamcode.RobotControl.Movement;
-import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
-import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
-
-@Autonomous(name = "PID Test", group = "test")
-public class PIDTest extends LinearOpMode {
+@Autonomous(name = "FPS Test", group = "test")
+public class FieldPositioningSystemTest extends LinearOpMode {
 
     DcMotorEx lf;
     DcMotorEx lb;
@@ -29,10 +27,10 @@ public class PIDTest extends LinearOpMode {
         ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -47,10 +45,17 @@ public class PIDTest extends LinearOpMode {
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
-
-        Movement mv = new Movement(lf, lb, rf, rb, ex1, ex2, ey);
         waitForStart();
 
-        mv.rotateTo(45);
+        while (true) {
+            telemetry.addData("theta", ThreadManager.getInstance().getValue("theta", Double.class));
+            telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
+            telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
+            telemetry.addData("rotation", ThreadManager.getInstance().getValue("rotation", Integer.class));
+            telemetry.addData("ex1", ex1.getCurrentPosition());
+            telemetry.addData("ex2", ex2.getCurrentPosition());
+            telemetry.addData("ey", ey.getCurrentPosition());
+            telemetry.update();
+        }
     }
 }
