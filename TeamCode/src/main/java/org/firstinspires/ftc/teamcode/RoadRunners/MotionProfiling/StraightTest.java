@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.Tests.MotionProfiling;
+package org.firstinspires.ftc.teamcode.RoadRunners.MotionProfiling;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.RobotControl.DriveBase;
-import org.firstinspires.ftc.teamcode.RobotControl.MohanBot;
+import org.firstinspires.ftc.teamcode.RoadRunners.DriveBase;
+import org.firstinspires.ftc.teamcode.RoadRunners.MohanBot;
 
 /*
  * This is a simple routine to test translational drive capabilities.
