@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.RobotControl.Movement;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
-    private final String imuTag = "imu";
-    private final BNO055IMU imu;
+//    private final String imuTag = "imu";
+//    private final BNO055IMU imu;
     private DcMotorEx ex1;
     private DcMotorEx ex2;
     private DcMotorEx ey;
@@ -25,22 +25,23 @@ public class PositionMonitor extends MonitorThread {
     double y = 0;
     double theta = 0;
     int rotation = 0;
+    double orientation = 0;
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap) {
         super(thread, hardwareMap, TAG);
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = false;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = null;
-        synchronized (this.hardwareMap) {
-            this.imu = hardwareMap.get(BNO055IMU.class, this.imuTag);
-        }
-        synchronized (this.imu) {
-            this.imu.initialize(parameters);
-        }
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+//        parameters.loggingEnabled = false;
+//        parameters.loggingTag = "IMU";
+//        parameters.accelerationIntegrationAlgorithm = null;
+//        synchronized (this.hardwareMap) {
+//            this.imu = hardwareMap.get(BNO055IMU.class, this.imuTag);
+//        }
+//        synchronized (this.imu) {
+//            this.imu.initialize(parameters);
+//        }
         ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
@@ -71,6 +72,7 @@ public class PositionMonitor extends MonitorThread {
 
         updatePosition();
         setValue("theta", Movement.toDegrees(theta));
+        setValue("orientation", Movement.toDegrees(orientation));
         setValue("x", x);
         setValue("y", y);
         setValue("rotation", rotation);
@@ -97,6 +99,7 @@ public class PositionMonitor extends MonitorThread {
             Log.d(TAG, "deltaY: " + deltaY);
 
             theta += deltaTheta;
+            orientation = theta;
             if (theta >= 2 * Math.PI) {
                 theta -=  2 * Math.PI;
                 rotation ++;

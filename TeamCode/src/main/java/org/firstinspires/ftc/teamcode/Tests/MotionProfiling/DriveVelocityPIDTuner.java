@@ -1,11 +1,6 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.Tests.MotionProfiling;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.config.ValueProvider;
-import com.acmerobotics.dashboard.config.variable.BasicVariable;
-import com.acmerobotics.dashboard.config.variable.CustomVariable;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
@@ -13,18 +8,19 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
+import org.firstinspires.ftc.teamcode.RobotControl.DriveConstants;
+import org.firstinspires.ftc.teamcode.RobotControl.DriveBase;
+import org.firstinspires.ftc.teamcode.RobotControl.MohanBot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-
@@ -37,17 +33,18 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * PID coefficients. Once you've found a satisfactory set of gains, add them to your drive class
  * ctor.
  */
+
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72;
 
     private static final String PID_VAR_NAME = "VELO_PID";
 
-    private FtcDashboard dashboard = FtcDashboard.getInstance();
-    private String catName;
-    private CustomVariable catVar;
+//    private FtcDashboard dashboard = FtcDashboard.getInstance();
+//    private String catName;
+//    private CustomVariable catVar;
 
-    private SampleMecanumDriveBase drive;
+    private DriveBase drive;
 
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
@@ -58,78 +55,78 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
                 DriveConstants.BASE_CONSTRAINTS.maxJerk);
     }
 
-    private void addPidVariable() {
-        catName = getClass().getSimpleName();
-        catVar = (CustomVariable) dashboard.getConfigRoot().getVariable(catName);
-        if (catVar == null) {
-            // this should never happen...
-            catVar = new CustomVariable();
-            dashboard.getConfigRoot().putVariable(catName, catVar);
-
-            RobotLog.w("Unable to find top-level category %s", catName);
-        }
-
-        CustomVariable pidVar = new CustomVariable();
-        pidVar.putVariable("kP", new BasicVariable<>(new ValueProvider<Double>() {
-            @Override
-            public Double get() {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kP;
-            }
-
-            @Override
-            public void set(Double value) {
-                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                        new PIDCoefficients(value, coeffs.kI, coeffs.kD));
-            }
-        }));
-        pidVar.putVariable("kI", new BasicVariable<>(new ValueProvider<Double>() {
-            @Override
-            public Double get() {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kI;
-            }
-
-            @Override
-            public void set(Double value) {
-                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                        new PIDCoefficients(coeffs.kP, value, coeffs.kD));
-            }
-        }));
-        pidVar.putVariable("kD", new BasicVariable<>(new ValueProvider<Double>() {
-            @Override
-            public Double get() {
-                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kD;
-            }
-
-            @Override
-            public void set(Double value) {
-                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                        new PIDCoefficients(coeffs.kP, coeffs.kI, value));
-            }
-        }));
-
-        catVar.putVariable(PID_VAR_NAME, pidVar);
-        dashboard.updateConfig();
-    }
-
-    private void removePidVariable() {
-        if (catVar.size() > 1) {
-            catVar.removeVariable(PID_VAR_NAME);
-        } else {
-            dashboard.getConfigRoot().removeVariable(catName);
-        }
-        dashboard.updateConfig();
-    }
+//    private void addPidVariable() {
+//        catName = getClass().getSimpleName();
+//        catVar = (CustomVariable) dashboard.getConfigRoot().getVariable(catName);
+//        if (catVar == null) {
+//            // this should never happen...
+//            catVar = new CustomVariable();
+//            dashboard.getConfigRoot().putVariable(catName, catVar);
+//
+//            RobotLog.w("Unable to find top-level category %s", catName);
+//        }
+//
+//        CustomVariable pidVar = new CustomVariable();
+//        pidVar.putVariable("kP", new BasicVariable<>(new ValueProvider<Double>() {
+//            @Override
+//            public Double get() {
+//                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kP;
+//            }
+//
+//            @Override
+//            public void set(Double value) {
+//                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+//                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+//                        new PIDCoefficients(value, coeffs.kI, coeffs.kD));
+//            }
+//        }));
+//        pidVar.putVariable("kI", new BasicVariable<>(new ValueProvider<Double>() {
+//            @Override
+//            public Double get() {
+//                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kI;
+//            }
+//
+//            @Override
+//            public void set(Double value) {
+//                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+//                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+//                        new PIDCoefficients(coeffs.kP, value, coeffs.kD));
+//            }
+//        }));
+//        pidVar.putVariable("kD", new BasicVariable<>(new ValueProvider<Double>() {
+//            @Override
+//            public Double get() {
+//                return drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).kD;
+//            }
+//
+//            @Override
+//            public void set(Double value) {
+//                PIDCoefficients coeffs = drive.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+//                drive.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+//                        new PIDCoefficients(coeffs.kP, coeffs.kI, value));
+//            }
+//        }));
+//
+//        catVar.putVariable(PID_VAR_NAME, pidVar);
+//        dashboard.updateConfig();
+//    }
+//
+//    private void removePidVariable() {
+//        if (catVar.size() > 1) {
+//            catVar.removeVariable(PID_VAR_NAME);
+//        } else {
+//            dashboard.getConfigRoot().removeVariable(catName);
+//        }
+//        dashboard.updateConfig();
+//    }
 
     @Override
     public void runOpMode() {
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+//        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleMecanumDriveREV(hardwareMap);
+        drive = new MohanBot(hardwareMap);
 
-        addPidVariable();
+//        addPidVariable();
 
         NanoClock clock = NanoClock.system();
 
@@ -184,6 +181,6 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
             lastWheelPositions = wheelPositions;
         }
 
-        removePidVariable();
+//        removePidVariable();
     }
 }

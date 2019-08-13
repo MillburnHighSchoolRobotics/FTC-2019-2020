@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.localizer;
+package org.firstinspires.ftc.teamcode.RobotControl;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
@@ -23,7 +23,7 @@ import java.util.List;
  * Note: this could be optimized significantly with REV bulk reads
  */
 
-public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 360*4;
     public static double WHEEL_RADIUS = (60/25.4)/2; // in
     public static double GEAR_RATIO = 32/48.0; // output (wheel) speed / input (encoder) speed
@@ -33,7 +33,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     private DcMotor leftEncoder, rightEncoder, frontEncoder;
 
-    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
+    public TrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
                 new Vector2d(0, LATERAL_DISTANCE / 2), // left
                 new Vector2d(0, -LATERAL_DISTANCE / 2), // right

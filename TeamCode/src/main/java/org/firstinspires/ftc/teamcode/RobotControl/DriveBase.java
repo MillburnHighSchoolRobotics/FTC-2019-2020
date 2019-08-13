@@ -1,9 +1,5 @@
-package org.firstinspires.ftc.teamcode.drive.mecanum;
+package org.firstinspires.ftc.teamcode.RobotControl;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.canvas.Canvas;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
@@ -21,20 +17,13 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.BASE_CONSTRAINTS;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.kStatic;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.BASE_CONSTRAINTS;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-
-/*
- * Base class with shared functionality for sample mecanum drives. All hardware-specific details are
- * handled in subclasses.
- */
-
-public abstract class SampleMecanumDriveBase extends MecanumDrive {
+public abstract class DriveBase extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -45,7 +34,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         FOLLOW_TRAJECTORY
     }
 
-    private FtcDashboard dashboard;
+//    private FtcDashboard dashboard;
     private NanoClock clock;
 
     private Mode mode;
@@ -57,10 +46,10 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
     private DriveConstraints constraints;
     private TrajectoryFollower follower;
 
-    public SampleMecanumDriveBase() {
+    public DriveBase() {
         super(kV, kA, kStatic, TRACK_WIDTH);
 
-        dashboard = FtcDashboard.getInstance();
+//        dashboard = FtcDashboard.getInstance();
         clock = NanoClock.system();
 
         mode = Mode.IDLE;
@@ -122,18 +111,18 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         Pose2d currentPose = getPoseEstimate();
         Pose2d lastError = getLastError();
 
-        TelemetryPacket packet = new TelemetryPacket();
-        Canvas fieldOverlay = packet.fieldOverlay();
-
-        packet.put("mode", mode);
-
-        packet.put("x", currentPose.getX());
-        packet.put("y", currentPose.getY());
-        packet.put("heading", currentPose.getHeading());
-
-        packet.put("xError", lastError.getX());
-        packet.put("yError", lastError.getY());
-        packet.put("headingError", lastError.getHeading());
+//        TelemetryPacket packet = new TelemetryPacket();
+//        Canvas fieldOverlay = packet.fieldOverlay();
+//
+//        packet.put("mode", mode);
+//
+//        packet.put("x", currentPose.getX());
+//        packet.put("y", currentPose.getY());
+//        packet.put("heading", currentPose.getHeading());
+//
+//        packet.put("xError", lastError.getX());
+//        packet.put("yError", lastError.getY());
+//        packet.put("headingError", lastError.getHeading());
 
         switch (mode) {
             case IDLE:
@@ -164,12 +153,12 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
             case FOLLOW_TRAJECTORY: {
                 setDriveSignal(follower.update(currentPose));
 
-                fieldOverlay.setStrokeWidth(1);
-                fieldOverlay.setStroke("green");
-                DashboardUtil.drawSampledTrajectory(fieldOverlay, follower.getTrajectory());
-
-                fieldOverlay.setFill("blue");
-                fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
+//                fieldOverlay.setStrokeWidth(1);
+//                fieldOverlay.setStroke("green");
+//                DashboardUtil.drawSampledTrajectory(fieldOverlay, follower.getTrajectory());
+//
+//                fieldOverlay.setFill("blue");
+//                fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);
 
                 if (!follower.isFollowing()) {
                     mode = Mode.IDLE;
@@ -180,7 +169,7 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
             }
         }
 
-        dashboard.sendTelemetryPacket(packet);
+//        dashboard.sendTelemetryPacket(packet);
     }
 
     public void waitForIdle() {

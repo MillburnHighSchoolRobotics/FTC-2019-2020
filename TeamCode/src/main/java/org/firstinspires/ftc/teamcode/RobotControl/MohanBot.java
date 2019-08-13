@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.drive.mecanum;
+package org.firstinspires.ftc.teamcode.RobotControl;
 
 
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,37 +10,34 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.ThreadManager.PositionMonitor;
+import org.firstinspires.ftc.teamcode.ThreadManager.ThreadManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.RobotControl.DriveConstants.encoderTicksToInches;
 
-/*
- * Simple mecanum drive hardware implementation for REV hardware.
- */
-public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+
+public class MohanBot extends DriveBase {
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront, ex1, ex2, ey;
     private List<DcMotorEx> motors;
-    private BNO055IMU imu;
+    private List<DcMotorEx> encoders;
 
-    public SampleMecanumDriveREV(HardwareMap hardwareMap) {
+    public MohanBot(HardwareMap hardwareMap) {
         super();
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
-
-        // upward (normal to the floor) using a command like the following:
-        // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "lf");
         leftRear = hardwareMap.get(DcMotorEx.class, "lb");
         rightRear = hardwareMap.get(DcMotorEx.class, "rb");
         rightFront = hardwareMap.get(DcMotorEx.class, "rf");
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+        encoders = Arrays.asList(ex1, ex2, ey);
 
         for (DcMotorEx motor : motors) {
             // TODO: decide whether or not to use the built-in velocity PID
@@ -57,14 +53,11 @@ public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
         // TODO: set the tuned coefficients from DriveVelocityPIDTuner if using RUN_USING_ENCODER
         // setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ...);
 
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        setLocalizer(new ThreeTrackingWheelLocalizer() {
-            @Override
-            public List<Double> getWheelPositions() {
-                return null;
-            }
-        });
+        setLocalizer(new TrackingWheelLocalizer(hardwareMap));
+
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
     }
 
     @Override
@@ -101,6 +94,6 @@ public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getAngularOrientation().firstAngle;
+        return ThreadManager.getInstance().getValue("orientation", Double.class);
     }
 }
