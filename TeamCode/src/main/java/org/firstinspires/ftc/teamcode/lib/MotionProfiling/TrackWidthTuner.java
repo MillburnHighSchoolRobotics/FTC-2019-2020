@@ -29,8 +29,6 @@ public class TrackWidthTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         DriveBase drive = new MohanBot(hardwareMap);
-        // TODO: if you haven't already, set the localizer to something that doesn't depend on
-        // drive encoders for computing the heading
 
         telemetry.log().add("Press play to begin the track width tuner routine");
         telemetry.log().add("Make sure your robot has enough clearance to turn smoothly");
