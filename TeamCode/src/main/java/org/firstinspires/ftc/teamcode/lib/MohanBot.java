@@ -32,7 +32,7 @@ public class MohanBot extends DriveBase {
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
-            // TODO: tune kStatic or kA
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
