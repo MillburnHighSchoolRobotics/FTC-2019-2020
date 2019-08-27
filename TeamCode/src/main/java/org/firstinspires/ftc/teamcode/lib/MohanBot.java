@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ public class MohanBot extends DriveBase {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
+
         setLocalizer(new TrackingWheelLocalizer(hardwareMap));
     }
 
@@ -57,7 +63,7 @@ public class MohanBot extends DriveBase {
     }
 
     @Override
-    public List<Double> getWheelPositions() {
+    public List<Double> getWheelPositions() { // does not matter because when we initialize mohanbot, we set the localizer to the TrackingWheelLocalizer which overwrites MecanumLocalizer
         List<Double> wheelPositions = new ArrayList<>();
         for (DcMotorEx motor : motors) {
             wheelPositions.add(encoderTicksToInches(motor.getCurrentPosition()));
@@ -74,7 +80,7 @@ public class MohanBot extends DriveBase {
     }
 
     @Override
-    public double getRawExternalHeading() {
+    public double getRawExternalHeading() { // does not matter because when we initialize mohanbot, we set the localizer to the TrackingWheelLocalizer which overwrites MecanumLocalizer
         return ThreadManager.getInstance().getValue("orientation", Double.class);
     }
 }

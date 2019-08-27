@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.autonomous.Movement;
-import org.firstinspires.ftc.teamcode.profile.geometry.Pose2d;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
@@ -76,7 +75,6 @@ public class PositionMonitor extends MonitorThread {
         setValue("orientation", Movement.toDegrees(orientation));
         setValue("x", x);
         setValue("y", y);
-        setValue("pose2d", new Pose2d(x, y, orientation));
         setValue("rotation", rotation);
     }
     protected void updatePosition() {
