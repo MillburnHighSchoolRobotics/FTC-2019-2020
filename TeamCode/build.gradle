@@ -13,3 +13,13 @@
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
+
+//android {
+//    buildConfig {
+//        multiDexEnabled true
+//    }
+//}
+//
+//dependencies {
+//    implementation 'com.android.support.multidex:1.0.3'
+//}
