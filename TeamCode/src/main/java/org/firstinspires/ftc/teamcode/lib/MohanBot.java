@@ -44,7 +44,7 @@ public class MohanBot extends DriveBase {
         manager.setHardwareMap(hardwareMap);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        setLocalizer(new TrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new MohanLocalizer(hardwareMap));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MohanBot extends DriveBase {
     }
 
     @Override
-    public List<Double> getWheelPositions() { // does not matter because when we initialize mohanbot, we set the localizer to the TrackingWheelLocalizer which overwrites MecanumLocalizer
+    public List<Double> getWheelPositions() { // does not matter because when we initialize mohanbot, we set the localizer to the MohanLocalizer which overwrites MecanumLocalizer
         List<Double> wheelPositions = new ArrayList<>();
         for (DcMotorEx motor : motors) {
             wheelPositions.add(encoderTicksToInches(motor.getCurrentPosition()));
@@ -80,7 +80,7 @@ public class MohanBot extends DriveBase {
     }
 
     @Override
-    public double getRawExternalHeading() { // does not matter because when we initialize mohanbot, we set the localizer to the TrackingWheelLocalizer which overwrites MecanumLocalizer
+    public double getRawExternalHeading() {
         return ThreadManager.getInstance().getValue("orientation", Double.class);
     }
 }

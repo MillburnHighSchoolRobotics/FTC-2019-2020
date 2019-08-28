@@ -73,7 +73,7 @@ public class PositionMonitor extends MonitorThread {
         updatePosition();
         setValue("theta", Movement.toDegrees(theta));
         setValue("orientation", Movement.toDegrees(orientation));
-        setValue("x", x);
+        setValue("x", x); // reverse x and y
         setValue("y", y);
         setValue("rotation", rotation);
     }
@@ -115,7 +115,7 @@ public class PositionMonitor extends MonitorThread {
             ex2PosLast = ex2Pos;
             eyPosLast = eyPos;
 
-            Log.d(TAG, "X: " + x);
+            Log.d(TAG, "X " + x);
             Log.d(TAG, "Y: " + y);
             Log.d(TAG, "Theta (radians): " + theta);
 

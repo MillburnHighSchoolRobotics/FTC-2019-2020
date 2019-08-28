@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
@@ -16,6 +18,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.BASE_CONSTRAINTS;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.TRACK_WIDTH;
@@ -123,7 +127,9 @@ public abstract class DriveBase extends MecanumDrive {
 //        packet.put("xError", lastError.getX());
 //        packet.put("yError", lastError.getY());
 //        packet.put("headingError", lastError.getHeading());
-
+        Log.d("drivePosition", "X: " + ThreadManager.getInstance().getValue("x", Double.class).toString());
+        Log.d("drivePosition", "Y: " + ThreadManager.getInstance().getValue("y", Double.class).toString());
+        Log.d("drivePosition", "Theta: " + ThreadManager.getInstance().getValue("theta", Double.class).toString());
         switch (mode) {
             case IDLE:
                 // do nothing

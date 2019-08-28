@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
+import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +27,7 @@ import java.util.List;
  * Note: this could be optimized significantly with REV bulk reads
  */
 
-public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+public class MohanLocalizer implements Localizer {
     public static double TICKS_PER_REV = 360*4;
     public static double WHEEL_RADIUS = (60/25.4)/2; // in
     public static double GEAR_RATIO = 32/48.0; // output (wheel) speed / input (encoder) speed
@@ -31,18 +35,15 @@ public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double LATERAL_DISTANCE = 15.53; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 5; // in; offset of the lateral wheel
 
-    private DcMotor leftEncoder, rightEncoder, frontEncoder;
+    DcMotorEx ex1;
+    DcMotorEx ex2;
+    DcMotorEx ey;
+    Pose2d mohansLocation = new Pose2d(0,0,0);
 
-    public TrackingWheelLocalizer(HardwareMap hardwareMap) {
-        super(Arrays.asList(
-                new Vector2d(0, LATERAL_DISTANCE / 2), // left
-                new Vector2d(0, -LATERAL_DISTANCE / 2), // right
-                new Vector2d(FORWARD_OFFSET, 0) // front
-        ), Arrays.asList(0.0, 0.0, Math.toRadians(90.0)));
-
-        leftEncoder = hardwareMap.dcMotor.get("lf");
-        rightEncoder = hardwareMap.dcMotor.get("rb");
-        frontEncoder = hardwareMap.dcMotor.get("rf");
+    public MohanLocalizer(HardwareMap hardwareMap) {
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
     }
 
     public static double encoderTicksToInches(int ticks) {
@@ -50,11 +51,22 @@ public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     }
 
     @Override
-    public List<Double> getWheelPositions() {
-        return Arrays.asList(
-                encoderTicksToInches(leftEncoder.getCurrentPosition()),
-                encoderTicksToInches(rightEncoder.getCurrentPosition()),
-                -encoderTicksToInches(frontEncoder.getCurrentPosition())
-        );
+    public Pose2d getPoseEstimate() {
+        return mohansLocation;
+    }
+
+    @Override
+    public void setPoseEstimate(Pose2d pose2d) {
+        mohansLocation = pose2d;
+    }
+
+    @Override
+    public void update() {
+        // lmao threads bitch
+        double x = ThreadManager.getInstance().getValue("x", Double.class);
+        double y = ThreadManager.getInstance().getValue("y", Double.class);
+        double theta = ThreadManager.getInstance().getValue("theta", Double.class);
+        mohansLocation = new Pose2d(x,y,theta);
+
     }
 }
