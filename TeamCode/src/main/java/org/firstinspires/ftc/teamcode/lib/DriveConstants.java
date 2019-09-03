@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
-import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
+import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 /*
@@ -16,7 +16,7 @@ public class DriveConstants {
      * adjust them in the dashboard; **config variable changes don't persist between app restarts**.
      */
     private static final MotorConfigurationType MOTOR_CONFIG =
-            MotorConfigurationType.getMotorType(NeveRest40Gearmotor.class);
+            MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class);
     private static final double TICKS_PER_REV = MOTOR_CONFIG.getTicksPerRev();
 
     /*
@@ -37,9 +37,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.00005 / rpmToVelocity(getMaxRpm());
+    public static double kV = 0.00445 / rpmToVelocity(getMaxRpm());
     public static double kA = 0;
-    public static double kStatic = 0.36124;
+    public static double kStatic = 0.22151;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -55,7 +55,7 @@ public class DriveConstants {
     );
 
 
-    public static double encoderTicksToInches(int ticks) {
+    public static double encoderTicksToInches(int ticks) { // literal trash
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 

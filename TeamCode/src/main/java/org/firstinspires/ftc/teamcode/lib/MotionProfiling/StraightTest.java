@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
  */
 @Autonomous(group = "drive")
 public class StraightTest extends LinearOpMode {
-    public static double DISTANCE = 60;
+    public static double DISTANCE = 100;
 
     @Override
     public void runOpMode() throws InterruptedException {
