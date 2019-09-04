@@ -130,6 +130,7 @@ public abstract class DriveBase extends MecanumDrive {
         Log.d("drivePosition", "X: " + ThreadManager.getInstance().getValue("x", Double.class).toString());
         Log.d("drivePosition", "Y: " + ThreadManager.getInstance().getValue("y", Double.class).toString());
         Log.d("drivePosition", "Theta: " + ThreadManager.getInstance().getValue("theta", Double.class).toString());
+
         switch (mode) {
             case IDLE:
                 // do nothing

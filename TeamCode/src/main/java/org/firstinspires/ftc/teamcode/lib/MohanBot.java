@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.encoderTicksToInches;
-
 
 public class MohanBot extends DriveBase {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
@@ -66,7 +64,7 @@ public class MohanBot extends DriveBase {
     public List<Double> getWheelPositions() { // does not matter because when we initialize mohanbot, we set the localizer to the MohanLocalizer which overwrites MecanumLocalizer
         List<Double> wheelPositions = new ArrayList<>();
         for (DcMotorEx motor : motors) {
-            wheelPositions.add(encoderTicksToInches(motor.getCurrentPosition()));
+            wheelPositions.add(0.0);
         }
         return wheelPositions;
     }

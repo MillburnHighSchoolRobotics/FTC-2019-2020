@@ -17,7 +17,6 @@ public class DriveConstants {
      */
     private static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class);
-    private static final double TICKS_PER_REV = MOTOR_CONFIG.getTicksPerRev();
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -29,7 +28,9 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 2; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 2;
+    public static double TRACK_WIDTH = 15.53;
+
+    public static double MAX_MOTOR_LIMIT = 0.8;
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -37,9 +38,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.00445 / rpmToVelocity(getMaxRpm());
+    public static double kV = 0.00389 / rpmToVelocity(getMaxRpm());
     public static double kA = 0;
-    public static double kStatic = 0.22151;
+    public static double kStatic = 0.25004;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -50,14 +51,14 @@ public class DriveConstants {
      * forces acceleration-limited profiling).
      */
     public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
-            30.0, 30.0, 0.0,
+            MAX_MOTOR_LIMIT*rpmToVelocity(getMaxRpm()), 40.0, 0.0,
             Math.toRadians(180.0), Math.toRadians(180.0), 0.0
     );
 
 
-    public static double encoderTicksToInches(int ticks) { // literal trash
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
-    }
+//    public static double encoderTicksToInches(int ticks) { // literal trash
+//        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+//    }
 
     public static double rpmToVelocity(double rpm) {
         return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;

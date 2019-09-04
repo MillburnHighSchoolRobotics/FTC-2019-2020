@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib.MotionProfiling;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.tuning.AccelRegression;
 import com.acmerobotics.roadrunner.tuning.RampRegression;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.lib.DriveBase;
 import org.firstinspires.ftc.teamcode.lib.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.getMaxRpm;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.rpmToVelocity;
@@ -27,7 +30,7 @@ import static org.firstinspires.ftc.teamcode.lib.DriveConstants.rpmToVelocity;
 @Autonomous(group = "drive")
 public class DriveFeedforwardTuner extends LinearOpMode {
     public static final double MAX_POWER = 0.7;
-    public static final double DISTANCE = 100;
+    public static final double DISTANCE = 96;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -67,6 +70,21 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         telemetry.log().clear();
         telemetry.log().add(Misc.formatInvariant(
                 "Place your robot on the field with at least %.2f in of room in front", DISTANCE));
+
+        double maxVel = rpmToVelocity(getMaxRpm());
+        double finalVel = MAX_POWER * maxVel;
+        double accel = (finalVel * finalVel) / (2.0 * DISTANCE);
+        double rampTime = Math.sqrt(2.0 * DISTANCE / accel);
+
+        telemetry.log().add(Misc.formatInvariant(
+                "Max Vel: %.2f", maxVel));
+        telemetry.log().add(Misc.formatInvariant(
+                "Final Vel: %.2f", finalVel));
+        telemetry.log().add(Misc.formatInvariant(
+                "Accel: %.2f", accel));
+        telemetry.log().add(Misc.formatInvariant(
+                "Ramp Time: %.2f", rampTime));
+
         telemetry.log().add("Press (A) to begin");
         telemetry.update();
 
@@ -81,11 +99,6 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         telemetry.log().add("Running...");
         telemetry.update();
 
-        double maxVel = rpmToVelocity(getMaxRpm());
-        double finalVel = MAX_POWER * maxVel;
-        double accel = (finalVel * finalVel) / (2.0 * DISTANCE);
-        double rampTime = Math.sqrt(2.0 * DISTANCE / accel);
-
         double startTime = clock.seconds();
         RampRegression rampRegression = new RampRegression();
 
@@ -93,12 +106,18 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > rampTime) {
+//                telemetry.log().add("break");
                 break;
             }
             double vel = accel * elapsedTime;
             double power = vel / maxVel;
 
-            rampRegression.add(elapsedTime, drive.getPoseEstimate().getX(), power);
+            double driveX = drive.getPoseEstimate().getX();
+
+//            telemetry.log().add("Vel: " + vel + "\tPower: " + (vel/rpmToVelocity(getMaxRpm())) + "\tX: " + driveX);
+//            telemetry.update();
+
+            rampRegression.add(elapsedTime, driveX, power);
 
             drive.setDrivePower(new Pose2d(power, 0.0, 0.0));
             drive.updatePoseEstimate();
@@ -108,8 +127,14 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         RampRegression.RampResult rampResult = rampRegression.fit(fitIntercept);
 
 
-        telemetry.log().clear();
+//        telemetry.log().clear();
+//        drive.updatePoseEstimate();
+//        telemetry.log().add(String.valueOf(drive.getPoseEstimate().getX()));
         telemetry.log().add("Quasi-static ramp up test complete");
+        drive.updatePoseEstimate();
+        telemetry.log().add(String.valueOf(drive.getPoseEstimate().getX()));
+        telemetry.log().add(String.valueOf(ThreadManager.getInstance().getValue("x", Double.class)));
+
         if (fitIntercept) {
             telemetry.log().add(Misc.formatInvariant("kV = %.5f, kStatic = %.5f (R^2 = %.2f)",
                     rampResult.kV, rampResult.kStatic, rampResult.rSquare));

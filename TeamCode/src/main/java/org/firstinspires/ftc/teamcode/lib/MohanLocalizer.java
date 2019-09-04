@@ -38,7 +38,7 @@ public class MohanLocalizer implements Localizer {
     DcMotorEx ex1;
     DcMotorEx ex2;
     DcMotorEx ey;
-    Pose2d mohansLocation = new Pose2d(0,0,0);
+    static Pose2d mohansLocation = new Pose2d(0,0,0);
 
     public MohanLocalizer(HardwareMap hardwareMap) {
         ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
@@ -52,6 +52,7 @@ public class MohanLocalizer implements Localizer {
 
     @Override
     public Pose2d getPoseEstimate() {
+        update();
         return mohansLocation;
     }
 
