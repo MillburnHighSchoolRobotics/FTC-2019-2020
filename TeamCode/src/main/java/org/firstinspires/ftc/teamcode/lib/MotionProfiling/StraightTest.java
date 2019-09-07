@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.DriveBase;
 import org.firstinspires.ftc.teamcode.lib.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 /*
@@ -14,10 +15,14 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
  */
 @Autonomous(group = "drive")
 public class StraightTest extends LinearOpMode {
-    public static double DISTANCE = 96;
+    public static double DISTANCE = 12;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
+
         DriveBase drive = new MohanBot(hardwareMap);
 
         Trajectory trajectory = drive.trajectoryBuilder()
@@ -29,9 +34,6 @@ public class StraightTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         drive.followTrajectorySync(trajectory);
-
-        telemetry.addData("data", drive.getPoseEstimate().getX());
-        telemetry.update();
 
         Thread.sleep(5000);
     }

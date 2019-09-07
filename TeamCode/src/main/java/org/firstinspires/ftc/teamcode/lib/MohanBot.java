@@ -37,11 +37,6 @@ public class MohanBot extends DriveBase {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-
         setLocalizer(new MohanLocalizer(hardwareMap));
     }
 

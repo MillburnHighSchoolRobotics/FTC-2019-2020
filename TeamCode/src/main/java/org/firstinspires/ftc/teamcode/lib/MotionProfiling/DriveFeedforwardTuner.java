@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.lib.DriveBase;
 import org.firstinspires.ftc.teamcode.lib.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.getMaxRpm;
@@ -34,6 +35,9 @@ public class DriveFeedforwardTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
         DriveBase drive = new MohanBot(hardwareMap);
 
         NanoClock clock = NanoClock.system();
@@ -133,7 +137,6 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         telemetry.log().add("Quasi-static ramp up test complete");
         drive.updatePoseEstimate();
         telemetry.log().add(String.valueOf(drive.getPoseEstimate().getX()));
-        telemetry.log().add(String.valueOf(ThreadManager.getInstance().getValue("x", Double.class)));
 
         if (fitIntercept) {
             telemetry.log().add(Misc.formatInvariant("kV = %.5f, kStatic = %.5f (R^2 = %.2f)",

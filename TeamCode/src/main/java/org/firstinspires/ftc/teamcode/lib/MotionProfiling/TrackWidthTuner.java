@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.lib.MohanBot;
 
 @Autonomous(group = "drive")
 public class TrackWidthTuner extends LinearOpMode {
-    public static double ANGLE = Math.toRadians(180);
+    public static double ANGLE = Math.toRadians(90);
     public static int NUM_TRIALS = 5;
 
     @Override
