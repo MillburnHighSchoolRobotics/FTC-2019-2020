@@ -23,12 +23,13 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.BASE_CONSTRAINTS;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.lib.DriveConstants.WHEEL_BASE;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kV;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kStatic;
 
 public abstract class DriveBase extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
 
@@ -61,7 +62,7 @@ public abstract class DriveBase extends MecanumDrive {
         turnController = new PIDFController(HEADING_PID);
         turnController.setInputBounds(0, 2 * Math.PI);
 
-        constraints = new MecanumConstraints(BASE_CONSTRAINTS, TRACK_WIDTH);
+        constraints = new MecanumConstraints(BASE_CONSTRAINTS, TRACK_WIDTH, WHEEL_BASE);
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID);
     }
 
@@ -127,10 +128,6 @@ public abstract class DriveBase extends MecanumDrive {
 //        packet.put("xError", lastError.getX());
 //        packet.put("yError", lastError.getY());
 //        packet.put("headingError", lastError.getHeading());
-        Log.d("drivePosition", "X: " + ThreadManager.getInstance().getValue("x", Double.class).toString());
-        Log.d("drivePosition", "Y: " + ThreadManager.getInstance().getValue("y", Double.class).toString());
-        Log.d("drivePosition", "Theta: " + ThreadManager.getInstance().getValue("theta", Double.class).toString());
-
         switch (mode) {
             case IDLE:
                 // do nothing

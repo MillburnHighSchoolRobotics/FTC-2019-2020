@@ -37,11 +37,11 @@ public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
         super(Arrays.asList(
                 new Vector2d(0, LATERAL_DISTANCE / 2), // left
                 new Vector2d(0, -LATERAL_DISTANCE / 2), // right
-                new Vector2d(FORWARD_OFFSET, 0) // front
+                new Vector2d(-FORWARD_OFFSET, 0) // front
         ), Arrays.asList(0.0, 0.0, Math.toRadians(90.0)));
 
         leftEncoder = hardwareMap.dcMotor.get("lf");
-        rightEncoder = hardwareMap.dcMotor.get("rb");
+        rightEncoder = hardwareMap.dcMotor.get("lb");
         frontEncoder = hardwareMap.dcMotor.get("rf");
     }
 
@@ -54,7 +54,7 @@ public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
         return Arrays.asList(
                 encoderTicksToInches(leftEncoder.getCurrentPosition()),
                 encoderTicksToInches(rightEncoder.getCurrentPosition()),
-                -encoderTicksToInches(frontEncoder.getCurrentPosition())
+                encoderTicksToInches(frontEncoder.getCurrentPosition())
         );
     }
 }

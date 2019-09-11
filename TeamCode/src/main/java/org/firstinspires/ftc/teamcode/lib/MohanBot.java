@@ -32,6 +32,7 @@ public class MohanBot extends DriveBase {
 
         for (DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
