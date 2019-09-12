@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.lib;
-
-import android.util.Log;
+package org.firstinspires.ftc.teamcode.roadrunner_old;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
@@ -19,14 +17,12 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.threads.ThreadManager;
-
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.BASE_CONSTRAINTS;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.WHEEL_BASE;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kV;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.BASE_CONSTRAINTS;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.WHEEL_BASE;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.kStatic;
 
 public abstract class DriveBase extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);

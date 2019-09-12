@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.lib.MotionProfiling;
-
-import android.util.Log;
+package org.firstinspires.ftc.teamcode.roadrunner_old.MotionProfiling;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.tuning.AccelRegression;
@@ -10,13 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.lib.DriveBase;
-import org.firstinspires.ftc.teamcode.lib.MohanBot;
+import org.firstinspires.ftc.teamcode.roadrunner_old.DriveBase;
+import org.firstinspires.ftc.teamcode.roadrunner_old.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.getMaxRpm;
-import static org.firstinspires.ftc.teamcode.lib.DriveConstants.rpmToVelocity;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.getMaxRpm;
+import static org.firstinspires.ftc.teamcode.roadrunner_old.DriveConstants.rpmToVelocity;
 
 /*
  * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an
