@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 /*
  * This is a simple routine to test translational drive capabilities.
@@ -14,10 +16,15 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 @Config
 @Autonomous(group = "drive")
 public class StraightTest extends LinearOpMode {
-    public static double DISTANCE = 60;
+    public static double DISTANCE = 96;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setCurrentAuton(this);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
+
         DriveBase drive = new MohanBot(hardwareMap);
 
         Trajectory trajectory = drive.trajectoryBuilder()

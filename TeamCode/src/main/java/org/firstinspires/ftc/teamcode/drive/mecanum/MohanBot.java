@@ -50,10 +50,6 @@ public class MohanBot extends DriveBase {
         ex2 = hardwareMap.get(DcMotorEx.class, "lb");
         ey = hardwareMap.get(DcMotorEx.class, "rf");
 
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
