@@ -18,8 +18,8 @@ public class PositionMonitor extends MonitorThread {
     double ex1PosLast = 0;
     double ex2PosLast = 0;
     double eyPosLast = 0;
-    double offsetX = 15.53; // the left right distance from the x1 tracking wheel to the x1 tracking wheel
-    double offsetY = 5; // the forward backward distance from the tracking center to the back tracking wheel
+    double offsetX = 15.5; // the left right distance from the x1 tracking wheel to the x1 tracking wheel
+    double offsetY = 6; // the forward backward distance from the tracking center to the back tracking wheel
 
     double x = 0;
     double y = 0;
@@ -73,14 +73,14 @@ public class PositionMonitor extends MonitorThread {
         updatePosition();
         setValue("theta", Movement.toDegrees(theta));
         setValue("orientation", Movement.toDegrees(orientation));
-        setValue("x", x); // reverse x and y
+        setValue("x", x);
         setValue("y", y);
         setValue("rotation", rotation);
     }
     protected void updatePosition() {
-        double ex1Pos = Movement.encoderToDistance(ex1.getCurrentPosition());
-        double ex2Pos = -Movement.encoderToDistance(ex2.getCurrentPosition());
-        double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
+        double ex1Pos = -Movement.encoderToDistance(ex1.getCurrentPosition());
+        double ex2Pos = Movement.encoderToDistance(ex2.getCurrentPosition());
+        double eyPos = 0;//Movement.encoderToDistance(ey.getCurrentPosition());
         Log.d(TAG, "ex1 pos (inches): " + ex1Pos);
         Log.d(TAG, "ex2 pos (inches): " + ex2Pos);
         Log.d(TAG, "ey pos (inches): " + eyPos);

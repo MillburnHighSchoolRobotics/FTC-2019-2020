@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.drive.mecanum;
 import android.support.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,9 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.drive.localizer.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.drive.localizer.MohanLocalizer;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,12 +25,13 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksTo
  * Simple mecanum drive hardware implementation for REV hardware. If your hardware configuration
  * satisfies the requirements, SampleMecanumDriveREVOptimized is highly recommended.
  */
-public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
+public class MohanBot extends DriveBase {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
+    private DcMotorEx ex1, ex2, ey;
     private BNO055IMU imu;
 
-    public SampleMecanumDriveREV(HardwareMap hardwareMap) {
+    public MohanBot(HardwareMap hardwareMap) {
         super();
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -40,14 +41,18 @@ public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
 //        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
 //        imu.initialize(parameters);
 
-        // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
-        // upward (normal to the floor) using a command like the following:
-        // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
-
         leftFront = hardwareMap.get(DcMotorEx.class, "lf");
         leftRear = hardwareMap.get(DcMotorEx.class, "lb");
         rightRear = hardwareMap.get(DcMotorEx.class, "rb");
         rightFront = hardwareMap.get(DcMotorEx.class, "rf");
+
+        ex1 = hardwareMap.get(DcMotorEx.class, "lf");
+        ex2 = hardwareMap.get(DcMotorEx.class, "lb");
+        ey = hardwareMap.get(DcMotorEx.class, "rf");
+
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -56,10 +61,10 @@ public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new MohanLocalizer(hardwareMap));
     }
 
     @Override
