@@ -27,12 +27,12 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 1;
-    public static double WHEEL_RADIUS = 2; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
+    public static double TICKS_PER_REV = 360*4;
+    public static double WHEEL_RADIUS = (60/25.4)/2; // in
+    public static double GEAR_RATIO = 32.0/48; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
+    public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels
+    public static double FORWARD_OFFSET = 6; // in; offset of the lateral wheel
 
     private DcMotor leftEncoder, rightEncoder, frontEncoder;
 
@@ -40,12 +40,12 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         super(Arrays.asList(
                 new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
                 new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right
-                new Pose2d(FORWARD_OFFSET, 0, Math.toRadians(90)) // front
+                new Pose2d(-FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 
-        leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
-        rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-        frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
+        leftEncoder = hardwareMap.dcMotor.get("lf");
+        rightEncoder = hardwareMap.dcMotor.get("rf");
+        frontEncoder = hardwareMap.dcMotor.get("lb");
     }
 
     public static double encoderTicksToInches(int ticks) {
@@ -57,8 +57,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public List<Double> getWheelPositions() {
         return Arrays.asList(
                 encoderTicksToInches(leftEncoder.getCurrentPosition()),
-                encoderTicksToInches(rightEncoder.getCurrentPosition()),
-                encoderTicksToInches(frontEncoder.getCurrentPosition())
+                encoderTicksToInches(rightEncoder.getCurrentPosition()),0.0
+//                encoderTicksToInches(frontEncoder.getCurrentPosition())
         );
     }
 }

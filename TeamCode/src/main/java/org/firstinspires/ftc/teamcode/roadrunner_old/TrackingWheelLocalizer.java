@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.roadrunner_old;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -35,10 +36,10 @@ public class TrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
 
     public TrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
-                new Vector2d(0, LATERAL_DISTANCE / 2), // left
-                new Vector2d(0, -LATERAL_DISTANCE / 2), // right
-                new Vector2d(-FORWARD_OFFSET, 0) // front
-        ), Arrays.asList(0.0, 0.0, Math.toRadians(90.0)));
+                new Pose2d(0, LATERAL_DISTANCE / 2, 0), // left
+                new Pose2d(0, -LATERAL_DISTANCE / 2, 0), // right
+                new Pose2d(-FORWARD_OFFSET, 0, Math.toRadians(90)) // front
+        ));
 
         leftEncoder = hardwareMap.dcMotor.get("lf");
         rightEncoder = hardwareMap.dcMotor.get("lb");
