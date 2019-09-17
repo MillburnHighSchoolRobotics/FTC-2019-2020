@@ -60,7 +60,7 @@ public class MohanLocalizer implements Localizer {
     public void update() {
         // lmao threads bitch
         double x = ThreadManager.getInstance().getValue("x", Double.class);
-        double y = ThreadManager.getInstance().getValue("y", Double.class);
+        double y = 0;//ThreadManager.getInstance().getValue("y", Double.class);
         double theta = ThreadManager.getInstance().getValue("theta", Double.class);
         mohansLocation = new Pose2d(x,y,theta);
 

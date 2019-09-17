@@ -19,12 +19,14 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.getMaxRpm;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
 
 @Config
 @Autonomous(group = "drive")
 public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
-    public static final double MAX_POWER = 1;
+    public static final double MAX_POWER = 0.7;
     public static final double DISTANCE = 100;
 
     @Override
@@ -43,11 +45,13 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         double maxVel = rpmToVelocity(getMaxRpm());
         double maxPowerTime = DISTANCE / maxVel;
 
-        double startTime = clock.seconds();
-
         drive.setPoseEstimate(new Pose2d());
         drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
         AccelRegression accelRegression = new AccelRegression();
+
+        drive.updatePoseEstimate();
+        double startTime = clock.seconds();
+
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > maxPowerTime) {
@@ -56,29 +60,34 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
             accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
 
-            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
-            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
-            Log.d("acceltuner", "powertime: " + String.valueOf(maxPowerTime));
-            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
-            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
+//            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
+//            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
+//            Log.d("acceltuner", "powertime: " + String.valueOf(maxPowerTime));
+//            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
+//            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
+
+            Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
 
 
             drive.updatePoseEstimate();
+            Thread.sleep(20);
         }
         drive.setDrivePower(new Pose2d(0.0, 0.0, 0.0));
 
 
-        AccelRegression.AccelResult accelResult = accelRegression.fit(
-                DriveConstants.kV, DriveConstants.kStatic);
+        AccelRegression.AccelResult accelResult = accelRegression.fit(0.01367, 0.06144);
 
         accelRegression.save(LoggingUtil.getLogFile(Misc.formatInvariant(
                 "DriveAccelRegression-%d.csv", System.currentTimeMillis())));
+
 
         telemetry.log().clear();
         telemetry.log().add("Constant power test complete");
         telemetry.log().add(Misc.formatInvariant("kA = %.9f (R^2 = %.9f)",
                 accelResult.kA, accelResult.rSquare));
             telemetry.update();
+        Log.d("literallywhatever?!", accelResult.kA + "\t" + accelResult.rSquare);
+
         Thread.sleep(5000);
     }
 }

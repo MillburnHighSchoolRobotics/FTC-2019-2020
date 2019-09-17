@@ -112,6 +112,9 @@ public class DriveFeedforwardTuner extends LinearOpMode {
 
             rampRegression.add(elapsedTime, drive.getPoseEstimate().getX(), power);
 
+            Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
+            Thread.sleep(10);
+
             drive.setDrivePower(new Pose2d(power, 0.0, 0.0));
             drive.updatePoseEstimate();
         }
