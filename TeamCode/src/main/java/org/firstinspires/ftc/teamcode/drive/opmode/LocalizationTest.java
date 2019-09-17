@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -18,6 +20,10 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setCurrentAuton(this);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
         DriveBase drive = new MohanBot(hardwareMap);
 
         waitForStart();

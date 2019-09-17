@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.tuning.AccelRegression;
@@ -42,10 +44,10 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         double maxPowerTime = DISTANCE / maxVel;
 
         double startTime = clock.seconds();
-        AccelRegression accelRegression = new AccelRegression();
 
         drive.setPoseEstimate(new Pose2d());
         drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
+        AccelRegression accelRegression = new AccelRegression();
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > maxPowerTime) {
@@ -54,9 +56,17 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
             accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
 
+            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
+            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
+            Log.d("acceltuner", "powertime: " + String.valueOf(maxPowerTime));
+            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
+            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
+
+
             drive.updatePoseEstimate();
         }
         drive.setDrivePower(new Pose2d(0.0, 0.0, 0.0));
+
 
         AccelRegression.AccelResult accelResult = accelRegression.fit(
                 DriveConstants.kV, DriveConstants.kStatic);
@@ -66,8 +76,9 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
         telemetry.log().clear();
         telemetry.log().add("Constant power test complete");
-        telemetry.log().add(Misc.formatInvariant("kA = %.5f (R^2 = %.2f)",
+        telemetry.log().add(Misc.formatInvariant("kA = %.9f (R^2 = %.9f)",
                 accelResult.kA, accelResult.rSquare));
             telemetry.update();
+        Thread.sleep(5000);
     }
 }
