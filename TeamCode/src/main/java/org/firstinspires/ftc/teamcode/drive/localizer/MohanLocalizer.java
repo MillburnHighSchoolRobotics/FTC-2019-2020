@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.localizer;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -58,7 +60,8 @@ public class MohanLocalizer implements Localizer {
         // lmao threads bitch
         double x = ThreadManager.getInstance().getValue("x", Double.class);
         double y = ThreadManager.getInstance().getValue("y", Double.class);
-        double theta = ThreadManager.getInstance().getValue("theta", Double.class);
+        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
+        Log.d("mohan theta", theta + "");
         mohansLocation = new Pose2d(x,y,theta);
 
     }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.tuning.AccelRegression;
 import com.acmerobotics.roadrunner.tuning.RampRegression;
@@ -17,6 +18,10 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.getMaxRpm;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
@@ -68,14 +73,13 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
             Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
 
-
             drive.updatePoseEstimate();
             Thread.sleep(20);
         }
         drive.setDrivePower(new Pose2d(0.0, 0.0, 0.0));
 
 
-        AccelRegression.AccelResult accelResult = accelRegression.fit(0.01367, 0.06144);
+        AccelRegression.AccelResult accelResult = accelRegression.fit(kV, kStatic);
 
         accelRegression.save(LoggingUtil.getLogFile(Misc.formatInvariant(
                 "DriveAccelRegression-%d.csv", System.currentTimeMillis())));

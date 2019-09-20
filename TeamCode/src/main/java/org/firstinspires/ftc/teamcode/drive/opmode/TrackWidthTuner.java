@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.MovingStatistics;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
+import org.firstinspires.ftc.teamcode.autonomous.MathUtils;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
@@ -29,7 +31,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 @Autonomous(group = "drive")
 public class TrackWidthTuner extends LinearOpMode {
     public static double ANGLE = Math.toRadians(180);
-    public static int NUM_TRIALS = 5;
+    public static int NUM_TRIALS = 30;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -61,22 +63,29 @@ public class TrackWidthTuner extends LinearOpMode {
             // it is important to handle heading wraparounds
             double headingAccumulator = 0;
             double lastHeading = 0;
+            boolean first = true;
 
             drive.turn(ANGLE);
 
             while (!isStopRequested() && drive.isBusy()) {
                 double heading = drive.getPoseEstimate().getHeading();
-                headingAccumulator += Angle.norm(heading - lastHeading);
+                if (first) lastHeading = heading;
+                headingAccumulator += Math.abs(heading - lastHeading) > Math.PI ? -MathUtils.sgn(heading - lastHeading)*(2*Math.PI - Math.abs(heading - lastHeading)) : heading - lastHeading; //fucking lmao
+                Log.d("head", "" + headingAccumulator);
+                Log.d("head head", "" + heading);
+                Log.d("head head head ", "" + (heading - lastHeading));
                 lastHeading = heading;
-
+                first = false;
                 drive.update();
+                Thread.sleep(15);
             }
 
-            double trackWidth = DriveConstants.TRACK_WIDTH * ANGLE / headingAccumulator;
+            double trackWidth = DriveConstants.TRACK_WIDTH * ANGLE / Math.abs(headingAccumulator);
+            Log.d("eee", "" + Math.abs(headingAccumulator));
             telemetry.log().add(String.valueOf(trackWidth));
             telemetry.update();
             trackWidthStats.add(trackWidth);
-
+            Log.d("lmao", "" + trackWidth);
             sleep(1000);
         }
 
@@ -87,8 +96,7 @@ public class TrackWidthTuner extends LinearOpMode {
                 trackWidthStats.getStandardDeviation() / Math.sqrt(NUM_TRIALS)));
         telemetry.update();
 
-        while (!isStopRequested()) {
-            idle();
-        }
+        Log.d("eeee", "" + trackWidthStats.getMean());
+
     }
 }
