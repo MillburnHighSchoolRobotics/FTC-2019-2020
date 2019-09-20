@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
  * This is an example of a more complex path to really test the tuning.
  */
 @Autonomous(group = "drive")
-public class SplineTest extends LinearOpMode {
+public class MindstormSquare extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ThreadManager manager = ThreadManager.getInstance();
@@ -29,8 +29,28 @@ public class SplineTest extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(48, 24, 0))
+                        .forward(24)
                         .build()
         );
+//        Thread.sleep(1000);
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .strafeRight(24)
+//                        .build()
+//        );
+        Thread.sleep(1000);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse()
+                        .forward(24)
+                        .build()
+        );
+//        Thread.sleep(1000);
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .strafeLeft(24)
+//                        .build()
+//        );
+
     }
 }

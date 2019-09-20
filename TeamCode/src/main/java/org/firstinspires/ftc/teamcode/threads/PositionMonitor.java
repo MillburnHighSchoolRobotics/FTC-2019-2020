@@ -80,7 +80,7 @@ public class PositionMonitor extends MonitorThread {
     protected void updatePosition() {
         double ex1Pos = -Movement.encoderToDistance(ex1.getCurrentPosition());
         double ex2Pos = Movement.encoderToDistance(ex2.getCurrentPosition());
-        double eyPos = 0;//Movement.encoderToDistance(ey.getCurrentPosition());
+        double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
         Log.d(TAG, "ex1 pos (inches): " + ex1Pos);
         Log.d(TAG, "ex2 pos (inches): " + ex2Pos);
         Log.d(TAG, "ey pos (inches): " + eyPos);

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.Angle;
@@ -11,6 +13,8 @@ import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 /*
  * This routine determines the effective track width. The procedure works by executing a point turn
@@ -29,6 +33,11 @@ public class TrackWidthTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setCurrentAuton(this);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
+
         DriveBase drive = new MohanBot(hardwareMap);
         // TODO: if you haven't already, set the localizer to something that doesn't depend on
         // drive encoders for computing the heading
@@ -64,6 +73,8 @@ public class TrackWidthTuner extends LinearOpMode {
             }
 
             double trackWidth = DriveConstants.TRACK_WIDTH * ANGLE / headingAccumulator;
+            telemetry.log().add(String.valueOf(trackWidth));
+            telemetry.update();
             trackWidthStats.add(trackWidth);
 
             sleep(1000);
