@@ -74,7 +74,6 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
             Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
 
             drive.updatePoseEstimate();
-            Thread.sleep(20);
         }
         drive.setDrivePower(new Pose2d(0.0, 0.0, 0.0));
 

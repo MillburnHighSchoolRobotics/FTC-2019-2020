@@ -46,23 +46,23 @@ public class MohanLocalizer implements Localizer {
 
     @Override
     public Pose2d getPoseEstimate() {
-//        update();
         return mohansLocation;
     }
 
     @Override
     public void setPoseEstimate(Pose2d pose2d) {
-        mohansLocation = pose2d;
+
     }
 
     @Override
     public void update() {
-        // lmao threads bitch
-        double x = ThreadManager.getInstance().getValue("x", Double.class);
-        double y = ThreadManager.getInstance().getValue("y", Double.class);
-        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
-        Log.d("mohan theta", theta + "");
-        mohansLocation = new Pose2d(x,y,theta);
+        double x, y, theta;
+        do {
+            x = ThreadManager.getInstance().getValue("x", Double.class);
+            y = ThreadManager.getInstance().getValue("y", Double.class);
+            theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
+        } while (mohansLocation.getX() == x && mohansLocation.getY() == y && mohansLocation.getHeading() == theta);
 
+        mohansLocation = new Pose2d(x,y,theta);
     }
 }
