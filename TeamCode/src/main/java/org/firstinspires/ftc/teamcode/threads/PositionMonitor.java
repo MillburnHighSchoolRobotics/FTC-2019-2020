@@ -26,6 +26,7 @@ public class PositionMonitor extends MonitorThread {
     double theta = 0;
     int rotation = 0;
     double orientation = 0;
+    int count = 0;
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap) {
         super(thread, hardwareMap, TAG);
@@ -76,6 +77,8 @@ public class PositionMonitor extends MonitorThread {
         setValue("x", x);
         setValue("y", y);
         setValue("rotation", rotation);
+        setValue("count", count);
+        count++;
     }
     protected void updatePosition() {
         double ex1Pos = -Movement.encoderToDistance(ex1.getCurrentPosition());

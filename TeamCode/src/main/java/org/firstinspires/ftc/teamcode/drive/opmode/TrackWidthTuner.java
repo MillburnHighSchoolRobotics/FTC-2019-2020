@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 @Autonomous(group = "drive")
 public class TrackWidthTuner extends LinearOpMode {
     public static double ANGLE = Math.toRadians(180);
-    public static int NUM_TRIALS = 30;
+    public static int NUM_TRIALS = 10;
 
     @Override
     public void runOpMode() throws InterruptedException {

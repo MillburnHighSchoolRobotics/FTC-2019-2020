@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
 @Config
 @Autonomous(group = "drive")
 public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
-    public static final double MAX_POWER = 0.7;
+    public static final double MAX_POWER = 1;
     public static final double DISTANCE = 100;
 
     @Override
@@ -50,12 +50,11 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         double maxVel = rpmToVelocity(getMaxRpm());
         double maxPowerTime = DISTANCE / maxVel;
 
-        drive.setPoseEstimate(new Pose2d());
-        drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
+        double startTime = clock.seconds();
         AccelRegression accelRegression = new AccelRegression();
 
-        drive.updatePoseEstimate();
-        double startTime = clock.seconds();
+        drive.setPoseEstimate(new Pose2d());
+        drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
 
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
@@ -91,6 +90,8 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
             telemetry.update();
         Log.d("literallywhatever?!", accelResult.kA + "\t" + accelResult.rSquare);
 
-        Thread.sleep(5000);
+        while (!isStopRequested()) {
+            idle();
+        }
     }
 }

@@ -33,6 +33,7 @@ public class MohanLocalizer implements Localizer {
 //    DcMotorEx ex2;
 //    DcMotorEx ey;
     static Pose2d mohansLocation = new Pose2d(0,0,0);
+    double count = 0;
 
     public MohanLocalizer(HardwareMap hardwareMap) {
 //        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
@@ -56,13 +57,24 @@ public class MohanLocalizer implements Localizer {
 
     @Override
     public void update() {
-        double x, y, theta;
-        do {
-            x = ThreadManager.getInstance().getValue("x", Double.class);
-            y = ThreadManager.getInstance().getValue("y", Double.class);
-            theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
-        } while (mohansLocation.getX() == x && mohansLocation.getY() == y && mohansLocation.getHeading() == theta);
+//        double x, y, theta;
+//        do {
+//            x = ThreadManager.getInstance().getValue("x", Double.class);
+//            y = ThreadManager.getInstance().getValue("y", Double.class);
+//            theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
+//        } while (mohansLocation.getX() == x && mohansLocation.getY() == y && mohansLocation.getHeading() == theta);
 
+        double count1;
+        do {
+            count1 = ThreadManager.getInstance().getValue("count", Integer.class);
+        } while (count == count1);
+
+
+        double x = ThreadManager.getInstance().getValue("x", Double.class);
+        double y = ThreadManager.getInstance().getValue("y", Double.class);
+        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
         mohansLocation = new Pose2d(x,y,theta);
+
+        count = count1;
     }
 }

@@ -48,9 +48,6 @@ public class DriveFeedforwardTuner extends LinearOpMode {
 
         NanoClock clock = NanoClock.system();
 
-//        telemetry.log().add("Press play to begin the feedforward tuning routine");
-//        telemetry.update();
-
         waitForStart();
 
 //        if (isStopRequested()) return;
