@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -43,6 +45,9 @@ public class FieldPositioningSystemTest extends LinearOpMode {
         ex2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ey.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ey.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        rf.setDirection(DcMotorSimple.Direction.REVERSE);
+        rb.setDirection(DcMotorSimple.Direction.REVERSE);
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
