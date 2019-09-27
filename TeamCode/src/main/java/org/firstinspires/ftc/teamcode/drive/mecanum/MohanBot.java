@@ -46,8 +46,8 @@ public class MohanBot extends DriveBase {
         rightRear = hardwareMap.get(DcMotorEx.class, "rb");
         rightFront = hardwareMap.get(DcMotorEx.class, "rf");
 
-        ex1 = hardwareMap.get(DcMotorEx.class, "lf");
-        ex2 = hardwareMap.get(DcMotorEx.class, "lb");
+        ex1 = hardwareMap.get(DcMotorEx.class, "lb");
+        ex2 = hardwareMap.get(DcMotorEx.class, "lf");
         ey = hardwareMap.get(DcMotorEx.class, "rf");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);

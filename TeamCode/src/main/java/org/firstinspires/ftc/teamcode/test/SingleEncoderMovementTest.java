@@ -23,7 +23,7 @@ public class SingleEncoderMovementTest extends LinearOpMode {
         lb = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         rf = (DcMotorEx) hardwareMap.dcMotor.get("rf");
         rb = (DcMotorEx) hardwareMap.dcMotor.get("rb");
-        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

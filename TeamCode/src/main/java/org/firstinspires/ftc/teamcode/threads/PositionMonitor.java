@@ -43,8 +43,8 @@ public class PositionMonitor extends MonitorThread {
 //        synchronized (this.imu) {
 //            this.imu.initialize(parameters);
 //        }
-        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
-        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
         ex1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ex1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -74,7 +74,7 @@ public class PositionMonitor extends MonitorThread {
         updatePosition();
         setValue("theta", Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
         setValue("orientation", Movement.toDegrees(orientation));
-        setValue("x", x);
+        setValue("x", -x);
         setValue("y", y);
         setValue("rotation", rotation);
         setValue("count", count);

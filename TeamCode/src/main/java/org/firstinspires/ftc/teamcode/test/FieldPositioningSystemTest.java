@@ -28,8 +28,8 @@ public class FieldPositioningSystemTest extends LinearOpMode {
         lb = (DcMotorEx) hardwareMap.dcMotor.get("lb");
         rf = (DcMotorEx) hardwareMap.dcMotor.get("rf");
         rb = (DcMotorEx) hardwareMap.dcMotor.get("rb");
-        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
-        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
+        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
         ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
