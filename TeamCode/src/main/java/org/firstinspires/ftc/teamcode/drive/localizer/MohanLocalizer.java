@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -35,6 +36,10 @@ public class MohanLocalizer implements Localizer {
     static Pose2d mohansLocation = new Pose2d(0,0,0);
     double count = 0;
 
+    double xOffset = 0;
+    double yOffset = 0;
+    double thetaOffset = 0;
+
     public MohanLocalizer(HardwareMap hardwareMap) {
 //        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
 //        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("rf");
@@ -52,7 +57,9 @@ public class MohanLocalizer implements Localizer {
 
     @Override
     public void setPoseEstimate(Pose2d pose2d) {
-
+        this.xOffset = pose2d.getX();
+        this.yOffset = pose2d.getY();
+        this.thetaOffset = pose2d.getHeading();
     }
 
     @Override
@@ -70,9 +77,9 @@ public class MohanLocalizer implements Localizer {
         } while (count == count1);
 
 
-        double x = ThreadManager.getInstance().getValue("x", Double.class);
-        double y = ThreadManager.getInstance().getValue("y", Double.class);
-        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
+        double x = ThreadManager.getInstance().getValue("x", Double.class) + xOffset;
+        double y = ThreadManager.getInstance().getValue("y", Double.class) + yOffset;
+        double theta = Angle.norm(Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class)) + thetaOffset);
         mohansLocation = new Pose2d(x,y,theta);
 
         count = count1;
