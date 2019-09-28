@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
+import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
+import com.acmerobotics.roadrunner.path.heading.TangentInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -31,8 +33,10 @@ public class SplineTest extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(48, 32, Math.PI / 2), new ConstantInterpolator(0))
-                        .splineTo(new Pose2d(0,0, Math.PI), new LinearInterpolator(Math.PI / 2, Math.PI))
+//                        .splineTo(new Pose2d(48, 32, Math.PI / 2), new ConstantInterpolator(0))
+//                        .splineTo(new Pose2d(48, 32, Math.PI/2), new LinearInterpolator(0, Math.PI/2))
+                        .splineTo(new Pose2d(48, 32, Math.PI/2), new SplineInterpolator(0, Math.PI/2))
+//                        .splineTo(new Pose2d(48, 32, Math.PI/2), new TangentInterpolator())
                         .build()
         );
     }
