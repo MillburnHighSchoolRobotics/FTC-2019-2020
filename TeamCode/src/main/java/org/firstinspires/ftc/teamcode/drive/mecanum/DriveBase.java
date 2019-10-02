@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.mecanum;
 
+import android.util.Log;
+
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.BASE_CONSTRAINTS;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.WHEEL_BASE;
@@ -27,6 +29,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.autonomous.Movement;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
@@ -173,6 +177,8 @@ public abstract class DriveBase extends MecanumDrive {
                 fieldOverlay.setStroke("#F44336");
                 double t = follower.elapsedTime();
                 DashboardUtil.drawRobot(fieldOverlay, trajectory.get(t));
+                Log.d("pose", "Target Pose: (" + trajectory.get(t).getX() + "," + trajectory.get(t).getY() + ") - " + Movement.toDegrees(trajectory.get(t).getHeading()));
+                Log.d("pose", "Current Pose: (" + currentPose.getX() + "," + currentPose.getY() + ") - " + Movement.toDegrees(currentPose.getHeading()));
 
                 fieldOverlay.setStroke("#3F51B5");
                 fieldOverlay.fillCircle(currentPose.getX(), currentPose.getY(), 3);

@@ -60,6 +60,7 @@ public class MohanLocalizer implements Localizer {
         this.xOffset = pose2d.getX();
         this.yOffset = pose2d.getY();
         this.thetaOffset = pose2d.getHeading();
+        mohansLocation = pose2d;
     }
 
     @Override
