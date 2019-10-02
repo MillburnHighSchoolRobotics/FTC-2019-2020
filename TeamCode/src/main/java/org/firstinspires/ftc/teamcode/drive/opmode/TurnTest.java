@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 @Config
 @Autonomous(group = "drive")
 public class TurnTest extends LinearOpMode {
-    public static double ANGLE = 180;
+    public static double ANGLE = 30;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -31,5 +32,6 @@ public class TurnTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         drive.turnSync(Math.toRadians(ANGLE));
+
     }
 }

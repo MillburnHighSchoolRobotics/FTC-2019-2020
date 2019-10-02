@@ -72,7 +72,7 @@ public class PositionMonitor extends MonitorThread {
 //        setValue("theta", theta);
 
         updatePosition();
-        setValue("theta", Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
+        setValue("theta", 360-Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
         setValue("orientation", Movement.toDegrees(orientation));
         setValue("x", x);
         setValue("y", y);
@@ -92,7 +92,7 @@ public class PositionMonitor extends MonitorThread {
         double deltaEY = eyPos-eyPosLast;
 
         if (!((deltaEX1 == 0) && (deltaEX2 == 0) && (deltaEY == 0))) {
-            double deltaTheta = (deltaEX1-deltaEX2)/offsetX; //radians
+            double deltaTheta = (deltaEX2-deltaEX1)/offsetX; //radians
             Log.d(TAG, "change in theta (radians): " + deltaTheta);
 
             double deltaX = (0.5 * (deltaEX1 + deltaEX2)) + ((deltaEY - offsetY * deltaTheta) * Math.sin(deltaTheta));
