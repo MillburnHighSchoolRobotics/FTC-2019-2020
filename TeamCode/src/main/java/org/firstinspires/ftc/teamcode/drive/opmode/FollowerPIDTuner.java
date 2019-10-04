@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 /*
  * Op mode for tuning follower PID coefficients. The robot drives in a DISTANCE-by-DISTANCE square
@@ -19,9 +21,13 @@ public class FollowerPIDTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        DriveBase drive = new MohanBot(hardwareMap);
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setCurrentAuton(this);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        drive.setPoseEstimate(new Pose2d(-DISTANCE / 2, -DISTANCE / 2, 0));
+        DriveBase drive = new MohanBot(hardwareMap);
+        drive.setPoseEstimate(new Pose2d(-60, 60, 3*Math.PI/2));
 
         waitForStart();
 
