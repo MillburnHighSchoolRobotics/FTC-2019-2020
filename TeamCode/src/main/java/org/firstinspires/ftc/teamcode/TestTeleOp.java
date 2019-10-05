@@ -42,8 +42,8 @@ public class TestTeleOp extends OpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lf.setDirection(REVERSE);
-        lb.setDirection(REVERSE);
+        rf.setDirection(REVERSE);
+        rb.setDirection(REVERSE);
     }
 
     @Override

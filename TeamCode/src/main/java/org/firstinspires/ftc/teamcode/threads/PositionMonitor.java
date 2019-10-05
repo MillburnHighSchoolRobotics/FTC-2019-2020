@@ -102,7 +102,7 @@ public class PositionMonitor extends MonitorThread {
             Log.d(TAG, "deltaY: " + deltaY);
 
             theta += deltaTheta;
-            orientation = theta;
+            orientation += deltaTheta;
             if (theta >= 2 * Math.PI) {
                 theta -=  2 * Math.PI;
                 rotation ++;
@@ -123,7 +123,7 @@ public class PositionMonitor extends MonitorThread {
             Log.d(TAG, "Theta (radians): " + theta);
 
             try {
-                Thread.sleep(5);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

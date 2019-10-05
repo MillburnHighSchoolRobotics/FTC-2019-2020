@@ -45,6 +45,8 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
+//        drive.setPoseEstimate(new Pose2d(-36, 60, 3*Math.PI/2));
+
 
         NanoClock clock = NanoClock.system();
 

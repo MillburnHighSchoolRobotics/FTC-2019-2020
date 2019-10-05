@@ -31,7 +31,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 14.8;
+    public static double TRACK_WIDTH = 19.2;
     public static double WHEEL_BASE = 13.5;
 
     /*
@@ -53,7 +53,7 @@ public class DriveConstants {
      * forces acceleration-limited profiling).
      */
     public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
-            50.0, 40.0, 0.0,
+            50.0, 20.0, 0.0,
             Math.toRadians(180), Math.toRadians(180), 0.0
     );
 

@@ -34,12 +34,13 @@ public class FollowerPIDTuner extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-            drive.followTrajectorySync(
-                    drive.trajectoryBuilder()
-                            .forward(DISTANCE)
-                            .build()
-            );
-            drive.turnSync(Math.toRadians(90));
+//            drive.followTrajectorySync(
+//                    drive.trajectoryBuilder()
+//                            .forward(DISTANCE)
+//                            .build()
+//            );
+            drive.turnSync(Math.toRadians(180));
+            Thread.sleep(1000);
         }
     }
 }

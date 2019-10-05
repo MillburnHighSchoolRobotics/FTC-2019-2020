@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 @Config
 @Autonomous(group = "drive")
 public class TurnTest extends LinearOpMode {
-    public static double ANGLE = 30;
+    public static double ANGLE = 90;
 
     @Override
     public void runOpMode() throws InterruptedException {
