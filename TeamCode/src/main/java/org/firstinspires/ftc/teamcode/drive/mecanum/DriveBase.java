@@ -31,6 +31,7 @@ import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.autonomous.Movement;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 
 /*
@@ -39,8 +40,8 @@ import org.firstinspires.ftc.teamcode.util.DashboardUtil;
  */
 @Config
 public abstract class DriveBase extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = DriveConstants.TRANSLATIONAL_PID;
+    public static PIDCoefficients HEADING_PID = DriveConstants.HEADING_PID;
 
 
     public enum Mode {
@@ -138,6 +139,8 @@ public abstract class DriveBase extends MecanumDrive {
         packet.put("xError", lastError.getX());
         packet.put("yError", lastError.getY());
         packet.put("headingError", lastError.getHeading());
+
+        Log.d("Memeyname", currentPose.getHeading() + "");
 
         switch (mode) {
             case IDLE:

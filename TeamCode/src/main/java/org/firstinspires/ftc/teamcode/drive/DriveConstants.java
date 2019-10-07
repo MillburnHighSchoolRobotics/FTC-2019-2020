@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 /*
@@ -31,7 +32,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 19.2;
+    public static double TRACK_WIDTH = 18;
     public static double WHEEL_BASE = 13.5;
 
     /*
@@ -48,6 +49,9 @@ public class DriveConstants {
 //    public static double kV = 0.01346;// / rpmToVelocity(getMaxRpm());
 //    public static double kA = 0.000172232;
 //    public static double kStatic = 0.05133;
+
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.013, 0.0075, 0);
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
