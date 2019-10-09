@@ -41,17 +41,17 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.01146;// / rpmToVelocity(getMaxRpm());
-    public static double kA = 0.000192232;
-    public static double kStatic = 0.06633;
+//    public static double kV = 0.01146;// / rpmToVelocity(getMaxRpm());
+//    public static double kA = 0.000192232;
+//    public static double kStatic = 0.06633;
 
 
-//    public static double kV = 0.01346;// / rpmToVelocity(getMaxRpm());
-//    public static double kA = 0.000172232;
-//    public static double kStatic = 0.05133;
+    public static double kV = 0.01346;// / rpmToVelocity(getMaxRpm());
+    public static double kA = 0.000172232;
+    public static double kStatic = 0.05133;
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.007, 0.003, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.007, 0.0015, 0);
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,

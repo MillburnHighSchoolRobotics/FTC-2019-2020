@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
+import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,9 +30,10 @@ public class StraightTest extends LinearOpMode {
 
         DriveBase drive = new MohanBot(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(-60, 60, 3*Math.PI/2));
+//        drive.setPoseEstimate(new Pose2d(-60, 60, 3*Math.PI/2));
 
         Trajectory trajectory = drive.trajectoryBuilder()
+//                .splineTo(new Pose2d(48, 0,0), new ConstantInterpolator(0))
                 .forward(DISTANCE)
                 .build();
 
