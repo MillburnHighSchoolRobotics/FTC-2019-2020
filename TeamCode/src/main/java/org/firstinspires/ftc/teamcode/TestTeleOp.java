@@ -13,10 +13,10 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 @TeleOp(group = "test")
 public class TestTeleOp extends OpMode {
-    double[] squishPos = {0,1}; //open, close
-    double[] spinPos = {0,1}; //open, close
-    boolean clawSquished = false;
-    boolean clawSpun = false;
+    double[] squishPos = {0.45,1};
+    double[] spinPos = {0,0.5};
+
+    final double intakePower = 0.8;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -65,7 +65,7 @@ public class TestTeleOp extends OpMode {
 
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
-        intakeR.setDirection(REVERSE);
+        intakeL.setDirection(REVERSE);
 
         lf.setPower(0);
         lb.setPower(0);
@@ -73,6 +73,9 @@ public class TestTeleOp extends OpMode {
         rb.setPower(0);
         intakeL.setPower(0);
         intakeR.setPower(0);
+
+        clawSquish.setPosition(squishPos[0]);
+        clawSpin.setPosition(spinPos[1]);
     }
 
     @Override
@@ -92,43 +95,35 @@ public class TestTeleOp extends OpMode {
         }
 
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) {
-            intakeL.setPower(.4);
-            intakeR.setPower(.4);
-        }
-
-        if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) {
-            intakeL.setPower(-.4);
-            intakeR.setPower(-.4);
+            intakeL.setPower(intakePower);
+            intakeR.setPower(intakePower);
+        } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) {
+            intakeL.setPower(-intakePower);
+            intakeR.setPower(-intakePower);
+        } else {
+            intakeL.setPower(0);
+            intakeR.setPower(0);
         }
 
         if (gamepad1.a) { //close claw
-            if (!clawSquished) {
-                clawSquish.setPosition(squishPos[1]);
-            }
+            clawSquish.setPosition(squishPos[1]);
         }
 
         if (gamepad1.b) { //release claw
-            if (clawSquished) {
-                clawSquish.setPosition(squishPos[0]);
-            }
+            clawSquish.setPosition(squishPos[0]);
         }
 
         if (gamepad1.x) { //normal claw rotation
-            if (clawSpun) {
-                clawSpin.setPosition(spinPos[0]);
-            }
+            clawSpin.setPosition(spinPos[1]);
         }
 
         if (gamepad1.y) { //sideways claw rotation
-            if (clawSpun) {
-                clawSpin.setPosition(spinPos[1]);
-            }
+            clawSpin.setPosition(spinPos[0]);
         }
 
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
         double rotX = gamepad1.right_stick_x;
-        double rotY = gamepad1.right_stick_y;
         double translateMag = Math.sqrt(transX*transX + transY*transY);
         double translateTheta = Math.atan2(transY, transX);
         translateTheta = Math.toDegrees(translateTheta);
@@ -174,11 +169,5 @@ public class TestTeleOp extends OpMode {
         lb.setPower(LB * gearCoefficient);
         rf.setPower(RF * gearCoefficient);
         rb.setPower(RB * gearCoefficient);
-//        telemetry.addData("THETA", translateTheta);
-//        telemetry.addData("SCALE", scale);
-//        telemetry.addData("LF", lf.getPower() + " " + lf.getCurrentPosition());
-//        telemetry.addData("LB", lb.getPower() + " " +  lb.getCurrentPosition());
-//        telemetry.addData("RF", rf.getPower() + " " + rf.getCurrentPosition());
-//        telemetry.addData("RB", rb.getPower() + " " + rb.getCurrentPosition());
     }
 }
