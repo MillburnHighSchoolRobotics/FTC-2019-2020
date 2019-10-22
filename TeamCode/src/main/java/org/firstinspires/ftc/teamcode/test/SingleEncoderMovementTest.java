@@ -8,7 +8,7 @@ import static org.firstinspires.ftc.teamcode.util.Movement.shouldStop;
 import static org.firstinspires.ftc.teamcode.util.Movement.ticks;
 import static org.firstinspires.ftc.teamcode.util.Movement.wheelDiameter;
 
-@Autonomous(name = "Single Encoder Movement Test", group = "test")
+@Autonomous(group = "test")
 public class SingleEncoderMovementTest extends LinearOpMode {
 
     DcMotorEx lf;

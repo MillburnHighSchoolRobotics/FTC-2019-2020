@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.Movement;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-@Autonomous(name = "PID Test", group = "test")
+@Autonomous(group = "test")
 public class PIDTest extends LinearOpMode {
 
     DcMotorEx lf;

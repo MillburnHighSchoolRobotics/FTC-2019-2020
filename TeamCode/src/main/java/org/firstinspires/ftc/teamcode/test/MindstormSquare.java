@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 /*
  * This is an example of a more complex path to really test the tuning.
  */
-@Autonomous(group = "drive")
+@Autonomous(group = "test")
 public class MindstormSquare extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

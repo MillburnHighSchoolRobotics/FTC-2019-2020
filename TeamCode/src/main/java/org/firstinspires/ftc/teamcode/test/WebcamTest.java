@@ -20,7 +20,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 
-@TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
+@TeleOp(group ="test")
 public class WebcamTest extends LinearOpMode {
 
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;

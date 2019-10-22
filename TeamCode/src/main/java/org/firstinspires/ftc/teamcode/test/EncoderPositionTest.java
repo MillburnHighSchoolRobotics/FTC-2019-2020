@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.util.Movement;
 
-@Autonomous(name = "Encoder Position Test", group = "test")
+@Autonomous(group = "test")
 public class EncoderPositionTest extends LinearOpMode {
 
     DcMotorEx encoder;

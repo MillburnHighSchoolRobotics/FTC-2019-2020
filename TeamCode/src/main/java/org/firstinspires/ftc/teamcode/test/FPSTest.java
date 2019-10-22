@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-@Autonomous(name = "FPS Test", group = "test")
-public class FieldPositioningSystemTest extends LinearOpMode {
+@Autonomous(group = "test")
+public class FPSTest extends LinearOpMode {
 
     DcMotorEx lf;
     DcMotorEx lb;

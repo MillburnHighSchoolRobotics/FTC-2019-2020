@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-@TeleOp(name = "TEST TELEOP", group = "Testing")
+@TeleOp(group = "test")
 public class TestTeleOp extends OpMode {
     public DcMotorEx lf;
     public DcMotorEx lb;
