@@ -46,12 +46,28 @@ public class DriveConstants {
 //    public static double kStatic = 0.06633;
 
 
-    public static double kV = 0.01346;// / rpmToVelocity(getMaxRpm());
-    public static double kA = 0.000172232;
-    public static double kStatic = 0.05133;
+    public static double kV = 0.014;// / rpmToVelocity(getMaxRpm());
+    public static double kA = 0.00013;
+    public static double kStatic = 0.08;
+//
+////    public static double kV = 0.1568;// / rpmToVelocity(getMaxRpm());
+////    public static double kA = 0.000903926;
+////    public static double kStatic = 0.27657;
+//
+//    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+//    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.007, 0.002, 0);
+
+//    public static double kV = 0.0125;// / rpmToVelocity(getMaxRpm());
+//    public static double kA = 0.0001725;
+//    public static double kStatic = 0.0675;
+
+//    public static double kV = 0.1568;// / rpmToVelocity(getMaxRpm());
+//    public static double kA = 0.000903926;
+//    public static double kStatic = 0.27657;
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.007, 0.0015, 0);
+//    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.0045, 0.0012, 0);
+public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.005, 0.05, 0.002);
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,

@@ -50,12 +50,13 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         double maxVel = rpmToVelocity(getMaxRpm());
         double maxPowerTime = DISTANCE / maxVel;
 
-        double startTime = clock.seconds();
+
         AccelRegression accelRegression = new AccelRegression();
 
         drive.setPoseEstimate(new Pose2d());
         drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
-
+        Thread.sleep(250);
+        double startTime = clock.seconds();
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > maxPowerTime) {
