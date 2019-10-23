@@ -6,17 +6,20 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-@TeleOp(group = "test")
-public class TestTeleOp extends OpMode {
-    double[] squishPos = {0.45,1};
-    double[] spinPos = {0,0.5};
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
+public class DriversPickUpYourControllers extends OpMode {
+    final double[] squishPos = {0.45,1};
+    final double[] spinPos = {0,0.5};
+
+    final double chainBarLow = 0;
+    final double chainBarHigh = 1000;
 
     final double intakePower = 0.8;
+    final double chainBarPower = 0.8;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -24,10 +27,9 @@ public class TestTeleOp extends OpMode {
     public DcMotorEx rb;
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
+    public DcMotor chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
-    private double gearCoefficient = 1;
-    private double rotateCoefficient = 1;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
             {1, 0, 0, 1},
@@ -44,8 +46,11 @@ public class TestTeleOp extends OpMode {
         lb = (DcMotorEx)hardwareMap.dcMotor.get("lb");
         rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
         rb = (DcMotorEx)hardwareMap.dcMotor.get("rb");
+
         intakeL = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
         intakeR = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
+        chainBar = hardwareMap.dcMotor.get("chainBar");
+
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
 
@@ -53,15 +58,19 @@ public class TestTeleOp extends OpMode {
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
@@ -71,8 +80,10 @@ public class TestTeleOp extends OpMode {
         lb.setPower(0);
         rf.setPower(0);
         rb.setPower(0);
+
         intakeL.setPower(0);
         intakeR.setPower(0);
+        chainBar.setPower(0);
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
@@ -86,12 +97,19 @@ public class TestTeleOp extends OpMode {
             lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
             lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) {
@@ -121,6 +139,17 @@ public class TestTeleOp extends OpMode {
             clawSpin.setPosition(spinPos[0]);
         }
 
+        if (gamepad1.left_bumper) {
+            if (chainBar.getCurrentPosition() > chainBarLow) {
+                chainBar.setPower(-chainBarPower);
+            }
+        }
+        if (gamepad1.right_bumper) {
+            if (chainBar.getCurrentPosition() < chainBarHigh) {
+                chainBar.setPower(chainBarPower);
+            }
+        }
+
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
         double rotX = gamepad1.right_stick_x;
@@ -131,10 +160,10 @@ public class TestTeleOp extends OpMode {
         double scale = 0;
         double RF = 0, RB = 0, LF = 0, LB = 0;
         if (!MathUtils.equals(rotX, 0, 0.05)) {
-            LF = rotX * rotateCoefficient;
-            LB = rotX * rotateCoefficient;
-            RF = -rotX * rotateCoefficient;
-            RB = -rotX * rotateCoefficient;
+            LF = rotX;
+            LB = rotX;
+            RF = -rotX;
+            RB = -rotX;
         } else if (!MathUtils.equals(translateMag, 0, 0.05)) {
             double translatePower = translateMag;
             if (translateTheta >= 0 && translateTheta <= 90) { //quadrant 1
@@ -165,9 +194,9 @@ public class TestTeleOp extends OpMode {
                 RB = (translatePower * POWER_MATRIX[6][3] * scale);
             }
         }
-        lf.setPower(LF * gearCoefficient);
-        lb.setPower(LB * gearCoefficient);
-        rf.setPower(RF * gearCoefficient);
-        rb.setPower(RB * gearCoefficient);
+        lf.setPower(LF);
+        lb.setPower(LB);
+        rf.setPower(RF);
+        rb.setPower(RB);
     }
 }
