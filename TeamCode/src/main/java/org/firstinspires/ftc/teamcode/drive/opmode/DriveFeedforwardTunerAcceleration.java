@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
 @Config
 @Autonomous(group = "drive")
 public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
-    public static final double MAX_POWER = 1;
+    public static final double MAX_POWER = 0.7;
     public static final double DISTANCE = 100;
 
     @Override
@@ -55,7 +55,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
         drive.setPoseEstimate(new Pose2d());
         drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
-        Thread.sleep(250);
+//        Thread.sleep(250);
         double startTime = clock.seconds();
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
@@ -63,7 +63,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
                 break;
             }
 
-            accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
+            accelRegression.add(elapsedTime, drive.getPoseEstimate().getY(), MAX_POWER);
 
 //            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
 //            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
@@ -71,7 +71,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 //            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
 //            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
 
-            Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
+            Log.d("literallywhatever?!", drive.getPoseEstimate().getY() + "\t" + elapsedTime);
 
             drive.updatePoseEstimate();
         }

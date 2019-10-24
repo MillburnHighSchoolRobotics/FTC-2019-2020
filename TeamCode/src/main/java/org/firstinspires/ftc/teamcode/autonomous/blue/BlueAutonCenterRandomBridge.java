@@ -100,9 +100,18 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeTo(new Vector2d(-34,36))
-                        .reverse()
+                        .forward(4.75)
+                        .build()
+        );
+        Thread.sleep(500);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
                         .splineTo(new Pose2d(60, 36, Math.PI), new SplineInterpolator(Math.PI,3*Math.PI/2))
-                        .reverse()
+                        .build()
+        );
+        Thread.sleep(500);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
                         .forward(4.75)
                         .build()
         );
@@ -117,8 +126,7 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .reverse()
-                        .splineTo(new Pose2d(0, 42, Math.PI))
+                        .strafeTo(new Vector2d(0,42))
                         .build()
         );
     }
