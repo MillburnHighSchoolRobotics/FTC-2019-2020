@@ -32,8 +32,8 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 18;
-    public static double WHEEL_BASE = 13.5;
+    public static double TRACK_WIDTH = 11;
+    public static double WHEEL_BASE = 14.5;
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -67,7 +67,7 @@ public class DriveConstants {
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
 //    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.0045, 0.0012, 0);
-public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.005, 0.05, 0.002);
+public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,

@@ -28,7 +28,7 @@ public class BlueAutonParkBridge extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(0, 36, Math.PI))
+                        .splineTo(new Pose2d(0, 42, Math.PI))
                         .build()
         );
     }

@@ -12,6 +12,7 @@ public class ChainBarPositionTest extends OpMode {
     @Override
     public void init() {
         chainBar = hardwareMap.dcMotor.get("chainBar");
+        chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setPower(0);
@@ -22,9 +23,10 @@ public class ChainBarPositionTest extends OpMode {
 
         if (gamepad1.left_bumper) {
             chainBar.setPower(-chainBarPower);
-        }
-        if (gamepad1.right_bumper) {
+        } else if (gamepad1.right_bumper) {
             chainBar.setPower(chainBarPower);
+        } else {
+            chainBar.setPower(0);
         }
         telemetry.addData("ChainBar",chainBar.getCurrentPosition());
         telemetry.update();

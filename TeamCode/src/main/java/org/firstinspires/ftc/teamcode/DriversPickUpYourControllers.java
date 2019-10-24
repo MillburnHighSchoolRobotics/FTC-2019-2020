@@ -15,11 +15,12 @@ public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
 
-    final double chainBarLow = 0;
-    final double chainBarHigh = 1000;
+//    final double chainBarLow = 200;
+//    final double chainBarHigh = 2000;
 
-    final double intakePower = 0.8;
-    final double chainBarPower = 0.8;
+    double intakePower = 0.45;
+    double chainBarPower = 0.8;
+    double drivePower = 1;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -59,6 +60,8 @@ public class DriversPickUpYourControllers extends OpMode {
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -87,6 +90,7 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
+
     }
 
     @Override
@@ -140,14 +144,21 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.left_bumper) {
-            if (chainBar.getCurrentPosition() > chainBarLow) {
-                chainBar.setPower(-chainBarPower);
-            }
+            chainBar.setPower(-chainBarPower);
+        } else if (gamepad1.right_bumper) {
+            chainBar.setPower(chainBarPower);
+        } else {
+            chainBar.setPower(0);
         }
-        if (gamepad1.right_bumper) {
-            if (chainBar.getCurrentPosition() < chainBarHigh) {
-                chainBar.setPower(chainBarPower);
-            }
+
+        if (gamepad1.dpad_up) {
+            drivePower = 1;
+        } else if (gamepad1.dpad_right) {
+            drivePower = 0.8;
+        } else if (gamepad1.dpad_down) {
+            drivePower = 0.6;
+        } else if (gamepad1.dpad_left) {
+            drivePower = 0.4;
         }
 
         double transX = gamepad1.left_stick_x;
@@ -194,9 +205,9 @@ public class DriversPickUpYourControllers extends OpMode {
                 RB = (translatePower * POWER_MATRIX[6][3] * scale);
             }
         }
-        lf.setPower(LF);
-        lb.setPower(LB);
-        rf.setPower(RF);
-        rb.setPower(RB);
+        lf.setPower(drivePower * LF);
+        lb.setPower(drivePower * LB);
+        rf.setPower(drivePower * RF);
+        rb.setPower(drivePower * RB);
     }
 }
