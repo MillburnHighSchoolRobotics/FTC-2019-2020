@@ -1,43 +1,44 @@
 ## NOTICE
 
-This repository contains v5.0 of the FTC SDK.  No further versions will pushed to https://github.com/ftctechnh/ftc_app.
+This repository contains the public FTC SDK for the SKYSTONE (2019-2020) competition season.  
 
-v5.0 has also been posted to https://github.com/FIRST-Tech-Challenge/SkyStone where all further releases will be posted for the 2019/20 season.
-
-Why are we doing this?  Git/GitHub is not designed to store large binary blobs.  As such the ftc_app repository has grown to over 1GB.  Not only does this violate GitHub's usage policies, but puts an undue burden on users of the repository when they download it.  For the foreseeable future a season specific version of the repository will be hosted at the url above.  Different approaches to prevent the size problem from recurring are being evaluated by the FTC Technology Team.  We realize that this creates a problem with teams that have maintained a history of software within the ftc_app workspace.  We appreciate your patience and understanding as work to migrate to a permanent solution.
+Formerly this software project was hosted [here](https://github.com/ftctechnh/ftc_app).  Teams who are competing in the SKYSTONE Challenge should use this [new SKYSTONE repository](https://github.com/FIRST-Tech-Challenge/SKYSTONE) instead of the older (and no longer updated) ftc_app repository.
 
 ## Welcome!
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
-If you are new to the *FIRST* Tech Challenge software and control system, you should visit the online wiki to learn how to install, configure, and use the software and control system:
+## Getting Started
+If you are new to robotics or new to the *FIRST* Tech Challenge, then you should consider reviewing the [FTC Blocks Tutorial](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki/Blocks-Tutorial) to get familiar with how to use the control system:  
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FTC Blocks Online Tutorial](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki/Blocks-Tutorial)
 
-Note that the wiki is an "evergreen" document that is constantly being updated and edited.  It contains the most current information about the *FIRST* Tech Challenge software and control system.
+Even if you are an advanced Java programmer, it is helpful to start with the [FTC Blocks tutorial](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki/Blocks-Tutorial), and then migrate to the [OnBot Java Tool](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki/OnBot-Java-Tutorial) or to [Android Studio](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki/Android-Studio-Tutorial) afterwards.
 
 ## Downloading the Project
-It is important to note that this repository is large and can take a long time and use a lot of space to download. If you would like to save time and space, there are some options that you can choose to download only the most current version of the Android project folder:
+If you are an Android Studio programmer, there are several ways to download this repo.  Note that if you use the Blocks or OnBot Java Tool to program your robot, then you do not need to download this repository.
 
-* If you are a git user, *FIRST* recommends that you use the --depth command line argument to only clone the most current version of the repository:
+* If you are a git user, you can clone the most current version of the repository:
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone --depth=1 https://github.com/ftctechnh/ftc_app.git</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/FIRST-Tech-Challenge/SKYSTONE.git</p>
 
 * Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
 
-* You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the Releases page for this repository.
+* You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the [Releases](https://github.com/FIRST-Tech-Challenge/SKYSTONE/releases) page for this repository.
 
 Once you have downloaded and uncompressed (if needed) your folder, you can use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
 
 ## Getting Help
 ### User Documentation and Tutorials
-*FIRST* maintains an online wiki with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access the wiki at the following address:
+*FIRST* maintains online documentation with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access this documentation using the following link:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[SKYSTONE Online Documentation](https://github.com/FIRST-Tech-Challenge/SKYSTONE/wiki)
+
+Note that the online documentation is an "evergreen" document that is constantly being updated and edited.  It contains the most current information about the *FIRST* Tech Challenge software and control system.
 
 ### Javadoc Reference Material
-The Javadoc reference documentation for the FTC SDK is now available online.  Visit the following URL to view the FTC SDK documentation as a live website:
+The Javadoc reference documentation for the FTC SDK is now available online.  Click on the following link to view the FTC SDK Javadoc documentation as a live website:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://ftctechnh.github.io/ftc_app/doc/javadoc/index.html    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FTC Javadoc Documentation](https://first-tech-challenge.github.io/SkyStone/doc/javadoc/index.html)    
 
 Documentation for the FTC SDK is also included with this repository.  There is a subfolder called "doc" which contains several subfolders:
 
@@ -45,9 +46,99 @@ Documentation for the FTC SDK is also included with this repository.  There is a
  * The folder "javadoc" contains the JavaDoc user documentation for the FTC SDK.
 
 ### Online User Forum
-For technical questions regarding the SDK, please visit the FTC Technology forum:
+For technical questions regarding the Control System or the FTC SDK, please visit the FTC Technology forum:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FTC Technology Forum](https://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology)
+
+
+**************************************************************************************
+# Release Information
+**************************************************************************************
+
+Version 5.3 (20191004-112306)
+
+* Fixes external USB/UVC webcam support
+* Makes various bugfixes and improvements to Blocks page, including but not limited to:
+    * Many visual tweaks
+    * Browser zoom and window resize behave better
+    * Resizing the Java preview pane works better and more consistently across browsers
+    * The Java preview pane consistently gets scrollbars when needed
+    * The Java preview pane is hidden by default on phones
+    * Internet Explorer 11 should work
+    * Large dropdown lists display properly on lower res screens
+    * Disabled buttons are now visually identifiable as disabled
+    * A warning is shown if a user selects a TFOD sample, but their device is not compatible
+    * Warning messages in a Blocks op mode are now visible by default.
+* Adds goBILDA 5201 and 5202 motors to Robot Configurator
+* Adds PIDF Annotation values to AndyMark, goBILDA and TETRIX motor configurations.
+    This has the effect of causing the RUN_USING_ENCODERS and RUN_TO_POSITION modes to use 
+    PIDF vs PID closed loop control on these motors.  This should provide more responsive, yet stable, speed control.  
+    PIDF adds Feedforward control to the basic PID control loop.
+    Feedforward is useful when controlling a motor's speed because it "anticipates" how much the control voltage 
+    must change to achieve a new speed set-point, rather than requiring the integrated error to change sufficiently. 
+    The PIDF values were chosen to provide responsive, yet stable, speed control on a lightly loaded motor.
+    The more heavily a motor is loaded (drag or friction), the more noticable the PIDF improvement will be.
+* Fixes startup crash on Android 10
+* Fixes [ftc_app issue #712](https://github.com/ftctechnh/ftc_app/issues/712) (thanks to FROGbots-4634)
+* Fixes [ftc_app issue #542](https://github.com/ftctechnh/ftc_app/issues/542)
+* Allows "A" and lowercase letters when naming device through RC and DS apps.
+    
+**************************************************************************************
+# Release Information
+**************************************************************************************
+
+Version 5.2 (20190905-083227)
+
+* Fixes extra-wide margins on settings activities, and placement of the new configuration button
+* Adds Skystone Vuforia image target data.
+   * Includes sample Skystone Vuforia Navigation op modes (Java).
+   * Includes sample Skystone Vuforia Navigation op modes (Blocks).
+* Adds TensorFlow inference model (.tflite) for Skystone game elements.
+   * Includes sample Skystone TensorFlow op modes (Java).
+   * Includes sample Skystone TensorFlow op modes (Blocks).
+* Removes older (season-specific) sample op modes.
+* Includes 64-bit support (to comply with [Google Play requirements](https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html)).
+* Protects against Stuck OpModes when a Restart Robot is requested. (Thanks to FROGbots-4634) ([ftc_app issue #709](https://github.com/ftctechnh/ftc_app/issues/709))
+* Blocks related changes:
+   * Fixes bug with blocks generated code when hardware device name is a java or javascript reserved word.
+   * Shows generated java code for blocks, even when hardware items are missing from the active configuration.
+   * Displays warning icon when outdated Vuforia and TensorFlow blocks are used ([SkyStone issue #27](https://github.com/FIRST-Tech-Challenge/SkyStone/issues/27))
+
+**************************************************************************************
+# Release Information
+**************************************************************************************
+
+Version 5.1 (20190820-222104)
+
+* Defines default PIDF parameters for the following motors:
+    * REV Core Hex Motor
+    * REV 20:1 HD Hex Motor
+    * REV 40:1 HD Hex Motor
+* Adds back button when running on a device without a system back button (such as a Control Hub) 
+* Allows a REV Control Hub to update the firmware on a REV Expansion Hub via USB
+* Fixes [SkyStone issue #9](https://github.com/FIRST-Tech-Challenge/SkyStone/issues/9)
+* Fixes [ftc_app issue #715](https://github.com/ftctechnh/ftc_app/issues/715)
+* Prevents extra DS User clicks by filtering based on current state.
+* Prevents incorrect DS UI state changes when receiving new OpMode list from RC
+* Adds support for REV Color Sensor V3
+* Adds a manual-refresh DS Camera Stream for remotely viewing RC camera frames.
+    * To show the stream on the DS, initialize **but do not run** a stream-enabled opmode, select the Camera Stream option in the DS menu, and tap the image to refresh. This feature is automatically enabled when using Vuforia or TFOD—no additional RC configuration is required for typical use cases. To hide the stream, select the same menu item again.
+    * Note that gamepads are disabled and the selected opmode cannot be started while the stream is open as a safety precaution. 
+    * To use custom streams, consult the API docs for `CameraStreamServer#setSource` and `CameraStreamSource`.
+* Adds many Star Wars sounds to RobotController resources.
+* Added SKYSTONE Sounds Chooser Sample Program.
+* Switches out startup, connect chimes, and error/warning sounds for Star Wars sounds
+* Updates OnBot Java to use a WebSocket for communication with the robot
+    * The OnBot Java page no longer has to do a full refresh when a user switches from editing one file to another
+ 
+Known issues:
+* Camera Stream
+    * The Vuforia camera stream inherits the issues present in the phone preview (namely [ftc_app issue #574](https://github.com/ftctechnh/ftc_app/issues/574)). This problem does not affect the TFOD camera stream even though it receives frames from Vuforia.
+    * The orientation of the stream frames may not always match the phone preview. For now, these frames may be rotated manually via a custom `CameraStreamSource` if desired.
+* OnBotJava
+    * Browser back button may not always work correctly
+    * It's possible for a build to be queued, but not started. The OnBot Java build console will display a warning if this occurs.
+    * A user might not realize they are editing a different file if the user inadvertently switches from one file to another since this switch is now seamless. The name of the currently open file is displayed in the browser tab.
 
 **************************************************************************************
 # Release Information
@@ -129,8 +220,8 @@ Changes include:
     - User can upload calibration files from Program and Manage web interface.
     - UVC cameras seem to draw a fair amount of electrical current from the USB bus.
          + This does not appear to present any problems for the REV Robotics Control Hub.
-	 + This does seem to create stability problems when using some cameras with an Android phone-based Robot Controller.
-	 + FTC Tech Team is investigating options to mitigate this issue with the phone-based Robot Controllers.
+     + This does seem to create stability problems when using some cameras with an Android phone-based Robot Controller.
+     + FTC Tech Team is investigating options to mitigate this issue with the phone-based Robot Controllers.
     - Updated sample Vuforia Navigation and VuMark Op Modes to demonstrate how to use an internal phone-based camera and an external UVC webcam.    
 
  * Support for improved motor control.
@@ -143,23 +234,23 @@ Changes include:
  * Wireless
     - Added 5GHz support for wireless channel changing for those devices that support it.
         + Tested with Moto G5 and E4 phones.
-	+ Also tested with other (currently non-approved) phones such as Samsung Galaxy S8.
+    + Also tested with other (currently non-approved) phones such as Samsung Galaxy S8.
 
 * Improved Expansion Hub firmware update support in Robot Controller app
     - Changes to make the system more robust during the firmware update process (when performed through Robot Controller app).
     - User no longer has to disconnect a downstream daisy-chained Expansion Hub when updating an Expansion Hub's firmware.
         + If user is updating an Expansion Hub's firmware through a USB connection, he/she does not have to disconnect RS485 connection to other Expansion Hubs.
-	+ The user still must use a USB connection to update an Expansion Hub's firmware.
-	+ The user cannot update the Expansion Hub firmware for a downstream device that is daisy chained through an RS485 connection.
+    + The user still must use a USB connection to update an Expansion Hub's firmware.
+    + The user cannot update the Expansion Hub firmware for a downstream device that is daisy chained through an RS485 connection.
     - If an Expansion Hub accidentally gets "bricked" the Robot Controller app is now more likely to recognize the Hub when it scans the USB bus.
         + Robot Controller app should be able to detect an Expansion Hub, even if it accidentally was bricked in a previous update attempt.
-	+ Robot Controller app should be able to install the firmware onto the Hub, even if if accidentally was bricked in a previous update attempt.
+    + Robot Controller app should be able to install the firmware onto the Hub, even if if accidentally was bricked in a previous update attempt.
  
  * Resiliency
     - FTC software can detect and enable an FTDI reset feature that is available with REV Robotics v1.8 Expansion Hub firmware and greater.
         + When enabled, the Expansion Hub can detect if it hasn't communicated with the Robot Controller over the FTDI (USB) connection.
-	+ If the Hub hasn't heard from the Robot Controller in a while, it will reset the FTDI connection.
-	+ This action helps system recover from some ESD-induced disruptions.
+    + If the Hub hasn't heard from the Robot Controller in a while, it will reset the FTDI connection.
+    + This action helps system recover from some ESD-induced disruptions.
     - Various fixes to improve reliability of FTC software.
      
  * Blocks
@@ -175,19 +266,19 @@ Changes include:
     - Added support for a REV Touch Sensor (no longer have to configure as a generic digital device).
     - Added blocks for DcMotorEx methods.
         + These are enhanced methods that you can use when supported by the motor controller hardware.
-	+ The REV Robotics Expansion Hub supports these enhanced methods.
-	+ Enhanced methods include methods to get/set motor velocity (in encoder pulses per second), get/set PIDF coefficients, etc..
+    + The REV Robotics Expansion Hub supports these enhanced methods.
+    + Enhanced methods include methods to get/set motor velocity (in encoder pulses per second), get/set PIDF coefficients, etc..
 
  * Modest Improvements in Logging
     - Decrease frequency of battery checker voltage statements.
     - Removed non-FTC related log statements (wherever possible).
     - Introduced a "Match Logging" feature.
         + Under "Settings" a user can enable/disable this feature (it's disabled by default).
-	+ If enabled, user provides a "Match Number" through the Driver Station user interface (top of the screen).
-	    * The Match Number is used to create a log file specifically with log statements from that particular Op Mode run.
-	    * Match log files are stored in /sdcard/FIRST/matlogs on the Robot Controller.
-	    * Once an op mode run is complete, the Match Number is cleared.
-	    * This is a convenient way to create a separate match log with statements only related to a specific op mode run.
+    + If enabled, user provides a "Match Number" through the Driver Station user interface (top of the screen).
+        * The Match Number is used to create a log file specifically with log statements from that particular Op Mode run.
+        * Match log files are stored in /sdcard/FIRST/matlogs on the Robot Controller.
+        * Once an op mode run is complete, the Match Number is cleared.
+        * This is a convenient way to create a separate match log with statements only related to a specific op mode run.
  
  * New Devices
     - Support for REV Robotics Blinkin LED Controller.
@@ -209,14 +300,14 @@ Known issues:
  * Initial support for UVC compatible cameras
     - UVC cameras seem to draw significant amount of current from the USB bus.
         + This does not appear to present any problems for the REV Robotics Control Hub.
-	+ This does seem to create stability problems when using some cameras with an Android phone-based Robot Controller.
-	+ FTC Tech Team is investigating options to mitigate this issue with the phone-based Robot Controllers.
+    + This does seem to create stability problems when using some cameras with an Android phone-based Robot Controller.
+    + FTC Tech Team is investigating options to mitigate this issue with the phone-based Robot Controllers.
     - There might be a possible deadlock which causes the RC to become unresponsive when using a UVC webcam with a Nougat Android Robot Controller.
 
  * Wireless
     - When user selects a wireless channel, this channel does not necessarily persist if the phone is power cycled.
         + Tech Team is hoping to eventually address this issue in a future release.
-	+ Issue has been present since apps were introduced (i.e., it is not new with the v4.0 release).
+    + Issue has been present since apps were introduced (i.e., it is not new with the v4.0 release).
     - Wireless channel is not currently displayed for WiFi Direct connections.
 
  * Miscellaneous
