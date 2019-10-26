@@ -2,10 +2,10 @@
 poses:
 - x: 24.0
   y: -63.0
-  heading: 1.5707963267948966
+  heading: 0.0
 - x: 0.0
-  y: -63.0
-  heading: 1.5707963267948966
+  y: 63.0
+  heading: 3.141592653589793
 constraints:
   maxVel: 25.0
   maxAccel: 40.0

@@ -74,8 +74,8 @@ public class PositionMonitor extends MonitorThread {
         updatePosition();
         setValue("theta", 360-Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
         setValue("orientation", Movement.toDegrees(orientation));
-        setValue("x", y);
-        setValue("y", -x);
+        setValue("x", x);
+        setValue("y", y);
         setValue("rotation", rotation);
         setValue("count", count);
         count++;

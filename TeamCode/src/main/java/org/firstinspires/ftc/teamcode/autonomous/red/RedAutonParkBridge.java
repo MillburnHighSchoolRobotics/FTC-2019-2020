@@ -20,7 +20,7 @@ public class RedAutonParkBridge extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(24, -63, Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(24, -63, 0));
 
         waitForStart();
 
@@ -28,7 +28,8 @@ public class RedAutonParkBridge extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(0, -36, Math.PI))
+                        .strafeLeft(24)
+                        .forward(27)
                         .build()
         );
     }

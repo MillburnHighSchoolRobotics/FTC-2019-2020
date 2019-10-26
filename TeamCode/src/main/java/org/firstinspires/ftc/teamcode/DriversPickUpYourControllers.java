@@ -14,6 +14,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
+    final double[] foundationHookPos = {0,1};
 
 //    final double chainBarLow = 200;
 //    final double chainBarHigh = 2000;
@@ -31,6 +32,8 @@ public class DriversPickUpYourControllers extends OpMode {
     public DcMotor chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
+    public Servo foundationHook;
+    double thetaOffset;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
             {1, 0, 0, 1},
@@ -54,6 +57,7 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
+        foundationHook = hardwareMap.servo.get("foundationHook");
 
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -90,7 +94,8 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
-
+        foundationHook.setPosition(foundationHookPos[0]);
+        thetaOffset = 0;
     }
 
     @Override
@@ -143,10 +148,18 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSpin.setPosition(spinPos[0]);
         }
 
+        if (gamepad2.a) { //hook up
+            foundationHook.setPosition(foundationHookPos[1]);
+        }
+
+        if (gamepad2.b) { //hook down
+            foundationHook.setPosition(foundationHookPos[0]);
+        }
+
         if (gamepad1.left_bumper) {
-            chainBar.setPower(-chainBarPower);
-        } else if (gamepad1.right_bumper) {
             chainBar.setPower(chainBarPower);
+        } else if (gamepad1.right_bumper) {
+            chainBar.setPower(-chainBarPower);
         } else {
             chainBar.setPower(0);
         }
@@ -154,11 +167,11 @@ public class DriversPickUpYourControllers extends OpMode {
         if (gamepad1.dpad_up) {
             drivePower = 1;
         } else if (gamepad1.dpad_right) {
-            drivePower = 0.8;
+            thetaOffset = 0;
         } else if (gamepad1.dpad_down) {
             drivePower = 0.6;
         } else if (gamepad1.dpad_left) {
-            drivePower = 0.4;
+            thetaOffset = 180;
         }
 
         double transX = gamepad1.left_stick_x;
@@ -167,6 +180,7 @@ public class DriversPickUpYourControllers extends OpMode {
         double translateMag = Math.sqrt(transX*transX + transY*transY);
         double translateTheta = Math.atan2(transY, transX);
         translateTheta = Math.toDegrees(translateTheta);
+        translateTheta += thetaOffset;
         if (translateTheta < 0) translateTheta += 360;
         double scale = 0;
         double RF = 0, RB = 0, LF = 0, LB = 0;

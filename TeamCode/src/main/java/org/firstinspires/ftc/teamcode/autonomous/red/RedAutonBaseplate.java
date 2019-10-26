@@ -1,19 +1,21 @@
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.autonomous.red;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-/*
- * This is an example of a more complex path to really test the tuning.
- */
-@Autonomous(group = "test")
-public class MindstormSquare extends LinearOpMode {
+
+@Autonomous(group = "auton")
+public class RedAutonBaseplate extends LinearOpMode {
+    public Servo foundationHook;
+    final double[] foundationHookPos = {0,1};
+
     @Override
     public void runOpMode() throws InterruptedException {
         ThreadManager manager = ThreadManager.getInstance();
@@ -22,6 +24,10 @@ public class MindstormSquare extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
+        drive.setPoseEstimate(new Pose2d(24, -63, 0));
+
+        foundationHook = hardwareMap.servo.get("foundationHook");
+        foundationHook.setPosition(foundationHookPos[0]);
 
         waitForStart();
 
@@ -29,25 +35,40 @@ public class MindstormSquare extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(24)
-                        .build()
-        );
-        Thread.sleep(1000);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
                         .strafeRight(24)
+                        .forward(15)
                         .build()
         );
-        Thread.sleep(1000);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .back(24)
-                        .build()
-        );
-        Thread.sleep(1000);
+        drive.turnSync(Math.PI);
+
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeLeft(24)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(4)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .back(19)
+                        .build()
+        );
+        foundationHook.setPosition(foundationHookPos[1]);
+        Thread.sleep(1000);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .forward(48)
+                        .build()
+        );
+        Thread.sleep(1000);
+        foundationHook.setPosition(foundationHookPos[0]);
+        Thread.sleep(1000);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(64)
                         .build()
         );
 

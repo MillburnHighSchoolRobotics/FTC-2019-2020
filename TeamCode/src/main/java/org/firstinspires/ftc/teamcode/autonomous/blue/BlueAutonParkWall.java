@@ -21,7 +21,7 @@ public class BlueAutonParkWall extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(24, 63, 3*Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(24, 63, 0));
 
         waitForStart();
 
@@ -29,7 +29,7 @@ public class BlueAutonParkWall extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(0, 63))
+                        .strafeRight(24)
                         .build()
         );
     }

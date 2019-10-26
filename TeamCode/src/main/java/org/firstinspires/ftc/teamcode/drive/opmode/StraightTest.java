@@ -30,7 +30,7 @@ public class StraightTest extends LinearOpMode {
 
         DriveBase drive = new MohanBot(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(-48, 60, 3*Math.PI/2));
+//        drive.setPoseEstimate(new Pose2d(-48, 60, 3*Math.PI/2));
 
         Trajectory trajectory = drive.trajectoryBuilder()
 //                .splineTo(new Pose2d(48, 0,0), new ConstantInterpolator(0))

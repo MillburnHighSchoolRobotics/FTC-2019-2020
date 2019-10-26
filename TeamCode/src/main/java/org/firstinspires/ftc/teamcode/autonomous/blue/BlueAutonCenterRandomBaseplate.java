@@ -19,15 +19,17 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 
 @Autonomous(group = "auton")
-public class BlueAutonCenterRandomBridge extends LinearOpMode {
+public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
     public DcMotor chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
+    public Servo foundationHook;
 
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
+    final double[] foundationHookPos = {0,1};
 
     final double chainBarLow = 200;
     final double chainBarHigh = 2000;
@@ -45,6 +47,7 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
+        foundationHook = hardwareMap.servo.get("foundationHook");
 
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -63,6 +66,7 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
+        foundationHook.setPosition(foundationHookPos[0]);
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
@@ -70,7 +74,7 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(-12, 63, 3*Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(-12, 63, 0));
 
         waitForStart();
 
@@ -97,36 +101,59 @@ public class BlueAutonCenterRandomBridge extends LinearOpMode {
         intakeL.setPower(0);
         intakeR.setPower(0);
 
+        clawSquish.setPosition(squishPos[1]);
+
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeTo(new Vector2d(-34,36))
-                        .forward(4.75)
                         .build()
         );
         Thread.sleep(500);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(60, 36, Math.PI), new SplineInterpolator(Math.PI,3*Math.PI/2))
+                        .splineTo(new Pose2d(60, 36, Math.PI), new SplineInterpolator(Math.PI,Math.PI/2))
                         .build()
         );
         Thread.sleep(500);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(4.75)
+                        .back(4.75)
                         .build()
         );
 
         chainBar.setPower(chainBarPower);
         chainBar.setTargetPosition((int) chainBarHigh);
 
-        Thread.sleep(5000);
+        foundationHook.setPosition(foundationHookPos[0]);
+
+        Thread.sleep(2000);
+
+
 
         chainBar.setPower(-chainBarPower);
         chainBar.setTargetPosition((int) chainBarLow);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(0,42))
+                        .back(32)
+//                        .strafeTo(new Vector2d(60,63))
+                        .build()
+        );
+        Thread.sleep(500);
+
+        foundationHook.setPosition(foundationHookPos[1]);
+
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .forward(2)
+                        .build()
+        );
+
+        Thread.sleep(500);
+
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeTo(new Vector2d(0,61))
                         .build()
         );
     }

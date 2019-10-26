@@ -32,7 +32,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 11;
+    public static double TRACK_WIDTH = 14;
     public static double WHEEL_BASE = 14.5;
 
     /*
@@ -46,9 +46,9 @@ public class DriveConstants {
 //    public static double kStatic = 0.06633;
 
 
-    public static double kV = 0.01430523554869033;// / rpmToVelocity(getMaxRpm());
-    public static double kA = 0.000151714;
-    public static double kStatic = 0.06943427112368247;
+    public static double kV = 0.013864159829629552;// / rpmToVelocity(getMaxRpm());
+    public static double kA = 0.0000512688388;
+    public static double kStatic = 0.06732772023126822;
 //
 ////    public static double kV = 0.1568;// / rpmToVelocity(getMaxRpm());
 ////    public static double kA = 0.000903926;
