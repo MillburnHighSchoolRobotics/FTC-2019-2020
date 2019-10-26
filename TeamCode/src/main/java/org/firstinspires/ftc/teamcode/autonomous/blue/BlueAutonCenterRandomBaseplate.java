@@ -58,7 +58,7 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeR.setDirection(REVERSE);
+        intakeL.setDirection(REVERSE);
 
         intakeL.setPower(0);
         intakeR.setPower(0);
@@ -82,7 +82,18 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-30, 22, 3*Math.PI/2), new SplineInterpolator(3*Math.PI/2, Math.PI))
+                        .forward(23)
+                        .build()
+        );
+        drive.turnSync(Math.PI/2);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .forward(18)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeLeft(18)
                         .build()
         );
         intakeL.setPower(intakePower);
@@ -90,70 +101,83 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
 
         chainBar.setPower(-chainBarPower);
         chainBar.setTargetPosition((int) chainBarMid);
-        Thread.sleep(1000);
+
+        clawSquish.setPosition(squishPos[0]);
+
+        Thread.sleep(500);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                 .forward(4)
                 .build()
         );
-        Thread.sleep(1000);
+        Thread.sleep(500);
         intakeL.setPower(0);
         intakeR.setPower(0);
+
+        chainBar.setPower(chainBarPower);
+        chainBar.setTargetPosition((int) chainBarLow);
+        Thread.sleep(500);
 
         clawSquish.setPosition(squishPos[1]);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(-34,36))
+                        .strafeRight(14)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .back(82)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(12)
+                        .build()
+        );
+        drive.turnSync(Math.PI/2);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(24)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeLeft(4)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .back(19)
+                        .build()
+        );
+        foundationHook.setPosition(foundationHookPos[1]);
+        Thread.sleep(1000);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .forward(48)
                         .build()
         );
         Thread.sleep(500);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(60, 36, Math.PI), new SplineInterpolator(Math.PI,Math.PI/2))
-                        .build()
-        );
-        Thread.sleep(500);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .back(4.75)
-                        .build()
-        );
-
-        chainBar.setPower(chainBarPower);
-        chainBar.setTargetPosition((int) chainBarHigh);
-
         foundationHook.setPosition(foundationHookPos[0]);
 
-        Thread.sleep(2000);
-
-
-
         chainBar.setPower(-chainBarPower);
+        chainBar.setTargetPosition((int) chainBarHigh);
+        Thread.sleep(1000);
+
+        clawSquish.setPosition(squishPos[0]);
+        Thread.sleep(500);
+
+        chainBar.setPower(chainBarPower);
         chainBar.setTargetPosition((int) chainBarLow);
 
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .back(32)
-//                        .strafeTo(new Vector2d(60,63))
-                        .build()
-        );
         Thread.sleep(500);
 
-        foundationHook.setPosition(foundationHookPos[1]);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(2)
-                        .build()
-        );
-
-        Thread.sleep(500);
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(0,61))
+                        .strafeLeft(64)
                         .build()
         );
     }
