@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-
+@Deprecated
 @Autonomous(group = "auton")
 public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
     public DcMotorEx intakeL;
@@ -31,9 +31,10 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
     final double[] spinPos = {0,0.5};
     final double[] foundationHookPos = {0,1};
 
-    final double chainBarLow = 200;
-    final double chainBarHigh = 2000;
-    final double chainBarMid = 700;
+    final double chainBarLow = 20;
+    final double chainBarHigh = 1890;
+    final double chainBarHighMid = 1320;
+    final double chainBarMid = 320;
 
     double intakePower = 0.45;
     double chainBarPower = 0.8;
@@ -53,6 +54,7 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
 
         intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        chainBar.setTargetPosition((int)chainBarLow);
         chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -85,15 +87,15 @@ public class BlueAutonCenterRandomBaseplate extends LinearOpMode {
                         .forward(23)
                         .build()
         );
-        drive.turnSync(Math.PI/2);
+        drive.turnSync(3*Math.PI/2);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(18)
+                        .forward(12)
                         .build()
         );
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(18)
+                        .strafeLeft(16)
                         .build()
         );
         intakeL.setPower(intakePower);

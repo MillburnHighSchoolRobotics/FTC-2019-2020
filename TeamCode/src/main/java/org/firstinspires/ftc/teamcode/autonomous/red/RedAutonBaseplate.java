@@ -48,19 +48,19 @@ public class RedAutonBaseplate extends LinearOpMode {
         );
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(4)
+                        .strafeRight(16)
                         .build()
         );
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .back(19)
+                        .back(24)
                         .build()
         );
         foundationHook.setPosition(foundationHookPos[1]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(48)
+                        .forward(53)
                         .build()
         );
         Thread.sleep(1000);
@@ -68,7 +68,22 @@ public class RedAutonBaseplate extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(64)
+                        .strafeRight(30)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .back(16)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeLeft(5)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(27)
                         .build()
         );
 

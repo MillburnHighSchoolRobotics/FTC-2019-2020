@@ -28,7 +28,7 @@ public class SplineTest extends LinearOpMode {
 
         DriveBase drive = new MohanBot(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(-48, 60, 3*Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(0, 0, 0));
 //        drive.setPoseEstimate(new Pose2d(0, 0, 0));
 
         waitForStart();
@@ -37,7 +37,7 @@ public class SplineTest extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(0,0,0), new SplineInterpolator(3*Math.PI/2, Math.PI))
+                        .splineTo(new Pose2d(36,36,3*Math.PI/2), new SplineInterpolator(0, Math.PI))
 //                        .reverse()
 //                        .splineTo(new Pose2d(-48, 60,3*Math.PI/2)/*, new SplineInterpolator(Math.PI/2, Math.PI)*/)
 //                        .reverse()
