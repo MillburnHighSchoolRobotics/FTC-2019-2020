@@ -64,7 +64,7 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
-        foundationHookRight.setPosition(foundationHookPos[0]);
+        foundationHookRight.setPosition(foundationHookPos[1]);
         foundationHookLeft.setPosition(foundationHookPos[0]);
 
         ThreadManager manager = ThreadManager.getInstance();
@@ -120,7 +120,7 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
                         .build()
         );
         foundationHookLeft.setPosition(foundationHookPos[1]);
-        foundationHookRight.setPosition(foundationHookPos[1]);
+        foundationHookRight.setPosition(foundationHookPos[0]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
@@ -129,7 +129,7 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
         );
         Thread.sleep(1000);
         foundationHookLeft.setPosition(foundationHookPos[0]);
-        foundationHookRight.setPosition(foundationHookPos[0]);
+        foundationHookRight.setPosition(foundationHookPos[1]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()

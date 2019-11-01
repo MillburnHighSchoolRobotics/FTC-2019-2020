@@ -29,7 +29,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookLeft.setPosition(foundationHookPos[0]);
         foundationHookRight = hardwareMap.servo.get("foundationHookRight");
-        foundationHookRight.setPosition(foundationHookPos[0]);
+        foundationHookRight.setPosition(foundationHookPos[1]);
 
         waitForStart();
 
@@ -59,7 +59,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
                         .build()
         );
         foundationHookLeft.setPosition(foundationHookPos[1]);
-        foundationHookRight.setPosition(foundationHookPos[1]);
+        foundationHookRight.setPosition(foundationHookPos[0]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
@@ -68,7 +68,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
         );
         Thread.sleep(1000);
         foundationHookLeft.setPosition(foundationHookPos[0]);
-        foundationHookRight.setPosition(foundationHookPos[0]);
+        foundationHookRight.setPosition(foundationHookPos[1]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
