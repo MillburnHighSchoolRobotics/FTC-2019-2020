@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 @Autonomous(group = "auton")
 public class BlueAutonBaseplate extends LinearOpMode {
-    public Servo foundationHook;
+    public Servo foundationHookLeft, foundationHookRight;
     final double[] foundationHookPos = {0,1};
 
     @Override
@@ -24,10 +24,12 @@ public class BlueAutonBaseplate extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(24, 63, 0));
+//        drive.setPoseEstimate(new Pose2d(24, 63, 0));
 
-        foundationHook = hardwareMap.servo.get("foundationHook");
-        foundationHook.setPosition(foundationHookPos[0]);
+        foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
+        foundationHookLeft.setPosition(foundationHookPos[0]);
+        foundationHookRight = hardwareMap.servo.get("foundationHookRight");
+        foundationHookRight.setPosition(foundationHookPos[0]);
 
         waitForStart();
 
@@ -56,7 +58,8 @@ public class BlueAutonBaseplate extends LinearOpMode {
                         .back(19)
                         .build()
         );
-        foundationHook.setPosition(foundationHookPos[1]);
+        foundationHookLeft.setPosition(foundationHookPos[1]);
+        foundationHookRight.setPosition(foundationHookPos[1]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
@@ -64,7 +67,8 @@ public class BlueAutonBaseplate extends LinearOpMode {
                         .build()
         );
         Thread.sleep(1000);
-        foundationHook.setPosition(foundationHookPos[0]);
+        foundationHookLeft.setPosition(foundationHookPos[0]);
+        foundationHookRight.setPosition(foundationHookPos[0]);
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
