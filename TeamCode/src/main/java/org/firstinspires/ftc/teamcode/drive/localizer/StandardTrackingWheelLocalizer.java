@@ -34,7 +34,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double LATERAL_DISTANCE = 15.5; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 6; // in; offset of the lateral wheel
 
-    private DcMotor leftEncoder, rightEncoder, frontEncoder;
+    private DcMotor leftEncoder, rightEncoder, backEncoder;
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
@@ -43,9 +43,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
                 new Pose2d(-FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 
-        leftEncoder = hardwareMap.dcMotor.get("lf");
-        rightEncoder = hardwareMap.dcMotor.get("rf");
-        frontEncoder = hardwareMap.dcMotor.get("lb");
+        leftEncoder = hardwareMap.dcMotor.get("lb");
+        rightEncoder = hardwareMap.dcMotor.get("lf");
+        backEncoder = hardwareMap.dcMotor.get("rf");
     }
 
     public static double encoderTicksToInches(int ticks) {
@@ -57,8 +57,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public List<Double> getWheelPositions() {
         return Arrays.asList(
                 encoderTicksToInches(leftEncoder.getCurrentPosition()),
-                encoderTicksToInches(rightEncoder.getCurrentPosition()),0.0
-//                encoderTicksToInches(frontEncoder.getCurrentPosition())
+                encoderTicksToInches(rightEncoder.getCurrentPosition()),
+                encoderTicksToInches(backEncoder.getCurrentPosition())
         );
     }
 }

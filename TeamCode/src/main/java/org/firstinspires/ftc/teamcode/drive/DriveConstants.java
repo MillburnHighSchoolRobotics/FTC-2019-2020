@@ -65,9 +65,10 @@ public class DriveConstants {
 //    public static double kA = 0.000903926;
 //    public static double kStatic = 0.27657;
 
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+//    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
 //    public static PIDCoefficients HEADING_PID = new PIDCoefficients(.0045, 0.0012, 0);
-public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
