@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
@@ -14,7 +15,10 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
+    private int currentSpinPos = 1;
     final double[] foundationHookPos = {0,1};
+
+    ElapsedTime toggleSpinTime;
 
 //    final double chainBarLow = 200;
 //    final double chainBarHigh = 2000;
@@ -66,8 +70,10 @@ public class DriversPickUpYourControllers extends OpMode {
 
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -92,34 +98,36 @@ public class DriversPickUpYourControllers extends OpMode {
         intakeR.setPower(0);
         chainBar.setPower(0);
 
-        clawSquish.setPosition(squishPos[0]);
-        clawSpin.setPosition(spinPos[1]);
+        clawSquish.setPosition(squishPos[currentSpinPos]);
+        clawSpin.setPosition(spinPos[currentSpinPos]);
         foundationHook.setPosition(foundationHookPos[0]);
         thetaOffset = 0;
+
+        toggleSpinTime = new ElapsedTime();
     }
 
     @Override
     public void loop() {
 
-        if (gamepad2.x) {
-            lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+//        if (gamepad2.x) {
+//            lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//            intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//            lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        }
 
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) {
             intakeL.setPower(intakePower);
@@ -140,12 +148,10 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSquish.setPosition(squishPos[0]);
         }
 
-        if (gamepad1.x) { //normal claw rotation
-            clawSpin.setPosition(spinPos[1]);
-        }
-
-        if (gamepad1.y) { //sideways claw rotation
-            clawSpin.setPosition(spinPos[0]);
+        if (gamepad1.x && (toggleSpinTime.milliseconds() > 250)) { //toggle claw rotation
+            currentSpinPos = 1-currentSpinPos;
+            clawSpin.setPosition(spinPos[currentSpinPos]);
+            toggleSpinTime.reset();
         }
 
         if (gamepad2.a) { //hook up
@@ -172,7 +178,8 @@ public class DriversPickUpYourControllers extends OpMode {
             drivePower = 0.6;
         } else if (gamepad1.dpad_left) {
             thetaOffset = 180;
-        }
+         }
+
 
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
@@ -190,7 +197,7 @@ public class DriversPickUpYourControllers extends OpMode {
             RF = -rotX;
             RB = -rotX;
         } else if (!MathUtils.equals(translateMag, 0, 0.05)) {
-            double translatePower = translateMag;
+            double translatePower = driveDampen(Math.abs(translateMag));
             if (translateTheta >= 0 && translateTheta <= 90) { //quadrant 1
                 scale = MathUtils.sinDegrees(translateTheta - 45) / MathUtils.cosDegrees(translateTheta - 45);
                 LF = translatePower * POWER_MATRIX[0][0];
@@ -223,5 +230,10 @@ public class DriversPickUpYourControllers extends OpMode {
         lb.setPower(drivePower * LB);
         rf.setPower(drivePower * RF);
         rb.setPower(drivePower * RB);
+    }
+    private double driveDampen(double input) {
+        double output = Math.pow((input),(9/7.0));
+        return output;
+
     }
 }
