@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.drive.mecanum.SampleDriveBase;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -26,9 +27,9 @@ public class SplineTest extends LinearOpMode {
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        DriveBase drive = new MohanBot(hardwareMap);
+        DriveBase drive = new SampleDriveBase(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(0, 0, 0));
+        drive.setPoseEstimate(new Pose2d(-60, 60, 0));
 //        drive.setPoseEstimate(new Pose2d(0, 0, 0));
 
         waitForStart();
@@ -37,7 +38,7 @@ public class SplineTest extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(36,36,3*Math.PI/2), new SplineInterpolator(0, Math.PI))
+                        .splineTo(new Pose2d(-24,0,0), new SplineInterpolator(0, Math.PI))
 //                        .reverse()
 //                        .splineTo(new Pose2d(-48, 60,3*Math.PI/2)/*, new SplineInterpolator(Math.PI/2, Math.PI)*/)
 //                        .reverse()

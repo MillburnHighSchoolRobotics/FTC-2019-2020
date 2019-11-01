@@ -23,7 +23,7 @@ public class DriversPickUpYourControllers extends OpMode {
 //    final double chainBarLow = 200;
 //    final double chainBarHigh = 2000;
 
-    double intakePower = 0.45;
+    double intakePower = 0.6;
     double chainBarPower = 0.8;
     double drivePower = 1;
 
@@ -184,56 +184,59 @@ public class DriversPickUpYourControllers extends OpMode {
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
         double rotX = gamepad1.right_stick_x;
+
         double translateMag = Math.sqrt(transX*transX + transY*transY);
-        double translateTheta = Math.atan2(transY, transX);
-        translateTheta = Math.toDegrees(translateTheta);
-        translateTheta += thetaOffset;
+        double translateTheta = Math.toDegrees(Math.atan2(transY, transX));
         if (translateTheta < 0) translateTheta += 360;
-        double scale = 0;
+
         double RF = 0, RB = 0, LF = 0, LB = 0;
-        if (!MathUtils.equals(rotX, 0, 0.05)) {
-            LF = rotX;
-            LB = rotX;
-            RF = -rotX;
-            RB = -rotX;
-        } else if (!MathUtils.equals(translateMag, 0, 0.05)) {
-            double translatePower = driveDampen(Math.abs(translateMag));
+        if (!MathUtils.equals(translateMag, 0, 0.05)) {
+            double translatePower = Math.pow(Math.abs(translateMag),(9/7.0));
             if (translateTheta >= 0 && translateTheta <= 90) { //quadrant 1
-                scale = MathUtils.sinDegrees(translateTheta - 45) / MathUtils.cosDegrees(translateTheta - 45);
+                double scale = MathUtils.sinDegrees(translateTheta - 45) / MathUtils.cosDegrees(translateTheta - 45);
                 LF = translatePower * POWER_MATRIX[0][0];
                 LB = translatePower * POWER_MATRIX[0][1] * scale;
                 RF = translatePower * POWER_MATRIX[0][2] * scale;
                 RB = translatePower * POWER_MATRIX[0][3];
             } else if (translateTheta > 90 && translateTheta <= 180) { //quadrant 2
+                double scale = MathUtils.sinDegrees(translateTheta - 135) / MathUtils.cosDegrees(translateTheta - 135);
                 translatePower *= -1;
-                scale = MathUtils.sinDegrees(translateTheta - 135) / MathUtils.cosDegrees(translateTheta - 135);
                 LF = (translatePower * POWER_MATRIX[2][0] * scale);
                 LB = (translatePower * POWER_MATRIX[2][1]);
-                RF = (translatePower * POWER_MATRIX[2][2]);// * scale);
+                RF = (translatePower * POWER_MATRIX[2][2]);
                 RB = (translatePower * POWER_MATRIX[2][3] * scale);
             } else if (translateTheta > 180 && translateTheta <= 270) { //quadrant 3
-                scale = MathUtils.sinDegrees(translateTheta - 225) / MathUtils.cosDegrees(translateTheta - 225);
+                double scale = MathUtils.sinDegrees(translateTheta - 225) / MathUtils.cosDegrees(translateTheta - 225);
                 LF = (translatePower * POWER_MATRIX[4][0]);
                 LB = (translatePower * POWER_MATRIX[4][1] * scale);
                 RF = (translatePower * POWER_MATRIX[4][2] * scale);
                 RB = (translatePower * POWER_MATRIX[4][3]);
             } else if (translateTheta > 270 && translateTheta < 360) { //quadrant 4
+                double scale = MathUtils.sinDegrees(translateTheta - 315) / MathUtils.cosDegrees(translateTheta - 315);
                 translatePower *= -1;
-                scale = MathUtils.sinDegrees(translateTheta - 315) / MathUtils.cosDegrees(translateTheta - 315);
                 LF = (translatePower * POWER_MATRIX[6][0] * scale);
                 LB = (translatePower * POWER_MATRIX[6][1]);
                 RF = (translatePower * POWER_MATRIX[6][2]);
                 RB = (translatePower * POWER_MATRIX[6][3] * scale);
             }
         }
-        lf.setPower(drivePower * LF);
-        lb.setPower(drivePower * LB);
-        rf.setPower(drivePower * RF);
-        rb.setPower(drivePower * RB);
-    }
-    private double driveDampen(double input) {
-        double output = Math.pow((input),(9/7.0));
-        return output;
 
+        LF += rotX;
+        LB += rotX;
+        RF -= rotX;
+        RB -= rotX;
+
+        double[] powerArray = new double[] {LF,LB,RF,RB};
+        double maxPower = MathUtils.maxArray(powerArray);
+        if (maxPower > 1) {
+            for (int x = 0; x < powerArray.length; x++) {
+                powerArray[x] = MathUtils.sgn(powerArray[x]) * MathUtils.map(Math.abs(powerArray[x]),0,maxPower,0,1);
+            }
+        }
+
+        lf.setPower(drivePower * powerArray[0]);
+        lb.setPower(drivePower * powerArray[1]);
+        rf.setPower(drivePower * powerArray[2]);
+        rb.setPower(drivePower * powerArray[3]);
     }
 }
