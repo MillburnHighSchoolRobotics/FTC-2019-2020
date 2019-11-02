@@ -63,7 +63,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
                 break;
             }
 
-            accelRegression.add(elapsedTime, drive.getPoseEstimate().getY(), MAX_POWER);
+            accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
 
 //            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
 //            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
@@ -71,7 +71,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 //            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
 //            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
 
-            Log.d("literallywhatever?!", drive.getPoseEstimate().getY() + "\t" + elapsedTime);
+            Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
 
             drive.updatePoseEstimate();
         }

@@ -29,16 +29,18 @@ public class SplineTest extends LinearOpMode {
 
         DriveBase drive = new SampleDriveBase(hardwareMap);
 
-        drive.setPoseEstimate(new Pose2d(-60, 60, 0));
-//        drive.setPoseEstimate(new Pose2d(0, 0, 0));
+//        drive.setPoseEstimate(new Pose2d(-60, 60, 0));
+        drive.updatePoseEstimate();
+        drive.setPoseEstimate(new Pose2d(0, 0, 0));
 
         waitForStart();
 
         if (isStopRequested()) return;
-
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-24,0,0), new SplineInterpolator(0, Math.PI))
+                        .reverse()
+                        .splineTo(new Pose2d(-53,-28,0), new SplineInterpolator(2*Math.PI,3*Math.PI/2))
+//                        .splineTo(new Pose2d(-24,0,0), new SplineInterpolator(0, Math.PI))
 //                        .reverse()
 //                        .splineTo(new Pose2d(-48, 60,3*Math.PI/2)/*, new SplineInterpolator(Math.PI/2, Math.PI)*/)
 //                        .reverse()

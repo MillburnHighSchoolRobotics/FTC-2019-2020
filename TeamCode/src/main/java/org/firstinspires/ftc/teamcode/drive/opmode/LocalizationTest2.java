@@ -18,18 +18,14 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 @TeleOp(group = "test")
-public class LocalizationTest extends LinearOpMode {
+public class LocalizationTest2 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setCurrentAuton(this);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-        DriveBase drive = new MohanBot(hardwareMap);
+        DriveBase drive = new SampleDriveBase(hardwareMap);
 
         waitForStart();
 
-//        drive.setPoseEstimate(new Pose2d(-48, 63, 3*Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(-48, 63, 3*Math.PI/2));
 
         while (!isStopRequested()) {
             drive.setDrivePower(new Pose2d(

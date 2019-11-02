@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.autonomous.red;
+package org.firstinspires.ftc.teamcode.autonomous.blue;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 
 @Autonomous(group = "auton")
-public class RedAutonBaseplate extends LinearOpMode {
+public class BlueAutonBaseplateSpline extends LinearOpMode {
     public Servo foundationHookLeft, foundationHookRight;
     final double[] foundationHookPos = {0,1};
 
@@ -24,7 +25,6 @@ public class RedAutonBaseplate extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-//        drive.setPoseEstimate(new Pose2d(24, 63, 0));
 
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookLeft.setPosition(foundationHookPos[1]);
@@ -37,25 +37,8 @@ public class RedAutonBaseplate extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(24)
-                        .forward(15)
-                        .build()
-        );
-        drive.turnSync(Math.PI);
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .strafeLeft(24)
-                        .build()
-        );
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .strafeRight(4)
-                        .build()
-        );
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .back(19)
+                        .splineTo(new Pose2d(26,28,0), new SplineInterpolator(0,Math.PI))
+                        .back(8)
                         .build()
         );
         foundationHookLeft.setPosition(foundationHookPos[0]);
@@ -72,7 +55,7 @@ public class RedAutonBaseplate extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(64)
+                        .strafeLeft(68)
                         .build()
         );
 

@@ -10,19 +10,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.teamcode.util.Spline;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-@Deprecated
 @Autonomous(group = "auton")
-public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
+public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
-    public static DcMotor chainBar;
+    public DcMotor chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
     public Servo foundationHookLeft, foundationHookRight;
@@ -30,9 +32,9 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
     final double[] foundationHookPos = {0,1};
-    final static int[] chainBarPos = {0,1000,2000};
+    final static int[] chainBarPos = {0,750,1200,1500};
 
-    final double intakePower = 0.45;
+    final double intakePower = 0.6;
     final static double chainBarPower = 0.33;
 
 
@@ -54,7 +56,6 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
         chainBar.setTargetPosition(chainBarPos[0]);
         chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -66,8 +67,8 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
-        foundationHookRight.setPosition(foundationHookPos[1]);
-        foundationHookLeft.setPosition(foundationHookPos[0]);
+        foundationHookLeft.setPosition(foundationHookPos[1]);
+        foundationHookRight.setPosition(foundationHookPos[0]);
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
@@ -75,7 +76,6 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(-12, 63, 0));
 
         waitForStart();
 
@@ -83,30 +83,38 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(24)
+                        .splineTo(new Pose2d(40,-12,0), new SplineInterpolator(2*Math.PI,3*Math.PI/2))
+                        .strafeLeft(4)
                         .build()
         );
-        drive.turnSync(Math.PI);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .strafeLeft(20)
-                        .build()
-        );
-        moveChainbar(2);
-        clawSquish.setPosition(squishPos[1]);
-        Thread.sleep(1000);
         moveChainbar(1);
-        Thread.sleep(1000);
+        intakeL.setPower(-intakePower);
+        intakeR.setPower(-intakePower);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .forward(4)
+                        .forward(6)
                         .build()
         );
+        moveChainbar(0);
+        clawSquish.setPosition(squishPos[1]);
+        intakeL.setPower(0);
+        intakeR.setPower(0);
+        drive.setPoseEstimate(new Pose2d(0,0,Math.PI/2));
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(20+72)
+                        .reverse()
+                        .splineTo(new Pose2d(-25,-31,0), new ConstantInterpolator(0))
                         .build()
         );
+
+        drive.setPoseEstimate(new Pose2d(0,0,0));
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse()
+                        .splineTo(new Pose2d(-53,28,0), new ConstantInterpolator(0))
+                        .build()
+        );
+        drive.turnSync(-Math.PI/2);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .back(4)
@@ -114,13 +122,7 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
         );
         moveChainbar(2);
         clawSquish.setPosition(squishPos[0]);
-        Thread.sleep(1000);
         moveChainbar(0);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .forward(4)
-                        .build()
-        );
         foundationHookLeft.setPosition(foundationHookPos[0]);
         foundationHookRight.setPosition(foundationHookPos[1]);
         Thread.sleep(1000);
@@ -135,15 +137,15 @@ public class BlueAutonBlockRandomBaseplate extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeRight(64)
+                        .strafeLeft(64)
                         .build()
         );
     }
 
-    public static void moveChainbar(int whichPos) throws InterruptedException {
+    public void moveChainbar(int whichPos) throws InterruptedException {
         chainBar.setTargetPosition(chainBarPos[whichPos]);
         chainBar.setPower(chainBarPower);
-        while(chainBar.isBusy())
+        while(!MathUtils.equals(chainBar.getCurrentPosition(), chainBarPos[whichPos], 50))
             Thread.sleep(10);
         chainBar.setPower(0);
     }

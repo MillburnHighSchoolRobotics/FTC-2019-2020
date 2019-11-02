@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.localizer;
 
 import android.util.Log;
 
+import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.util.Angle;
@@ -61,6 +62,8 @@ public class MohanLocalizer implements Localizer {
         this.yOffset = pose2d.getY();
         this.thetaOffset = pose2d.getHeading();
         mohansLocation = pose2d;
+
+        Log.d("offset", xOffset + " " + yOffset + " " + thetaOffset);
     }
 
     @Override
@@ -71,7 +74,6 @@ public class MohanLocalizer implements Localizer {
 //            y = ThreadManager.getInstance().getValue("y", Double.class);
 //            theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
 //        } while (mohansLocation.getX() == x && mohansLocation.getY() == y && mohansLocation.getHeading() == theta);
-
         double count1;
         do {
             count1 = ThreadManager.getInstance().getValue("count", Integer.class);

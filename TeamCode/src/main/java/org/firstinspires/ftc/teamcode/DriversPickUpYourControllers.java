@@ -17,11 +17,11 @@ public class DriversPickUpYourControllers extends OpMode {
     final double[] spinPos = {0,0.5};
     private int currentSpinPos = 1;
     final double[] foundationHookPos = {0,1};
+    final double[] driveSpeeds = {0.6,1};
+    private int currentDriveSpeed = 0;
 
     ElapsedTime toggleSpinTime;
-
-//    final double chainBarLow = 200;
-//    final double chainBarHigh = 2000;
+    ElapsedTime toggleDriveSpeed;
 
     double intakePower = 0.6;
     double chainBarPower = 0.8;
@@ -36,8 +36,8 @@ public class DriversPickUpYourControllers extends OpMode {
     public DcMotor chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
-    public Servo foundationHook;
-    double thetaOffset;
+    public Servo foundationHookLeft;
+    public Servo foundationHookRight;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
             {1, 0, 0, 1},
@@ -61,7 +61,8 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
-        foundationHook = hardwareMap.servo.get("foundationHook");
+        foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
+        foundationHookRight = hardwareMap.servo.get("foundationHookRight");
 
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -69,11 +70,11 @@ public class DriversPickUpYourControllers extends OpMode {
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-//        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -100,10 +101,11 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish.setPosition(squishPos[currentSpinPos]);
         clawSpin.setPosition(spinPos[currentSpinPos]);
-        foundationHook.setPosition(foundationHookPos[0]);
-        thetaOffset = 0;
+        foundationHookLeft.setPosition(foundationHookPos[1]);
+        foundationHookRight.setPosition(foundationHookPos[0]);
 
         toggleSpinTime = new ElapsedTime();
+        toggleDriveSpeed = new ElapsedTime();
     }
 
     @Override
@@ -148,18 +150,20 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSquish.setPosition(squishPos[0]);
         }
 
-        if (gamepad1.x && (toggleSpinTime.milliseconds() > 250)) { //toggle claw rotation
+        if (gamepad1.y && (toggleSpinTime.milliseconds() > 250)) { //toggle claw rotation
             currentSpinPos = 1-currentSpinPos;
             clawSpin.setPosition(spinPos[currentSpinPos]);
             toggleSpinTime.reset();
         }
 
         if (gamepad2.a) { //hook up
-            foundationHook.setPosition(foundationHookPos[1]);
+            foundationHookLeft.setPosition(foundationHookPos[1]);
+            foundationHookRight.setPosition(foundationHookPos[0]);
         }
 
         if (gamepad2.b) { //hook down
-            foundationHook.setPosition(foundationHookPos[0]);
+            foundationHookLeft.setPosition(foundationHookPos[0]);
+            foundationHookRight.setPosition(foundationHookPos[1]);
         }
 
         if (gamepad1.left_bumper) {
@@ -170,15 +174,11 @@ public class DriversPickUpYourControllers extends OpMode {
             chainBar.setPower(0);
         }
 
-        if (gamepad1.dpad_up) {
-            drivePower = 1;
-        } else if (gamepad1.dpad_right) {
-            thetaOffset = 0;
-        } else if (gamepad1.dpad_down) {
-            drivePower = 0.6;
-        } else if (gamepad1.dpad_left) {
-            thetaOffset = 180;
-         }
+        if (gamepad1.dpad_down && (toggleDriveSpeed.milliseconds() > 250)) { //toggle drive speed
+            currentDriveSpeed = 1-currentDriveSpeed;
+            drivePower = driveSpeeds[currentDriveSpeed];
+            toggleDriveSpeed.reset();
+        }
 
 
         double transX = gamepad1.left_stick_x;
