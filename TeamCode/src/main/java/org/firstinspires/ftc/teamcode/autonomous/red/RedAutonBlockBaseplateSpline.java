@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.blue;
+package org.firstinspires.ftc.teamcode.autonomous.red;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.util.Spline;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 @Autonomous(group = "auton")
-public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
+public class RedAutonBlockBaseplateSpline extends LinearOpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
     public DcMotor chainBar;
@@ -83,8 +83,8 @@ public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(40,-12,0), new SplineInterpolator(2*Math.PI,3*Math.PI/2))
-                        .strafeLeft(4)
+                        .splineTo(new Pose2d(40,12,0), new SplineInterpolator(0,Math.PI/2))
+                        .strafeRight(4)
                         .build()
         );
         moveChainbar(1);
@@ -103,7 +103,7 @@ public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse()
-                        .splineTo(new Pose2d(-25,-31,0), new ConstantInterpolator(0))
+                        .splineTo(new Pose2d(-25,31,0), new ConstantInterpolator(0))
                         .build()
         );
 
@@ -111,10 +111,10 @@ public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse()
-                        .splineTo(new Pose2d(-53,28,0), new ConstantInterpolator(0))
+                        .splineTo(new Pose2d(-53,-28,0), new ConstantInterpolator(0))
                         .build()
         );
-        drive.turnSync(-Math.PI/2);
+        drive.turnSync(Math.PI/2);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .back(4)
@@ -132,7 +132,7 @@ public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
         foundationHookRight.setPosition(foundationHookPos[1]);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(12)
+                        .strafeRight(12)
                         .build()
         );
         Thread.sleep(1000);
@@ -147,7 +147,7 @@ public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(68)
+                        .strafeRight(64)
                         .build()
         );
     }

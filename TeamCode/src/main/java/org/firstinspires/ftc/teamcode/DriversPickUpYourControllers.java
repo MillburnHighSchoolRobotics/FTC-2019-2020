@@ -16,14 +16,17 @@ public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};
     private int currentSpinPos = 1;
-    final double[] foundationHookPos = {0,1};
+    final double[] foundationHookPosLeft = {0.3,0.7};
+    final double[] foundationHookPosRight = {0.7,0.3};
     final double[] driveSpeeds = {0.6,1};
     private int currentDriveSpeed = 0;
+    private int currentHook = 0;
 
     ElapsedTime toggleSpinTime;
     ElapsedTime toggleDriveSpeed;
+    ElapsedTime toggleHook;
 
-    double intakePower = 0.6;
+    double intakePower = 0.9;
     double chainBarPower = 0.8;
     double drivePower = 1;
 
@@ -33,11 +36,13 @@ public class DriversPickUpYourControllers extends OpMode {
     public DcMotorEx rb;
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
-    public DcMotor chainBar;
+    public DcMotorEx chainBar;
     public Servo clawSquish;
     public Servo clawSpin;
     public Servo foundationHookLeft;
     public Servo foundationHookRight;
+
+    private final int chainBarIntakePosition = 500;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
             {1, 0, 0, 1},
@@ -57,7 +62,7 @@ public class DriversPickUpYourControllers extends OpMode {
 
         intakeL = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
         intakeR = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
-        chainBar = hardwareMap.dcMotor.get("chainBar");
+        chainBar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
@@ -90,6 +95,8 @@ public class DriversPickUpYourControllers extends OpMode {
         rb.setDirection(REVERSE);
         intakeL.setDirection(REVERSE);
 
+        chainBar.setTargetPositionTolerance(50);
+
         lf.setPower(0);
         lb.setPower(0);
         rf.setPower(0);
@@ -101,45 +108,58 @@ public class DriversPickUpYourControllers extends OpMode {
 
         clawSquish.setPosition(squishPos[currentSpinPos]);
         clawSpin.setPosition(spinPos[currentSpinPos]);
-        foundationHookLeft.setPosition(foundationHookPos[1]);
-        foundationHookRight.setPosition(foundationHookPos[0]);
+        foundationHookLeft.setPosition(foundationHookPosLeft[currentHook]);
+        foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
 
         toggleSpinTime = new ElapsedTime();
         toggleDriveSpeed = new ElapsedTime();
+        toggleHook = new ElapsedTime();
     }
 
     @Override
     public void loop() {
 
-//        if (gamepad2.x) {
+        if (gamepad2.x) {
 //            lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
+
 //            intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
+            chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 //            lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
+
 //            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        }
+            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) {
             intakeL.setPower(intakePower);
             intakeR.setPower(intakePower);
+
         } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
+            clawSquish.setPosition(squishPos[0]);
+            if (!MathUtils.equals(chainBar.getCurrentPosition(), chainBarIntakePosition, 75)) {
+                chainBar.setTargetPosition(chainBarIntakePosition);
+                chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                chainBar.setPower(chainBarPower);
+            }
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
+        }
+
+        if (!chainBar.isBusy() && chainBar.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            chainBar.setPower(0);
         }
 
         if (gamepad1.a) { //close claw
@@ -155,22 +175,28 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSpin.setPosition(spinPos[currentSpinPos]);
             toggleSpinTime.reset();
         }
-
-        if (gamepad2.a) { //hook up
-            foundationHookLeft.setPosition(foundationHookPos[1]);
-            foundationHookRight.setPosition(foundationHookPos[0]);
+        if (gamepad1.x && (toggleHook.milliseconds() > 250)) { //toggle claw rotation
+            currentHook = 1-currentHook;
+            foundationHookLeft.setPosition(foundationHookPosLeft[currentHook]);
+            foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
+            toggleHook.reset();
         }
 
-        if (gamepad2.b) { //hook down
-            foundationHookLeft.setPosition(foundationHookPos[0]);
-            foundationHookRight.setPosition(foundationHookPos[1]);
-        }
+//        if (gamepad2.a) { //hook up
+//            foundationHookLeft.setPosition(foundationHookPosLeft[1]);
+//            foundationHookRight.setPosition(foundationHookPosRight[0]);
+//        }
+//
+//        if (gamepad2.b) { //hook down
+//            foundationHookLeft.setPosition(foundationHookPosLeft[0]);
+//            foundationHookRight.setPosition(foundationHookPosRight[1]);
+//        }
 
         if (gamepad1.left_bumper) {
             chainBar.setPower(chainBarPower);
         } else if (gamepad1.right_bumper) {
             chainBar.setPower(-chainBarPower);
-        } else {
+        } else if (chainBar.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
             chainBar.setPower(0);
         }
 

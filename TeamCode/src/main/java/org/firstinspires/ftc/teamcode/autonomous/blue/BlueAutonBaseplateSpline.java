@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 @Autonomous(group = "auton")
 public class BlueAutonBaseplateSpline extends LinearOpMode {
     public Servo foundationHookLeft, foundationHookRight;
-    final double[] foundationHookPos = {0,1};
+    final double[] foundationHookPos = {1,0};
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,7 +38,7 @@ public class BlueAutonBaseplateSpline extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .splineTo(new Pose2d(26,28,0), new SplineInterpolator(0,Math.PI))
-                        .back(8)
+                        .back(4)
                         .build()
         );
         foundationHookLeft.setPosition(foundationHookPos[0]);
@@ -55,7 +55,7 @@ public class BlueAutonBaseplateSpline extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(68)
+                        .strafeLeft(69)
                         .build()
         );
 

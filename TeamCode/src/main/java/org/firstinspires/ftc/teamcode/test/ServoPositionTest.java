@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(group = "test")
 public class ServoPositionTest extends OpMode {
-
     public Servo servo;
     @Override
     public void init() {
-        servo = hardwareMap.servo.get("foundationHook");
+        servo = hardwareMap.servo.get("foundationHookLeft");
         servo.setPosition(0);
+        super.msStuckDetectLoop = 100000000;
     }
 
     @Override
