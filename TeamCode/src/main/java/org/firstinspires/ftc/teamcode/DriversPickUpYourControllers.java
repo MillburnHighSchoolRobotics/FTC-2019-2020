@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
+@TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
     final double[] spinPos = {0,0.5};

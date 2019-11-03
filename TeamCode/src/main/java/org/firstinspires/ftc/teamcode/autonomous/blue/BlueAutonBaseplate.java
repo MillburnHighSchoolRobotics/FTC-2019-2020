@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous.blue;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 
 @Autonomous(group = "auton")
+@Disabled
 public class BlueAutonBaseplate extends LinearOpMode {
     public Servo foundationHookLeft, foundationHookRight;
     final double[] foundationHookPos = {0,1};
