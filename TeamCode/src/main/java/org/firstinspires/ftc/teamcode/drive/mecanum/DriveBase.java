@@ -66,6 +66,8 @@ public abstract class DriveBase extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, WHEEL_BASE);
 
         dashboard = FtcDashboard.getInstance();
+        dashboard.setTelemetryTransmissionInterval(25);
+
         clock = NanoClock.system();
 
         mode = Mode.IDLE;
