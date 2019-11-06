@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.autonomous.blue;
+package org.firstinspires.ftc.teamcode.autonomous.red.old;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -13,9 +13,10 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 
 @Autonomous(group = "auton")
-public class BlueAutonBaseplateSpline extends LinearOpMode {
+@Disabled
+public class RedAutonBaseplateLinear extends LinearOpMode {
     public Servo foundationHookLeft, foundationHookRight;
-    final double[] foundationHookPos = {1,0};
+    final double[] foundationHookPos = {0,1};
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,6 +26,7 @@ public class BlueAutonBaseplateSpline extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
+//        drive.setPoseEstimate(new Pose2d(24, 63, 0));
 
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookLeft.setPosition(foundationHookPos[1]);
@@ -37,8 +39,25 @@ public class BlueAutonBaseplateSpline extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(26,28,0), new SplineInterpolator(0,Math.PI))
-                        .back(4)
+                        .strafeRight(24)
+                        .forward(15)
+                        .build()
+        );
+        drive.turnSync(Math.PI);
+
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeLeft(24)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeRight(4)
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .back(19)
                         .build()
         );
         foundationHookLeft.setPosition(foundationHookPos[0]);
@@ -55,7 +74,7 @@ public class BlueAutonBaseplateSpline extends LinearOpMode {
         Thread.sleep(1000);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(69)
+                        .strafeRight(64)
                         .build()
         );
 

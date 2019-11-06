@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.util.Spline;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 @Autonomous(group = "auton")
-public class BlueAutonBlockBaseplateSpline extends LinearOpMode {
+public class BlueAutonRandomStoneBaseplate extends LinearOpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
     public DcMotor chainBar;
