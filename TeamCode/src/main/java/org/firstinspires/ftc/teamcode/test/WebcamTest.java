@@ -127,7 +127,7 @@ public class WebcamTest extends LinearOpMode {
                 if (robotLocationTransform != null) {
                     lastLocation = robotLocationTransform;
                 }
-                break;
+//                break;
             }
 
             if (targetVisible) {
