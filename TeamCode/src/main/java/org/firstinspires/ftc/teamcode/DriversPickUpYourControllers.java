@@ -26,7 +26,7 @@ public class DriversPickUpYourControllers extends OpMode {
     ElapsedTime toggleDriveSpeed;
     ElapsedTime toggleHook;
 
-    double intakePower = 0.9;
+    double intakePower = 0.6;
     double chainBarPower = 0.8;
     double drivePower = 1;
 
