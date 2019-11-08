@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -22,7 +24,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 public class BarkerClass {
-    private HardwareMap hardwareMap;
+    static private HardwareMap hardwareMap;
 
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false;
@@ -32,22 +34,24 @@ public class BarkerClass {
     private static final float stoneZ = 2.00f * 25.4f;
 
     private OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia = null;
-    WebcamName webcamName = null;
+    static private VuforiaLocalizer vuforia = null;
+    static WebcamName webcamName = null;
 
     private boolean targetVisible = false;
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    static private float phoneXRotate    = 0;
+    static private float phoneYRotate    = 0;
+    static private float phoneZRotate    = 0;
 
-    private double imageBlockX;
-    private VectorF relativeBlockLoc;
+    static VuforiaTrackable skystoneTrackable = null;
+    static VuforiaTrackables targetsSkyStone = null;
+
+    private VectorF translation;
 
     public BarkerClass(HardwareMap hwmap) {
         hardwareMap = hwmap;
     }
 
-    public int getPos() {
+    public static void setupCam() {
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -56,8 +60,8 @@ public class BarkerClass {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = webcamName;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
-        VuforiaTrackable skystoneTrackable = targetsSkyStone.get(0);
+        targetsSkyStone = vuforia.loadTrackablesFromAsset("Skystone");
+        skystoneTrackable = targetsSkyStone.get(0);
         skystoneTrackable.setName("Stone Target");
 
 
@@ -124,6 +128,10 @@ public class BarkerClass {
         //waitForStart();
 
         targetsSkyStone.activate();
+    }
+
+    public int getPos() {
+
 
         /*while (true) {
 
@@ -155,34 +163,35 @@ public class BarkerClass {
             //telemetry.update();
         }*/
 
+
         ElapsedTime et = new ElapsedTime();
         while (et.seconds() <= 3) {
+            targetVisible = false;
             if (((VuforiaTrackableDefaultListener) skystoneTrackable.getListener()).isVisible()) {
+                targetVisible = true;
+
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) skystoneTrackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     lastLocation = robotLocationTransform;
-                    // express position (translation) of robot in inches.
-                    VectorF translation = lastLocation.getTranslation();
-                    //telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    relativeBlockLoc = new VectorF(translation.get(0) / 25.4f, translation.get(1) / 25.4f, translation.get(2) / 25.4f);//);
-
-                    // express the rotation of the robot in degrees.
-                    //Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                    break;
                 }
+                Log.d("ooga booga", robotLocationTransform.toString());
+            }
+            if (targetVisible) {
+                try {
+                    if (translation.get(1)/25.4f > 4) {
+                        return 1;
+                    } else if (translation.get(1)/25.4f < 4) {
+                        return 2;
+                    } else {
+                        return 3;
+                    }
+                } catch (Exception ex) {return -1;}
             }
         }
 
-        targetsSkyStone.deactivate();
 
-        if (relativeBlockLoc.get(0) <= 100 && relativeBlockLoc.get(0) >= 0) {
-            return 1;
-        } else if (relativeBlockLoc.get(0) <= 200 && relativeBlockLoc.get(0) >= 100) {
-            return 2;
-        } else if (relativeBlockLoc.get(0) <= 300 && relativeBlockLoc.get(0) >= 200) {
-            return 3;
-        }
-        Random rand = new Random();
-        return rand.nextInt(3) + 1;
+        targetsSkyStone.deactivate();
+        Log.d("ooga booga", translation.getData().toString());
+        return -1;
     }
 }

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 @Autonomous(group = "auton")
-public class BlueAutonOtherTeamGetsDomed extends LinearOpMode {
+public class bluegodauton extends LinearOpMode {
     private DcMotorEx intakeL, intakeR, chainBar;
     private Servo clawSquish, clawSpin, foundationHookLeft, foundationHookRight;
 
@@ -89,7 +89,7 @@ public class BlueAutonOtherTeamGetsDomed extends LinearOpMode {
             case 1:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-44,32,Math.PI/2), new SplineInterpolator(3*Math.PI/2, Math.toRadians(275-45)))
+                                .splineTo(new Pose2d(-44,32,3*Math.PI/2), new SplineInterpolator(3*Math.PI/2, Math.toRadians(275-45)))
                                 .strafeTo(new Vector2d(-48,25))
                                 .build()
                 );
@@ -118,38 +118,51 @@ public class BlueAutonOtherTeamGetsDomed extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse()
                         .splineTo(new Pose2d(0,42,0), new SplineInterpolator(Math.toRadians(275-45),Math.PI))
-                        .splineTo(new Pose2d(24,15,3*Math.PI/2),new ConstantInterpolator(Math.PI))
+                        .splineTo(new Pose2d(51,32,3*Math.PI/2),new SplineInterpolator(Math.PI,Math.PI/2))
+                        .back(8)
                         .build()
         );
-        moveChainbar(2);
-        clawSquish.setPosition(squishPos[0]);
+        foundationHookLeft.setPosition(foundationHookPosLeft[1]);
+        foundationHookRight.setPosition(foundationHookPosRight[1]);
 
-        moveChainbar(1);
+        moveChainbar(2);
+
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .splineTo(new Pose2d(24,48,0))
+                        .build()
+        );
+
+        clawSquish.setPosition(squishPos[0]);
+        moveChainbar(0);
         intakeL.setPower(-intakePower);
         intakeR.setPower(-intakePower);
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
+                        .build()
+        );
+        moveChainbar(1);
 
         switch(skystone) {
             case 1:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
-                                .splineTo(new Pose2d(-20,32,Math.PI/2), new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+                                .splineTo(new Pose2d(-20,32,0), new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
                                 .strafeTo(new Vector2d(-24,25))
                                 .build()
                 );
             case 2:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
-                                .splineTo(new Pose2d(0,42,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+                                .splineTo(new Pose2d(-28,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
                                 .strafeTo(new Vector2d(-32,25))
                                 .build()
                 );
             case 3:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
-                                .splineTo(new Pose2d(0,42,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+                                .splineTo(new Pose2d(-36,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
                                 .strafeTo(new Vector2d(-40,25))
                                 .build()
                 );
@@ -162,26 +175,21 @@ public class BlueAutonOtherTeamGetsDomed extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .reverse()
-                        .splineTo(new Pose2d(0,42,0), new SplineInterpolator(Math.toRadians(275-45),Math.PI))
-                        .splineTo(new Pose2d(51,32,3*Math.PI/2),new SplineInterpolator(Math.PI,Math.PI/2))
-                        .back(8)
+                        .splineTo(new Pose2d(24,48,0))
                         .build()
         );
-        foundationHookLeft.setPosition(foundationHookPosLeft[1]);
-        foundationHookRight.setPosition(foundationHookPosRight[1]);
-        Thread.sleep(500);
+        moveChainbar(2);
+        clawSquish.setPosition(squishPos[0]);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .forward(48)
                         .build()
         );
-        foundationHookLeft.setPosition(foundationHookPosLeft[0]);
-        foundationHookRight.setPosition(foundationHookPosRight[0]);
+        moveChainbar(0);
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeLeft(51)
+                        .splineTo(new Pose2d(0,42,0),new SplineInterpolator(0,4*Math.PI))
                         .build()
         );
     }
@@ -189,9 +197,5 @@ public class BlueAutonOtherTeamGetsDomed extends LinearOpMode {
     private void moveChainbar(int whichPos) throws InterruptedException {
         chainBar.setTargetPosition(chainBarPos[whichPos]);
         chainBar.setPower(chainBarPower);
-        while (chainBar.isBusy()) {
-            Thread.sleep(10);
-        }
-        chainBar.setPower(0);
     }
 }
