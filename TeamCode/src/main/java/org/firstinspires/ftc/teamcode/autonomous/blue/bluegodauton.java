@@ -74,7 +74,7 @@ public class bluegodauton extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(-48,63,0));
+        drive.setPoseEstimate(new Pose2d(-48,63,3*Math.PI/2));
 
         waitForStart();
         if (isStopRequested()) return;
@@ -84,7 +84,7 @@ public class bluegodauton extends LinearOpMode {
         intakeL.setPower(-intakePower);
         intakeR.setPower(-intakePower);
 
-        int skystone = 1;
+        int skystone = 2;
         switch(skystone) {
             case 1:
                 drive.followTrajectorySync(
@@ -93,13 +93,15 @@ public class bluegodauton extends LinearOpMode {
                                 .strafeTo(new Vector2d(-48,25))
                                 .build()
                 );
+                break;
             case 2:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-52,32,Math.PI/2), new SplineInterpolator(3*Math.PI/2, Math.toRadians(275-45)))
-                                .strafeTo(new Vector2d(-56,25))
+                                .splineTo(new Pose2d(-52,32,Math.toRadians(230)))
+//                                .strafeTo(new Vector2d(-56,25))
                                 .build()
                 );
+                break;
             case 3:
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
@@ -107,8 +109,11 @@ public class bluegodauton extends LinearOpMode {
                                 .strafeTo(new Vector2d(-64,25))
                                 .build()
                 );
+                break;
 
         }
+        telemetry.addData("aadf", "stop");
+        telemetry.update();
         moveChainbar(0);
         clawSquish.setPosition(squishPos[1]);
         intakeL.setPower(0);
@@ -117,7 +122,7 @@ public class bluegodauton extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse()
-                        .splineTo(new Pose2d(0,42,0), new SplineInterpolator(Math.toRadians(275-45),Math.PI))
+                        .splineTo(new Pose2d(0,42,Math.PI))
                         .splineTo(new Pose2d(51,32,3*Math.PI/2),new SplineInterpolator(Math.PI,Math.PI/2))
                         .back(8)
                         .build()
@@ -125,73 +130,76 @@ public class bluegodauton extends LinearOpMode {
         foundationHookLeft.setPosition(foundationHookPosLeft[1]);
         foundationHookRight.setPosition(foundationHookPosRight[1]);
 
-        moveChainbar(2);
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(24,48,0))
-                        .build()
-        );
-
-        clawSquish.setPosition(squishPos[0]);
-        moveChainbar(0);
-        intakeL.setPower(-intakePower);
-        intakeR.setPower(-intakePower);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
-                        .build()
-        );
-        moveChainbar(1);
-
-        switch(skystone) {
-            case 1:
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-20,32,0), new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
-                                .strafeTo(new Vector2d(-24,25))
-                                .build()
-                );
-            case 2:
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-28,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
-                                .strafeTo(new Vector2d(-32,25))
-                                .build()
-                );
-            case 3:
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-36,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
-                                .strafeTo(new Vector2d(-40,25))
-                                .build()
-                );
-
-        }
-        moveChainbar(0);
-        clawSquish.setPosition(squishPos[1]);
-        intakeL.setPower(0);
-        intakeR.setPower(0);
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(24,48,0))
-                        .build()
-        );
-        moveChainbar(2);
-        clawSquish.setPosition(squishPos[0]);
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .forward(48)
-                        .build()
-        );
-        moveChainbar(0);
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(0,42,0),new SplineInterpolator(0,4*Math.PI))
-                        .build()
-        );
+//        moveChainbar(2);
+//
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .splineTo(new Pose2d(24,48,0))
+//                        .build()
+//        );
+//
+//        clawSquish.setPosition(squishPos[0]);
+//        moveChainbar(0);
+//        intakeL.setPower(-intakePower);
+//        intakeR.setPower(-intakePower);
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .splineTo(new Pose2d(0,42,0),new ConstantInterpolator(Math.PI))
+//                        .build()
+//        );
+//        moveChainbar(1);
+//
+//        switch(skystone) {
+//            case 1:
+//                drive.followTrajectorySync(
+//                        drive.trajectoryBuilder()
+//                                .splineTo(new Pose2d(-20,32,0), new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+//                                .strafeTo(new Vector2d(-24,25))
+//                                .build()
+//                );
+//                break;
+//            case 2:
+//                drive.followTrajectorySync(
+//                        drive.trajectoryBuilder()
+//                                .splineTo(new Pose2d(-28,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+//                                .strafeTo(new Vector2d(-32,25))
+//                                .build()
+//                );
+//                break;
+//            case 3:
+//                drive.followTrajectorySync(
+//                        drive.trajectoryBuilder()
+//                                .splineTo(new Pose2d(-36,32,0),new SplineInterpolator(Math.PI, Math.toRadians(275-45)))
+//                                .strafeTo(new Vector2d(-40,25))
+//                                .build()
+//                );
+//                break;
+//
+//        }
+//        moveChainbar(0);
+//        clawSquish.setPosition(squishPos[1]);
+//        intakeL.setPower(0);
+//        intakeR.setPower(0);
+//
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .splineTo(new Pose2d(24,48,0))
+//                        .build()
+//        );
+//        moveChainbar(2);
+//        clawSquish.setPosition(squishPos[0]);
+//
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .forward(48)
+//                        .build()
+//        );
+//        moveChainbar(0);
+//        drive.followTrajectorySync(
+//                drive.trajectoryBuilder()
+//                        .splineTo(new Pose2d(0,42,0),new SplineInterpolator(0,4*Math.PI))
+//                        .build()
+//        );
     }
 
     private void moveChainbar(int whichPos) throws InterruptedException {
