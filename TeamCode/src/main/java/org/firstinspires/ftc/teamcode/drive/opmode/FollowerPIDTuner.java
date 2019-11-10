@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -27,7 +28,7 @@ public class FollowerPIDTuner extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(-60, 60, 3*Math.PI/2));
+//        drive.setPoseEstimate(new Pose2d(-60, 60, 3*Math.PI/2));
 
         waitForStart();
 
@@ -36,7 +37,7 @@ public class FollowerPIDTuner extends LinearOpMode {
         while (!isStopRequested()) {
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .forward(DISTANCE)
+                            .strafeTo(new Vector2d(DISTANCE,0))
                             .build()
             );
             drive.turnSync(Math.toRadians(180));

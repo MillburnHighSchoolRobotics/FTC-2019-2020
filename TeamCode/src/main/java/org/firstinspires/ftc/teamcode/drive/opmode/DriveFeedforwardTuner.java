@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.tuning.AccelRegression;
 import com.acmerobotics.roadrunner.tuning.RampRegression;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -39,15 +39,15 @@ public class DriveFeedforwardTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
-
         DriveBase drive = new MohanBot(hardwareMap);
 
         NanoClock clock = NanoClock.system();
-
         waitForStart();
 
 
@@ -55,7 +55,6 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         double finalVel = MAX_POWER * maxVel;
         double accel = (finalVel * finalVel) / (2.0 * DISTANCE);
         double rampTime = Math.sqrt(2.0 * DISTANCE / accel);
-
         double startTime = clock.seconds();
         RampRegression rampRegression = new RampRegression();
 
@@ -69,8 +68,7 @@ public class DriveFeedforwardTuner extends LinearOpMode {
             double power = vel / maxVel;
 
             rampRegression.add(elapsedTime, drive.getPoseEstimate().getX(), power);
-
-            Log.d("DriveFeedForward", elapsedTime + " " + drive.getPoseEstimate().getX() + " " + power);
+            Log.d("DriveFeedForwardVel", elapsedTime + " " + drive.getPoseEstimate().getX() + " " + power);
 
             drive.setDrivePower(new Pose2d(power, 0.0, 0.0));
             drive.updatePoseEstimate();
@@ -82,11 +80,11 @@ public class DriveFeedforwardTuner extends LinearOpMode {
         rampRegression.save(LoggingUtil.getLogFile(Misc.formatInvariant(
                 "DriveRampRegression-%d.csv", System.currentTimeMillis())));
 
-        telemetry.log().clear();
+        telemetry.clearAll();
         telemetry.log().add(Misc.formatInvariant("kV = %.5f, kStatic = %.5f (R^2 = %.2f)",
                     rampResult.kV, rampResult.kStatic, rampResult.rSquare));
 
-        Log.d("DriveFeedForward", rampResult.kV + "\t" + rampResult.kStatic + "\t" + rampResult.rSquare);
+        Log.d("DriveFeedForwardVel", rampResult.kV + "\t" + rampResult.kStatic + "\t" + rampResult.rSquare);
 
         while (!isStopRequested()) {
             idle();

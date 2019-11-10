@@ -28,39 +28,28 @@ public class SplineTest extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-
-        drive.updatePoseEstimate();
-        drive.setPoseEstimate(new Pose2d(-60, 63, 3*Math.PI/2));
+        drive.setPoseEstimate(new Pose2d(0,42,Math.PI));
 
         waitForStart();
 
         if (isStopRequested()) return;
+
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-24,0,0), new ConstantInterpolator(3*Math.PI/2))
-                        .reverse()
-                        .splineTo(new Pose2d(-60,-63,Math.PI/2), new ConstantInterpolator(3*Math.PI/2))
-//                        .splineTo(new Pose2d(-24,0,0), new SplineInterpolator(0, Math.PI))
-//                        .reverse()
-//                        .splineTo(new Pose2d(-48, 60,3*Math.PI/2)/*, new SplineInterpolator(Math.PI/2, Math.PI)*/)
-//                        .reverse()
-//                        .strafeTo(new Vector2d(-24, 0))
-//                        .strafeTo(new Vector2d(-48, 60))
-//                        .splineTo(new Pose2d(-48,0, 3*Math.PI/2), new ConstantInterpolator(3*Math.PI/2))
-//
+                        .lineTo(new Vector2d(-39,58))
                         .build()
         );
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                        .splineTo(new Pose2d(30,30,0))
-//                        .build()
-//        );
-//        Thread.sleep(2000);
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                        .reverse()
-//                        .splineTo(new Pose2d(0,0,0))
-//                        .build()
-//        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .splineTo(new Pose2d(-40,32,3*Math.PI/2))
+                        .strafeTo(new Vector2d(-42,20))
+                        .build()
+        );
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse()
+                        .splineTo(new Pose2d(0,42,Math.PI))
+                        .build()
+        );
     }
 }

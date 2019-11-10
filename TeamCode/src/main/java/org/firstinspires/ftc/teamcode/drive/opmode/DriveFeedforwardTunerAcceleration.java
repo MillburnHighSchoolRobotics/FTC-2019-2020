@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.tuning.AccelRegression;
@@ -36,27 +38,26 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         DriveBase drive = new MohanBot(hardwareMap);
-
         NanoClock clock = NanoClock.system();
 
         waitForStart();
 
         double maxVel = rpmToVelocity(getMaxRpm());
         double maxPowerTime = DISTANCE / maxVel;
-
-
         AccelRegression accelRegression = new AccelRegression();
-
-        drive.setPoseEstimate(new Pose2d());
-        drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
-        Thread.sleep(250);
         double startTime = clock.seconds();
+
+
+        drive.setPoseEstimate(new Pose2d(0,0,0));
+        drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > maxPowerTime) {
@@ -64,14 +65,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
             }
 
             accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
-
-//            Log.d("acceltuner", "time: " + String.valueOf(elapsedTime));
-//            Log.d("acceltuner", "pos: " + String.valueOf(drive.getPoseEstimate().getX()));
-//            Log.d("acceltuner", "powertime: " + String.valueOf(maxPowerTime));
-//            Log.d("acceltuner", "maxrpm: " + getMaxRpm());
-//            Log.d("acceltuner", "maxvel: " + rpmToVelocity(getMaxRpm()));
-
-            Log.d("literallywhatever?!", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
+            Log.d("DriveFeedForwardAcc", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
 
             drive.updatePoseEstimate();
         }
@@ -89,7 +83,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         telemetry.log().add(Misc.formatInvariant("kA = %.9f (R^2 = %.9f)",
                 accelResult.kA, accelResult.rSquare));
             telemetry.update();
-        Log.d("literallywhatever?!", accelResult.kA + "\t" + accelResult.rSquare);
+        Log.d("DriveFeedForwardAcc", accelResult.kA + "\t" + accelResult.rSquare);
 
         while (!isStopRequested()) {
             idle();

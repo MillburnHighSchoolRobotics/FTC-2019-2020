@@ -29,7 +29,7 @@ public class LocalizationTest extends LinearOpMode {
 
         waitForStart();
 
-//        drive.setPoseEstimate(new Pose2d(-48, 63, 3*Math.PI/2));
+//        drive.setPoseEstimate(new Pose2d(-39,63,3*Math.PI/2));
 
         while (!isStopRequested()) {
             drive.setDrivePower(new Pose2d(

@@ -32,7 +32,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 14;
+    public static double TRACK_WIDTH = 13.7;
     public static double WHEEL_BASE = 13.5;
 
     /*
@@ -49,6 +49,10 @@ public class DriveConstants {
     public static double kV = 0.013955236664657396;// / rpmToVelocity(getMaxRpm());
     public static double kA = 0.000045225265421946806;
     public static double kStatic = 0.05955177567008853;
+
+//    public static double kV = 0.011362387119061589;
+//    public static double kA = 0.00017928041111880488;
+//    public static double kStatic = 0.20696107176746095;
 //
 ////    public static double kV = 0.1568;// / rpmToVelocity(getMaxRpm());
 ////    public static double kA = 0.000903926;
@@ -85,7 +89,7 @@ public class DriveConstants {
 
 
     public static double encoderTicksToInches(int ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / MOTOR_CONFIG.getTicksPerRev();
     }
 
     public static double rpmToVelocity(double rpm) {
