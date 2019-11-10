@@ -2,13 +2,6 @@ package org.firstinspires.ftc.teamcode.drive.mecanum;
 
 import android.util.Log;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.BASE_CONSTRAINTS;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.WHEEL_BASE;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
@@ -30,12 +23,16 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.Movement;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.util.Movement;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.BASE_CONSTRAINTS;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.WHEEL_BASE;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 
 /*
  * Base class with shared functionality for sample mecanum drives. All hardware-specific details are
@@ -64,9 +61,6 @@ public abstract class DriveBase extends MecanumDrive {
 
     private DriveConstraints constraints;
     private TrajectoryFollower follower;
-
-    private List<Double> lastWheelPositions;
-    private double lastTimestamp;
 
     public DriveBase() {
         super(kV, kA, kStatic, TRACK_WIDTH, WHEEL_BASE);
@@ -205,28 +199,6 @@ public abstract class DriveBase extends MecanumDrive {
         }
 
         dashboard.sendTelemetryPacket(packet);
-    }
-
-    public List<Double> getWheelVelocities() {
-        List<Double> positions = getWheelPositions();
-        double currentTimestamp = clock.seconds();
-
-        List<Double> velocities = new ArrayList<>(positions.size());;
-        if (lastWheelPositions != null) {
-            double dt = currentTimestamp - lastTimestamp;
-            for (int i = 0; i < positions.size(); i++) {
-                velocities.add((positions.get(i) - lastWheelPositions.get(i)) / dt);
-            }
-        } else {
-            for (int i = 0; i < positions.size(); i++) {
-                velocities.add(0.0);
-            }
-        }
-
-        lastTimestamp = currentTimestamp;
-        lastWheelPositions = positions;
-
-        return velocities;
     }
 
     public void waitForIdle() {

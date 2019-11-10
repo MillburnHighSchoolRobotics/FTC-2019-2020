@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleDriveBase;
+import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -21,11 +22,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setCurrentAuton(this);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-        DriveBase drive = new MohanBot(hardwareMap);
+        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
 
         waitForStart();
 
@@ -40,13 +37,11 @@ public class LocalizationTest extends LinearOpMode {
 
             drive.update();
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
+            Pose2d poseEstimate = drive.getPose();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.update();
-
-            drive.updatePoseEstimate();
         }
     }
 }

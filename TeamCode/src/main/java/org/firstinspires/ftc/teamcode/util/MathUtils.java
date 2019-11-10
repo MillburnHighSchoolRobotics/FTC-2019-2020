@@ -76,4 +76,10 @@ public class MathUtils {
         }
         return max;
     }
+    public static double normalize(double angle) {
+        double newAngle = angle%(2*Math.PI);
+        newAngle = (newAngle + 2*Math.PI) % (2*Math.PI);
+
+        return newAngle;
+    }
 }

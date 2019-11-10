@@ -55,24 +55,8 @@ public class PositionMonitor extends MonitorThread {
     }
     @Override
     protected void loop() {
-//        float newTheta;
-//        synchronized (imu) {
-//            newTheta = imu.getAngularOrientation().firstAngle;
-//        }
-//        if (Math.abs(newTheta - theta) > 180) {
-//            if (newTheta > 0) {
-//                rotation--;
-//            } else {
-//                rotation++;
-//            }
-//        }
-//        theta = newTheta;
-//
-//        Log.d(TAG, "Rotation: " + rotation + " theta, " + theta + " degrees");
-//        setValue("theta", theta);
-
         updatePosition();
-        setValue("theta", 360-Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
+        setValue("theta", Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
         setValue("orientation", Movement.toDegrees(orientation));
         setValue("x", x);
         setValue("y", y);
@@ -127,33 +111,6 @@ public class PositionMonitor extends MonitorThread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-//            double localOffsetX;
-//            double localOffsetY;
-//            if (Math.abs(deltaTheta) < encoderTolerance) {
-//                localOffsetX = deltaY;
-//                localOffsetY = deltaX2;
-//            } else {
-//                localOffsetX = 2 * Math.sin(deltaTheta/2) * ((deltaY/deltaTheta) + offsetY);
-//                localOffsetY = 2 * Math.sin(deltaTheta/2) * ((deltaX2/deltaTheta) + offsetX2);
-//            }
-//
-//            double localOffsetR = Math.sqrt(Math.pow(localOffsetX,2)+Math.pow(localOffsetY,2));
-//            double localOffsetTheta = 0;
-//            if ((localOffsetY >= 0) && (localOffsetR != 0)) {
-//                localOffsetTheta = Math.acos(localOffsetX/localOffsetR);
-//            } else if (localOffsetR != 0) {
-//                localOffsetTheta = -Math.acos(localOffsetX/localOffsetR);
-//            }
-//
-//            localOffsetTheta -= (lastTheta + (deltaTheta/2));
-//
-//            localOffsetX = localOffsetR * Math.cos(localOffsetTheta);
-//            localOffsetY = localOffsetR * Math.sin(localOffsetTheta);
-//
-//            x += localOffsetX;
-//            y += localOffsetY;
-//            theta = currentTheta*(180/Math.PI);
         }
     }
 }

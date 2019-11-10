@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -24,17 +25,11 @@ public class StraightTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setCurrentAuton(this);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
+        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
 
-        DriveBase drive = new MohanBot(hardwareMap);
-
-        drive.setPoseEstimate(new Pose2d(0, 0, 0));
+        drive.setPose(new Pose2d(0, 0, 0));
 
         Trajectory trajectory = drive.trajectoryBuilder()
-//                .splineTo(new Pose2d(48, 0,0), new ConstantInterpolator(0))
                 .lineTo(new Vector2d(DISTANCE,0))
                 .build();
 
@@ -42,6 +37,6 @@ public class StraightTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySync(trajectory);
+        drive.followTrajectory(trajectory);
     }
 }

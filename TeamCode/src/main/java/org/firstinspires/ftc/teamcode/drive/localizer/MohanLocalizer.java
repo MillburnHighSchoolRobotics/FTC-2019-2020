@@ -31,9 +31,6 @@ public class MohanLocalizer implements Localizer {
     public static double WHEEL_RADIUS = (60/25.4)/2; // in
     public static double GEAR_RATIO = 32/48.0; // output (wheel) speed / input (encoder) speed
 
-//    DcMotorEx ex1;
-//    DcMotorEx ex2;
-//    DcMotorEx ey;
     static Pose2d mohansLocation = new Pose2d(0,0,0);
     double count = 0;
 
@@ -68,12 +65,6 @@ public class MohanLocalizer implements Localizer {
 
     @Override
     public void update() {
-//        double x, y, theta;
-//        do {
-//            x = ThreadManager.getInstance().getValue("x", Double.class);
-//            y = ThreadManager.getInstance().getValue("y", Double.class);
-//            theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
-//        } while (mohansLocation.getX() == x && mohansLocation.getY() == y && mohansLocation.getHeading() == theta);
         double count1;
         do {
             count1 = ThreadManager.getInstance().getValue("count", Integer.class);
@@ -82,7 +73,7 @@ public class MohanLocalizer implements Localizer {
 
         double x = ThreadManager.getInstance().getValue("x", Double.class) + xOffset;
         double y = ThreadManager.getInstance().getValue("y", Double.class) + yOffset;
-        double theta = Angle.norm(Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class)) + thetaOffset);
+        double theta = Angle.norm(Math.toRadians(360-ThreadManager.getInstance().getValue("theta", Double.class)) + thetaOffset);
         mohansLocation = new Pose2d(x,y,theta);
 
         count = count1;

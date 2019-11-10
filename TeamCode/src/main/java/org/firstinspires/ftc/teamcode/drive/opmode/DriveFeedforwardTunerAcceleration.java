@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
@@ -40,12 +41,7 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setCurrentAuton(this);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-
-        DriveBase drive = new MohanBot(hardwareMap);
+        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
         NanoClock clock = NanoClock.system();
 
         waitForStart();
@@ -56,20 +52,19 @@ public class DriveFeedforwardTunerAcceleration extends LinearOpMode {
         double startTime = clock.seconds();
 
 
-        drive.setPoseEstimate(new Pose2d(0,0,0));
-        drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
+        drive.setPose(new Pose2d(0,0,0));
+        drive.setDrivePower(MAX_POWER);
         while (!isStopRequested()) {
             double elapsedTime = clock.seconds() - startTime;
             if (elapsedTime > maxPowerTime) {
                 break;
             }
 
-            accelRegression.add(elapsedTime, drive.getPoseEstimate().getX(), MAX_POWER);
-            Log.d("DriveFeedForwardAcc", drive.getPoseEstimate().getX() + "\t" + elapsedTime);
+            accelRegression.add(elapsedTime, drive.getPose().getX(), MAX_POWER);
+            Log.d("DriveFeedForwardAcc", drive.getPose().getX() + "\t" + elapsedTime);
 
-            drive.updatePoseEstimate();
         }
-        drive.setDrivePower(new Pose2d(0.0, 0.0, 0.0));
+        drive.setDrivePower(0);
 
 
         AccelRegression.AccelResult accelResult = accelRegression.fit(kV, kStatic);
