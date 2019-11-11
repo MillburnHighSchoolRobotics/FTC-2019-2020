@@ -1,21 +1,17 @@
-package org.firstinspires.ftc.teamcode.roadrunner.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner;
 
-import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.roadrunner.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.roadrunner.mecanum.MohanBot2;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-/*
- * This is a simple routine to test turning capabilities.
- */
-@Config
+
 @Autonomous(group = "drive")
-public class TurnTest extends LinearOpMode {
-    public static double ANGLE = 180;
+public class FollowerPIDTuner extends LinearOpMode {
+    public static double DISTANCE = 48;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -24,13 +20,20 @@ public class TurnTest extends LinearOpMode {
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        DriveBase drive = new MohanBot2(hardwareMap);
+        MohanBot robot = new MohanBot(hardwareMap,this);
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.turnSync(Math.toRadians(ANGLE));
-
+        while (!isStopRequested()) {
+            robot.followTrajectory(
+                    robot.trajectoryBuilder()
+                            .strafeTo(new Vector2d(DISTANCE,0))
+                            .build()
+            );
+            robot.turn(Math.toRadians(180));
+            Thread.sleep(1000);
+        }
     }
 }

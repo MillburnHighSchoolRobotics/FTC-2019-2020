@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.robot.MohanBot;
 
 
 @Autonomous(group = "auton")
-public class AutonParkStraight extends LinearOpMode {
+public class AutonParkStraightLeft extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot robot = new MohanBot(hardwareMap,this);
@@ -18,6 +18,7 @@ public class AutonParkStraight extends LinearOpMode {
         robot.followTrajectory(
                 robot.trajectoryBuilder()
                         .forward(24)
+                        .strafeLeft(24)
                         .build()
         );
     }

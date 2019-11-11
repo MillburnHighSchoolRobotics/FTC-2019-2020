@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner;
 
 import android.util.Log;
 
@@ -9,11 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.MovingStatistics;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.roadrunner.DriveConstants;
-import org.firstinspires.ftc.teamcode.roadrunner.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.roadrunner.mecanum.MohanBot2;
-import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.ROBOT_WIDTH;
 
 /*
  * This routine determines the effective track width. The procedure works by executing a point turn
@@ -32,14 +31,7 @@ public class TrackWidthTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ThreadManager manager = ThreadManager.getInstance();
-        manager.setHardwareMap(hardwareMap);
-        manager.setCurrentAuton(this);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
-
-        DriveBase drive = new MohanBot2(hardwareMap);
-        // TODO: if you haven't already, set the localizer to something that doesn't depend on
-        // drive encoders for computing the heading
+        MohanBot robot = new MohanBot(hardwareMap,this);
 
         telemetry.log().add("Press play to begin the track width tuner routine");
         telemetry.log().add("Make sure your robot has enough clearance to turn smoothly");
@@ -56,26 +48,23 @@ public class TrackWidthTuner extends LinearOpMode {
 
         MovingStatistics trackWidthStats = new MovingStatistics(NUM_TRIALS);
         for (int i = 0; i < NUM_TRIALS; i++) {
-            drive.setPoseEstimate(new Pose2d());
+            robot.setPose(new Pose2d());
 
             // it is important to handle heading wraparounds
             double headingAccumulator = 0;
 
-            drive.turn(ANGLE);
+            robot.turn(ANGLE);
 
-            while (!isStopRequested() && drive.isBusy()) {
+            while (!isStopRequested() && robot.isBusy()) {
                 double heading = Math.toRadians(ThreadManager.getInstance().getValue("orientation", Double.class));
 
                 headingAccumulator += Math.abs(heading - lastHeading);
-                Log.d("head", "" + headingAccumulator);
-                Log.d("head2", "" + Math.toDegrees(heading));
-                Log.d("head3 ", "" + (heading - lastHeading));
                 lastHeading = heading;
-                drive.update();
+                robot.update();
             }
             Log.d("mohan finished", "" + Math.toDegrees(Math.abs(headingAccumulator)));
 
-            double trackWidth = DriveConstants.TRACK_WIDTH * ANGLE / Math.abs(headingAccumulator);
+            double trackWidth = ROBOT_WIDTH * ANGLE / Math.abs(headingAccumulator);
             Log.d("eee", "" + trackWidth);
             telemetry.log().add(String.valueOf(trackWidth));
             telemetry.update();
@@ -91,6 +80,5 @@ public class TrackWidthTuner extends LinearOpMode {
         telemetry.update();
 
         Log.d("eeee", "" + trackWidthStats.getMean());
-
     }
 }

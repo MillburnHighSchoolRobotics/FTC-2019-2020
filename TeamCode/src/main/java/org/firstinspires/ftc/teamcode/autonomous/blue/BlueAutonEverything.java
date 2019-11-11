@@ -16,20 +16,19 @@ public class BlueAutonEverything extends LinearOpMode {
         MohanBot mohanBot = new MohanBot(hardwareMap,this);
         mohanBot.setPose(new Pose2d(-39,63,3*Math.PI/2));
 
-        mohanBot.hookUp();
-        mohanBot.openClaw();
+        mohanBot.getHook().hookUp();
+        mohanBot.getChainBar().openClaw();
 
         waitForStart();
         if (isStopRequested()) return;
 
-
-        mohanBot.chainBarUp();
-        mohanBot.intakeIn();
+        mohanBot.getChainBar().chainBarUp();
+        mohanBot.getIntake().intakeIn();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .lineTo(new Vector2d(-39,57))
-                .build()
+                        .build()
         );
 
         int skystone = 2;//(int)Math.round(3*Math.random())+1;
@@ -57,8 +56,8 @@ public class BlueAutonEverything extends LinearOpMode {
                 break;
 
         }
-        mohanBot.chainBarIn();
-        mohanBot.closeClaw();
+        mohanBot.getChainBar().chainBarIn();
+        mohanBot.getChainBar().closeClaw();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
@@ -68,10 +67,9 @@ public class BlueAutonEverything extends LinearOpMode {
                         .strafeTo(new Vector2d(51,20))
                         .build()
         );
-        mohanBot.intakeStop();
-        mohanBot.hookDown();
-
-        mohanBot.chainBarOut();
+        mohanBot.getIntake().intakeStop();
+        mohanBot.getHook().hookDown();
+        mohanBot.getChainBar().chainBarOut();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
@@ -80,16 +78,16 @@ public class BlueAutonEverything extends LinearOpMode {
                         .build()
         );
 
-        mohanBot.hookUp();
-        mohanBot.chainBarIn();
-        mohanBot.intakeIn();
+        mohanBot.getHook().hookUp();
+        mohanBot.getChainBar().chainBarIn();
+        mohanBot.getIntake().intakeIn();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .splineTo(new Pose2d(0,42,Math.PI),new ConstantInterpolator(Math.PI))
                         .build()
         );
-        mohanBot.chainBarUp();
+        mohanBot.getChainBar().chainBarUp();
 
         switch(skystone) {
             case 1:
@@ -103,7 +101,6 @@ public class BlueAutonEverything extends LinearOpMode {
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .splineTo(new Pose2d(-32,32,3*Math.PI/2), new SplineInterpolator(Math.PI,Math.toRadians(225)))
-//                                .strafeTo(new Vector2d(-50,20))
                                 .build()
                 );
                 break;
@@ -111,15 +108,13 @@ public class BlueAutonEverything extends LinearOpMode {
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .splineTo(new Pose2d(-40,32,3*Math.PI/2), new SplineInterpolator(Math.PI,Math.toRadians(225)))
-//                                .strafeTo(new Vector2d(-58,20))
                                 .build()
                 );
                 break;
-
         }
 
-        mohanBot.chainBarIn();
-        mohanBot.closeClaw();
+        mohanBot.getChainBar().chainBarIn();
+        mohanBot.getChainBar().closeClaw();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
@@ -127,9 +122,10 @@ public class BlueAutonEverything extends LinearOpMode {
                         .splineTo(new Pose2d(24,48,Math.PI))
                         .build()
         );
-        mohanBot.intakeStop();
-        mohanBot.chainBarOut();
-        mohanBot.openClaw();
+
+        mohanBot.getIntake().intakeStop();
+        mohanBot.getChainBar().chainBarOut();
+        mohanBot.getChainBar().openClaw();
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
@@ -138,7 +134,7 @@ public class BlueAutonEverything extends LinearOpMode {
                         .build()
         );
 
-        mohanBot.chainBarIn();
+        mohanBot.getChainBar().chainBarIn();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .splineTo(new Pose2d(0,42,Math.PI), new ConstantInterpolator(Math.PI))
