@@ -7,13 +7,13 @@ import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 
 @Autonomous(group = "auton")
 public class BlueAutonEverything extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MillburnRobot mohanBot = new MillburnRobot(hardwareMap,this);
+        MohanBot mohanBot = new MohanBot(hardwareMap,this);
         mohanBot.setPose(new Pose2d(-39,63,3*Math.PI/2));
 
         mohanBot.hookUp();
@@ -64,7 +64,7 @@ public class BlueAutonEverything extends LinearOpMode {
                 mohanBot.trajectoryBuilder()
                         .reverse()
                         .splineTo(new Pose2d(24,40,Math.PI))
-                        .splineTo(new Pose2d(51,24,Math.PI/2), new SplineInterpolator(Math.PI,Math.PI/2))
+                        .splineTo(new Pose2d(51,24,Math.PI/2), new SplineInterpolator(Math.PI/2,Math.PI))
                         .strafeTo(new Vector2d(51,20))
                         .build()
         );

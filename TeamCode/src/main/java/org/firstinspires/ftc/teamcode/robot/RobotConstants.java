@@ -8,12 +8,11 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 public class RobotConstants {
     private static final MotorConfigurationType MOTOR_CONFIG =
             MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class);
-    private static final double TICKS_PER_REV = MOTOR_CONFIG.getTicksPerRev();
 
     public static double WHEEL_RADIUS = 2;
     public static double DRIVE_GEARING = 1;
     public static double ROBOT_WIDTH = 13.7; // lf to rf
-    public static double ROBOT_LENGTH = 13.5; // lf to lb
+    public static double ROBOT_LENGTH = 13.5; // lf to lbs
 
     public static double X_OFFSET, Y_OFFSET, HEADING_OFFSET = 0;
 
@@ -28,10 +27,6 @@ public class RobotConstants {
             50.0, 40.0, 0.0,
             Math.toRadians(180), Math.toRadians(180), 0.0
     );
-
-    public static double encoderTicksToInches(int ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * DRIVE_GEARING * ticks / MOTOR_CONFIG.getTicksPerRev();
-    }
 
     public static double rpmToVelocity(double rpm) {
         return rpm * DRIVE_GEARING * 2 * Math.PI * WHEEL_RADIUS / 60.0;

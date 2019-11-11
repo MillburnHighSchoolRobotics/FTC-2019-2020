@@ -1,15 +1,10 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleDriveBase;
-import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
-import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
-import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -22,7 +17,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
+        MohanBot drive = new MohanBot(hardwareMap,this);
 
         waitForStart();
 

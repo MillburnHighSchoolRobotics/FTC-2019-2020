@@ -1,20 +1,11 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
-import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
-import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
-import com.acmerobotics.roadrunner.path.heading.TangentInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
-import org.firstinspires.ftc.teamcode.drive.mecanum.SampleDriveBase;
-import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
-import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
-import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 
 /*
  * This is an example of a more complex path to really test the tuning.
@@ -23,7 +14,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 public class SplineTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
+        MohanBot drive = new MohanBot(hardwareMap,this);
         drive.setPose(new Pose2d(0,42,Math.PI));
 
         waitForStart();

@@ -1,12 +1,11 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
+import org.firstinspires.ftc.teamcode.roadrunner.mecanum.DriveBase;
+import org.firstinspires.ftc.teamcode.roadrunner.mecanum.MohanBot2;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -25,7 +24,7 @@ public class TurnTest extends LinearOpMode {
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        DriveBase drive = new MohanBot(hardwareMap);
+        DriveBase drive = new MohanBot2(hardwareMap);
 
         waitForStart();
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.mecanum;
+package org.firstinspires.ftc.teamcode.roadrunner.mecanum;
 
 import android.support.annotation.NonNull;
 
@@ -10,29 +10,22 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.drive.localizer.MohanLocalizer;
-import org.firstinspires.ftc.teamcode.drive.localizer.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
-import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+import org.firstinspires.ftc.teamcode.roadrunner.localizer.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.encoderTicksToInches;
 
-/*
- * Simple mecanum drive hardware implementation for REV hardware. If your hardware configuration
- * satisfies the requirements, SampleMecanumDriveREVOptimized is highly recommended.
- */
-public class MohanBot extends DriveBase {
+public class SampleDriveBase extends DriveBase {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
     private DcMotorEx ex1, ex2, ey;
     private BNO055IMU imu;
 
-    public MohanBot(HardwareMap hardwareMap) {
+    public SampleDriveBase(HardwareMap hardwareMap) {
         super();
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -56,7 +49,7 @@ public class MohanBot extends DriveBase {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        setLocalizer(new MohanLocalizer(hardwareMap));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
     }
 
     @Override
@@ -94,7 +87,6 @@ public class MohanBot extends DriveBase {
 
     @Override
     public double getRawExternalHeading() {
-//        return imu.getAngularOrientation().firstAngle;
         return 0;
     }
 }

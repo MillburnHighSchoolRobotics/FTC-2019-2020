@@ -26,7 +26,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
@@ -47,7 +46,7 @@ import static org.firstinspires.ftc.teamcode.robot.RobotConstants.kA;
 import static org.firstinspires.ftc.teamcode.robot.RobotConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.robot.RobotConstants.kV;
 
-public class MillburnRobot {
+public class MohanBot {
     
     private HardwareMap hardwareMap;
     private DcMotorEx lf, lb, rf, rb, intakeL, intakeR, chainBar;
@@ -80,7 +79,7 @@ public class MillburnRobot {
 
     private int threadCount = 0;
 
-    public MillburnRobot(HardwareMap hardwareMap, LinearOpMode opMode) {
+    public MohanBot(HardwareMap hardwareMap, LinearOpMode opMode) {
         this.hardwareMap = hardwareMap;
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);

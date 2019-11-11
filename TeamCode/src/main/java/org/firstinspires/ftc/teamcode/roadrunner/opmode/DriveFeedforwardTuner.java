@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.roadrunner.opmode;
 
 import android.util.Log;
 
@@ -12,15 +12,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.drive.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.drive.mecanum.MohanBot;
-import org.firstinspires.ftc.teamcode.robot.MillburnRobot;
-import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
-import org.firstinspires.ftc.teamcode.threads.ThreadManager;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.getMaxRpm;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.getMaxRpm;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.rpmToVelocity;
 
 @Config
 @Autonomous(group = "drive")
@@ -32,7 +28,7 @@ public class DriveFeedforwardTuner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        MillburnRobot drive = new MillburnRobot(hardwareMap,this);
+        MohanBot drive = new MohanBot(hardwareMap,this);
 
         NanoClock clock = NanoClock.system();
         waitForStart();
