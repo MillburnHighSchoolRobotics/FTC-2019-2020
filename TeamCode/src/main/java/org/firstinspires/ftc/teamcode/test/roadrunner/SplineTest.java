@@ -12,7 +12,7 @@ public class SplineTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot drive = new MohanBot(hardwareMap,this);
-
+        drive.setPose(new Pose2d(0,0,0));
         waitForStart();
 
         if (isStopRequested()) return;

@@ -41,7 +41,7 @@ public class Drive {
         List<Double> powers = Kinematics.calculateMotorFeedforward(velocities, accelerations, kV, kA, kStatic);
         setDrivePower(powers.get(0),powers.get(1),powers.get(2),powers.get(3));
     }
-    public void setDrivePower(double lfPower, double rfPower, double lbPower, double rbPower) {
+    public void setDrivePower(double lfPower, double lbPower, double rbPower, double rfPower) {
         lf.setPower(lfPower);
         lb.setPower(lbPower);
         rf.setPower(rfPower);

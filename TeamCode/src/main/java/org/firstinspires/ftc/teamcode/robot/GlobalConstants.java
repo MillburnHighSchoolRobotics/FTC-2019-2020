@@ -32,12 +32,20 @@ public class GlobalConstants {
 
 
     public static double X_OFFSET, Y_OFFSET, HEADING_OFFSET = 0;
+    public static boolean PENDING_OFFSET = false;
 
-    public static double kV = 0.013955236664657396;// / rpmToVelocity(getMaxRpm());
-    public static double kA = 0.000045225265421946806;
-    public static double kStatic = 0.05955177567008853;
+    public static double kV = 0.01324745673316696;// 1/rpmToVelocity(getMaxRpm());
+    public static double kA = .0006987732539925108;
+    public static double kStatic = 0.059471479216887536;
 
-    public static PIDCoefficients TRANSLATION_PID = new PIDCoefficients(1, 0, 0);
+    /*
+
+    0.01324745673316696
+2018-12-02 11:29:33.232 1028-1208/com.qualcomm.ftcrobotcontroller D/DriveFeedForward: kA: 6.987732539925108E-4
+2018-12-02 11:29:33.232 1028-1208/com.qualcomm.ftcrobotcontroller D/DriveFeedForward: kStatic: 0.059471479216887536
+     */
+
+    public static PIDCoefficients TRANSLATION_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(

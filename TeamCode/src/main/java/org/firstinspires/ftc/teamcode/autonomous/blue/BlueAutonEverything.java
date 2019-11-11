@@ -36,21 +36,24 @@ public class BlueAutonEverything extends LinearOpMode {
             case 1:
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-48,32,Math.toRadians(225)))
+                                .splineTo(new Pose2d(-44,28,Math.toRadians(225)))
+                                .strafeTo(new Vector2d(-46,24))
                                 .build()
                 );
                 break;
             case 2:
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-56,32,Math.toRadians(225)))
+                                .splineTo(new Pose2d(-52,28,Math.toRadians(225)))
+                                .strafeTo(new Vector2d(-54,24))
                                 .build()
                 );
                 break;
             case 3:
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-64,32,Math.toRadians(225)))
+                                .splineTo(new Pose2d(-60,28,Math.toRadians(225)))
+                                .strafeTo(new Vector2d(-62,24))
                                 .build()
                 );
                 break;
@@ -59,6 +62,8 @@ public class BlueAutonEverything extends LinearOpMode {
         mohanBot.getChainBar().chainBarIn();
         mohanBot.getChainBar().closeClaw();
 
+        telemetry.addData("a",mohanBot.getPose().toString());
+        telemetry.update();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .reverse()

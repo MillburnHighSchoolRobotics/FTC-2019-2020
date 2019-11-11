@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.test.roadrunner.mecanum.DriveBase;
-import org.firstinspires.ftc.teamcode.test.roadrunner.mecanum.MohanBot2;
+import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.BarkerClass;
@@ -71,7 +70,7 @@ public class BarkerClassTest extends LinearOpMode {
         manager.setCurrentAuton(this);
         manager.setupThread("PositionMonitor", PositionMonitor.class);
 
-        DriveBase drive = new MohanBot2(hardwareMap);
+        MohanBot drive = new MohanBot(hardwareMap,this);
 
         waitForStart();
 
@@ -79,7 +78,7 @@ public class BarkerClassTest extends LinearOpMode {
 
         BarkerClass barker = new BarkerClass(hardwareMap);
 
-        drive.followTrajectorySync(
+        drive.followTrajectory(
                 drive.trajectoryBuilder()
                         .forward(6)
                         .build()

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.util.Log;
+
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
@@ -19,6 +21,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.*;
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
@@ -54,6 +57,7 @@ public class MohanBot {
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
+        manager.setupThread("PositionMonitor", PositionMonitor.class);
 
         initRobotHardware();
         initRoadRunner();
@@ -83,7 +87,7 @@ public class MohanBot {
         mode = Mode.IDLE;
 
         turnController = new PIDFController(HEADING_PID);
-        turnController.setInputBounds(0, 2*Math.PI);
+        turnController.setInputBounds(0,2*Math.PI);
 
         constraints = new MecanumConstraints(BASE_CONSTRAINTS, ROBOT_WIDTH, ROBOT_LENGTH);
         follower = new HolonomicPIDVAFollower(TRANSLATION_PID, TRANSLATION_PID, HEADING_PID);
@@ -106,17 +110,20 @@ public class MohanBot {
             threadCount1 = ThreadManager.getInstance().getValue("count", Integer.class);
         } while (threadCount == threadCount1);
 
-        double x = ThreadManager.getInstance().getValue("x", Double.class) + X_OFFSET;
-        double y = ThreadManager.getInstance().getValue("y", Double.class) + Y_OFFSET;
-        double theta = MathUtils.normalize(Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class)) + HEADING_OFFSET);
+        double x = ThreadManager.getInstance().getValue("x", Double.class);
+        double y = ThreadManager.getInstance().getValue("y", Double.class);
+        double theta = MathUtils.normalize(Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class)));
 
         threadCount = threadCount1;
-        return new Pose2d(x,y,theta);
+        Pose2d pose = new Pose2d(x,y,theta);
+        Log.d("Pose", pose.toString());
+        return pose;
     }
     public void setPose(Pose2d offset) {
         X_OFFSET = offset.getX();
         Y_OFFSET = offset.getY();
         HEADING_OFFSET = offset.getHeading();
+        PENDING_OFFSET = true;
     }
 
     public TrajectoryBuilder trajectoryBuilder() {
