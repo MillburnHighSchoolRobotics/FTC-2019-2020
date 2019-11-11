@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.subsystems.*;
+import org.firstinspires.ftc.teamcode.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
