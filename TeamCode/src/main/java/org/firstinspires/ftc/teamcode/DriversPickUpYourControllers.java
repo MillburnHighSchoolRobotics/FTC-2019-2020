@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_TICKS;
 
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
@@ -94,6 +95,7 @@ public class DriversPickUpYourControllers extends OpMode {
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
         intakeL.setDirection(REVERSE);
+        chainBar.setDirection(REVERSE);
 
         chainBar.setTargetPositionTolerance(50);
 
@@ -147,7 +149,7 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
-            if (!MathUtils.equals(chainBar.getCurrentPosition(), chainBarIntakePosition, 75)) {
+            if (!MathUtils.equals(chainBar.getCurrentPosition(), CHAINBAR_UP_TICKS, 75)) {
                 chainBar.setTargetPosition(chainBarIntakePosition);
                 chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 chainBar.setPower(chainBarPower);

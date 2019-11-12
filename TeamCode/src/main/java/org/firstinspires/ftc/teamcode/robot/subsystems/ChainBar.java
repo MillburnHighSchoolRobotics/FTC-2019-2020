@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
@@ -17,6 +18,7 @@ public class ChainBar {
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        chainBar.setDirection(DcMotorSimple.Direction.REVERSE);
 
         chainBar.setTargetPositionTolerance(50);
     }
