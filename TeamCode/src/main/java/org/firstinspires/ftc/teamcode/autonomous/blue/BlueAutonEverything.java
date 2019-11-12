@@ -27,7 +27,7 @@ public class BlueAutonEverything extends LinearOpMode {
 
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
-                        .lineTo(new Vector2d(-39,57))
+                        .strafeTo(new Vector2d(-36,55.5))
                         .build()
         );
 
@@ -62,8 +62,6 @@ public class BlueAutonEverything extends LinearOpMode {
         mohanBot.getChainBar().chainBarIn();
         mohanBot.getChainBar().closeClaw();
 
-        telemetry.addData("a",mohanBot.getPose().toString());
-        telemetry.update();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .reverse()

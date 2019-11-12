@@ -12,7 +12,7 @@ public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot drive = new MohanBot(hardwareMap,this);
-        drive.setPose(new Pose2d(-39,63,Math.PI/2));
+//        drive.setPose(new Pose2d(-39,63,3*Math.PI/2));
 
         waitForStart();
 
