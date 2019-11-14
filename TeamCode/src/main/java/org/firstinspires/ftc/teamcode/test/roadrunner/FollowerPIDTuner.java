@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
 @Autonomous(group = "drive")
 public class FollowerPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 36;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,10 +29,10 @@ public class FollowerPIDTuner extends LinearOpMode {
         while (!isStopRequested()) {
             robot.followTrajectory(
                     robot.trajectoryBuilder()
-                            .strafeTo(new Vector2d(DISTANCE,0))
+                            .forward(DISTANCE)
                             .build()
             );
-            robot.turn(Math.toRadians(180));
+            robot.turn(Math.toRadians(90));
             Thread.sleep(1000);
         }
     }

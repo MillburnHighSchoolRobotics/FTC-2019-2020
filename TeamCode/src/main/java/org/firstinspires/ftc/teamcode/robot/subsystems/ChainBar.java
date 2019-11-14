@@ -61,4 +61,7 @@ public class ChainBar {
         }
         chainBar.setPower(0);
     }
+    public boolean isBusy() {
+        return chainBar.isBusy();
+    }
 }

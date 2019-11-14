@@ -15,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_T
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.45,1};
-    final double[] spinPos = {0,0.5};
+    final double[] spinPos = {0.5,0};
     private int currentSpinPos = 1;
     final double[] foundationHookPosLeft = {0.3,0.7};
     final double[] foundationHookPosRight = {0.7,0.3};

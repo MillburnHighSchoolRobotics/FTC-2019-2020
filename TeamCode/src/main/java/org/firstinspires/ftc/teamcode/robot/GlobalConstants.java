@@ -19,8 +19,8 @@ public class GlobalConstants {
 
     public static final double CLAW_CLOSE_POS = 1;
     public static final double CLAW_OPEN_POS = 0.45;
-    public static final double CLAW_NORMAL_POS = 0.5;
-    public static final double CLAW_ROTATE_POS = 0;
+    public static final double CLAW_NORMAL_POS = 0;
+    public static final double CLAW_ROTATE_POS = 0.5;
     public static final double RIGHT_HOOK_DOWN_POS = 0.3;
     public static final double RIGHT_HOOK_UP_POS = 0.7;
     public static final double LEFT_HOOK_DOWN_POS = 0.7;
@@ -45,8 +45,8 @@ public class GlobalConstants {
 2018-12-02 11:29:33.232 1028-1208/com.qualcomm.ftcrobotcontroller D/DriveFeedForward: kStatic: 0.059471479216887536
      */
 
-    public static PIDCoefficients TRANSLATION_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATION_PID = new PIDCoefficients(0.2, 0, 0.15);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.1, 0, 0);
 
     public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
             50.0, 40.0, 0.0,

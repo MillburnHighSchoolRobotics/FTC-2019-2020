@@ -39,12 +39,16 @@ public class BarkerClassTest extends LinearOpMode {
 
         drive.followTrajectory(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(7.5, 3))
+                        .forward(10)
                         .build()
         );
 
-        Thread.sleep(5000);
-
-        Log.d("BarkerClass Block Pos:",barker.getPos() + "");
+        int pos = barker.getPos();
+        telemetry.addData("barker",pos);
+        telemetry.update();
+        Log.d("barker",pos+"");
+        while (!isStopRequested()) {
+            Thread.sleep(10);
+        }
     }
 }

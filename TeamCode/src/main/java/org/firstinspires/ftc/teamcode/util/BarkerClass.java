@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -125,8 +126,6 @@ public class BarkerClass {
 
         ((VuforiaTrackableDefaultListener) skystoneTrackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
 
-        //waitForStart();
-
         targetsSkyStone.activate();
     }
 
@@ -164,11 +163,13 @@ public class BarkerClass {
         }*/
 
 
+        int pos = 3;
         ElapsedTime et = new ElapsedTime();
-        while (et.seconds() <= 3) {
+        while (et.seconds() <= 5) {
             targetVisible = false;
             if (((VuforiaTrackableDefaultListener) skystoneTrackable.getListener()).isVisible()) {
                 targetVisible = true;
+                Log.d("barkerpos","visible1");
 
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) skystoneTrackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
@@ -177,21 +178,18 @@ public class BarkerClass {
                 Log.d("ooga booga", robotLocationTransform.toString());
             }
             if (targetVisible) {
-                try {
-                    if (translation.get(1)/25.4f > 4) {
-                        return 1;
-                    } else if (translation.get(1)/25.4f < 4) {
-                        return 2;
-                    } else {
-                        return 3;
-                    }
-                } catch (Exception ex) {return -1;}
+                Log.d("barkerpos","visible2");
+                translation = lastLocation.getTranslation();
+                Log.d("barkerpos","translation: " + translation.get(1));
+                if (translation.get(1)/25.4f < 0) {
+                    pos = 1;
+                    break;
+                } else if (translation.get(1)/25.4f > 0) {
+                    pos = 2;
+                    break;
+                }
             }
         }
-
-
-        targetsSkyStone.deactivate();
-        Log.d("ooga booga", translation.getData().toString());
-        return -1;
+        return pos;
     }
 }
