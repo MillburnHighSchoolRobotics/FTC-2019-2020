@@ -19,8 +19,6 @@ public class DriversPickUpYourControllers extends OpMode {
     private int currentSpinPos = 1;
     final double[] foundationHookPosLeft = {0.3,0.7};
     final double[] foundationHookPosRight = {0.7,0.3};
-    final double[] driveSpeeds = {0.6,1};
-    private int currentDriveSpeed = 0;
     private int currentHook = 0;
 
     ElapsedTime toggleSpinTime;
@@ -122,22 +120,7 @@ public class DriversPickUpYourControllers extends OpMode {
     public void loop() {
 
         if (gamepad2.x) {
-//            lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-//            intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-//            lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
@@ -183,17 +166,6 @@ public class DriversPickUpYourControllers extends OpMode {
             foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
             toggleHook.reset();
         }
-
-//        if (gamepad2.a) { //hook up
-//            foundationHookLeft.setPosition(foundationHookPosLeft[1]);
-//            foundationHookRight.setPosition(foundationHookPosRight[0]);
-//        }
-//
-//        if (gamepad2.b) { //hook down
-//            foundationHookLeft.setPosition(foundationHookPosLeft[0]);
-//            foundationHookRight.setPosition(foundationHookPosRight[1]);
-//        }
-
         if (gamepad1.left_bumper) {
             chainBar.setPower(chainBarPower);
         } else if (gamepad1.right_bumper) {
@@ -202,10 +174,10 @@ public class DriversPickUpYourControllers extends OpMode {
             chainBar.setPower(0);
         }
 
-        if (gamepad1.dpad_down && (toggleDriveSpeed.milliseconds() > 250)) { //toggle drive speed
-            currentDriveSpeed = 1-currentDriveSpeed;
-            drivePower = driveSpeeds[currentDriveSpeed];
-            toggleDriveSpeed.reset();
+        if (gamepad1.left_stick_button) {
+            drivePower = 0.6;
+        } else {
+            drivePower = 1;
         }
 
 

@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import android.util.Log;
-
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import android.graphics.Bitmap;
 
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -19,19 +18,26 @@ public class FUCKMYLIFEClass {
     static {
         OpenCVLoader.initDebug();
     }
-    VuforiaInitializer vuforiaInitalizer;
-    public FUCKMYLIFEClass(HardwareMap hwmap) {
-        this.vuforiaInitalizer = new VuforiaInitializer(hwmap);
+    VuforiaLocalizerImplSubclass vuforiaInstance;
+
+    private int widthCamera;
+    private int heightCamera;
+    public FUCKMYLIFEClass(VuforiaLocalizerImplSubclass vuforiaInstance) {
+        this.vuforiaInstance = vuforiaInstance;
+        widthCamera = vuforiaInstance.rgb.getBufferWidth();
+        heightCamera = vuforiaInstance.rgb.getHeight();
     }
 
     public int getPos() {
-        Mat img = vuforiaInitalizer.getMat();
-        Log.d("rippp","1");
+        Mat img = new Mat();
+        Bitmap bm = Bitmap.createBitmap(widthCamera, heightCamera, Bitmap.Config.RGB_565);
+        bm.copyPixelsFromBuffer(vuforiaInstance.rgb.getPixels());
+        Utils.bitmapToMat(bm, img);
+
         Mat blur = new Mat();
-        Log.d("rippp","2");
         Imgproc.GaussianBlur(img, blur, new Size(9,9),50);
         Mat gray = new Mat();
-        Imgproc.cvtColor(blur, gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(blur, gray, Imgproc.COLOR_RGB2GRAY);
 
         Mat thresh = new Mat();
         Imgproc.threshold(gray,thresh,65,255,Imgproc.THRESH_BINARY_INV);

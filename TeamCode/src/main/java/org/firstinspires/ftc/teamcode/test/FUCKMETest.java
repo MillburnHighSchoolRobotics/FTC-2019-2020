@@ -5,8 +5,11 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.util.FUCKMYLIFEClass;
+import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 
@@ -22,22 +25,21 @@ public class FUCKMETest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        MohanBot mohanBot = new MohanBot(hardwareMap,this);
-//
-//        mohanBot.getHook().hookUp();
-//        mohanBot.getChainBar().openClaw();
+        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
-        FUCKMYLIFEClass fuck = new FUCKMYLIFEClass(hardwareMap);
+        params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        params.vuforiaLicenseKey = GlobalConstants.VUFORIA_KEY;
+        telemetry.addData("Vuforia Status: ", "Loading...");
+        telemetry.update();
+        VuforiaLocalizerImplSubclass vuforiaInstance = new VuforiaLocalizerImplSubclass(params);
+
+        telemetry.addData("Vuforia Status: ", "Loaded!");
+        telemetry.update();
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
-//        drive.followTrajectory(
-//                drive.trajectoryBuilder()
-//                        .forward(10)
-//                        .build()
-//        );
+        FUCKMYLIFEClass fuck = new FUCKMYLIFEClass(vuforiaInstance);
 
         int pos = fuck.getPos();
         telemetry.addData("fuck",pos);

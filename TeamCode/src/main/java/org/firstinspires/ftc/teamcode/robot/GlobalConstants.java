@@ -38,12 +38,7 @@ public class GlobalConstants {
     public static double kA = .0006987732539925108;
     public static double kStatic = 0.059471479216887536;
 
-    /*
-
-    0.01324745673316696
-2018-12-02 11:29:33.232 1028-1208/com.qualcomm.ftcrobotcontroller D/DriveFeedForward: kA: 6.987732539925108E-4
-2018-12-02 11:29:33.232 1028-1208/com.qualcomm.ftcrobotcontroller D/DriveFeedForward: kStatic: 0.059471479216887536
-     */
+    public static final String VUFORIA_KEY = "AcSW/tj/////AAABmUB3byzZQksfqhymb0Tr3M92yvtrzF4HgDl0t7Z07OZ2xscXR1yyeX4GxftrShvm9T926ZCW0VglQKXuQE5+JkrABVijohk5DCkcE9CcxHy3mTs2Ui76Nz+9CQTgOsr6/AMLV+Te6uyXTs3rZwGdnHGRo0Q1yboJCQ51Ap2rgJc//ehVdkp/QetIMnfhRffac0edAHFt0i2F5++S/OH/4kdxFd5ha0lswd4nTnqU2MiJrz+OH4WQPQ8JC94dQZ6F3m/iX5mk4TCq/9xg3cTJvFccEUawf7PIsapABxKMJB6hcPikwa0XtyGB+vEb7fQAXZ80tRal2mcwKSHrDM4ZvYisD73X+sTIAqQnXgxYiL14";
 
     public static PIDCoefficients TRANSLATION_PID = new PIDCoefficients(0.2, 0, 0.15);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.1, 0, 0);
