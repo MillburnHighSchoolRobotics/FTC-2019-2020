@@ -17,22 +17,16 @@ public class BlueAutonEverything extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot mohanBot = new MohanBot(hardwareMap,this);
-        BarkerClass barker = new BarkerClass(hardwareMap);
 
-        mohanBot.setPose(new Pose2d(-37, 63, 3*Math.PI/2));
+        mohanBot.setPose(new Pose2d(-39, 63, 3*Math.PI/2));
 
         mohanBot.getHook().hookUp();
         mohanBot.getChainBar().openClaw();
+        mohanBot.getChainBar().normalClaw();
 
-        barker.setupCam();
         waitForStart();
         if (isStopRequested()) return;
 
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
-                        .forward(10)
-                        .build()
-        );
         int skystone = 3;//barker.getPos();;//(int)Math.round(3*Math.random())+1;
         telemetry.addData("barkerclass",skystone+"");
         telemetry.update();
@@ -87,20 +81,26 @@ public class BlueAutonEverything extends LinearOpMode {
                 );
                 break;
         }
-        mohanBot.getChainBar().closeClaw();
-        Thread.sleep(50);
-        mohanBot.getChainBar().chainBarOut();
-        mohanBot.getHook().hookDown();
-        mohanBot.getIntake().intakeStop();
-        Thread.sleep(50);
-        mohanBot.getChainBar().openClaw();
-        mohanBot.getChainBar().chainBarIn();
+        mohanBot.turnTo(Math.PI/2);
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .setReversed(false)
+                        .back(18)
+                        .build()
+        );
+
+        mohanBot.getHook().hookDown();
+        mohanBot.getChainBar().closeClaw();
+        Thread.sleep(100);
+        mohanBot.getChainBar().chainBarOut();
+        mohanBot.getIntake().intakeStop();
+        mohanBot.followTrajectory(
+                mohanBot.trajectoryBuilder()
                         .forward(48)
                         .build()
         );
+        mohanBot.getChainBar().openClaw();
+        mohanBot.getChainBar().chainBarIn();
         mohanBot.getHook().hookUp();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()

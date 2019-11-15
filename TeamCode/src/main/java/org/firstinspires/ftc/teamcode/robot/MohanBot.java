@@ -143,6 +143,9 @@ public class MohanBot {
         mode = Mode.TURN;
         waitForIdle();
     }
+    public void turnTo(double angle) {
+        turn(angle-getPose().getHeading());
+    }
 
     public void followTrajectory(Trajectory trajectory) {
         follower.followTrajectory(trajectory);
