@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -71,13 +72,17 @@ public class FUCKMYLIFEClass {
             mat.release();
         }
 
-        int pos = 3;
+        int pos = -1;
         if ((centroid.x >= 0) && (centroid.x < (img.cols()/3.0))) {
-            pos = 0;
-        } else if ((centroid.x >= (img.cols()/3)) && (centroid.x < (2*(img.cols()/3)))) {
             pos = 1;
-        } else if (centroid.x >= (2*(img.cols()/3))) {
+        } else if ((centroid.x >= (img.cols()/3)) && (centroid.x < (2*(img.cols()/3)))) {
             pos = 2;
+        } else if (centroid.x >= (2*(img.cols()/3))) {
+            pos = 3;
+        }
+        Log.d("detection",""+pos);
+        if (pos == -1) {
+            pos = 3;
         }
         return pos;
     }

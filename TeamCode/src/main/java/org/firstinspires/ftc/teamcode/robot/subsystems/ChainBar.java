@@ -29,10 +29,10 @@ public class ChainBar {
         clawClamp.setPosition(CLAW_CLOSE_POS);
     }
     public void normalClaw() {
-        clawClamp.setPosition(CLAW_NORMAL_POS);
+        clawRotate.setPosition(CLAW_NORMAL_POS);
     }
     public void rotateClaw() {
-        clawClamp.setPosition(CLAW_ROTATE_POS);
+        clawRotate.setPosition(CLAW_ROTATE_POS);
     }
     public void chainBarIn() {
         chainBar.setTargetPosition(CHAINBAR_IN_TICKS);
