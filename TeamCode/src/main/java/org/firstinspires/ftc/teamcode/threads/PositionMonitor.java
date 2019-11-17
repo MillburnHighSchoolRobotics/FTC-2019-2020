@@ -2,13 +2,16 @@ package org.firstinspires.ftc.teamcode.threads;
 
 import android.util.Log;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.teamcode.util.Movement;
 
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.HEADING_OFFSET;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.PENDING_OFFSET;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.X_OFFSET;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.Y_OFFSET;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
@@ -55,7 +58,7 @@ public class PositionMonitor extends MonitorThread {
             PENDING_OFFSET = false;
         }
         updatePosition();
-        setValue("theta", 360-Movement.toDegrees(theta)); //This value is in degrees but turns to radians when interfacing with roadrunner
+        setValue("theta", 360-Movement.toDegrees(theta));
         setValue("orientation", Movement.toDegrees(orientation));
         setValue("x", x);
         setValue("y", y);

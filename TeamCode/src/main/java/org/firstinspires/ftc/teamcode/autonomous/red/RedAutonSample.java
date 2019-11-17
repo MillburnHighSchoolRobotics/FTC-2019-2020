@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 @Autonomous(group = "auton")
-public class RedAutonDoubleMineral extends LinearOpMode {
+public class RedAutonSample extends LinearOpMode {
     static {
         if(OpenCVLoader.initDebug()) {
             Log.d("opencv","yay it works");
@@ -163,101 +163,6 @@ public class RedAutonDoubleMineral extends LinearOpMode {
                 mohanBot.trajectoryBuilder()
                         .reverse()
                         .splineTo(new Pose2d(0,-40,0), new SplineInterpolator(Math.PI,3*Math.PI/2))
-                        .build()
-        );
-
-
-        switch(skystone) {
-            case 1:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-40,-22,Math.PI/2), new ConstantInterpolator(Math.PI))
-                                .build()
-                );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .strafeTo(new Vector2d(-40,-22))
-                                .build()
-                );
-                mohanBot.getIntake().intakeIn();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .forward(8)
-                                .build()
-                );
-                mohanBot.getChainBar().openClaw();
-                break;
-            case 3:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-48,-22,Math.PI/2), new ConstantInterpolator(Math.PI))
-                                .build()
-                );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .strafeTo(new Vector2d(-48,-22))
-                                .build()
-                );
-                mohanBot.getIntake().intakeIn();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .forward(8)
-                                .build()
-                );
-                mohanBot.getChainBar().openClaw();
-                break;
-            case 2:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .splineTo(new Pose2d(-56,-22,Math.PI/2), new ConstantInterpolator(Math.PI))
-                                .build()
-                );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .strafeTo(new Vector2d(-56,-22))
-                                .build()
-                );
-                mohanBot.getIntake().intakeIn();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
-                                .forward(8)
-                                .build()
-                );
-                mohanBot.getChainBar().openClaw();
-                break;
-        }
-        mohanBot.getChainBar().chainBarIn();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
-                        .strafeLeft(18)
-                        .build()
-        );
-        while (mohanBot.getChainBar().isBusy()) {
-            Thread.sleep(10);
-        }
-        mohanBot.getChainBar().closeClaw();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
-                        .strafeTo(new Vector2d(40,-40))
-                        .build()
-        );
-        mohanBot.getChainBar().chainBarOut();
-        mohanBot.turnTo(Math.PI);
-        while (mohanBot.getChainBar().isBusy()) {
-            Thread.sleep(10);
-        }
-        mohanBot.getChainBar().openClaw();
-        Thread.sleep(500);
-        mohanBot.getChainBar().chainBarIn();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
-                        .strafeTo(new Vector2d(0,-40))
                         .build()
         );
     }

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -16,8 +15,6 @@ import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.util.FUCKMYLIFEClass;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
-
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_OUT_TICKS;
 
 @Autonomous(group = "auton")
 public class BlueAutonSample extends LinearOpMode {
@@ -31,17 +28,14 @@ public class BlueAutonSample extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot mohanBot = new MohanBot(hardwareMap,this);
-
         mohanBot.setPose(new Pose2d(-39, 63, 3*Math.PI/2));
 
         mohanBot.getHook().hookUp();
-
         mohanBot.getChainBar().openClaw();
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
         params.vuforiaLicenseKey = GlobalConstants.VUFORIA_KEY;
         telemetry.addData("Vuforia Status: ", "Loading...");
         telemetry.update();
@@ -61,6 +55,7 @@ public class BlueAutonSample extends LinearOpMode {
 
         mohanBot.getChainBar().chainBarUp();
         mohanBot.getIntake().intakeIn();
+        mohanBot.getChainBar().normalClaw();
         switch(skystone) {
             case 1:
                 mohanBot.followTrajectory(
@@ -68,14 +63,16 @@ public class BlueAutonSample extends LinearOpMode {
                                 .splineTo(new Pose2d(-30,24,Math.toRadians(315)),new LinearInterpolator(3*Math.PI/2,Math.PI/4))
                                 .build()
                 );
-                mohanBot.getChainBar().chainBarIn();
 
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .splineTo(new Pose2d(-20,44,Math.PI/2),new LinearInterpolator(Math.toRadians(315),3*Math.PI/4))
                                 .build()
                 );
+                Thread.sleep(200);
+                mohanBot.getChainBar().chainBarIn();
                 mohanBot.turnTo(Math.PI/2);
+                Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .strafeTo(new Vector2d(60,44))
@@ -93,14 +90,18 @@ public class BlueAutonSample extends LinearOpMode {
                                 .splineTo(new Pose2d(-38,24,Math.toRadians(315)),new LinearInterpolator(3*Math.PI/2,Math.PI/4))
                                 .build()
                 );
-                mohanBot.getChainBar().chainBarIn();
+                Thread.sleep(100);
                 mohanBot.getIntake().intakeStop();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
+                                .back(6)
                                 .splineTo(new Pose2d(-24,44,Math.PI/2),new LinearInterpolator(Math.toRadians(315),3*Math.PI/4))
                                 .build()
                 );
+                Thread.sleep(200);
+                mohanBot.getChainBar().chainBarIn();
                 mohanBot.turnTo(Math.PI/2);
+                Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .strafeTo(new Vector2d(60,44))
@@ -116,10 +117,12 @@ public class BlueAutonSample extends LinearOpMode {
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .forward(10)
-                                .splineTo(new Pose2d(-40,22,Math.toRadians(225)),new SplineInterpolator(3*Math.PI/2,Math.toRadians(225)))
+                                .splineTo(new Pose2d(-40,24,Math.toRadians(225)),new SplineInterpolator(3*Math.PI/2,Math.toRadians(225)))
                                 .build()
                 );
+                Thread.sleep(100);
                 mohanBot.getChainBar().chainBarIn();
+                Thread.sleep(200);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .reverse()
@@ -130,17 +133,15 @@ public class BlueAutonSample extends LinearOpMode {
                 );
                 break;
         }
-        mohanBot.turnTo(Math.PI/2);
+        mohanBot.getChainBar().closeClaw();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .setReversed(false)
-                        .back(14)
+                        .back(18)
                         .build()
         );
         Thread.sleep(100);
         mohanBot.getHook().hookDown();
-        mohanBot.getChainBar().closeClaw();
-        Thread.sleep(100);
         mohanBot.getChainBar().chainBarOut();
         mohanBot.getIntake().intakeStop();
         mohanBot.followTrajectory(
@@ -149,12 +150,12 @@ public class BlueAutonSample extends LinearOpMode {
                         .build()
         );
         mohanBot.getChainBar().openClaw();
-        Thread.sleep(100);
-        mohanBot.getChainBar().chainBarIn();
+        Thread.sleep(700);
+        mohanBot.getChainBar().chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);;
         mohanBot.getHook().hookUp();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
-                        .strafeTo(new Vector2d(10,63))
+                        .strafeTo(new Vector2d(12,63))
                         .build()
         );
         mohanBot.followTrajectory(

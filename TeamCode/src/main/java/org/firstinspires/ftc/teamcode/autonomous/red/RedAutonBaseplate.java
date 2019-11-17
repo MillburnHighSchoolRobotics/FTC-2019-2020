@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.red;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,14 +16,21 @@ public class RedAutonBaseplate extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MohanBot robot = new MohanBot(hardwareMap,this);
 
+        robot.setPose(new Pose2d(-24, 63, Math.toRadians(270)));
+
         waitForStart();
 
         if (isStopRequested()) return;
 
         robot.followTrajectory(
                 robot.trajectoryBuilder()
-                        .splineTo(new Pose2d(26,-28,0), new SplineInterpolator(0,Math.PI))
-                        .back(4)
+                        .strafeLeft(36)
+                        .build()
+        );
+
+        robot.followTrajectory(
+                robot.trajectoryBuilder()
+                        .back(48)
                         .build()
         );
 
@@ -30,7 +38,7 @@ public class RedAutonBaseplate extends LinearOpMode {
         Thread.sleep(1000);
         robot.followTrajectory(
                 robot.trajectoryBuilder()
-                        .forward(48)
+                        .forward(60)
                         .build()
         );
         Thread.sleep(1000);
@@ -38,7 +46,7 @@ public class RedAutonBaseplate extends LinearOpMode {
         Thread.sleep(1000);
         robot.followTrajectory(
                 robot.trajectoryBuilder()
-                        .strafeRight(69)
+                        .strafeRight(60)
                         .build()
         );
     }

@@ -28,7 +28,7 @@ public class GlobalConstants {
 
     public static final int CHAINBAR_IN_TICKS = 0;
     public static final int CHAINBAR_UP_TICKS = 500;
-    public static final int CHAINBAR_OUT_TICKS = 1200;
+    public static final int CHAINBAR_OUT_TICKS = 1300;
 
 
     public static double X_OFFSET, Y_OFFSET, HEADING_OFFSET = 0;
