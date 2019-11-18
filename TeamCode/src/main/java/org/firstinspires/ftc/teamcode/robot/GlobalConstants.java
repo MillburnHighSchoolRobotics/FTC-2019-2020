@@ -6,6 +6,10 @@ import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 public class GlobalConstants {
+    public static enum Side{
+        BLUE, RED;
+    }
+
     private static final MotorConfigurationType MOTOR_CONFIG = MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class);
 
     public static final double WHEEL_RADIUS = 2;
@@ -30,6 +34,7 @@ public class GlobalConstants {
     public static final int CHAINBAR_UP_TICKS = 500;
     public static final int CHAINBAR_OUT_TICKS = 1300;
 
+    public static Side side;
 
     public static double X_OFFSET, Y_OFFSET, HEADING_OFFSET = 0;
     public static boolean PENDING_OFFSET = false;

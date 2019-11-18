@@ -7,14 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
-import org.firstinspires.ftc.teamcode.robot.MohanBot;
-import org.firstinspires.ftc.teamcode.util.FUCKMYLIFEClass;
+import org.firstinspires.ftc.teamcode.util.ABCVReeTest;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 
 @Autonomous(group = "auton")
-public class FUCKMETest extends LinearOpMode {
+public class ABCVRee extends LinearOpMode {
     static {
         if(OpenCVLoader.initDebug()) {
             Log.d("opencv","yay it works");
@@ -25,6 +24,8 @@ public class FUCKMETest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        GlobalConstants.side = GlobalConstants.Side.BLUE;
+
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -39,7 +40,7 @@ public class FUCKMETest extends LinearOpMode {
 
         waitForStart();
 
-        FUCKMYLIFEClass fuck = new FUCKMYLIFEClass(vuforiaInstance);
+        ABCVReeTest fuck = new ABCVReeTest(vuforiaInstance);
 
         int pos = fuck.getPos();
         telemetry.addData("fuck",pos);

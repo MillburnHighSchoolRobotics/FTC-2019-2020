@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -15,7 +16,7 @@ import org.opencv.imgproc.Moments;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FUCKMYLIFEClass {
+public class ABCVReeTest {
     static {
         OpenCVLoader.initDebug();
     }
@@ -23,7 +24,7 @@ public class FUCKMYLIFEClass {
 
     private int widthCamera;
     private int heightCamera;
-    public FUCKMYLIFEClass(VuforiaLocalizerImplSubclass vuforiaInstance) {
+    public ABCVReeTest(VuforiaLocalizerImplSubclass vuforiaInstance) {
         this.vuforiaInstance = vuforiaInstance;
         widthCamera = vuforiaInstance.rgb.getBufferWidth();
         heightCamera = vuforiaInstance.rgb.getHeight();
@@ -41,7 +42,7 @@ public class FUCKMYLIFEClass {
         Imgproc.cvtColor(blur, gray, Imgproc.COLOR_RGB2GRAY);
 
         Mat thresh = new Mat();
-        Imgproc.threshold(gray,thresh,65,255,Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(gray,thresh, 60,255,Imgproc.THRESH_BINARY_INV);
 
 
         List<MatOfPoint> contours = new LinkedList<>();
@@ -73,13 +74,22 @@ public class FUCKMYLIFEClass {
         }
 
         int pos = -1;
-        if ((centroid.x >= 0) && (centroid.x < (img.cols()/3.0))) {
-            pos = 1;
-        } else if ((centroid.x >= (img.cols()/3)) && (centroid.x < (2*(img.cols()/3)))) {
-            pos = 2;
-        } else if (centroid.x >= (2*(img.cols()/3))) {
-            pos = 3;
+        if (GlobalConstants.side == GlobalConstants.Side.BLUE) {
+            if (centroid.x > 30 && centroid.x < 225)
+                pos = 1;
+            else if (centroid.x > 225 && centroid.x < 420)
+                pos = 2;
+            else if (centroid.x > 420 && centroid.x < 625)
+                pos = 3;
+        } else {
+            if (centroid.x > 50 && centroid.x < 240)
+                pos = 1;
+            else if ((centroid.x > 430 && centroid.x < 640) || (centroid.x < 50))
+                pos = 2;
+            else if (centroid.x > 240 && centroid.x < 430)
+                pos = 3;
         }
+
         Log.d("detection",""+pos);
         if (pos == -1) {
             pos = 3;

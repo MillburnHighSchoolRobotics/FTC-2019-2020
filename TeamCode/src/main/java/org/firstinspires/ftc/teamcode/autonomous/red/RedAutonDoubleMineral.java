@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
-import org.firstinspires.ftc.teamcode.util.FUCKMYLIFEClass;
+import org.firstinspires.ftc.teamcode.util.ABCVReeTest;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
@@ -48,7 +48,7 @@ public class RedAutonDoubleMineral extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        FUCKMYLIFEClass fuck = new FUCKMYLIFEClass(vuforiaInstance);
+        ABCVReeTest fuck = new ABCVReeTest(vuforiaInstance);
 
         int skystone = fuck.getPos();
         telemetry.addData("cv",skystone+"");
