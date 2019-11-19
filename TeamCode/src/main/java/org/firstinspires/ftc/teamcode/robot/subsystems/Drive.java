@@ -54,4 +54,10 @@ public class Drive {
         List<Double> powers = MecanumKinematics.robotToWheelVelocities(power, ROBOT_WIDTH, ROBOT_LENGTH);
         setDrivePower(powers.get(0),powers.get(1),powers.get(2),powers.get(3));
     }
+    public void setDrivePower(double powerLeft, double powerRight) {
+        lf.setPower(powerLeft);
+        lb.setPower(powerLeft);
+        rf.setPower(powerRight);
+        rb.setPower(powerRight);
+    }
 }
