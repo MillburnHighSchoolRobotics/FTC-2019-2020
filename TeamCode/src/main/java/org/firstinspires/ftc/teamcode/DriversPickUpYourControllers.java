@@ -21,6 +21,8 @@ public class DriversPickUpYourControllers extends OpMode {
     final double[] foundationHookPosRight = {0.7,0.3};
     private int currentHook = 0;
 
+    private boolean togglePower = false;
+
     ElapsedTime toggleSpinTime;
     ElapsedTime toggleDriveSpeed;
     ElapsedTime toggleHook;
@@ -156,12 +158,12 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.y && (toggleSpinTime.milliseconds() > 250)) { //toggle claw rotation
-            currentSpinPos = 1-currentSpinPos;
+            currentSpinPos = 1 - currentSpinPos;
             clawSpin.setPosition(spinPos[currentSpinPos]);
             toggleSpinTime.reset();
         }
         if (gamepad1.x && (toggleHook.milliseconds() > 250)) { //toggle claw rotation
-            currentHook = 1-currentHook;
+            currentHook = 1 - currentHook;
             foundationHookLeft.setPosition(foundationHookPosLeft[currentHook]);
             foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
             toggleHook.reset();
@@ -170,14 +172,17 @@ public class DriversPickUpYourControllers extends OpMode {
             chainBar.setPower(chainBarPower);
         } else if (gamepad1.right_bumper) {
             chainBar.setPower(-chainBarPower);
-        } else if (chainBar.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+        } else if (chainBar.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
             chainBar.setPower(0);
         }
 
         if (gamepad1.left_stick_button) {
-            drivePower = 0.6;
-        } else {
-            drivePower = 1;
+            togglePower = !togglePower;
+            if (togglePower) {
+                drivePower = 0.6;
+            } else {
+                drivePower = 1;
+            }
         }
 
 
