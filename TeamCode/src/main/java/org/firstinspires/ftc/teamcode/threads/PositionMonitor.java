@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
-import org.firstinspires.ftc.teamcode.util.Movement;
 
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.FPS_UPDATE_PERIOD;
 
@@ -57,9 +57,9 @@ public class PositionMonitor extends MonitorThread {
         setValue("y", y);
     }
     protected void updatePosition() {
-        double ex1Pos = Movement.encoderToDistance(ex1.getCurrentPosition());
-        double ex2Pos = -Movement.encoderToDistance(ex2.getCurrentPosition());
-        double eyPos = Movement.encoderToDistance(ey.getCurrentPosition());
+        double ex1Pos = GlobalConstants.encoderToDistance(ex1.getCurrentPosition());
+        double ex2Pos = -GlobalConstants.encoderToDistance(ex2.getCurrentPosition());
+        double eyPos = GlobalConstants.encoderToDistance(ey.getCurrentPosition());
         Log.d(TAG, "ex1 pos (inches): " + ex1Pos);
         Log.d(TAG, "ex2 pos (inches): " + ex2Pos);
         Log.d(TAG, "ey pos (inches): " + eyPos);
@@ -84,6 +84,10 @@ public class PositionMonitor extends MonitorThread {
         x = currentPose.getX();
         y = currentPose.getY();
         theta = currentPose.getHeading();
+
+        ex1PosLast = ex1Pos;
+        ex2PosLast = ex2Pos;
+        eyPosLast = eyPos;
 
         try {
             Thread.sleep(FPS_UPDATE_PERIOD);

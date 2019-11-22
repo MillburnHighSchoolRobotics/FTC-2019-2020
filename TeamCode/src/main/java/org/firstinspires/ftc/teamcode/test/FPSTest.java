@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.test;
 
+import android.app.Activity;
+
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
@@ -55,7 +60,7 @@ public class FPSTest extends LinearOpMode {
         manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d());
         waitForStart();
 
-        while (true) {
+        while (!shouldStop()) {
             telemetry.addData("theta", ThreadManager.getInstance().getValue("theta", Double.class));
             telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
             telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
@@ -64,5 +69,13 @@ public class FPSTest extends LinearOpMode {
             telemetry.addData("ey", ey.getCurrentPosition());
             telemetry.update();
         }
+    }
+    public static boolean shouldStop() {
+        Activity currActivity = AppUtil.getInstance().getActivity();
+        OpModeManagerImpl manager = OpModeManagerImpl.getOpModeManagerOfActivity(currActivity);
+        OpMode currentOpMode = manager.getActiveOpMode();
+        return currentOpMode instanceof LinearOpMode &&
+                ((LinearOpMode) currentOpMode).isStarted() &&
+                ((LinearOpMode) currentOpMode).isStopRequested();
     }
 }

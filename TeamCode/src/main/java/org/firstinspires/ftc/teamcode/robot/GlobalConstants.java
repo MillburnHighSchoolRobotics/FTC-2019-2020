@@ -48,4 +48,12 @@ public class GlobalConstants {
     public static double getMaxRpm() {
         return MOTOR_CONFIG.getMaxRPM()*MOTOR_CONFIG.getAchieveableMaxRPMFraction();
     }
+    public static double encoderToDistance(double encoder) {
+        double ticks = 360*4;
+        double wheelDiameter = 60/25.4;
+        double circumferenceRaw = Math.PI*wheelDiameter;
+        double circumferenceScaled = circumferenceRaw*(32.0/48.0);
+        double distance = circumferenceScaled * (encoder/ticks);
+        return distance;
+    }
 }

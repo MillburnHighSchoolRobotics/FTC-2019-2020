@@ -23,7 +23,7 @@ public class ABCVRee extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GlobalConstants.COLOR = GlobalConstants.SIDE.BLUE;
+        GlobalConstants.side = GlobalConstants.SIDE.BLUE;
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 

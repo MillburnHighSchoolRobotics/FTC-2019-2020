@@ -75,7 +75,7 @@ public class ABCVReeTest {
         }
 
         int pos = -1;
-        if (GlobalConstants.COLOR == GlobalConstants.SIDE.BLUE) {
+        if (GlobalConstants.side == GlobalConstants.SIDE.BLUE) {
             if (centroid.x > 30 && centroid.x < 225)
                 pos = 1;
             else if (centroid.x > 225 && centroid.x < 420)
