@@ -28,6 +28,7 @@ public class PositionMonitor extends MonitorThread {
     double x = 0;
     double y = 0;
     double theta = 0;
+    double orientation = 0;
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose2d start) {
         super(thread, hardwareMap, TAG);
@@ -47,12 +48,12 @@ public class PositionMonitor extends MonitorThread {
 
         setValue("x",start.getX());
         setValue("y",start.getY());
-        setValue("theta",Math.toDegrees(start.getHeading()));
+        setValue("theta",360-Math.toDegrees(start.getHeading()));
     }
     @Override
     protected void loop() {
         updatePosition();
-        setValue("theta", Math.toDegrees(theta));
+        setValue("theta", 360-Math.toDegrees(theta));
         setValue("x", x);
         setValue("y", y);
     }
