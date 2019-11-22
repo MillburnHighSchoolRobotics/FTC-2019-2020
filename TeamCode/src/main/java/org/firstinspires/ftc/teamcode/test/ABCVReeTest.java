@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.test;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
+import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -74,7 +75,7 @@ public class ABCVReeTest {
         }
 
         int pos = -1;
-        if (GlobalConstants.side == GlobalConstants.Side.BLUE) {
+        if (GlobalConstants.COLOR == GlobalConstants.SIDE.BLUE) {
             if (centroid.x > 30 && centroid.x < 225)
                 pos = 1;
             else if (centroid.x > 225 && centroid.x < 420)

@@ -4,7 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_OUT_POWER;
 
 public class Intake {
     DcMotorEx intakeL, intakeR;
@@ -12,10 +13,8 @@ public class Intake {
         this.intakeL = intakeL;
         this.intakeR = intakeR;
 
-        intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeL.setDirection(REVERSE);

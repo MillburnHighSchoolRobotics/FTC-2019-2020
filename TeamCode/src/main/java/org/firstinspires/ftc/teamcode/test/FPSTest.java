@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -51,14 +52,13 @@ public class FPSTest extends LinearOpMode {
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
+        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d());
         waitForStart();
 
         while (true) {
             telemetry.addData("theta", ThreadManager.getInstance().getValue("theta", Double.class));
             telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
             telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
-            telemetry.addData("rotation", ThreadManager.getInstance().getValue("rotation", Integer.class));
             telemetry.addData("ex1", ex1.getCurrentPosition());
             telemetry.addData("ex2", ex2.getCurrentPosition());
             telemetry.addData("ey", ey.getCurrentPosition());

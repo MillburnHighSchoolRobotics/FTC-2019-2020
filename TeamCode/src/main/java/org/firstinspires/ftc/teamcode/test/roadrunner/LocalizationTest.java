@@ -12,12 +12,11 @@ public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot drive = new MohanBot(hardwareMap,this);
-//        drive.setPose(new Pose2d(-39,63,3*Math.PI/2));
 
         waitForStart();
 
         while (!isStopRequested()) {
-            drive.getDrive().setDrivePower(new Pose2d(
+            drive.drive.setDrivePower(new Pose2d(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x,
                     -gamepad1.right_stick_x

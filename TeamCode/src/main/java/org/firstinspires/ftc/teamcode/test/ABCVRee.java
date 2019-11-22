@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
-import org.firstinspires.ftc.teamcode.util.ABCVReeTest;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
@@ -24,7 +23,7 @@ public class ABCVRee extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GlobalConstants.side = GlobalConstants.Side.BLUE;
+        GlobalConstants.COLOR = GlobalConstants.SIDE.BLUE;
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
@@ -46,8 +45,5 @@ public class ABCVRee extends LinearOpMode {
         telemetry.addData("fuck",pos);
         telemetry.update();
         Log.d("fuck",pos+"");
-//        while (!isStopRequested()) {
-//            Thread.sleep(10);
-//        }
     }
 }

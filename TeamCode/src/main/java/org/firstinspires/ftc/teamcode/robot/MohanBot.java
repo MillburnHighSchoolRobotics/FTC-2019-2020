@@ -1,68 +1,69 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.app.Activity;
 import android.util.Log;
 
-import com.acmerobotics.roadrunner.control.PIDFController;
-import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
-import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
-import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.robot.subsystems.*;
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.robot.subsystems.ChainBar;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Hook;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.FPS_UPDATE_PERIOD;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TRACK_WIDTH;
 
 public class MohanBot {
-    
+
     private HardwareMap hardwareMap;
-    private Drive drive;
-    private ChainBar chainBar;
-    private Intake intake;
-    private Hook hook;
+    public Drive drive;
+    public ChainBar chainBar;
+    public Intake intake;
+    public Hook hook;
 
-    public enum Mode {
-        IDLE,
-        TURN,
-        FOLLOW_TRAJECTORY
-    }
+    private double defaultRotationPower = 0.8;
 
-    private NanoClock clock;
-    private Mode mode;
+    private double poseThreshold = 1;
+    private double rotationThreshold = Math.toRadians(5);
 
-    private PIDFController turnController;
-    private MotionProfile turnProfile;
-    private DriveConstraints constraints;
-    private TrajectoryFollower follower;
-    private double turnStart;
+    private PIDCoefficients rotationPID = new PIDCoefficients(0.009,0.003,0.0075);
+    private DriveConstraints driveConstraints = new DriveConstraints(
+            50.0, 40.0, 0.0,
+            Math.toRadians(180), Math.toRadians(180), 0.0
+    );
 
-    private int threadCount = 0;
+    TrajectoryFollower follower = new TrajectoryFollower();
 
     public MohanBot(HardwareMap hardwareMap, LinearOpMode opMode) {
+        this(hardwareMap, opMode, new Pose2d());
+    }
+    public MohanBot(HardwareMap hardwareMap, LinearOpMode opMode, Pose2d start) {
         this.hardwareMap = hardwareMap;
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
-        manager.setupThread("PositionMonitor", PositionMonitor.class);
+        manager.setupThread("PositionMonitor", PositionMonitor.class, start);
 
-        initRobotHardware();
-        initRoadRunner();
+        init();
     }
-    private void initRobotHardware() {
+    private void init() {
         DcMotorEx lf = (DcMotorEx)hardwareMap.dcMotor.get("lf");
         DcMotorEx lb = (DcMotorEx)hardwareMap.dcMotor.get("lb");
         DcMotorEx rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
@@ -82,120 +83,118 @@ public class MohanBot {
         intake = new Intake(intakeLeft,intakeRight);
         hook = new Hook(hookLeft,hookRight);
     }
-    private void initRoadRunner() {
-        clock = NanoClock.system();
-        mode = Mode.IDLE;
 
-        turnController = new PIDFController(HEADING_PID);
-        turnController.setInputBounds(0,2*Math.PI);
-
-        constraints = new MecanumConstraints(BASE_CONSTRAINTS, ROBOT_WIDTH, ROBOT_LENGTH);
-        follower = new HolonomicPIDVAFollower(TRANSLATION_PID, TRANSLATION_PID, HEADING_PID);
-    }
-    public Drive getDrive() {
-        return drive;
-    }
-    public ChainBar getChainBar() {
-        return chainBar;
-    }
-    public Intake getIntake() {
-        return intake;
-    }
-    public Hook getHook() {
-        return hook;
-    }
     public Pose2d getPose() {
-        int threadCount1;
-        do {
-            threadCount1 = ThreadManager.getInstance().getValue("count", Integer.class);
-        } while (threadCount == threadCount1);
-
         double x = ThreadManager.getInstance().getValue("x", Double.class);
         double y = ThreadManager.getInstance().getValue("y", Double.class);
-        double theta = MathUtils.normalize(Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class)));
+        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
 
-        threadCount = threadCount1;
         Pose2d pose = new Pose2d(x,y,theta);
         Log.d("Pose", pose.toString());
         return pose;
     }
-    public void setPose(Pose2d offset) {
-        X_OFFSET = offset.getX();
-        Y_OFFSET = offset.getY();
-        HEADING_OFFSET = offset.getHeading();
-        PENDING_OFFSET = true;
+
+    public void moveTo(Pose2d targetPose, double power) {
+        double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
+        double relAngle = absoluteAngle-getPose().getHeading();
+        if (relAngle < 0) {
+            relAngle += 360;
+        }
+        double scale, lf=0, lb=0, rf=0, rb=0;
+        if (relAngle >= 0 && relAngle < 90) {
+            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+            lf = 1;
+            lb = scale;
+            rf = scale;
+            rb = 1;
+        } else if (relAngle >= 90 && relAngle < 180) {
+            scale = Math.round(Math.tan(Math.toRadians(relAngle-135)));
+            lf = -scale;
+            lb = 1;
+            rf = 1;
+            rb = -scale;
+        } else if (relAngle >= 180 && relAngle < 270) {
+            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+            lf = -1;
+            lb = -scale;
+            rf = -scale;
+            rb = -1;
+        } else if (relAngle >= 270 && relAngle < 360) {
+            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+            lf = scale;
+            lb = -1;
+            rf = -1;
+            rb = scale;
+        }
+        lf*=power;
+        lb*=power;
+        rf*=power;
+        rb*=power;
+
+        while (getPose().vec().distTo(targetPose.vec()) > poseThreshold) {
+            drive.setDrivePower(lf, lb, rf, rb);
+        }
+        drive.stop();
+    }
+
+    public void rotate(double angle) throws InterruptedException {
+        rotate(angle,defaultRotationPower);
+    }
+    public void rotate(double angle, double power) throws InterruptedException {
+        double targetHeading = MathUtils.normalize(getPose().getHeading()+angle);
+        rotateTo(power,targetHeading);
+    }
+    public void rotateTo(double targetHeading) throws InterruptedException {
+        rotateTo(targetHeading,defaultRotationPower);
+    }
+
+    public void rotateTo(double targetHeading, double power) throws InterruptedException {
+        PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
+
+        ElapsedTime time = new ElapsedTime();
+        double lastTime = -1;
+        while (!shouldStop()) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new InterruptedException();
+            }
+            double output = pidController.getPIDOutput(getPose().getHeading());
+            if (!MathUtils.equals(getPose().getHeading(), targetHeading, rotationThreshold)) {
+                if (lastTime == -1) lastTime = time.milliseconds();
+                else if (time.milliseconds() - lastTime > 200) {
+                    drive.stop();
+                    break;
+                }
+            } else {
+                lastTime = -1;
+            }
+            drive.setDrivePower(-power*output,power*output);
+
+            Thread.sleep(FPS_UPDATE_PERIOD);
+        }
     }
 
     public TrajectoryBuilder trajectoryBuilder() {
-        return new TrajectoryBuilder(getPose(), constraints);
+        return trajectoryBuilder(getPose().getHeading());
     }
-
-    public void turn(double angle) {
-        double heading = getPose().getHeading();
-        turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(heading, 0, 0, 0),
-                new MotionState(heading+angle, 0, 0, 0),
-                constraints.maxAngVel,
-                constraints.maxAngAccel,
-                constraints.maxAngJerk
-        );
-        turnStart = clock.seconds();
-        mode = Mode.TURN;
-        waitForIdle();
-    }
-    public void turnTo(double angle) {
-        turn(angle-getPose().getHeading());
+    public TrajectoryBuilder trajectoryBuilder(double heading) {
+        return new TrajectoryBuilder(new Pose2d(getPose().vec(),heading), new MecanumConstraints(driveConstraints,TRACK_WIDTH));
     }
 
     public void followTrajectory(Trajectory trajectory) {
         follower.followTrajectory(trajectory);
-        mode = Mode.FOLLOW_TRAJECTORY;
-        waitForIdle();
-    }
-
-    public void update() {
-        switch (mode) {
-            case IDLE:
-                drive.setDrivePower(0);
-                break;
-            case TURN: {
-                double t = clock.seconds() - turnStart;
-
-                MotionState targetState = turnProfile.get(t);
-                turnController.setTargetPosition(targetState.getX());
-
-                double targetOmega = targetState.getV();
-                double targetAlpha = targetState.getA();
-                double correction = turnController.update(getPose().getHeading(), targetOmega);
-
-                drive.setDriveSignal(new DriveSignal(
-                                new Pose2d(0,0,targetOmega + correction),
-                                new Pose2d(0,0,targetAlpha)
-                ));
-
-                if (t >= turnProfile.duration()) {
-                    mode = Mode.IDLE;
-                    drive.setDriveSignal(new DriveSignal());
-                }
-                break;
-            }
-            case FOLLOW_TRAJECTORY: {
-                drive.setDriveSignal(follower.update(getPose()));
-
-                if (!follower.isFollowing()) {
-                    mode = Mode.IDLE;
-                    drive.setDriveSignal(new DriveSignal());
-                }
-                break;
-            }
+        while (follower.activeTrajectory()) {
+            Pose2d targetVelocity = follower.update(getPose());
+            drive.setDrivePower(targetVelocity);
         }
+        drive.stop();
     }
-    public void waitForIdle() {
-        while (!Thread.currentThread().isInterrupted() && isBusy()) {
-            update();
-        }
-    }
-    public boolean isBusy() {
-        return mode != Mode.IDLE;
+
+    public static boolean shouldStop() {
+        Activity currActivity = AppUtil.getInstance().getActivity();
+        OpModeManagerImpl manager = OpModeManagerImpl.getOpModeManagerOfActivity(currActivity);
+        OpMode currentOpMode = manager.getActiveOpMode();
+        return currentOpMode instanceof LinearOpMode &&
+                ((LinearOpMode) currentOpMode).isStarted() &&
+                ((LinearOpMode) currentOpMode).isStopRequested();
     }
 }

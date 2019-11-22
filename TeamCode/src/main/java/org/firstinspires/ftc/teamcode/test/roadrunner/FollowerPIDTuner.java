@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.test.roadrunner;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -32,7 +31,7 @@ public class FollowerPIDTuner extends LinearOpMode {
                             .forward(DISTANCE)
                             .build()
             );
-            robot.turn(Math.toRadians(90));
+            robot.rotate(Math.toRadians(90));
             Thread.sleep(1000);
         }
     }

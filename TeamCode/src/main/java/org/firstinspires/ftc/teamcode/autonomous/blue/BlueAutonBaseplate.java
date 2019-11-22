@@ -16,9 +16,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot robot = new MohanBot(hardwareMap,this);
-
-        robot.setPose(new Pose2d(24, 63, Math.toRadians(90)));
+        MohanBot robot = new MohanBot(hardwareMap,this, new Pose2d(24, 63, Math.toRadians(90)));
 
         waitForStart();
 
@@ -36,7 +34,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
                         .build()
         );
 
-        robot.getHook().hookDown();
+        robot.hook.hookDown();
         Thread.sleep(1000);
         robot.followTrajectory(
                 robot.trajectoryBuilder()
@@ -44,7 +42,7 @@ public class BlueAutonBaseplate extends LinearOpMode {
                         .build()
         );
         Thread.sleep(1000);
-        robot.getHook().hookUp();
+        robot.hook.hookUp();
         Thread.sleep(1000);
         robot.followTrajectory(
                 robot.trajectoryBuilder()

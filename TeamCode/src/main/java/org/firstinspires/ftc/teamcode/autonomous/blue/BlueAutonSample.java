@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
-import org.firstinspires.ftc.teamcode.util.ABCVReeTest;
+import org.firstinspires.ftc.teamcode.test.ABCVReeTest;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
@@ -27,11 +27,10 @@ public class BlueAutonSample extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot mohanBot = new MohanBot(hardwareMap,this);
-        mohanBot.setPose(new Pose2d(-39, 63, 3*Math.PI/2));
+        MohanBot mohanBot = new MohanBot(hardwareMap,this,new Pose2d(-39, 63, 3*Math.PI/2));
 
-        mohanBot.getHook().hookUp();
-        mohanBot.getChainBar().openClaw();
+        mohanBot.hook.hookUp();
+        mohanBot.chainBar.openClaw();
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
@@ -53,9 +52,9 @@ public class BlueAutonSample extends LinearOpMode {
         telemetry.addData("cv",skystone+"");
         telemetry.update();
 
-        mohanBot.getChainBar().chainBarUp();
-        mohanBot.getIntake().intakeIn();
-        mohanBot.getChainBar().normalClaw();
+        mohanBot.chainBar.chainBarUp();
+        mohanBot.intake.intakeIn();
+        mohanBot.chainBar.normalClaw();
         switch(skystone) {
             case 1:
                 mohanBot.followTrajectory(
@@ -70,8 +69,8 @@ public class BlueAutonSample extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(200);
-                mohanBot.getChainBar().chainBarIn();
-                mohanBot.turnTo(Math.PI/2);
+                mohanBot.chainBar.chainBarIn();
+                mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -91,7 +90,7 @@ public class BlueAutonSample extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(100);
-                mohanBot.getIntake().intakeStop();
+                mohanBot.intake.intakeStop();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .back(6)
@@ -99,8 +98,8 @@ public class BlueAutonSample extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(200);
-                mohanBot.getChainBar().chainBarIn();
-                mohanBot.turnTo(Math.PI/2);
+                mohanBot.chainBar.chainBarIn();
+                mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -121,7 +120,7 @@ public class BlueAutonSample extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(100);
-                mohanBot.getChainBar().chainBarIn();
+                mohanBot.chainBar.chainBarIn();
                 Thread.sleep(200);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -133,7 +132,7 @@ public class BlueAutonSample extends LinearOpMode {
                 );
                 break;
         }
-        mohanBot.getChainBar().closeClaw();
+        mohanBot.chainBar.closeClaw();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .setReversed(false)
@@ -141,18 +140,18 @@ public class BlueAutonSample extends LinearOpMode {
                         .build()
         );
         Thread.sleep(100);
-        mohanBot.getHook().hookDown();
-        mohanBot.getChainBar().chainBarOut();
-        mohanBot.getIntake().intakeStop();
+        mohanBot.hook.hookDown();
+        mohanBot.chainBar.chainBarOut();
+        mohanBot.intake.intakeStop();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .forward(64)
                         .build()
         );
-        mohanBot.getChainBar().openClaw();
+        mohanBot.chainBar.openClaw();
         Thread.sleep(700);
-        mohanBot.getChainBar().chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);;
-        mohanBot.getHook().hookUp();
+        mohanBot.chainBar.chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);;
+        mohanBot.hook.hookUp();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .strafeTo(new Vector2d(12,63))

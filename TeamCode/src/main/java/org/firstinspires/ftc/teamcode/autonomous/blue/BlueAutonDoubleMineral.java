@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
-import org.firstinspires.ftc.teamcode.util.ABCVReeTest;
+import org.firstinspires.ftc.teamcode.test.ABCVReeTest;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
@@ -28,11 +28,10 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot mohanBot = new MohanBot(hardwareMap,this);
-        mohanBot.setPose(new Pose2d(-39, 63, 3*Math.PI/2));
+        MohanBot mohanBot = new MohanBot(hardwareMap,this,new Pose2d(-39, 63, 3*Math.PI/2));
 
-        mohanBot.getHook().hookUp();
-        mohanBot.getChainBar().openClaw();
+        mohanBot.hook.hookUp();
+        mohanBot.chainBar.openClaw();
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
@@ -54,9 +53,9 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
         telemetry.addData("cv",skystone+"");
         telemetry.update();
 
-        mohanBot.getChainBar().chainBarUp();
-        mohanBot.getIntake().intakeIn();
-        mohanBot.getChainBar().normalClaw();
+        mohanBot.chainBar.chainBarUp();
+        mohanBot.intake.intakeIn();
+        mohanBot.chainBar.normalClaw();
         switch(skystone) {
             case 1:
                 mohanBot.followTrajectory(
@@ -70,8 +69,8 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(200);
-                mohanBot.getChainBar().chainBarIn();
-                mohanBot.turnTo(Math.PI/2);
+                mohanBot.chainBar.chainBarIn();
+                mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -91,7 +90,7 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(100);
-                mohanBot.getIntake().intakeStop();
+                mohanBot.intake.intakeStop();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .back(6)
@@ -99,8 +98,8 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(200);
-                mohanBot.getChainBar().chainBarIn();
-                mohanBot.turnTo(Math.PI/2);
+                mohanBot.chainBar.chainBarIn();
+                mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -121,7 +120,7 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .build()
                 );
                 Thread.sleep(100);
-                mohanBot.getChainBar().chainBarIn();
+                mohanBot.chainBar.chainBarIn();
                 Thread.sleep(200);
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
@@ -133,8 +132,8 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                 );
                 break;
         }
-        mohanBot.getChainBar().closeClaw();
-        mohanBot.turnTo(Math.PI/2);
+        mohanBot.chainBar.closeClaw();
+        mohanBot.rotateTo(Math.PI/2);
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .setReversed(false)
@@ -142,18 +141,18 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                         .build()
         );
         Thread.sleep(100);
-        mohanBot.getHook().hookDown();
-        mohanBot.getChainBar().chainBarOut();
-        mohanBot.getIntake().intakeStop();
+        mohanBot.hook.hookDown();
+        mohanBot.chainBar.chainBarOut();
+        mohanBot.intake.intakeStop();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .forward(64)
                         .build()
         );
-        mohanBot.getChainBar().openClaw();
+        mohanBot.chainBar.openClaw();
         Thread.sleep(700);
-        mohanBot.getChainBar().chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);
-        mohanBot.getHook().hookUp();
+        mohanBot.chainBar.chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);
+        mohanBot.hook.hookUp();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .strafeTo(new Vector2d(12,63))
@@ -174,20 +173,20 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .splineTo(new Pose2d(-40,22,3*Math.PI/2), new ConstantInterpolator(Math.PI))
                                 .build()
                 );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.chainBarUp();
+                mohanBot.chainBar.openClaw();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .strafeTo(new Vector2d(-40,22))
                                 .build()
                 );
-                mohanBot.getIntake().intakeIn();
+                mohanBot.intake.intakeIn();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .forward(8)
                                 .build()
                 );
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.openClaw();
                 break;
             case 2:
                 mohanBot.followTrajectory(
@@ -195,20 +194,20 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .splineTo(new Pose2d(-48,22,3*Math.PI/2), new ConstantInterpolator(Math.PI))
                                 .build()
                 );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.chainBarUp();
+                mohanBot.chainBar.openClaw();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .strafeTo(new Vector2d(-48,22))
                                 .build()
                 );
-                mohanBot.getIntake().intakeIn();
+                mohanBot.intake.intakeIn();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .forward(8)
                                 .build()
                 );
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.openClaw();
                 break;
             case 3:
                 mohanBot.followTrajectory(
@@ -216,45 +215,45 @@ public class BlueAutonDoubleMineral extends LinearOpMode {
                                 .splineTo(new Pose2d(-56,22,3*Math.PI/2), new ConstantInterpolator(Math.PI))
                                 .build()
                 );
-                mohanBot.getChainBar().chainBarUp();
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.chainBarUp();
+                mohanBot.chainBar.openClaw();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .strafeTo(new Vector2d(-56,22))
                                 .build()
                 );
-                mohanBot.getIntake().intakeIn();
+                mohanBot.intake.intakeIn();
                 mohanBot.followTrajectory(
                         mohanBot.trajectoryBuilder()
                                 .forward(8)
                                 .build()
                 );
-                mohanBot.getChainBar().openClaw();
+                mohanBot.chainBar.openClaw();
                 break;
         }
-        mohanBot.getChainBar().chainBarIn();
+        mohanBot.chainBar.chainBarIn();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .strafeRight(18)
                         .build()
         );
-        while (mohanBot.getChainBar().isBusy()) {
+        while (mohanBot.chainBar.isBusy()) {
             Thread.sleep(10);
         }
-        mohanBot.getChainBar().closeClaw();
+        mohanBot.chainBar.closeClaw();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .strafeTo(new Vector2d(40,40))
                         .build()
         );
-        mohanBot.getChainBar().chainBarOut();
-        mohanBot.turnTo(Math.PI);
-        while (mohanBot.getChainBar().isBusy()) {
+        mohanBot.chainBar.chainBarOut();
+        mohanBot.rotateTo(Math.PI);
+        while (mohanBot.chainBar.isBusy()) {
             Thread.sleep(10);
         }
-        mohanBot.getChainBar().openClaw();
+        mohanBot.chainBar.openClaw();
         Thread.sleep(500);
-        mohanBot.getChainBar().chainBarIn();
+        mohanBot.chainBar.chainBarIn();
         mohanBot.followTrajectory(
                 mohanBot.trajectoryBuilder()
                         .strafeTo(new Vector2d(0,40))

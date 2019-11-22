@@ -2,11 +2,17 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_IN_TICKS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_OUT_TICKS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_POWER;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_TICKS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_CLOSE_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_NORMAL_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_OPEN_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_ROTATE_POS;
 
 public class ChainBar {
     DcMotorEx chainBar;
