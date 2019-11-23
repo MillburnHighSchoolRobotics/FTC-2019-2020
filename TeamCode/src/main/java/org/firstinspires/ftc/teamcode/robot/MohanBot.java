@@ -41,9 +41,9 @@ public class MohanBot {
     private double defaultRotationPower = 0.8;
 
     private double poseThreshold = 1;
-    private double rotationThreshold = Math.toRadians(5);
+    private double rotationThreshold = 2;
 
-    private PIDCoefficients rotationPID = new PIDCoefficients(0.000,0.000,0.000);
+    private PIDCoefficients rotationPID = new PIDCoefficients(0.005,0.000,0.000);
     private DriveConstraints driveConstraints = new DriveConstraints(
             50.0, 40.0, 0.0,
             Math.toRadians(180), Math.toRadians(180), 0.0
@@ -141,7 +141,7 @@ public class MohanBot {
         rotate(angle,defaultRotationPower);
     }
     public void rotate(double angle, double power) throws InterruptedException {
-        double targetHeading = MathUtils.normalize(getPose().getHeading()+angle);
+        double targetHeading = Math.toDegrees(getPose().getHeading())+angle;
         rotateTo(targetHeading,power);
     }
     public void rotateTo(double targetHeading) throws InterruptedException {
@@ -149,6 +149,7 @@ public class MohanBot {
     }
 
     public void rotateTo(double targetHeading, double power) throws InterruptedException {
+        targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));
         PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
 
         ElapsedTime time = new ElapsedTime();
@@ -157,17 +158,21 @@ public class MohanBot {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
-            double currentHeading = getPose().getHeading();
+            double currentHeading = Math.toDegrees(getPose().getHeading());
             if (currentHeading - targetHeading > 180) {
-                currentHeading -= 2*Math.PI;
+                currentHeading -= 360;
             } else if (targetHeading - currentHeading > 180) {
-                currentHeading += 2*Math.PI;
+                currentHeading += 360;
             }
             double output = pidController.getPIDOutput(currentHeading);
-            if (!MathUtils.equals(currentHeading, targetHeading, rotationThreshold)) {
+            Log.d("turn pid", "output - " + output);
+            Log.d("turn pid", "current heading - " + currentHeading);
+            Log.d("turn pid", "target heading - " + targetHeading);
+            if (MathUtils.equals(currentHeading, targetHeading, rotationThreshold)) {
                 if (lastTime == -1) lastTime = time.milliseconds();
-                else if (time.milliseconds() - lastTime > 200) {
+                else if (time.milliseconds() - lastTime > 50) {
                     drive.stop();
+                    Log.d("turn pid", "STOP");
                     break;
                 }
             } else {
@@ -175,7 +180,7 @@ public class MohanBot {
             }
             drive.setDrivePower(-power*output,power*output);
 
-            Thread.sleep(FPS_UPDATE_PERIOD);
+            Thread.sleep(FPS_UPDATE_PERIOD*2);
         }
     }
 

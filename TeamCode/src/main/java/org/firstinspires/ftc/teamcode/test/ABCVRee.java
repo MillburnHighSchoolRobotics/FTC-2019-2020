@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 
-@Autonomous(group = "auton")
+@Autonomous(group = "test")
 public class ABCVRee extends LinearOpMode {
     static {
         if(OpenCVLoader.initDebug()) {

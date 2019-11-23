@@ -53,7 +53,7 @@ public class PositionMonitor extends MonitorThread {
     @Override
     protected void loop() {
         updatePosition();
-        setValue("theta", 360-Math.toDegrees(theta));
+        setValue("theta", Math.toDegrees(MathUtils.normalize(2*Math.PI-theta)));
         setValue("x", x);
         setValue("y", y);
     }
@@ -102,7 +102,7 @@ public class PositionMonitor extends MonitorThread {
         double dTheta = deltaPos.getHeading();
 
         double s,c;
-        if (MathUtils.equals(Math.abs(dTheta),0)) {
+        if (MathUtils.equals(Math.abs(dTheta),0,0.000001)) {
             s = 1 - dTheta * dTheta / 6.0;
             c = dTheta / 2.0;
         } else {
