@@ -28,7 +28,7 @@ public class PositionMonitor extends MonitorThread {
     double x = 0;
     double y = 0;
     double theta = 0;
-    double orientation = 0;
+    double count = 0;
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose2d start) {
         super(thread, hardwareMap, TAG);
@@ -56,6 +56,8 @@ public class PositionMonitor extends MonitorThread {
         setValue("theta", Math.toDegrees(MathUtils.normalize(2*Math.PI-theta)));
         setValue("x", x);
         setValue("y", y);
+        setValue("count", count);
+        count += 1;
     }
     protected void updatePosition() {
         double ex1Pos = GlobalConstants.encoderToDistance(ex1.getCurrentPosition());

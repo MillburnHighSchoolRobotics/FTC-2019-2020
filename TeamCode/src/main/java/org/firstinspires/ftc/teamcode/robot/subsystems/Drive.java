@@ -4,12 +4,14 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.VELOCITY_TO_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.WHEEL_BASE;
 
 public class Drive {
@@ -30,22 +32,27 @@ public class Drive {
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
     }
-    public void setDrivePower(Pose2d velocity) {
+    public void setDriveVelocity(Pose2d velocity) {
         double k = (WHEEL_BASE+TRACK_WIDTH)/2;
-        double[] targetWheelVelocity = new double[] {
+        double[] linearVelocity = new double[] {
                 velocity.getX()-velocity.getY()-k*velocity.getHeading(),
                 velocity.getX()+velocity.getY()-k*velocity.getHeading(),
                 velocity.getX()+velocity.getY()+k*velocity.getHeading(),
                 velocity.getX()-velocity.getY()+k*velocity.getHeading()
         };
-        double[] wheelPowers = new double[targetWheelVelocity.length];
-        for (int v = 0; v < wheelPowers.length; v++) {
-            wheelPowers[v] = targetWheelVelocity[v] * VELOCITY_TO_POWER;
+
+        double[] angularVelocity = new double[linearVelocity.length];
+        for (int v = 0; v < angularVelocity.length; v++) {
+            angularVelocity[v] = linearVelocity[v] / GlobalConstants.WHEEL_RADIUS;
         }
-        setDrivePower(wheelPowers);
+        setDriveVelocity(angularVelocity);
+
     }
-    public void setDrivePower(double[] powers) {
-        setDrivePower(powers[0],powers[1],powers[2],powers[3]);
+    public void setDriveVelocity(double[] velocity) {
+        lf.setVelocity(velocity[0], AngleUnit.RADIANS);
+        lb.setVelocity(velocity[1], AngleUnit.RADIANS);
+        rf.setVelocity(velocity[2], AngleUnit.RADIANS);
+        rb.setVelocity(velocity[3], AngleUnit.RADIANS);
     }
     public void setDrivePower(double lfPower, double lbPower, double rfPower, double rbPower) {
         lf.setPower(lfPower);

@@ -27,7 +27,6 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.FPS_UPDATE_PERIOD;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TRACK_WIDTH;
 
 public class MohanBot {
@@ -42,6 +41,7 @@ public class MohanBot {
 
     private double poseThreshold = 1;
     private double rotationThreshold = 2;
+    private double count;
 
     private PIDCoefficients rotationPID = new PIDCoefficients(0.005,0.000,0.000);
     private DriveConstraints driveConstraints = new DriveConstraints(
@@ -60,6 +60,8 @@ public class MohanBot {
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);
+
+        count = ThreadManager.getInstance().getValue("count", Double.class);
 
         init();
     }
@@ -85,6 +87,12 @@ public class MohanBot {
     }
 
     public Pose2d getPose() {
+        double newCount;
+        do {
+            newCount = ThreadManager.getInstance().getValue("count", Double.class);
+        } while (count == newCount);
+        count = newCount;
+
         double x = ThreadManager.getInstance().getValue("x", Double.class);
         double y = ThreadManager.getInstance().getValue("y", Double.class);
         double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
@@ -94,46 +102,48 @@ public class MohanBot {
         return pose;
     }
 
-    public void moveTo(Pose2d targetPose, double movePower, double targetAngle, double turnPower) {
-        double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
-        double relAngle = absoluteAngle-getPose().getHeading();
-        if (relAngle < 0) {
-            relAngle += 360;
-        }
-        double scale, lf=0, lb=0, rf=0, rb=0;
-        if (relAngle >= 0 && relAngle < 90) {
-            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
-            lf = 1;
-            lb = scale;
-            rf = scale;
-            rb = 1;
-        } else if (relAngle >= 90 && relAngle < 180) {
-            scale = Math.round(Math.tan(Math.toRadians(relAngle-135)));
-            lf = -scale;
-            lb = 1;
-            rf = 1;
-            rb = -scale;
-        } else if (relAngle >= 180 && relAngle < 270) {
-            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
-            lf = -1;
-            lb = -scale;
-            rf = -scale;
-            rb = -1;
-        } else if (relAngle >= 270 && relAngle < 360) {
-            scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
-            lf = scale;
-            lb = -1;
-            rf = -1;
-            rb = scale;
-        }
-        lf*=movePower;
-        lb*=movePower;
-        rf*=movePower;
-        rb*=movePower;
+    public void moveTo(Pose2d targetPose, double power) {
+        do {
+            double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
+            double relAngle = absoluteAngle-getPose().getHeading();
+            if (relAngle < 0) {
+                relAngle += 360;
+            }
+            double scale, lf=0, lb=0, rf=0, rb=0;
 
-        while (getPose().vec().distTo(targetPose.vec()) > poseThreshold) {
+            if (relAngle >= 0 && relAngle < 90) {
+                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                lf = 1;
+                lb = scale;
+                rf = scale;
+                rb = 1;
+            } else if (relAngle >= 90 && relAngle < 180) {
+                scale = Math.round(Math.tan(Math.toRadians(relAngle-135)));
+                lf = -scale;
+                lb = 1;
+                rf = 1;
+                rb = -scale;
+            } else if (relAngle >= 180 && relAngle < 270) {
+                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                lf = -1;
+                lb = -scale;
+                rf = -scale;
+                rb = -1;
+            } else if (relAngle >= 270 && relAngle < 360) {
+                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                lf = scale;
+                lb = -1;
+                rf = -1;
+                rb = scale;
+            }
+            lf*=power;
+            lb*=power;
+            rf*=power;
+            rb*=power;
+
             drive.setDrivePower(lf, lb, rf, rb);
-        }
+        } while (getPose().vec().distTo(targetPose.vec()) > poseThreshold);
+
         drive.stop();
     }
 
@@ -158,6 +168,7 @@ public class MohanBot {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedException();
             }
+
             double currentHeading = Math.toDegrees(getPose().getHeading());
             if (currentHeading - targetHeading > 180) {
                 currentHeading -= 360;
@@ -180,7 +191,7 @@ public class MohanBot {
             }
             drive.setDrivePower(-power*output,power*output);
 
-            Thread.sleep(FPS_UPDATE_PERIOD*2);
+            Thread.sleep(5);
         }
     }
 
@@ -195,11 +206,17 @@ public class MohanBot {
         follower.followTrajectory(trajectory);
         while (follower.activeTrajectory()) {
             Pose2d targetVelocity = follower.update(getPose());
-            drive.setDrivePower(targetVelocity);
+            drive.setDriveVelocity(targetVelocity);
         }
         drive.stop();
     }
 
+    public PIDCoefficients getTurnPID() {
+        return rotationPID;
+    }
+    public void setTurnPID(PIDCoefficients pid) {
+        rotationPID = pid;
+    }
     public static boolean shouldStop() {
         Activity currActivity = AppUtil.getInstance().getActivity();
         OpModeManagerImpl manager = OpModeManagerImpl.getOpModeManagerOfActivity(currActivity);
