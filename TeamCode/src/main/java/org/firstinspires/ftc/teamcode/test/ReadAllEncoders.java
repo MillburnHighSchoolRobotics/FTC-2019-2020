@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -32,8 +33,15 @@ public class ReadAllEncoders extends OpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
     public DcMotor chainBar;
+    public DcMotorEx lift;
     public Servo clawSquish;
     public Servo clawSpin;
+    private AnalogInput chainBarPot;
+
+
+    double liftExtensionPower = 1;
+    double liftRetractionPower = -0.5;
+    double liftNeutralPower = 0;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
             {1, 0, 0, 1},
@@ -51,16 +59,19 @@ public class ReadAllEncoders extends OpMode {
         rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
         rb = (DcMotorEx)hardwareMap.dcMotor.get("rb");
 
-        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("lb");
-        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("lf");
-        ey = (DcMotorEx) hardwareMap.dcMotor.get("rf");
+        ex1 = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
+        ex2 = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
+        ey = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
 
         intakeL = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
         intakeR = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
         chainBar = hardwareMap.dcMotor.get("chainBar");
+        lift = (DcMotorEx)hardwareMap.dcMotor.get("lift");
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
+
+        chainBarPot = hardwareMap.analogInput.get("chainBarPot");
 
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -69,9 +80,10 @@ public class ReadAllEncoders extends OpMode {
 
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        chainBar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -81,6 +93,7 @@ public class ReadAllEncoders extends OpMode {
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         ex1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -93,6 +106,7 @@ public class ReadAllEncoders extends OpMode {
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
         intakeL.setDirection(REVERSE);
+        lift.setDirection(REVERSE);
 
         lf.setPower(0);
         lb.setPower(0);
@@ -102,6 +116,7 @@ public class ReadAllEncoders extends OpMode {
         intakeL.setPower(0);
         intakeR.setPower(0);
         chainBar.setPower(0);
+        lift.setPower(0);
 
         clawSquish.setPosition(squishPos[0]);
         clawSpin.setPosition(spinPos[1]);
@@ -156,6 +171,15 @@ public class ReadAllEncoders extends OpMode {
 
         if (gamepad1.y) { //sideways claw rotation
             clawSpin.setPosition(spinPos[0]);
+        }
+
+        if (gamepad1.dpad_up) {
+            lift.setPower(liftExtensionPower);
+        } else if (gamepad1.dpad_down) {
+            lift.setPower(liftRetractionPower);
+        } else {
+            lift.setVelocity(0);
+//            lift.setPower(liftNeutralPower);
         }
 
         if (gamepad1.left_bumper) {
@@ -228,8 +252,10 @@ public class ReadAllEncoders extends OpMode {
         telemetry.addData("intakeL", intakeL.getCurrentPosition());
         telemetry.addData("intakeR", intakeR.getCurrentPosition());
         telemetry.addData("chainBar", chainBar.getCurrentPosition());
+        telemetry.addData("lift", lift.getCurrentPosition());
         telemetry.addData("ex1", ex1.getCurrentPosition());
         telemetry.addData("ex2", ex2.getCurrentPosition());
         telemetry.addData("ey", ey.getCurrentPosition());
+        telemetry.addData("chainBarPot", chainBarPot.getVoltage() + "/" + chainBarPot.getMaxVoltage());
     }
 }

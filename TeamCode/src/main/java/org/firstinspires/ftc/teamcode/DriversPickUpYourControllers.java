@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_TICKS;
 
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
@@ -30,6 +29,9 @@ public class DriversPickUpYourControllers extends OpMode {
     double intakePower = 0.6;
     double chainBarPower = 0.8;
     double drivePower = 1;
+    double liftExtensionPower = 1;
+    double liftRetractionPower = -0.5;
+    double liftNeutralPower = 0;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -38,6 +40,7 @@ public class DriversPickUpYourControllers extends OpMode {
     public DcMotorEx intakeL;
     public DcMotorEx intakeR;
     public DcMotorEx chainBar;
+    public DcMotorEx lift;
     public Servo clawSquish;
     public Servo clawSpin;
     public Servo foundationHookLeft;
@@ -64,6 +67,7 @@ public class DriversPickUpYourControllers extends OpMode {
         intakeL = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
         intakeR = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
         chainBar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
+        lift = (DcMotorEx)hardwareMap.dcMotor.get("lift");
 
         clawSquish = hardwareMap.servo.get("clawSquish");
         clawSpin = hardwareMap.servo.get("clawSpin");
@@ -79,9 +83,10 @@ public class DriversPickUpYourControllers extends OpMode {
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        chainBar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -91,11 +96,13 @@ public class DriversPickUpYourControllers extends OpMode {
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
         intakeL.setDirection(REVERSE);
         chainBar.setDirection(REVERSE);
+        lift.setDirection(REVERSE);
 
         chainBar.setTargetPositionTolerance(50);
 
@@ -134,20 +141,22 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
-            if (!MathUtils.equals(chainBar.getCurrentPosition(), CHAINBAR_UP_TICKS, 75)) {
-                chainBar.setTargetPosition(chainBarIntakePosition);
-                chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                chainBar.setPower(chainBarPower);
-            }
+            //TODO: Redo with potentiometer!
+//            if (!MathUtils.equals(chainBar.getCurrentPosition(), CHAINBAR_UP_TICKS, 75)) {
+//                chainBar.setTargetPosition(chainBarIntakePosition);
+//                chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                chainBar.setPower(chainBarPower);
+//            }
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
         }
 
-        if (!chainBar.isBusy() && chainBar.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
-            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            chainBar.setPower(0);
-        }
+        //TODO: Redo with potentiometer!
+//        if (!chainBar.isBusy() && chainBar.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+//            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            chainBar.setPower(0);
+//        }
 
         if (gamepad1.a) { //close claw
             clawSquish.setPosition(squishPos[1]);
@@ -174,6 +183,15 @@ public class DriversPickUpYourControllers extends OpMode {
             chainBar.setPower(-chainBarPower);
         } else if (chainBar.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
             chainBar.setPower(0);
+        }
+
+        if (gamepad1.dpad_up) {
+            lift.setPower(liftExtensionPower);
+        } else if (gamepad1.dpad_down) {
+            lift.setPower(liftRetractionPower);
+        } else {
+            lift.setVelocity(0);
+//            lift.setPower(liftNeutralPower);
         }
 
         if (gamepad1.left_stick_button) {
