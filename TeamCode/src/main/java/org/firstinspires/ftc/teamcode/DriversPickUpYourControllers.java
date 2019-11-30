@@ -177,11 +177,14 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.left_stick_button) {
-            togglePower = !togglePower;
-            if (togglePower) {
-                drivePower = 0.6;
-            } else {
-                drivePower = 1;
+            if (toggleDriveSpeed.milliseconds() > 250)  {
+                togglePower = !togglePower;
+                if (togglePower) {
+                    drivePower = 0.6;
+                } else {
+                    drivePower = 1;
+                }
+                toggleDriveSpeed.reset();
             }
         }
 
