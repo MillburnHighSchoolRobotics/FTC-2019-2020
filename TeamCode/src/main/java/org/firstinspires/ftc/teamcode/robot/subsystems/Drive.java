@@ -26,7 +26,7 @@ public class Drive {
 
         motors = Arrays.asList(lf,lb,rf,rb);
         for (DcMotorEx motor : motors) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         rf.setDirection(REVERSE);

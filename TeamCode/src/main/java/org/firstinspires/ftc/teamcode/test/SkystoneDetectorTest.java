@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
+import org.firstinspires.ftc.teamcode.util.SkystoneDetector;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 
 @Autonomous(group = "test")
-public class ABCVRee extends LinearOpMode {
+public class SkystoneDetectorTest extends LinearOpMode {
     static {
         if(OpenCVLoader.initDebug()) {
             Log.d("opencv","yay it works");
@@ -39,7 +40,7 @@ public class ABCVRee extends LinearOpMode {
 
         waitForStart();
 
-        ABCVReeTest fuck = new ABCVReeTest(vuforiaInstance);
+        SkystoneDetector fuck = new SkystoneDetector(vuforiaInstance);
 
         int pos = fuck.getPos();
         telemetry.addData("fuck",pos);

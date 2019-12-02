@@ -95,7 +95,7 @@ public class MohanBot {
 
         double x = ThreadManager.getInstance().getValue("x", Double.class);
         double y = ThreadManager.getInstance().getValue("y", Double.class);
-        double theta = Math.toRadians(ThreadManager.getInstance().getValue("theta", Double.class));
+        double theta = ThreadManager.getInstance().getValue("theta", Double.class);
 
         Pose2d pose = new Pose2d(x,y,theta);
         Log.d("Pose", pose.toString());
@@ -105,32 +105,32 @@ public class MohanBot {
     public void moveTo(Pose2d targetPose, double power) {
         do {
             double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
-            double relAngle = absoluteAngle-getPose().getHeading();
+            double relAngle = absoluteAngle-Math.toDegrees(getPose().getHeading());
             if (relAngle < 0) {
                 relAngle += 360;
             }
             double scale, lf=0, lb=0, rf=0, rb=0;
 
             if (relAngle >= 0 && relAngle < 90) {
-                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                scale = Math.tan(Math.toRadians(relAngle-45));
                 lf = 1;
                 lb = scale;
                 rf = scale;
                 rb = 1;
             } else if (relAngle >= 90 && relAngle < 180) {
-                scale = Math.round(Math.tan(Math.toRadians(relAngle-135)));
+                scale = Math.tan(Math.toRadians(relAngle-135));
                 lf = -scale;
                 lb = 1;
                 rf = 1;
                 rb = -scale;
             } else if (relAngle >= 180 && relAngle < 270) {
-                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                scale = Math.tan(Math.toRadians(relAngle-45));
                 lf = -1;
                 lb = -scale;
                 rf = -scale;
                 rb = -1;
             } else if (relAngle >= 270 && relAngle < 360) {
-                scale = Math.round(Math.tan(Math.toRadians(relAngle-45)));
+                scale = Math.tan(Math.toRadians(relAngle-45));
                 lf = scale;
                 lb = -1;
                 rf = -1;

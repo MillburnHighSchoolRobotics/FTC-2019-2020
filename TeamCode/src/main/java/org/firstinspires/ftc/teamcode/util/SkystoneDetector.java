@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.util;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -17,7 +17,7 @@ import org.opencv.imgproc.Moments;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ABCVReeTest {
+public class SkystoneDetector {
     static {
         OpenCVLoader.initDebug();
     }
@@ -25,7 +25,7 @@ public class ABCVReeTest {
 
     private int widthCamera;
     private int heightCamera;
-    public ABCVReeTest(VuforiaLocalizerImplSubclass vuforiaInstance) {
+    public SkystoneDetector(VuforiaLocalizerImplSubclass vuforiaInstance) {
         this.vuforiaInstance = vuforiaInstance;
         widthCamera = vuforiaInstance.rgb.getBufferWidth();
         heightCamera = vuforiaInstance.rgb.getHeight();
