@@ -20,6 +20,6 @@ public class MoveToTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.moveTo(new Pose2d(0 ,-24, 270), .4);
+        drive.moveTo(new Pose2d(0 ,-24, Math.toRadians(270)), .4);
     }
 }
