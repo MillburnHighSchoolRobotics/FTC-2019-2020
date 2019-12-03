@@ -31,7 +31,7 @@ public class DriversPickUpYourControllers extends OpMode {
     double drivePower = 1;
     double liftExtensionPower = 1;
     double liftRetractionPower = -0.5;
-    double liftNeutralPower = 0;
+    double liftHoldPower = 0.5;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -45,6 +45,8 @@ public class DriversPickUpYourControllers extends OpMode {
     public Servo clawSpin;
     public Servo foundationHookLeft;
     public Servo foundationHookRight;
+
+    boolean ascending;
 
     private final int chainBarIntakePosition = 500;
     public static final int[][] POWER_MATRIX = { //for each of the directions
@@ -82,6 +84,7 @@ public class DriversPickUpYourControllers extends OpMode {
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -105,6 +108,7 @@ public class DriversPickUpYourControllers extends OpMode {
         lift.setDirection(REVERSE);
 
         chainBar.setTargetPositionTolerance(50);
+        lift.setTargetPositionTolerance(25);
 
         lf.setPower(0);
         lb.setPower(0);
@@ -123,6 +127,8 @@ public class DriversPickUpYourControllers extends OpMode {
         toggleSpinTime = new ElapsedTime();
         toggleDriveSpeed = new ElapsedTime();
         toggleHook = new ElapsedTime();
+
+        ascending = false;
     }
 
     @Override
@@ -186,12 +192,23 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.dpad_up) {
+            if (ascending) {
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            ascending = true;
             lift.setPower(liftExtensionPower);
         } else if (gamepad1.dpad_down) {
+            if (ascending) {
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            ascending = false;
             lift.setPower(liftRetractionPower);
+        } else if (ascending) {
+            lift.setTargetPosition(lift.getCurrentPosition());
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift.setPower(liftHoldPower);
         } else {
-            lift.setVelocity(0);
-//            lift.setPower(liftNeutralPower);
+            lift.setPower(0);
         }
 
         if (gamepad1.left_stick_button) {
