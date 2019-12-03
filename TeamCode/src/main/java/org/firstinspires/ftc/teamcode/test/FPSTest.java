@@ -45,6 +45,8 @@ public class FPSTest extends LinearOpMode {
             telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
             telemetry.addData("orientation", Math.toDegrees(ThreadManager.getInstance().getValue("orientation", Double.class)));
             telemetry.addData("rotation", ThreadManager.getInstance().getValue("rotation", Double.class));
+            telemetry.addData("count", ThreadManager.getInstance().getValue("count", Double.class));
+
             telemetry.addData("er", er.getCurrentPosition());
             telemetry.addData("el", el.getCurrentPosition());
             telemetry.addData("eb", eb.getCurrentPosition());
