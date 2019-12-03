@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+
 public class GlobalConstants {
     public enum SIDE{
         BLUE, RED;
@@ -14,6 +17,9 @@ public class GlobalConstants {
     public static final double DEAD_WHEEL_DIAMETER = 60/25.4;
     public static final double DEAD_WHEEL_TICKS_PER_REV = 360*4;
     public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
+
+    public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
+    public static final double DEAD_WHEEL_TURN_RADIUS = 2.75;
 
 
     public static final double INTAKE_IN_POWER = -0.6;
@@ -42,5 +48,10 @@ public class GlobalConstants {
         double circumferenceGeared = circumference*DEAD_WHEEL_GEARING;
         double distance = circumferenceGeared * (ticks/DEAD_WHEEL_TICKS_PER_REV);
         return distance;
+    }
+    public static double motorTicksToRadians(double ticks) {
+        double rev = ticks/(MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class).getTicksPerRev());
+        double radians = 2*Math.PI*rev;
+        return radians;
     }
 }

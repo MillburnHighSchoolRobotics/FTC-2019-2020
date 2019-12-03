@@ -22,6 +22,7 @@ public class ChainBar {
         this.clawClamp = clawClamp;
         this.clawRotate = clawRotate;
 
+        //TODO: lmao redo half this shit w the potentiometer
         chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         chainBar.setDirection(REVERSE);
@@ -37,7 +38,7 @@ public class ChainBar {
     public void normalClaw() {
         clawRotate.setPosition(CLAW_NORMAL_POS);
     }
-    public void rotateClaw() {
+    public void rotatedClaw() {
         clawRotate.setPosition(CLAW_ROTATE_POS);
     }
     public void chainBarIn() {

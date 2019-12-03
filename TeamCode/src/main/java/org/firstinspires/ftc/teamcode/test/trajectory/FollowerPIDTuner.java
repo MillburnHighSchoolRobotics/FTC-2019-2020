@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.test.roadrunner;
+package org.firstinspires.ftc.teamcode.test.trajectory;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

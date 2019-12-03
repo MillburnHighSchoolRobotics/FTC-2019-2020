@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.test.roadrunner;
+package org.firstinspires.ftc.teamcode.test.trajectory;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
