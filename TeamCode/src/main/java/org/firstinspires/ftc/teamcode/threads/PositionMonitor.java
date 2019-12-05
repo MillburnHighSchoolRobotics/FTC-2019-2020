@@ -51,6 +51,9 @@ public class PositionMonitor extends MonitorThread {
         setValue("x",start.getX());
         setValue("y",start.getY());
         setValue("theta",start.getHeading());
+        setValue("count",count);
+        setValue("orientation", orientation);
+        setValue("rotation", rotation);
     }
     @Override
     protected void loop() {

@@ -41,7 +41,7 @@ public class MohanBot {
 
     private double poseThreshold = 1;
     private double rotationThreshold = 2;
-    private double count;
+    private double count = 0;
 
     private PIDCoefficients rotationPID = new PIDCoefficients(0.005,0.000,0.000);
     private DriveConstraints driveConstraints = new DriveConstraints(
@@ -62,7 +62,6 @@ public class MohanBot {
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);
 
         count = ThreadManager.getInstance().getValue("count", Double.class);
-
         init();
     }
     private void init() {
@@ -71,19 +70,19 @@ public class MohanBot {
         DcMotorEx rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
         DcMotorEx rb = (DcMotorEx)hardwareMap.dcMotor.get("rb");
 
-        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
-        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
-        DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
-
-        Servo clawClamp = hardwareMap.servo.get("clawSquish");
-        Servo clawRotate = hardwareMap.servo.get("clawSpin");
-        Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
-        Servo hookRight = hardwareMap.servo.get("foundationHookRight");
+//        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
+//        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
+//        DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
+//
+//        Servo clawClamp = hardwareMap.servo.get("clawSquish");
+//        Servo clawRotate = hardwareMap.servo.get("clawSpin");
+//        Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
+//        Servo hookRight = hardwareMap.servo.get("foundationHookRight");
 
         drive = new Drive(lf,lb,rf,rb);
-        chainBar = new ChainBar(chainbar,clawClamp,clawRotate);
-        intake = new Intake(intakeLeft,intakeRight);
-        hook = new Hook(hookLeft,hookRight);
+//        chainBar = new ChainBar(chainbar,clawClamp,clawRotate);
+//        intake = new Intake(intakeLeft,intakeRight);
+//        hook = new Hook(hookLeft,hookRight);
     }
 
     public Pose2d getPose() {
@@ -105,7 +104,9 @@ public class MohanBot {
     public void moveTo(Pose2d targetPose, double power) {
         do {
             double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
+            Log.d("absangle", ""+absoluteAngle);
             double relAngle = absoluteAngle-Math.toDegrees(getPose().getHeading());
+            Log.d("relangle", ""+relAngle);
             if (relAngle < 0) {
                 relAngle += 360;
             }
@@ -140,6 +141,7 @@ public class MohanBot {
             lb*=power;
             rf*=power;
             rb*=power;
+
 
             drive.setDrivePower(lf, lb, rf, rb);
         } while (getPose().vec().distTo(targetPose.vec()) > poseThreshold);
