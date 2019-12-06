@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
@@ -39,11 +40,11 @@ public class MohanBot {
 
     private double defaultRotationPower = 0.8;
 
-    private double poseThreshold = 1;
+    private double poseThreshold = 2;
     private double rotationThreshold = 2;
     private double count = 0;
 
-    private PIDCoefficients rotationPID = new PIDCoefficients(0.005,0.000,0.000);
+    private PIDCoefficients rotationPID = new PIDCoefficients(0.014,0.002,0.004);
     private DriveConstraints driveConstraints = new DriveConstraints(
             50.0, 40.0, 0.0,
             Math.toRadians(180), Math.toRadians(180), 0.0
@@ -101,52 +102,89 @@ public class MohanBot {
         return pose;
     }
 
-    public void moveTo(Pose2d targetPose, double power) {
-        do {
-            double absoluteAngle =  Math.toDegrees(Math.atan2(targetPose.getY()-getPose().getY(), targetPose.getX()-getPose().getX()));
-            Log.d("absangle", ""+absoluteAngle);
-            double relAngle = absoluteAngle-Math.toDegrees(getPose().getHeading());
-            Log.d("relangle", ""+relAngle);
-            if (relAngle < 0) {
-                relAngle += 360;
-            }
-            double scale, lf=0, lb=0, rf=0, rb=0;
+    public void moveTo(Vector2d targetPos, double targetHeading, double strafePower, double maxPower) {
+        targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));
+        PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
 
-            if (relAngle >= 0 && relAngle < 90) {
-                scale = Math.tan(Math.toRadians(relAngle-45));
-                lf = 1;
-                lb = scale;
-                rf = scale;
-                rb = 1;
-            } else if (relAngle >= 90 && relAngle < 180) {
-                scale = Math.tan(Math.toRadians(relAngle-135));
-                lf = -scale;
-                lb = 1;
-                rf = 1;
-                rb = -scale;
-            } else if (relAngle >= 180 && relAngle < 270) {
-                scale = Math.tan(Math.toRadians(relAngle-45));
-                lf = -1;
-                lb = -scale;
-                rf = -scale;
-                rb = -1;
-            } else if (relAngle >= 270 && relAngle < 360) {
-                scale = Math.tan(Math.toRadians(relAngle-45));
-                lf = scale;
-                lb = -1;
-                rf = -1;
-                rb = scale;
-            }
-            lf*=power;
-            lb*=power;
-            rf*=power;
-            rb*=power;
 
+        ElapsedTime time = new ElapsedTime();
+        double lastTime = -1;
+
+        boolean strafe = true;
+        while (!shouldStop()) {
+            if (getPose().vec().distTo(targetPos) <= poseThreshold) {
+                strafe = false;
+            }
+            double scale, lf = 0, lb = 0, rf = 0, rb = 0;
+            if (strafe) {
+                double absoluteAngle = Math.toDegrees(Math.atan2(targetPos.getY() - getPose().getY(), targetPos.getX() - getPose().getX()));
+                Log.d("absangle", "" + absoluteAngle);
+                double relAngle = absoluteAngle - Math.toDegrees(getPose().getHeading());
+                Log.d("relangle", "" + relAngle);
+                if (relAngle < 0) {
+                    relAngle += 360;
+                }
+
+                if (relAngle >= 0 && relAngle < 90) {
+                    scale = Math.tan(Math.toRadians(relAngle - 45));
+                    lf = 1;
+                    lb = scale;
+                    rf = scale;
+                    rb = 1;
+                } else if (relAngle >= 90 && relAngle < 180) {
+                    scale = Math.tan(Math.toRadians(relAngle - 135));
+                    lf = -scale;
+                    lb = 1;
+                    rf = 1;
+                    rb = -scale;
+                } else if (relAngle >= 180 && relAngle < 270) {
+                    scale = Math.tan(Math.toRadians(relAngle - 45));
+                    lf = -1;
+                    lb = -scale;
+                    rf = -scale;
+                    rb = -1;
+                } else if (relAngle >= 270 && relAngle < 360) {
+                    scale = Math.tan(Math.toRadians(relAngle - 45));
+                    lf = scale;
+                    lb = -1;
+                    rf = -1;
+                    rb = scale;
+                }
+                lf *= strafePower;
+                lb *= strafePower;
+                rf *= strafePower;
+                rb *= strafePower;
+            }
+
+            double currentHeading = Math.toDegrees(getPose().getHeading());
+            if (currentHeading - targetHeading > 180) {
+                currentHeading -= 360;
+            } else if (targetHeading - currentHeading > 180) {
+                currentHeading += 360;
+            }
+            double output = pidController.getPIDOutput(currentHeading);
+            Log.d("turn pid", "output - " + output);
+            Log.d("turn pid", "current heading - " + currentHeading);
+            Log.d("turn pid", "target heading - " + targetHeading);
+            if (MathUtils.equals(currentHeading, targetHeading, rotationThreshold) && !strafe) {
+                if (lastTime == -1) lastTime = time.milliseconds();
+                else if (time.milliseconds() - lastTime > 50) {
+                    drive.stop();
+                    break;
+
+                }
+            } else {
+                lastTime = -1;
+            }
+
+            double maxDrivePower = MathUtils.maxArray(new double[] {lf,lb,rf,rb});
+            lf -= (maxPower-maxDrivePower)*output;
+            lb -= (maxPower-maxDrivePower)*output;
+            rf += (maxPower-maxDrivePower)*output;
+            rb += (maxPower-maxDrivePower)*output;
 
             drive.setDrivePower(lf, lb, rf, rb);
-        } while (getPose().vec().distTo(targetPose.vec()) > poseThreshold);
-
-        drive.stop();
+        }
     }
 
     public void rotate(double angle) throws InterruptedException {

@@ -39,14 +39,14 @@ public class SpamRotate extends LinearOpMode {
 
             robot.setTurnPID(new PIDCoefficients(p,i,d));
 
-            robot.rotate(90,1);
-            Thread.sleep(1000);
-
             telemetry.addData("p", p+"");
             telemetry.addData("i", i+"");
             telemetry.addData("d", d+"");
-            telemetry.addData("heading",""+robot.getPose().getHeading());
+            telemetry.addData("heading",""+Math.toDegrees(robot.getPose().getHeading()));
             telemetry.update();
+
+            robot.rotate(90,1);
+            Thread.sleep(1000);
         }
     }
 }
