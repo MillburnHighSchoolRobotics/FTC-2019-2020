@@ -102,7 +102,7 @@ public class MohanBot {
         return pose;
     }
 
-    public void moveTo(Vector2d targetPos, double targetHeading, double strafePower, double maxPower) {
+    public void moveTo(Vector2d targetPos, double targetHeading, double strafePower, double rotationPower) {
         targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));
         PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
 
@@ -112,14 +112,15 @@ public class MohanBot {
 
         boolean strafe = true;
         while (!shouldStop()) {
-            if (getPose().vec().distTo(targetPos) <= poseThreshold) {
+            Pose2d currentPose = getPose();
+            if (currentPose.vec().distTo(targetPos) <= poseThreshold) {
                 strafe = false;
             }
             double scale, lf = 0, lb = 0, rf = 0, rb = 0;
             if (strafe) {
-                double absoluteAngle = Math.toDegrees(Math.atan2(targetPos.getY() - getPose().getY(), targetPos.getX() - getPose().getX()));
+                double absoluteAngle = Math.toDegrees(Math.atan2(targetPos.getY() - currentPose.getY(), targetPos.getX() - currentPose.getX()));
                 Log.d("absangle", "" + absoluteAngle);
-                double relAngle = absoluteAngle - Math.toDegrees(getPose().getHeading());
+                double relAngle = absoluteAngle - Math.toDegrees(currentPose.getHeading());
                 Log.d("relangle", "" + relAngle);
                 if (relAngle < 0) {
                     relAngle += 360;
@@ -156,7 +157,7 @@ public class MohanBot {
                 rb *= strafePower;
             }
 
-            double currentHeading = Math.toDegrees(getPose().getHeading());
+            double currentHeading = Math.toDegrees(currentPose.getHeading());
             if (currentHeading - targetHeading > 180) {
                 currentHeading -= 360;
             } else if (targetHeading - currentHeading > 180) {
@@ -178,10 +179,10 @@ public class MohanBot {
             }
 
             double maxDrivePower = MathUtils.maxArray(new double[] {lf,lb,rf,rb});
-            lf -= (maxPower-maxDrivePower)*output;
-            lb -= (maxPower-maxDrivePower)*output;
-            rf += (maxPower-maxDrivePower)*output;
-            rb += (maxPower-maxDrivePower)*output;
+            lf -= rotationPower*output;
+            lb -= rotationPower*output;
+            rf += rotationPower*output;
+            rb += rotationPower*output;
 
             drive.setDrivePower(lf, lb, rf, rb);
         }
@@ -248,7 +249,8 @@ public class MohanBot {
             Pose2d targetVelocity = follower.update(getPose());
             drive.setDriveVelocity(targetVelocity);
         }
-        drive.stop();
+        Pose2d end = follower.getEndPose();
+        moveTo(end.vec(),Math.toDegrees(end.getHeading()),0.8,0.2);
     }
 
     public PIDCoefficients getTurnPID() {

@@ -25,6 +25,11 @@ public class TrajectoryFollower {
         Log.d("trajectoryfollower","Target Robot Velocity: " + targetRobotVelocity.toString());
         return targetRobotVelocity;
     }
+    public Pose2d getEndPose() {
+        Pose2d endTrajectory = trajectory.end();
+        Pose2d end = new Pose2d(-endTrajectory.getY(),endTrajectory.getX(),endTrajectory.getHeading());
+        return end;
+    }
     public boolean activeTrajectory() {
         return e.seconds() < trajectory.duration();
     }
