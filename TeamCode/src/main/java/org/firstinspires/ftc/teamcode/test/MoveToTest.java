@@ -18,6 +18,8 @@ public class MoveToTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.moveTo(new Vector2d(24 ,24), 0,0.8,0.3);
+//        drive.moveTo(new Vector2d(24 ,24), 0,0.8,0.3);
+
+        drive.strafeTo(new Vector2d(24,24),0.8);
     }
 }

@@ -102,6 +102,50 @@ public class MohanBot {
         return pose;
     }
 
+    public void strafeTo(Vector2d targetPos, double strafePower) {
+        Pose2d currentPose;
+        do {
+            currentPose = getPose();
+            double scale, lf = 0, lb = 0, rf = 0, rb = 0;
+            double absoluteAngle = Math.atan2(targetPos.getY() - currentPose.getY(), targetPos.getX() - currentPose.getX());
+            Log.d("absangle", "" + absoluteAngle);
+            double relAngle = Math.toDegrees(MathUtils.normalize(absoluteAngle - currentPose.getHeading()));
+            Log.d("relangle", "" + relAngle);
+
+            if (relAngle >= 0 && relAngle < 90) {
+                scale = Math.tan(Math.toRadians(relAngle - 45));
+                lf = 1;
+                lb = scale;
+                rf = scale;
+                rb = 1;
+            } else if (relAngle >= 90 && relAngle < 180) {
+                scale = Math.tan(Math.toRadians(relAngle - 135));
+                lf = -scale;
+                lb = 1;
+                rf = 1;
+                rb = -scale;
+            } else if (relAngle >= 180 && relAngle < 270) {
+                scale = Math.tan(Math.toRadians(relAngle - 45));
+                lf = -1;
+                lb = -scale;
+                rf = -scale;
+                rb = -1;
+            } else if (relAngle >= 270 && relAngle < 360) {
+                scale = Math.tan(Math.toRadians(relAngle - 45));
+                lf = scale;
+                lb = -1;
+                rf = -1;
+                rb = scale;
+            }
+            lf *= strafePower;
+            lb *= strafePower;
+            rf *= strafePower;
+            rb *= strafePower;
+            drive.setDrivePower(lf, lb, rf, rb);
+        } while (currentPose.vec().distTo(targetPos) > poseThreshold);
+        drive.setDrivePower(0);
+    }
+
     public void moveTo(Vector2d targetPos, double targetHeading, double strafePower, double rotationPower) {
         targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));
         PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
