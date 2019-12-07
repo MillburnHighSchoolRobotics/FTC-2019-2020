@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.robot;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.path.PathBuilder;
+import com.acmerobotics.roadrunner.path.QuinticPolynomial;
+import com.acmerobotics.roadrunner.path.QuinticSpline;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.util.ElapsedTime;
 

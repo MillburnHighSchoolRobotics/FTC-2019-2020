@@ -125,13 +125,13 @@ public class MohanBot {
                 rf = 1;
                 rb = -scale;
             } else if (relAngle >= 180 && relAngle < 270) {
-                scale = Math.tan(Math.toRadians(relAngle - 45));
+                scale = Math.tan(Math.toRadians(relAngle - 225));
                 lf = -1;
                 lb = -scale;
                 rf = -scale;
                 rb = -1;
             } else if (relAngle >= 270 && relAngle < 360) {
-                scale = Math.tan(Math.toRadians(relAngle - 45));
+                scale = Math.tan(Math.toRadians(relAngle - 315));
                 lf = scale;
                 lb = -1;
                 rf = -1;
@@ -162,13 +162,10 @@ public class MohanBot {
             }
             double scale, lf = 0, lb = 0, rf = 0, rb = 0;
             if (strafe) {
-                double absoluteAngle = Math.toDegrees(Math.atan2(targetPos.getY() - currentPose.getY(), targetPos.getX() - currentPose.getX()));
+                double absoluteAngle = Math.atan2(targetPos.getY() - currentPose.getY(), targetPos.getX() - currentPose.getX());
                 Log.d("absangle", "" + absoluteAngle);
-                double relAngle = absoluteAngle - Math.toDegrees(currentPose.getHeading());
+                double relAngle = Math.toDegrees(MathUtils.normalize(absoluteAngle - currentPose.getHeading()));
                 Log.d("relangle", "" + relAngle);
-                if (relAngle < 0) {
-                    relAngle += 360;
-                }
 
                 if (relAngle >= 0 && relAngle < 90) {
                     scale = Math.tan(Math.toRadians(relAngle - 45));
@@ -183,13 +180,13 @@ public class MohanBot {
                     rf = 1;
                     rb = -scale;
                 } else if (relAngle >= 180 && relAngle < 270) {
-                    scale = Math.tan(Math.toRadians(relAngle - 45));
+                    scale = Math.tan(Math.toRadians(relAngle - 225));
                     lf = -1;
                     lb = -scale;
                     rf = -scale;
                     rb = -1;
                 } else if (relAngle >= 270 && relAngle < 360) {
-                    scale = Math.tan(Math.toRadians(relAngle - 45));
+                    scale = Math.tan(Math.toRadians(relAngle - 315));
                     lf = scale;
                     lb = -1;
                     rf = -1;
