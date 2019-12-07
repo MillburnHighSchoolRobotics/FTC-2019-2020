@@ -10,6 +10,9 @@ public class GlobalConstants {
 
     public static SIDE side;
 
+    public static final double TILE_WIDTH = 24.0;
+    public static final double BASEPLATE_WIDTH = 34;
+
     public static final double WHEEL_RADIUS = 2;
     public static final double WHEEL_BASE = 17.5;
     public static final double TRACK_WIDTH = 15.5;

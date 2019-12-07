@@ -35,10 +35,10 @@ public class Drive {
     public void setDriveVelocity(Pose2d velocity) {
         double k = (WHEEL_BASE+TRACK_WIDTH)/2;
         double[] linearVelocity = new double[] {
-                velocity.getX()-velocity.getY()-k*velocity.getHeading(),
-                velocity.getX()+velocity.getY()-k*velocity.getHeading(),
-                velocity.getX()+velocity.getY()+k*velocity.getHeading(),
-                velocity.getX()-velocity.getY()+k*velocity.getHeading()
+                velocity.getY()+velocity.getX()-k*velocity.getHeading(),
+                velocity.getY()-velocity.getX()-k*velocity.getHeading(),
+                velocity.getY()-velocity.getX()+k*velocity.getHeading(),
+                velocity.getY()+velocity.getX()+k*velocity.getHeading()
         };
 
         double[] angularVelocity = new double[linearVelocity.length];

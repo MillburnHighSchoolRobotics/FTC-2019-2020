@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.MohanBot;
 @Config
 @Autonomous(group = "drive")
 public class StraightTest extends LinearOpMode {
-    public static double DISTANCE = 96;
+    public static double DISTANCE = 24;
 
     @Override
     public void runOpMode() throws InterruptedException {

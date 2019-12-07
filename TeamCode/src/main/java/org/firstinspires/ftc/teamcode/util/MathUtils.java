@@ -67,7 +67,7 @@ public class MathUtils {
         return (value-lower1)*(upper2-lower2)/(upper1-lower1)+lower2;
     }
     public static double maxArray(double[] array) {
-        double max = array[0];
+        double max = Math.abs(array[0]);
         for (double a : array) {
             if (Math.abs(a) > max) {
                 max = Math.abs(a);
