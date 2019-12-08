@@ -30,8 +30,8 @@ public class DriversPickUpYourControllers extends OpMode {
     double chainBarPower = 0.8;
     double drivePower = 1;
     double liftExtensionPower = 1;
-    double liftRetractionPower = -0.5;
-    double liftHoldPower = 0.5;
+    double liftRetractionPower = -0.1;
+    double liftHoldPower = 0.25;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -105,7 +105,7 @@ public class DriversPickUpYourControllers extends OpMode {
         rb.setDirection(REVERSE);
         intakeL.setDirection(REVERSE);
         chainBar.setDirection(REVERSE);
-        lift.setDirection(REVERSE);
+//        lift.setDirection(REVERSE);
 
         chainBar.setTargetPositionTolerance(50);
         lift.setTargetPositionTolerance(25);
