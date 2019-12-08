@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.test.trajectory;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
-import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
+
+import static org.firstinspires.ftc.teamcode.robot.MohanBot.convertPose;
 
 
 @Autonomous(group = "drive")
@@ -20,7 +21,7 @@ public class SplineTest extends LinearOpMode {
 
         drive.followTrajectory(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(36,-24,0), new SplineInterpolator(2*Math.PI,3*Math.PI/2))
+                        .splineTo(convertPose(new Pose2d(24,24,0)), new ConstantInterpolator(0))
                         .build()
         );
         Thread.sleep(1000);

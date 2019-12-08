@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
@@ -14,7 +15,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
@@ -50,7 +50,7 @@ public class MohanBot {
             Math.toRadians(180), Math.toRadians(180), 0.0
     );
 
-    TrajectoryFollower follower = new TrajectoryFollower();
+    PurePursuitFollower follower = new PurePursuitFollower();
 
     public MohanBot(HardwareMap hardwareMap, LinearOpMode opMode) {
         this(hardwareMap, opMode, new Pose2d());
@@ -100,6 +100,44 @@ public class MohanBot {
         Pose2d pose = new Pose2d(x,y,theta);
         Log.d("Pose", pose.toString());
         return pose;
+    }
+    public void toVector(Pose2d currentPose, Vector2d targetVector, double strafePower) {
+        double scale, lf = 0, lb = 0, rf = 0, rb = 0;
+        double absoluteAngle = Math.atan2(targetVector.getY() - currentPose.getY(), targetVector.getX() - currentPose.getX());
+        Log.d("absangle", "" + absoluteAngle);
+        double relAngle = Math.toDegrees(MathUtils.normalize(absoluteAngle - currentPose.getHeading()));
+        Log.d("relangle", "" + relAngle);
+
+        if (relAngle >= 0 && relAngle < 90) {
+            scale = Math.tan(Math.toRadians(relAngle - 45));
+            lf = 1;
+            lb = scale;
+            rf = scale;
+            rb = 1;
+        } else if (relAngle >= 90 && relAngle < 180) {
+            scale = Math.tan(Math.toRadians(relAngle - 135));
+            lf = -scale;
+            lb = 1;
+            rf = 1;
+            rb = -scale;
+        } else if (relAngle >= 180 && relAngle < 270) {
+            scale = Math.tan(Math.toRadians(relAngle - 225));
+            lf = -1;
+            lb = -scale;
+            rf = -scale;
+            rb = -1;
+        } else if (relAngle >= 270 && relAngle < 360) {
+            scale = Math.tan(Math.toRadians(relAngle - 315));
+            lf = scale;
+            lb = -1;
+            rf = -1;
+            rb = scale;
+        }
+        lf *= strafePower;
+        lb *= strafePower;
+        rf *= strafePower;
+        rb *= strafePower;
+        drive.setDrivePower(lf, lb, rf, rb);
     }
 
     public void strafeTo(Vector2d targetPos, double strafePower) {
@@ -285,13 +323,20 @@ public class MohanBot {
     }
 
     public void followTrajectory(Trajectory trajectory) {
-        follower.followTrajectory(trajectory);
-        while (follower.activeTrajectory()) {
-            Pose2d targetVelocity = follower.update(getPose());
-            drive.setDriveVelocity(targetVelocity);
+        Path path = trajectory.getPath();
+        follower.follow(path);
+        Pose2d currentPose = getPose();
+        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,poseThreshold)) {
+            Vector2d targetVector = follower.update(currentPose);
+            toVector(currentPose, targetVector, 0.2);
         }
-        Pose2d end = follower.getEndPose();
-        moveTo(end.vec(),Math.toDegrees(end.getHeading()),0.8,0.2);
+        drive.stop();
+    }
+    public static Vector2d convertVector(Vector2d v) {
+        return new Vector2d(v.getY(),-v.getX());
+    }
+    public static Pose2d convertPose(Pose2d p) {
+        return new Pose2d(p.getY(),-p.getX(),p.getHeading());
     }
 
     public PIDCoefficients getTurnPID() {
