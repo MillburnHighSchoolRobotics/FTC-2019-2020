@@ -52,7 +52,7 @@ public class RedAutonToBlock extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //forwards, to wall, on first tile beyond bridge, sideplate on tile edge nearest to audience
-        BarkerClass barker = new BarkerClass(hardwareMap);
+        BarkerClass barker = new BarkerClass(hardwareMap, SIDE.RED);
 
         MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(-63, TILE_WIDTH + BOT_WIDTH / 2, Math.toRadians(90)));
 
@@ -68,7 +68,7 @@ public class RedAutonToBlock extends LinearOpMode {
             if (pos == 1) {
                 robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(30);
                 robot.intake.intakeIn();
                 robot.strafeTo(new Vector2d(17, -19),
                         DEFAULT_STRAFE_POWER);
@@ -79,7 +79,7 @@ public class RedAutonToBlock extends LinearOpMode {
             else if (pos == 2) {
                 robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-8),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(30);
                 robot.intake.intakeIn();
                 robot.strafeTo(new Vector2d(17, -27),
                         DEFAULT_STRAFE_POWER);
@@ -90,7 +90,7 @@ public class RedAutonToBlock extends LinearOpMode {
             else {
                 robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-16),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(30);
                 robot.intake.intakeIn();
                 robot.strafeTo(new Vector2d(17, -35),
                         DEFAULT_STRAFE_POWER);
@@ -106,37 +106,44 @@ public class RedAutonToBlock extends LinearOpMode {
 
         //second block
             if (pos == 1) {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH),
+                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(180);
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
+                        DEFAULT_STRAFE_POWER);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -19),
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH+4),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -19),
-                        DEFAULT_STRAFE_POWER);
+                robot.intake.intakeStop();
             }
             if (pos == 2) {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-8),
+                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(180);
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
+                        DEFAULT_STRAFE_POWER);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -27),
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH-4),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -27),
-                        DEFAULT_STRAFE_POWER);
+                robot.intake.intakeStop();
             }
             else {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-16),
+                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30); //heading 90->30
+                robot.rotateTo(180);
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
+                        DEFAULT_STRAFE_POWER);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -35),
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH-12),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -35),
-                        DEFAULT_STRAFE_POWER);
+                robot.intake.intakeStop();
             }
+
+            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
+                    DEFAULT_STRAFE_POWER);
+
+            robot.rotateTo(0);
+
+            robot.intake.intakeOut();
     }
 }
