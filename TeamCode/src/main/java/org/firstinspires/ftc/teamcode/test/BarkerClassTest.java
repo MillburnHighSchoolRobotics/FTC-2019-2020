@@ -3,41 +3,37 @@ package org.firstinspires.ftc.teamcode.test;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.robot.MohanBot;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.util.BarkerClass;
+import org.firstinspires.ftc.teamcode.util.SkystoneDetector;
+import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
+import org.opencv.android.OpenCVLoader;
 
 
-@Autonomous(group = "auton")
-@Disabled
+@Autonomous(group = "test")
 public class BarkerClassTest extends LinearOpMode {
-
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot drive = new MohanBot(hardwareMap,this);
         BarkerClass barker = new BarkerClass(hardwareMap);
 
-        barker.setupCam();
+        telemetry.addData("Status", "Loading");
+        telemetry.update();
+
+        barker.init();
+
+        telemetry.addData("Status", "Loaded!");
+        telemetry.update();
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
-        drive.followTrajectory(
-                drive.trajectoryBuilder()
-                        .forward(10)
-                        .build()
-        );
-
         int pos = barker.getPos();
-        telemetry.addData("barker",pos);
+
+        telemetry.addData("fuck",pos);
         telemetry.update();
-        Log.d("barker",pos+"");
-        while (!isStopRequested()) {
-            Thread.sleep(10);
-        }
+        Log.d("fuck",pos+"");
     }
 }

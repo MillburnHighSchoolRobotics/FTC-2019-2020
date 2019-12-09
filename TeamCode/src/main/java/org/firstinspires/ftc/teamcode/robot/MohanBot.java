@@ -71,8 +71,8 @@ public class MohanBot {
         DcMotorEx rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
         DcMotorEx rb = (DcMotorEx)hardwareMap.dcMotor.get("rb");
 
-//        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
-//        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
+        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
+        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
 //        DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
 //
 //        Servo clawClamp = hardwareMap.servo.get("clawSquish");
@@ -82,7 +82,7 @@ public class MohanBot {
 
         drive = new Drive(lf,lb,rf,rb);
 //        chainBar = new ChainBar(chainbar,clawClamp,clawRotate);
-//        intake = new Intake(intakeLeft,intakeRight);
+        intake = new Intake(intakeLeft,intakeRight);
 //        hook = new Hook(hookLeft,hookRight);
     }
 

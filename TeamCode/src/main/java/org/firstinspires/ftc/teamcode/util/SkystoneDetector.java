@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.util;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -18,6 +19,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SkystoneDetector {
+
+    public static double BLUE_LINE_1_X = 60;
+    public static double BLUE_LINE_2_X = 260;
+    public static double BLUE_LINE_3_X = 470;
+    public static double RED_LINE_1_X = 40;
+    public static double RED_LINE_2_X = 245;
+    public static double RED_LINE_3_X = 445;
+
     static {
         OpenCVLoader.initDebug();
     }
@@ -75,19 +84,19 @@ public class SkystoneDetector {
         }
 
         int pos = -1;
-        if (GlobalConstants.side == GlobalConstants.SIDE.BLUE) {
-            if (centroid.x > 30 && centroid.x < 225)
+        if (side == SIDE.BLUE) {
+            if (centroid.x > BLUE_LINE_1_X && centroid.x < BLUE_LINE_2_X)
                 pos = 1;
-            else if (centroid.x > 225 && centroid.x < 420)
+            else if (centroid.x > BLUE_LINE_2_X && centroid.x < BLUE_LINE_3_X)
                 pos = 2;
-            else if (centroid.x > 420 && centroid.x < 625)
+            else if (centroid.x > BLUE_LINE_3_X)
                 pos = 3;
         } else {
-            if (centroid.x > 50 && centroid.x < 240)
+            if (centroid.x > RED_LINE_1_X && centroid.x < RED_LINE_2_X)
                 pos = 1;
-            else if ((centroid.x > 430 && centroid.x < 640) || (centroid.x < 50))
+            else if (centroid.x > RED_LINE_3_X || centroid.x < RED_LINE_1_X)
                 pos = 2;
-            else if (centroid.x > 240 && centroid.x < 430)
+            else if (centroid.x > RED_LINE_2_X && centroid.x < RED_LINE_3_X)
                 pos = 3;
         }
 

@@ -15,14 +15,16 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 public class RedAutonBaseplate extends LinearOpMode {
 
     private static double BOT_WIDTH = 18.0;
-    private static double DEFAULT_STRAFE_POWER = 0.8;
+    private static double DEFAULT_STRAFE_POWER = 0.7;
     private static double DEFAULT_ROTATION_POWER = 0.2;
     private static double BASEPLATE_ALIGNMENT_Y = 49; //24 + 8 + 34/2
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //backwards, to wall, sideplate on tile edge nearest to bridge
+        //backwards, to wall, on tile closest to red triangle, sideplate on tile edge nearest to bridge
         MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(63, TILE_WIDTH + BOT_WIDTH/2, Math.toRadians(270)));
+
+
 
         waitForStart();
 
@@ -40,7 +42,7 @@ public class RedAutonBaseplate extends LinearOpMode {
 //        Thread.sleep(1000);
 //
 //        robot.strafeTo(new Vector2d(63, BASEPLATE_ALIGNMENT_Y),
-//                DEFAULT_STRAFE_POWER);
+//                0.4);
 //
 //        //robot.hook.hookUp();
 //        Thread.sleep(1000);

@@ -24,9 +24,9 @@ public class FPSTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        er = (DcMotorEx) hardwareMap.dcMotor.get("er");
-        el = (DcMotorEx) hardwareMap.dcMotor.get("el");
-        eb = (DcMotorEx) hardwareMap.dcMotor.get("eb");
+        er = (DcMotorEx) hardwareMap.dcMotor.get("lift");
+        el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
+        eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -38,6 +38,8 @@ public class FPSTest extends LinearOpMode {
         manager.setHardwareMap(hardwareMap);
         manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d());
         waitForStart();
+
+        if (isStopRequested()) return;
 
         while (!shouldStop()) {
             telemetry.addData("theta", Math.toDegrees(ThreadManager.getInstance().getValue("theta", Double.class)));
