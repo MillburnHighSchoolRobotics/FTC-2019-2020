@@ -62,7 +62,7 @@ public class RedAutonToBlock extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        int pos = barker.getPos();
+        int pos = barker.bark();
 
         //first block
             if (pos == 1) {

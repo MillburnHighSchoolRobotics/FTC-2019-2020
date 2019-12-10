@@ -50,7 +50,7 @@ public class RedAutonDoubleMineral extends LinearOpMode {
 
         BarkerClass fuck = new BarkerClass(hardwareMap, GlobalConstants.SIDE.RED);
 
-        int skystone = fuck.getPos();
+        int skystone = fuck.bark();
         telemetry.addData("cv",skystone+"");
         telemetry.update();
 

@@ -24,7 +24,7 @@ public class SkystoneDetectorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GlobalConstants.side = GlobalConstants.SIDE.BLUE;
+        GlobalConstants.side = GlobalConstants.SIDE.RED;
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 

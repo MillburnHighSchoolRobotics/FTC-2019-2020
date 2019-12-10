@@ -6,6 +6,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
+import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -20,6 +21,14 @@ import java.util.List;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 public class BarkerClass {
+    static {
+        if(OpenCVLoader.initDebug()) {
+            Log.d("opencv","yay it works");
+        } else {
+            Log.d("opencv","nope it doesnt work");
+        }
+    }
+
     static private HardwareMap hardwareMap;
     static private VuforiaLocalizerImplSubclass vuforiaInstance;
 
@@ -33,13 +42,15 @@ public class BarkerClass {
     private int widthCamera;
     private int heightCamera;
 
+    private VuforiaLocalizer.Parameters params;
+
     public BarkerClass(HardwareMap hardwareMap, GlobalConstants.SIDE side) {
         this.hardwareMap = hardwareMap;
         GlobalConstants.side = side;
     }
 
     public void init() {
-        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
+        params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
@@ -48,7 +59,7 @@ public class BarkerClass {
         vuforiaInstance = new VuforiaLocalizerImplSubclass(params);
     }
 
-    public int getPos() {
+    public int bark() {
         widthCamera = vuforiaInstance.rgb.getBufferWidth();
         heightCamera = vuforiaInstance.rgb.getHeight();
 
@@ -90,6 +101,7 @@ public class BarkerClass {
                 centroid.y = moments.get_m01() / moments.get_m00();
             }
         }
+        Log.d("whore",""+centroid.x);
         for (MatOfPoint mat : contours) {
             mat.release();
         }

@@ -23,9 +23,9 @@ public class SkystoneDetector {
     public static double BLUE_LINE_1_X = 60;
     public static double BLUE_LINE_2_X = 260;
     public static double BLUE_LINE_3_X = 470;
-    public static double RED_LINE_1_X = 40;
-    public static double RED_LINE_2_X = 245;
-    public static double RED_LINE_3_X = 445;
+    private static double RED_LINE_1_X = 20;
+    private static double RED_LINE_2_X = 225;
+    private static double RED_LINE_3_X = 425;
 
     static {
         OpenCVLoader.initDebug();
@@ -79,6 +79,7 @@ public class SkystoneDetector {
                 centroid.y = moments.get_m01() / moments.get_m00();
             }
         }
+        Log.d("whore",""+centroid.x);
         for (MatOfPoint mat : contours) {
             mat.release();
         }
