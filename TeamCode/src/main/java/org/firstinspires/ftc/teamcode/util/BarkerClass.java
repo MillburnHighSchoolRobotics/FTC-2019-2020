@@ -23,12 +23,12 @@ public class BarkerClass {
     static private HardwareMap hardwareMap;
     static private VuforiaLocalizerImplSubclass vuforiaInstance;
 
-    private static double BLUE_LINE_1_X = 60;
-    private static double BLUE_LINE_2_X = 260;
-    private static double BLUE_LINE_3_X = 470;
-    private static double RED_LINE_1_X = 40;
-    private static double RED_LINE_2_X = 245;
-    private static double RED_LINE_3_X = 445;
+    private static double BLUE_LINE_1_X = 80;
+    private static double BLUE_LINE_2_X = 280;
+    private static double BLUE_LINE_3_X = 480;
+    private static double RED_LINE_1_X = 20;
+    private static double RED_LINE_2_X = 225;
+    private static double RED_LINE_3_X = 425;
 
     private int widthCamera;
     private int heightCamera;
@@ -40,8 +40,10 @@ public class BarkerClass {
 
     public void init() {
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
+
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        params.vuforiaLicenseKey = VUFORIA_KEY;
+
+        params.vuforiaLicenseKey = GlobalConstants.VUFORIA_KEY;
 
         vuforiaInstance = new VuforiaLocalizerImplSubclass(params);
     }

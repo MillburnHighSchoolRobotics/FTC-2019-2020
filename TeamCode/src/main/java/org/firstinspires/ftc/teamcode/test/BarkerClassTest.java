@@ -32,8 +32,10 @@ public class BarkerClassTest extends LinearOpMode {
 
         int pos = barker.getPos();
 
-        telemetry.addData("fuck",pos);
+        telemetry.addData("Block",pos);
         telemetry.update();
-        Log.d("fuck",pos+"");
+        Log.d("Block",pos+"");
+
+        Thread.sleep(5);
     }
 }
