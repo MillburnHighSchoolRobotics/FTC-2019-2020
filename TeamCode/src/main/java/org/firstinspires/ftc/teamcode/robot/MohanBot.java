@@ -326,17 +326,26 @@ public class MohanBot {
         Path path = trajectory.getPath();
         follower.follow(path);
         Pose2d currentPose = getPose();
-        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,poseThreshold)) {
+        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,poseThreshold) && !shouldStop()) {
+            Log.d("pure pursuit", "loop");
             Vector2d targetVector = follower.update(currentPose);
             toVector(currentPose, targetVector, 0.2);
+            currentPose = getPose();
         }
+
         drive.stop();
     }
-    public static Vector2d convertVector(Vector2d v) {
+    public static Vector2d convertVectorToRR(Vector2d v) {
         return new Vector2d(v.getY(),-v.getX());
     }
-    public static Pose2d convertPose(Pose2d p) {
+    public static Vector2d convertVectorFromRR(Vector2d v) {
+        return new Vector2d(-v.getY(),v.getX());
+    }
+    public static Pose2d convertPoseToRR(Pose2d p) {
         return new Pose2d(p.getY(),-p.getX(),p.getHeading());
+    }
+    public static Pose2d convertPoseFromRR(Pose2d p) {
+        return new Pose2d(-p.getY(),p.getX(),p.getHeading());
     }
 
     public PIDCoefficients getTurnPID() {
