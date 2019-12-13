@@ -144,6 +144,7 @@ public class MohanBot {
         Pose2d currentPose;
         do {
             currentPose = getPose();
+            Log.d("iamat", ""+currentPose);
             double scale, lf = 0, lb = 0, rf = 0, rb = 0;
             double absoluteAngle = Math.atan2(targetPos.getY() - currentPose.getY(), targetPos.getX() - currentPose.getX());
             Log.d("absangle", "" + absoluteAngle);
