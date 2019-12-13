@@ -35,9 +35,9 @@ public class BarkerClass {
     private static double BLUE_LINE_1_X = 80;
     private static double BLUE_LINE_2_X = 280;
     private static double BLUE_LINE_3_X = 480;
-    private static double RED_LINE_1_X = 20;
-    private static double RED_LINE_2_X = 225;
-    private static double RED_LINE_3_X = 425;
+    private static double RED_LINE_1_X = 100;
+    private static double RED_LINE_2_X = 450;
+    private static double RED_LINE_3_X = 845;
 
     private int widthCamera;
     private int heightCamera;
@@ -101,7 +101,11 @@ public class BarkerClass {
                 centroid.y = moments.get_m01() / moments.get_m00();
             }
         }
-        Log.d("whore",""+centroid.x);
+        Log.d("watbark",""+centroid.x);
+        Log.d("watbark",""+RED_LINE_1_X);
+        Log.d("watbark",""+RED_LINE_2_X);
+        Log.d("watbark",""+RED_LINE_3_X);
+
         for (MatOfPoint mat : contours) {
             mat.release();
         }
