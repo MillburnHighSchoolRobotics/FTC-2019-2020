@@ -57,14 +57,14 @@ public class BlueAutonSample extends LinearOpMode {
         mohanBot.chainBar.normalClaw();
         switch(skystone) {
             case 1:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .splineTo(new Pose2d(-30,24,Math.toRadians(315)),new LinearInterpolator(3*Math.PI/2,Math.PI/4))
                                 .build()
                 );
 
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .splineTo(new Pose2d(-20,44,Math.PI/2),new LinearInterpolator(Math.toRadians(315),3*Math.PI/4))
                                 .build()
                 );
@@ -72,27 +72,27 @@ public class BlueAutonSample extends LinearOpMode {
                 mohanBot.chainBar.chainBarIn();
                 mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .strafeTo(new Vector2d(60,44))
                                 .build()
                 );
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .strafeTo(new Vector2d(60,44))
                                 .build()
                 );
                 break;
             case 2:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .splineTo(new Pose2d(-38,24,Math.toRadians(315)),new LinearInterpolator(3*Math.PI/2,Math.PI/4))
                                 .build()
                 );
                 Thread.sleep(100);
                 mohanBot.intake.intakeStop();
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .back(6)
                                 .splineTo(new Pose2d(-24,44,Math.PI/2),new LinearInterpolator(Math.toRadians(315),3*Math.PI/4))
                                 .build()
@@ -101,20 +101,20 @@ public class BlueAutonSample extends LinearOpMode {
                 mohanBot.chainBar.chainBarIn();
                 mohanBot.rotateTo(Math.PI/2);
                 Thread.sleep(100);
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .strafeTo(new Vector2d(60,44))
                                 .build()
                 );
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .strafeTo(new Vector2d(60,44))
                                 .build()
                 );
                 break;
             case 3:
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .forward(10)
                                 .splineTo(new Pose2d(-40,24,Math.toRadians(225)),new SplineInterpolator(3*Math.PI/2,Math.toRadians(225)))
                                 .build()
@@ -122,8 +122,8 @@ public class BlueAutonSample extends LinearOpMode {
                 Thread.sleep(100);
                 mohanBot.chainBar.chainBarIn();
                 Thread.sleep(200);
-                mohanBot.followTrajectory(
-                        mohanBot.trajectoryBuilder()
+                mohanBot.follow(
+                        mohanBot.path()
                                 .reverse()
                                 .splineTo(new Pose2d(0,40,Math.PI))
                                 .splineTo(new Pose2d(52,30,Math.PI/2), new SplineInterpolator(Math.PI/2,Math.PI))
@@ -133,8 +133,8 @@ public class BlueAutonSample extends LinearOpMode {
                 break;
         }
         mohanBot.chainBar.closeClaw();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
+        mohanBot.follow(
+                mohanBot.path()
                         .setReversed(false)
                         .back(18)
                         .build()
@@ -143,8 +143,8 @@ public class BlueAutonSample extends LinearOpMode {
         mohanBot.hook.hookDown();
         mohanBot.chainBar.chainBarOut();
         mohanBot.intake.intakeStop();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
+        mohanBot.follow(
+                mohanBot.path()
                         .forward(64)
                         .build()
         );
@@ -152,13 +152,13 @@ public class BlueAutonSample extends LinearOpMode {
         Thread.sleep(700);
         mohanBot.chainBar.chainBarTo(GlobalConstants.CHAINBAR_IN_TICKS);;
         mohanBot.hook.hookUp();
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
+        mohanBot.follow(
+                mohanBot.path()
                         .strafeTo(new Vector2d(12,63))
                         .build()
         );
-        mohanBot.followTrajectory(
-                mohanBot.trajectoryBuilder()
+        mohanBot.follow(
+                mohanBot.path()
                         .reverse()
                         .splineTo(new Pose2d(0,40,0), new SplineInterpolator(Math.PI,Math.PI/2))
                         .build()

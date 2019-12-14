@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.test.trajectory;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.PathBuilder;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
-
-import static org.firstinspires.ftc.teamcode.robot.MohanBot.convertPoseToRR;
 
 
 @Autonomous(group = "drive")
@@ -18,10 +18,9 @@ public class SplineTest extends LinearOpMode {
         if (isStopRequested()) return;
         waitForStart();
 
-
-        drive.followTrajectory(
-                drive.trajectoryBuilder()
-                        .splineTo(convertPoseToRR(new Pose2d(12,36,0)), new ConstantInterpolator(0))
+        drive.follow(
+                drive.path(0)
+                        .splineTo(new Pose2d(new Vector2d(12,36).rotated(-Math.PI/2),0))
                         .build()
         );
         Thread.sleep(1000);

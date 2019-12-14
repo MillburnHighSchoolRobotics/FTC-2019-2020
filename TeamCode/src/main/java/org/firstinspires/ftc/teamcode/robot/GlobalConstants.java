@@ -17,6 +17,8 @@ public class GlobalConstants {
     public static final double WHEEL_BASE = 17.5;
     public static final double TRACK_WIDTH = 15.5;
 
+    public static final double BOT_WIDTH = 18;
+
     public static final double DEAD_WHEEL_DIAMETER = 60/25.4;
     public static final double DEAD_WHEEL_TICKS_PER_REV = 360*4;
     public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
@@ -33,10 +35,10 @@ public class GlobalConstants {
     public static final double CLAW_OPEN_POS = 0.3;
     public static final double CLAW_NORMAL_POS = 0;
     public static final double CLAW_ROTATE_POS = 0.5;
-    public static final double RIGHT_HOOK_DOWN_POS = 0.3;
-    public static final double RIGHT_HOOK_UP_POS = 0.7;
-    public static final double LEFT_HOOK_DOWN_POS = 0.7;
-    public static final double LEFT_HOOK_UP_POS = 0.3;
+    public static final double RIGHT_HOOK_DOWN_POS = 0;
+    public static final double RIGHT_HOOK_UP_POS = 1;
+    public static final double LEFT_HOOK_DOWN_POS = 0;
+    public static final double LEFT_HOOK_UP_POS = 1;
 
     public static final int CHAINBAR_IN_TICKS = 0;
     public static final int CHAINBAR_UP_TICKS = 500;

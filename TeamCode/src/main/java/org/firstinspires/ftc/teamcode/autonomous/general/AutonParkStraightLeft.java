@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.general;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -15,11 +16,8 @@ public class AutonParkStraightLeft extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        robot.followTrajectory(
-                robot.trajectoryBuilder()
-                        .forward(24)
-                        .strafeLeft(24)
-                        .build()
-        );
+        robot.strafeTo(new Vector2d(0,24),0.7);
+        Thread.sleep(100);
+        robot.strafeTo(new Vector2d(-27,24),0.7);
     }
 }

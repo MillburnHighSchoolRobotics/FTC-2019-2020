@@ -60,6 +60,9 @@ public class Drive {
         rf.setPower(rfPower);
         rb.setPower(rbPower);
     }
+    public void setDrivePower(double[] powers) {
+        setDrivePower(powers[0],powers[1],powers[2],powers[3]);
+    }
     public void setDrivePower(double power) {
         setDrivePower(power,power,power,power);
     }

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_OUT_POWER;
 

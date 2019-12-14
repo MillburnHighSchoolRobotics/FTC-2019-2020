@@ -2,15 +2,12 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import android.util.Log;
 
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
-import static org.firstinspires.ftc.teamcode.robot.MohanBot.convertVectorFromRR;
-import static org.firstinspires.ftc.teamcode.robot.MohanBot.convertVectorToRR;
 import static org.firstinspires.ftc.teamcode.robot.MohanBot.shouldStop;
 
 public class PurePursuitFollower {
@@ -18,18 +15,17 @@ public class PurePursuitFollower {
     private double lookahead = 1.5;
     private double lastOnPath = 0.0;
 
-    public void follow(Path path, double lookahead) {
+    public PurePursuitFollower(Path path, double lookahead) {
         this.path = path;
         this.lookahead = lookahead;
     }
-    public void follow(Path path) {
+    public PurePursuitFollower(Path path) {
         this.path = path;
-        Log.d("endPose",convertVectorFromRR(path.end().vec()).toString());
     }
     public Vector2d update(Pose2d currentPose) {
-        double s = projectPoint(convertVectorToRR(currentPose.vec()));
-        Vector2d targetVector = convertVectorFromRR(path.get(s).vec());
-        Vector2d nextVector = convertVectorFromRR(path.get(s+lookahead).vec());
+        double s = projectPoint(currentPose.vec());
+        Vector2d targetVector = (path.get(s).vec().rotated(Math.PI/2));
+        Vector2d nextVector = (path.get(s+lookahead).vec().rotated(Math.PI/2));
 
         Log.d("pure pursuit","S - " + s);
         Log.d("pure pursuit","targetVector - " + targetVector.toString());
@@ -41,13 +37,13 @@ public class PurePursuitFollower {
 
         while (!shouldStop()) {
             Log.d("pure pursuit","project s - " + s);
-            Log.d("pure pursuit","path s pos - " + path.get(s).vec());
-            Vector2d pathPos = path.get(s).vec();
-            Vector2d derivPos = path.deriv(s).vec();
+            Vector2d pathPos = path.get(s).vec().rotated(Math.PI/2);
+            Log.d("pure pursuit","path s pos - " + pathPos.toString());
+            Vector2d derivPos = path.deriv(s).vec().rotated(Math.PI/2);
             Vector2d dPos = currentPos.minus(pathPos);
             double ds = dPos.dot(derivPos);
 
-            if (MathUtils.equals(ds,0.0,0.5)) {
+            if (MathUtils.equals(ds,0.0)) {
                 lastOnPath = s;
                 break;
             }
@@ -62,6 +58,6 @@ public class PurePursuitFollower {
         return s;
     }
     public Vector2d end() {
-        return convertVectorFromRR(path.end().vec());
+        return path.end().vec().rotated(Math.PI/2);
     }
 }
