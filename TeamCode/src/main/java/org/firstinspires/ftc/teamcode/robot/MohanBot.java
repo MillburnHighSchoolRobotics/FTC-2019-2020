@@ -40,7 +40,7 @@ public class MohanBot {
 
     private double defaultRotationPower = 0.8;
 
-    private double poseThreshold = 2;
+    private double poseThreshold = 5;
     private double rotationThreshold = 2;
     private double count = 0;
 

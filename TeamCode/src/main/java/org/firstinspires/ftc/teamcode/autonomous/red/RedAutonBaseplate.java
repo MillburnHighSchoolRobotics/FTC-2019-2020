@@ -22,7 +22,7 @@ public class RedAutonBaseplate extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //backwards, to wall, on tile closest to red triangle, sideplate on tile edge nearest to bridge
-        MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(63, TILE_WIDTH + BOT_WIDTH/2, Math.toRadians(270)));
+        MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(63, 24 + BOT_WIDTH/2, Math.toRadians(270)));
 
 
 
