@@ -17,14 +17,13 @@ public class Intake {
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeL.setDirection(REVERSE);
     }
     public void intakeIn() {
-        intakeL.setPower(INTAKE_IN_POWER);
+        intakeL.setPower(-INTAKE_IN_POWER);
         intakeR.setPower(INTAKE_IN_POWER);
     }
     public void intakeOut() {
-        intakeL.setPower(INTAKE_OUT_POWER);
+        intakeL.setPower(-INTAKE_OUT_POWER);
         intakeR.setPower(INTAKE_OUT_POWER);
     }
     public void intakeStop() {

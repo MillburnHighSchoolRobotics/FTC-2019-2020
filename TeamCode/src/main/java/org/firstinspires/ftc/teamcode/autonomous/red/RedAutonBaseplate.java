@@ -24,29 +24,27 @@ public class RedAutonBaseplate extends LinearOpMode {
         //backwards, to wall, on tile closest to red triangle, sideplate on tile edge nearest to bridge
         MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(63, 24 + BOT_WIDTH/2, Math.toRadians(270)));
 
-
-
         waitForStart();
 
         if (isStopRequested()) return;
 
-//        robot.strafeTo(new Vector2d(48, BASEPLATE_ALIGNMENT_Y),
-//                DEFAULT_STRAFE_POWER);
+        robot.strafeTo(new Vector2d(48, BASEPLATE_ALIGNMENT_Y),
+                DEFAULT_STRAFE_POWER);
 
-//        Thread.sleep(1000);
-//
-//        robot.strafeTo(new Vector2d(24, BASEPLATE_ALIGNMENT_Y),
-//                DEFAULT_STRAFE_POWER);
-//
-//        //robot.hook.hookDown();
-//        Thread.sleep(1000);
-//
-//        robot.strafeTo(new Vector2d(63, BASEPLATE_ALIGNMENT_Y),
-//                0.4);
-//
-//        //robot.hook.hookUp();
-//        Thread.sleep(1000);
-//
+        Thread.sleep(1000);
+
+        robot.strafeTo(new Vector2d(24, BASEPLATE_ALIGNMENT_Y),
+                DEFAULT_STRAFE_POWER);
+
+        //robot.hook.hookDown();
+        Thread.sleep(1000);
+
+        robot.strafeTo(new Vector2d(63, BASEPLATE_ALIGNMENT_Y),
+                0.4);
+
+        //robot.hook.hookUp();
+        Thread.sleep(1000);
+
         robot.strafeTo(new Vector2d(63, 0),
                 DEFAULT_STRAFE_POWER);
     }
