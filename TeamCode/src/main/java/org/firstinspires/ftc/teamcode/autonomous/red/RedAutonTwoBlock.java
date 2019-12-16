@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.red;
 
+import android.service.quicksettings.Tile;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
@@ -26,7 +28,7 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 
 @Autonomous(group = "auton")
-public class RedAutonToBlock extends LinearOpMode {
+public class RedAutonTwoBlock extends LinearOpMode {
 
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false  ;
@@ -45,8 +47,8 @@ public class RedAutonToBlock extends LinearOpMode {
     private float phoneZRotate    = 0;
 
     private static double BOT_WIDTH = 18.0;
-    private static double DEFAULT_STRAFE_POWER = 0.7;
-    private static double DEFAULT_ROTATION_POWER = 0.2;
+    private static double DEFAULT_STRAFE_POWER = 0.5;
+    private static double DEFAULT_ROTATION_POWER = 0.25;
     private static double BASEPLATE_ALIGNMENT_Y = 49; //24 + 8 + 34/2
 
     @Override
@@ -54,7 +56,7 @@ public class RedAutonToBlock extends LinearOpMode {
         //forwards, to wall, on first tile beyond bridge, sideplate on tile edge nearest to audience
 //        BarkerClass barker = new BarkerClass(hardwareMap, SIDE.RED);
 
-        MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(63, 24 + BOT_WIDTH / 2, Math.toRadians(90)));
+        MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(63, -2*TILE_WIDTH + BOT_WIDTH/2, Math.toRadians(90)));
 
         robot.intake.intakeStop();
 
@@ -63,46 +65,47 @@ public class RedAutonToBlock extends LinearOpMode {
         if (isStopRequested()) return;
 
 //        int pos = barker.bark();
-        int pos = 1;
+        int pos = 3;
 
         //first block
             if (pos == 1) {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH),
-                        DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30);
+                robot.strafeTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH+4), DEFAULT_STRAFE_POWER);
+                robot.rotateTo(50);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -19),
-                        DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -19),
-                        DEFAULT_STRAFE_POWER);
+                robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH),
+                        DEFAULT_STRAFE_POWER/2);
+//                //robot.intake.intakeOut();
+//                robot.rotateTo(0);
+//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -19),
+//                        DEFAULT_STRAFE_POWER);
             }
             else if (pos == 2) {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-8),
-                        DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30);
+                robot.strafeTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH-4), DEFAULT_STRAFE_POWER);
+                robot.rotateTo(50);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -27),
-                        DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -27),
-                        DEFAULT_STRAFE_POWER);
+                robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH-8),
+                        DEFAULT_STRAFE_POWER/2);
+                //robot.intake.intakeOut();
+//                robot.rotateTo(0);
+//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -27),
+//                        DEFAULT_STRAFE_POWER);
             } else {
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -7/4*TILE_WIDTH-16),
+                robot.strafeTo(new Vector2d(TILE_WIDTH, -28),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(30);
+                robot.rotateTo(180);
                 robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(17, -35),
+                robot.strafeTo(new Vector2d(robot.getPose().getX(), -32),
                         DEFAULT_STRAFE_POWER);
-                robot.rotateTo(0);
-                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -35),
-                        DEFAULT_STRAFE_POWER);
+                //robot.intake.intakeOut();
+//                robot.rotateTo(0);
+//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -35),
+//                        DEFAULT_STRAFE_POWER);
             }
 
-            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
-                    DEFAULT_STRAFE_POWER);
+//            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
+//                    DEFAULT_STRAFE_POWER);
 
-            robot.intake.intakeOut();
+            //robot.intake.intakeOut();
 
         //second block
 //            if (pos == 1) {

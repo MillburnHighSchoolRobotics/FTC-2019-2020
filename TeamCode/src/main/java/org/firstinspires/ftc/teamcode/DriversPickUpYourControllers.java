@@ -46,8 +46,6 @@ public class DriversPickUpYourControllers extends OpMode {
     public Servo foundationHookLeft;
     public Servo foundationHookRight;
 
-    boolean ascending;
-
     private final int chainBarIntakePosition = 500;
     public static final int[][] POWER_MATRIX = { //for each of the directions
             {1, 1, 1, 1},
@@ -127,8 +125,6 @@ public class DriversPickUpYourControllers extends OpMode {
         toggleSpinTime = new ElapsedTime();
         toggleDriveSpeed = new ElapsedTime();
         toggleHook = new ElapsedTime();
-
-        ascending = false;
     }
 
     @Override
@@ -177,7 +173,7 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSpin.setPosition(spinPos[currentSpinPos]);
             toggleSpinTime.reset();
         }
-        if (gamepad1.x && (toggleHook.milliseconds() > 250)) { //toggle claw rotation
+        if (gamepad1.x && (toggleHook.milliseconds() > 250)) { //toggle hook rotation
             currentHook = 1 - currentHook;
             foundationHookLeft.setPosition(foundationHookPosLeft[currentHook]);
             foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
@@ -192,21 +188,9 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.dpad_up) {
-            if (ascending) {
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-            ascending = true;
-            lift.setPower(liftExtensionPower);
+            lift.setPower(liftHoldPower*getLiftPower(lift.getCurrentPosition()));
         } else if (gamepad1.dpad_down) {
-            if (ascending) {
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-            ascending = false;
-            lift.setPower(liftRetractionPower);
-        } else if (ascending) {
-            lift.setTargetPosition(lift.getCurrentPosition());
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(liftHoldPower);
+            lift.setPower(-1);
         } else {
             lift.setPower(0);
         }
@@ -224,7 +208,8 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
 
-        //
+
+
 
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
@@ -283,5 +268,19 @@ public class DriversPickUpYourControllers extends OpMode {
         lb.setPower(drivePower * powerArray[1]);
         rf.setPower(drivePower * powerArray[2]);
         rb.setPower(drivePower * powerArray[3]);
+    }
+
+    public double getLiftPower(double encoderTicks) {
+        double L = 1;
+        double b = .85;
+        double k = 5.5;
+        double v = 0.9;
+
+        if (encoderTicks >= 0 && encoderTicks < L) {
+            return L/1+Math.pow(Math.E, k*(encoderTicks-b));
+        } else if (encoderTicks >= v && encoderTicks <= 1) {
+            return L/1+Math.pow(Math.E, k*(v-b));
+        }
+        return 0;
     }
 }

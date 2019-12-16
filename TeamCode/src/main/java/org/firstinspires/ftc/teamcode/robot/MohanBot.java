@@ -43,7 +43,7 @@ public class MohanBot {
     public Intake intake;
     public Hook hook;
 
-    private double poseThreshold = 5;
+    private double poseThreshold = 2;
     private double rotationThreshold = 2;
     private double count;
 
