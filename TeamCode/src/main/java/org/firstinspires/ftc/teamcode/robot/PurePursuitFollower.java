@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.robot.MohanBot.shouldStop;
 
 public class PurePursuitFollower {
     private Path path;
-    private double lookahead = 1.5;
+    private double lookahead = 6;
     private double lastOnPath = 0.0;
 
     public PurePursuitFollower(Path path, double lookahead) {
@@ -26,6 +26,9 @@ public class PurePursuitFollower {
         double s = projectPoint(currentPose.vec());
         Vector2d targetVector = (path.get(s).vec().rotated(Math.PI/2));
         Vector2d nextVector = (path.get(s+lookahead).vec().rotated(Math.PI/2));
+        if (MathUtils.equals(s,path.length())) {
+            nextVector = targetVector;
+        }
 
         Log.d("pure pursuit","S - " + s);
         Log.d("pure pursuit","targetVector - " + targetVector.toString());
@@ -33,7 +36,7 @@ public class PurePursuitFollower {
         return nextVector;
     }
     private double projectPoint(Vector2d currentPos) {
-        double s = path.length()/2.0;
+        double s = path.length();
 
         while (!shouldStop()) {
             Log.d("pure pursuit","project s - " + s);

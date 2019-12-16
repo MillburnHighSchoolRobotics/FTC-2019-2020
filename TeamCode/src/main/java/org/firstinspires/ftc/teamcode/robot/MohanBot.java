@@ -252,14 +252,14 @@ public class MohanBot {
         return new PathBuilder(new Pose2d(currentPose.vec().rotated(-Math.PI/2),currentPose.getHeading()));
     }
 
-    public void follow(Path path) {
+    public void follow(double power, Path path) {
         PurePursuitFollower follower = new PurePursuitFollower(path);
 
         Pose2d currentPose = getPose();
         while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,poseThreshold) && !shouldStop()) {
             Log.d("pure pursuit", "loop");
             Vector2d targetVector = follower.update(currentPose);
-            drive.setDrivePower(toVector(currentPose, targetVector, 0.2));
+            drive.setDrivePower(toVector(currentPose, targetVector, power));
             currentPose = getPose();
         }
 

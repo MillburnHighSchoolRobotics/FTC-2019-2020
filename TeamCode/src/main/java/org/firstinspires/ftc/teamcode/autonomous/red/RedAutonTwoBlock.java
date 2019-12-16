@@ -65,42 +65,29 @@ public class RedAutonTwoBlock extends LinearOpMode {
         if (isStopRequested()) return;
 
 //        int pos = barker.bark();
-        int pos = 3;
+        int pos = 2;
 
-        //first block
-            if (pos == 1) {
-                robot.strafeTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH+4), DEFAULT_STRAFE_POWER);
-                robot.rotateTo(50);
-                robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH),
-                        DEFAULT_STRAFE_POWER/2);
-//                //robot.intake.intakeOut();
-//                robot.rotateTo(0);
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -19),
-//                        DEFAULT_STRAFE_POWER);
-            }
-            else if (pos == 2) {
-                robot.strafeTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH-4), DEFAULT_STRAFE_POWER);
-                robot.rotateTo(50);
-                robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH-8),
-                        DEFAULT_STRAFE_POWER/2);
-                //robot.intake.intakeOut();
-//                robot.rotateTo(0);
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -27),
-//                        DEFAULT_STRAFE_POWER);
-            } else {
-                robot.strafeTo(new Vector2d(TILE_WIDTH, -28),
-                        DEFAULT_STRAFE_POWER);
-                robot.rotateTo(180);
-                robot.intake.intakeIn();
-                robot.strafeTo(new Vector2d(robot.getPose().getX(), -32),
-                        DEFAULT_STRAFE_POWER);
-                //robot.intake.intakeOut();
-//                robot.rotateTo(0);
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -35),
-//                        DEFAULT_STRAFE_POWER);
-            }
+        if (pos == 1) {
+            robot.moveTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH+4), 50,0.6,0.4);
+            robot.intake.intakeIn();
+            robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH),0.6);
+        }
+        else if (pos == 2) {
+            robot.moveTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH-4), 50, 0.5,0.5);
+            robot.intake.intakeIn();
+            robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH-8),0.5);
+        } else {
+            robot.moveTo(new Vector2d(24, -22), 180,0.6,0.4);
+            robot.intake.intakeIn();
+            robot.strafeTo(new Vector2d(24, -36),0.6);
+        }
+        robot.intake.intakeStop();
+        robot.moveTo(new Vector2d(48, -24), 0,0.6,0.4);
+        robot.moveTo(new Vector2d(48, 0), 0,0.6,0.4);
+
+        robot.intake.intakeOut();
+        Thread.sleep(1000);
+
 
 //            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
 //                    DEFAULT_STRAFE_POWER);

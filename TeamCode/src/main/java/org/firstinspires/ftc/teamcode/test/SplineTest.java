@@ -18,9 +18,9 @@ public class SplineTest extends LinearOpMode {
         if (isStopRequested()) return;
         waitForStart();
 
-        drive.follow(
+        drive.follow(0.5,
                 drive.path(0)
-                        .splineTo(new Pose2d(new Vector2d(12,36).rotated(-Math.PI/2),0))
+                        .splineTo(new Pose2d(new Vector2d(36,36).rotated(-Math.PI/2),0))
                         .build()
         );
         Thread.sleep(1000);
