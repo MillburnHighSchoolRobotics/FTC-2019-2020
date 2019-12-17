@@ -5,14 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_IN_TICKS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_OUT_TICKS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_POWER;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_TICKS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_CLOSE_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_NORMAL_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_OPEN_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_ROTATE_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 public class ChainBar {
     DcMotorEx chainBar;
@@ -41,21 +34,21 @@ public class ChainBar {
     public void rotatedClaw() {
         clawRotate.setPosition(CLAW_ROTATE_POS);
     }
-    public void chainBarIn() {
-        chainBar.setTargetPosition(CHAINBAR_IN_TICKS);
-        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        chainBar.setPower(CHAINBAR_POWER);
-    }
-    public void chainBarUp() {
-        chainBar.setTargetPosition(CHAINBAR_UP_TICKS);
-        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        chainBar.setPower(CHAINBAR_POWER);
-    }
-    public void chainBarOut() {
-        chainBar.setTargetPosition(CHAINBAR_OUT_TICKS);
-        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        chainBar.setPower(CHAINBAR_POWER);
-    }
+//    public void chainBarIn() {
+//        chainBar.setTargetPosition(CHAINBAR_IN_VOLTAGE);
+//        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        chainBar.setPower(CHAINBAR_POWER);
+//    }
+//    public void chainBarUp() {
+//        chainBar.setTargetPosition(CHAINBAR_UP_VOLTAGE);
+//        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        chainBar.setPower(CHAINBAR_POWER);
+//    }
+//    public void chainBarOut() {
+//        chainBar.setTargetPosition(CHAINBAR_OUT_VOLTAGE);
+//        chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        chainBar.setPower(CHAINBAR_POWER);
+//    }
     public void chainBarStop() {
         chainBar.setPower(0);
     }

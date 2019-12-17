@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(group = "test")
+@TeleOp(group = "util")
 public class ChainBarPositionTest extends OpMode {
     final double chainBarPower = 0.8;
 

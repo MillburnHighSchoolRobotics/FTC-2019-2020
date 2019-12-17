@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 
-@Autonomous(group = "test")
+@Autonomous(group = "util")
 public class FPSTest extends LinearOpMode {
 
     DcMotorEx er;

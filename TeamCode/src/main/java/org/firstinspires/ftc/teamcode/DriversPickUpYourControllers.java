@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
@@ -45,6 +47,7 @@ public class DriversPickUpYourControllers extends OpMode {
     public Servo clawSpin;
     public Servo foundationHookLeft;
     public Servo foundationHookRight;
+    public AnalogInput chainBarPot;
 
     private final int chainBarIntakePosition = 500;
     public static final int[][] POWER_MATRIX = { //for each of the directions
@@ -73,6 +76,8 @@ public class DriversPickUpYourControllers extends OpMode {
         clawSpin = hardwareMap.servo.get("clawSpin");
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookRight = hardwareMap.servo.get("foundationHookRight");
+
+        chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
 
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -143,22 +148,15 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
-            //TODO: Redo with potentiometer!
-//            if (!MathUtils.equals(chainBar.getCurrentPosition(), CHAINBAR_UP_TICKS, 75)) {
-//                chainBar.setTargetPosition(chainBarIntakePosition);
-//                chainBar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                chainBar.setPower(chainBarPower);
-//            }
+            if (chainBarPot.getVoltage() > CHAINBAR_UP_VOLTAGE && !MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.03)) {
+                chainBar.setPower(chainBarPower);
+            } else if (chainBarPot.getVoltage() < CHAINBAR_UP_VOLTAGE && !MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.03)){
+                chainBar.setPower(-chainBarPower);
+            }
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
         }
-
-        //TODO: Redo with potentiometer!
-//        if (!chainBar.isBusy() && chainBar.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
-//            chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            chainBar.setPower(0);
-//        }
 
         if (gamepad1.a) { //close claw
             clawSquish.setPosition(squishPos[1]);
@@ -206,8 +204,6 @@ public class DriversPickUpYourControllers extends OpMode {
                 toggleDriveSpeed.reset();
             }
         }
-
-
 
 
 

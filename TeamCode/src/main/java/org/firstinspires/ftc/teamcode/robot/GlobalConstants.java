@@ -27,7 +27,7 @@ public class GlobalConstants {
     public static final double DEAD_WHEEL_TURN_RADIUS = 2.75;
 
 
-    public static final double INTAKE_IN_POWER = -0.6;
+    public static final double INTAKE_IN_POWER = -      0.6;
     public static final double INTAKE_OUT_POWER = 0.8;
     public static final double CHAINBAR_POWER = 0.8;
 
@@ -40,9 +40,9 @@ public class GlobalConstants {
     public static final double LEFT_HOOK_DOWN_POS = 0;
     public static final double LEFT_HOOK_UP_POS = 1;
 
-    public static final int CHAINBAR_IN_TICKS = 0;
-    public static final int CHAINBAR_UP_TICKS = 500;
-    public static final int CHAINBAR_OUT_TICKS = 1300;
+    public static final double CHAINBAR_IN_VOLTAGE = 2.13;
+    public static final double CHAINBAR_UP_VOLTAGE = 1.5;
+    public static final double CHAINBAR_OUT_VOLTAGE = 1.05;
 
     public static final long FPS_UPDATE_PERIOD = 10;
 
