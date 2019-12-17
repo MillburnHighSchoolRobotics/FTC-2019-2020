@@ -47,7 +47,7 @@ public class RedAutonTwoBlock extends LinearOpMode {
     private float phoneZRotate    = 0;
 
     private static double BOT_WIDTH = 18.0;
-    private static double DEFAULT_STRAFE_POWER = 0.5;
+    private static double DEFAULT_STRAFE_POWER = 0.6;
     private static double DEFAULT_ROTATION_POWER = 0.25;
     private static double BASEPLATE_ALIGNMENT_Y = 49; //24 + 8 + 34/2
 
@@ -65,21 +65,21 @@ public class RedAutonTwoBlock extends LinearOpMode {
         if (isStopRequested()) return;
 
 //        int pos = barker.bark();
-        int pos = 2;
+        int pos = 3;
 
         if (pos == 1) {
-            robot.moveTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH+4), 50,0.6,0.4);
+            robot.moveTo(new Vector2d(1.5*TILE_WIDTH, -7.0/4.0*TILE_WIDTH+4), 50,DEFAULT_STRAFE_POWER,0.4);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH),0.6);
+            robot.strafeTo(new Vector2d(18, -1*TILE_WIDTH-2),DEFAULT_STRAFE_POWER);
         }
         else if (pos == 2) {
-            robot.moveTo(new Vector2d(1.5* TILE_WIDTH+3, -7.0/4.0*TILE_WIDTH-4), 50, 0.5,0.5);
+            robot.moveTo(new Vector2d(1.5*TILE_WIDTH, -7.0/4.0*TILE_WIDTH-4), 50, DEFAULT_STRAFE_POWER,0.5);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(20, -1*TILE_WIDTH-8),0.5);
+            robot.strafeTo(new Vector2d(18, -1*TILE_WIDTH-10),DEFAULT_STRAFE_POWER);
         } else {
-            robot.moveTo(new Vector2d(24, -22), 180,0.6,0.4);
+            robot.moveTo(new Vector2d(20, -20), 180,DEFAULT_STRAFE_POWER,0.4);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(24, -36),0.6);
+            robot.strafeTo(new Vector2d(20, -28),DEFAULT_STRAFE_POWER);
         }
         robot.intake.intakeStop();
         robot.moveTo(new Vector2d(48, -24), 0,0.6,0.4);
@@ -89,51 +89,26 @@ public class RedAutonTwoBlock extends LinearOpMode {
         Thread.sleep(1000);
 
 
-//            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
-//                    DEFAULT_STRAFE_POWER);
-
-            //robot.intake.intakeOut();
 
         //second block
-//            if (pos == 1) {
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.rotateTo(180);
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeIn();
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH+4),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeStop();
-//            }
-//            if (pos == 2) {
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.rotateTo(180);
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeIn();
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH-4),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeStop();
-//            }
-//            else {
-//                robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.rotateTo(180);
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeIn();
-//                robot.strafeTo(new Vector2d(TILE_WIDTH, -2*TILE_WIDTH-12),
-//                        DEFAULT_STRAFE_POWER);
-//                robot.intake.intakeStop();
-//            }
-//
-//            robot.strafeTo(new Vector2d(1.5*TILE_WIDTH, 0),
-//                    DEFAULT_STRAFE_POWER);
-//
-//            robot.rotateTo(0);
-//
-//            robot.intake.intakeOut();
+            if (pos == 1) {
+
+            }
+            if (pos == 2) {
+
+            }
+            else {
+                robot.moveTo(new Vector2d(30, -44), 180,DEFAULT_STRAFE_POWER,0.4);
+                robot.moveTo(new Vector2d(20, -44), 180,DEFAULT_STRAFE_POWER,0.4);
+                robot.intake.intakeIn();
+                robot.strafeTo(new Vector2d(20, -52),DEFAULT_STRAFE_POWER);
+            }
+
+        robot.intake.intakeStop();
+        robot.moveTo(new Vector2d(48, -24), 0,0.6,0.4);
+        robot.moveTo(new Vector2d(48, 0), 0,0.6,0.4);
+
+        robot.intake.intakeOut();
+        Thread.sleep(1000);
     }
 }
