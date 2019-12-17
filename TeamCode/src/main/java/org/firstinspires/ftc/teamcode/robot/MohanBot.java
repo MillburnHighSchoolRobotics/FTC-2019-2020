@@ -7,11 +7,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.path.PathBuilder;
-import com.acmerobotics.roadrunner.path.PathSegment;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumConstraints;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -31,10 +26,6 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
-import java.util.List;
-
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TRACK_WIDTH;
-
 public class MohanBot {
 
     private HardwareMap hardwareMap;
@@ -44,6 +35,7 @@ public class MohanBot {
     public Hook hook;
 
     private double poseThreshold = 2;
+    private double purePursuitThreshold = 1;
     private double rotationThreshold = 2;
     private double count;
 
@@ -252,13 +244,15 @@ public class MohanBot {
         return new PathBuilder(new Pose2d(currentPose.vec().rotated(-Math.PI/2),currentPose.getHeading()));
     }
 
-    public void follow(double power, Path path) {
+    public void follow(double powerLow1, double powerLow2, double powerHigh, Path path) {
         PurePursuitFollower follower = new PurePursuitFollower(path);
 
         Pose2d currentPose = getPose();
-        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,poseThreshold) && !shouldStop()) {
+        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && !shouldStop()) {
             Log.d("pure pursuit", "loop");
             Vector2d targetVector = follower.update(currentPose);
+
+            double power = follower.getPower(powerLow1, powerLow2,powerHigh);
             drive.setDrivePower(toVector(currentPose, targetVector, power));
             currentPose = getPose();
         }
