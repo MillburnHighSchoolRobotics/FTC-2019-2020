@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.teamcode.util.PIDController;
+
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
@@ -19,13 +21,15 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
     final double[] squishPos = {0.3,1};
-    final double[] spinPos = {0.5,0};
+    final double[] spinPos = {0,1};
     private int currentSpinPos = 1;
     final double[] foundationHookPosLeft = {0.3,0.7};
     final double[] foundationHookPosRight = {0.7,0.3};
     private int currentHook = 0;
 
     private boolean togglePower = false;
+    private boolean stoppedLift = true;
+    private boolean stoppedChainBar = true;
 
     ElapsedTime toggleSpinTime;
     ElapsedTime toggleDriveSpeed;
@@ -36,8 +40,9 @@ public class DriversPickUpYourControllers extends OpMode {
     double drivePower = 1;
     double liftExtensionPower = 1;
     double liftRetractionPower = -0.4;
-    double liftHoldPower = 0;
+    double liftHoldPower = 0.25;
     double liftMaxPosition = 1450;
+    double chainBarMaxVoltage = 3;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -52,6 +57,9 @@ public class DriversPickUpYourControllers extends OpMode {
     public Servo foundationHookLeft;
     public Servo foundationHookRight;
     public AnalogInput chainBarPot;
+
+    public PIDController chainBarPid = new PIDController(1.5,0,0);
+    public PIDController liftPid = new PIDController(0.01,0,0);
 
     private final int chainBarIntakePosition = 500;
     public static final int[][] POWER_MATRIX = { //for each of the directions
@@ -144,28 +152,63 @@ public class DriversPickUpYourControllers extends OpMode {
             chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
+        double currentChainBarPower = 0;
+
+        //-------------------------------------------- Intake --------------------------------------------
+
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) {
             intakeL.setPower(intakePower);
             intakeR.setPower(intakePower);
-
         } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
 
-            if (!MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.08)) {
-                if (chainBarPot.getVoltage() > CHAINBAR_UP_VOLTAGE) {
-                    chainBar.setPower(chainBarPower);
-                }
-                else if (chainBarPot.getVoltage() < CHAINBAR_UP_VOLTAGE) {
-                    chainBar.setPower(-chainBarPower);
-                }
-            }
-
+            stoppedChainBar = false;
+            chainBarPid.setTarget(CHAINBAR_UP_VOLTAGE);
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
         }
+
+        //-------------------------------------------- ChainBar --------------------------------------------
+
+        if (gamepad1.left_bumper) {
+            currentChainBarPower = chainBarPower;
+            stoppedChainBar = true;
+        } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < chainBarMaxVoltage) {
+            currentChainBarPower = -chainBarPower;
+            stoppedChainBar = true;
+        } else if (stoppedChainBar){
+            stoppedChainBar = false;
+            chainBarPid.setTarget(chainBarPot.getVoltage());
+        }
+        if (!stoppedChainBar) {
+            currentChainBarPower = -(chainBarPower * chainBarPid.getPIDOutput(chainBarPot.getVoltage()));
+        }
+
+        chainBar.setPower(currentChainBarPower);
+
+        telemetry.addData("Voltage", chainBarPot.getVoltage());
+        telemetry.addData("Target", chainBarPid.getTarget());
+        telemetry.addData("ChainBar PID", chainBarPid.getPIDOutput(chainBarPot.getVoltage()));
+
+        //-------------------------------------------- Lift --------------------------------------------
+
+        if (gamepad1.dpad_up) {
+            lift.setPower(liftExtensionPower*getLiftPower(lift.getCurrentPosition()/liftMaxPosition));
+            stoppedLift = true;
+        } else if (gamepad1.dpad_down) {
+            lift.setPower(liftRetractionPower);
+            stoppedLift = true;
+        } else if (stoppedLift){
+            stoppedLift = false;
+            liftPid.setTarget(lift.getCurrentPosition());
+        } else {
+            lift.setPower(liftHoldPower * liftPid.getPIDOutput(lift.getCurrentPosition()));
+        }
+
+        //-------------------------------------------- Claw --------------------------------------------
 
         if (gamepad1.a) { //close claw
             clawSquish.setPosition(squishPos[1]);
@@ -186,21 +229,8 @@ public class DriversPickUpYourControllers extends OpMode {
             foundationHookRight.setPosition(foundationHookPosRight[currentHook]);
             toggleHook.reset();
         }
-        if (gamepad1.left_bumper) {
-            chainBar.setPower(chainBarPower);
-        } else if (gamepad1.right_bumper) {
-            chainBar.setPower(-chainBarPower);
-        } else if (chainBar.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            chainBar.setPower(0);
-        }
 
-        if (gamepad1.dpad_up) {
-            lift.setPower(liftExtensionPower*getLiftPower(lift.getCurrentPosition()/liftMaxPosition));
-        } else if (gamepad1.dpad_down) {
-            lift.setPower(liftRetractionPower);
-        } else {
-            lift.setPower(liftHoldPower);
-        }
+        //-------------------------------------------- Movement --------------------------------------------
 
         if (gamepad1.left_stick_button) {
             if (toggleDriveSpeed.milliseconds() > 250)  {
@@ -213,8 +243,6 @@ public class DriversPickUpYourControllers extends OpMode {
                 toggleDriveSpeed.reset();
             }
         }
-
-        telemetry.addData("Voltage", chainBarPot.getVoltage());
 
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
@@ -273,6 +301,8 @@ public class DriversPickUpYourControllers extends OpMode {
         lb.setPower(drivePower * powerArray[1]);
         rf.setPower(drivePower * powerArray[2]);
         rb.setPower(drivePower * powerArray[3]);
+
+        telemetry.update();
     }
 
     public double getLiftPower(double ratio) {
@@ -280,6 +310,10 @@ public class DriversPickUpYourControllers extends OpMode {
         double b = .85;
         double k = 5.5;
         double v = 0.9;
+
+        if (ratio < 0) {
+            ratio = 0;
+        }
 
         if (ratio >= 0 && ratio < v) {
             return L/(1+Math.pow(Math.E,k*(ratio-b)));
