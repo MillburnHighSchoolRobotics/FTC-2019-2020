@@ -179,13 +179,13 @@ public class DriversPickUpYourControllers extends OpMode {
         } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < chainBarMaxVoltage) {
             currentChainBarPower = -chainBarPower;
             stoppedChainBar = true;
-        } else if (stoppedChainBar){
-            stoppedChainBar = false;
-            chainBarPid.setTarget(chainBarPot.getVoltage());
-        }
-        if (!stoppedChainBar) {
-            currentChainBarPower = -(chainBarPower * chainBarPid.getPIDOutput(chainBarPot.getVoltage()));
-        }
+        }// else if (stoppedChainBar){
+//            stoppedChainBar = false;
+//            chainBarPid.setTarget(chainBarPot.getVoltage());
+//        }
+//        if (!stoppedChainBar) {
+//            currentChainBarPower = -(chainBarPower * chainBarPid.getPIDOutput(chainBarPot.getVoltage()));
+//        }
 
         chainBar.setPower(currentChainBarPower);
 

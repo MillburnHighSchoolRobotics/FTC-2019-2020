@@ -47,8 +47,8 @@ public class RedAutonTwoBlock extends LinearOpMode {
     private float phoneZRotate    = 0;
 
     private static double BOT_WIDTH = 18.0;
-    private static double DEFAULT_STRAFE_POWER = 0.6;
-    private static double DEFAULT_ROTATION_POWER = 0.4;
+    private static double DEFAULT_STRAFE_POWER = 0.5;
+    private static double DEFAULT_ROTATION_POWER = 0.5;
     private static double BASEPLATE_ALIGNMENT_Y = 49; //24 + 8 + 34/2
 
     @Override
@@ -69,7 +69,7 @@ public class RedAutonTwoBlock extends LinearOpMode {
         int pos = 1;
 
         if (pos == 1) {
-            robot.moveTo(new Vector2d(1.5*TILE_WIDTH-4, -7.0/4.0*TILE_WIDTH+4), 50,DEFAULT_STRAFE_POWER,0.4);
+            robot.moveTo(new Vector2d(2*TILE_WIDTH, -1.5*TILE_WIDTH), 50,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
             robot.intake.intakeIn();
             robot.strafeTo(new Vector2d(18, -1*TILE_WIDTH),DEFAULT_STRAFE_POWER);
         }
@@ -83,8 +83,8 @@ public class RedAutonTwoBlock extends LinearOpMode {
             robot.strafeTo(new Vector2d(24, -32),DEFAULT_STRAFE_POWER);
         }
         robot.intake.intakeStop();
-        robot.moveTo(new Vector2d(48, -24), 0,0.6,0.4);
-        robot.moveTo(new Vector2d(48, 0), 0,0.6,0.4);
+        robot.moveTo(new Vector2d(48, -24), 0,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
+        robot.moveTo(new Vector2d(48, 0), 0,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
 
         robot.intake.intakeOut();
         Thread.sleep(1000);
@@ -93,10 +93,10 @@ public class RedAutonTwoBlock extends LinearOpMode {
 
         //second block
         if (pos == 1) {
-            robot.moveTo(new Vector2d(36, -1.5*TILE_WIDTH), 180,DEFAULT_STRAFE_POWER,0.4);
-            robot.moveTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH), 180,DEFAULT_STRAFE_POWER,0.4);
+            robot.moveTo(new Vector2d(36, -1.5*TILE_WIDTH+8), 180,DEFAULT_STRAFE_POWER,0.4);
+            robot.moveTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH+8), 180,DEFAULT_STRAFE_POWER,0.4);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH-8),DEFAULT_STRAFE_POWER);
+            robot.strafeTo(new Vector2d(TILE_WIDTH, -1.5*TILE_WIDTH),DEFAULT_STRAFE_POWER);
         }
         else if (pos == 2) {
 

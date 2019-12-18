@@ -18,6 +18,9 @@ public class RedAutonBaseplateParkWall extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(63, 24 + BOT_WIDTH/2, Math.toRadians(270)));
+
+        robot.hook.hookUp();
+
         if (isStopRequested()) return;
         waitForStart();
 

@@ -31,7 +31,7 @@ public class PositionMonitor extends MonitorThread {
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose2d start) {
         super(thread, hardwareMap, TAG);
-        er = (DcMotorEx) hardwareMap.dcMotor.get("chainbar");
+        er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
         el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
         eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
