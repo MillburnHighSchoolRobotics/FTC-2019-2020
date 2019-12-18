@@ -24,7 +24,7 @@ public class GlobalConstants {
     public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
 
     public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
-    public static final double DEAD_WHEEL_TURN_RADIUS = 2.75;
+    public static final double DEAD_WHEEL_TURN_RADIUS = -2.75;
 
 
     public static final double INTAKE_IN_POWER = -      0.6;

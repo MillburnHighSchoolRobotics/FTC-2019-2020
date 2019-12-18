@@ -34,6 +34,7 @@ public class DriversPickUpYourControllers extends OpMode {
     double liftExtensionPower = 1;
     double liftRetractionPower = -0.1;
     double liftHoldPower = 0.25;
+    double liftMaxPosition = 1000;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
@@ -186,11 +187,11 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         if (gamepad1.dpad_up) {
-            lift.setPower(liftHoldPower*getLiftPower(lift.getCurrentPosition()));
+            lift.setPower(liftExtensionPower*getLiftPower(lift.getCurrentPosition()/liftMaxPosition));
         } else if (gamepad1.dpad_down) {
-            lift.setPower(-1);
+            lift.setPower(liftRetractionPower);
         } else {
-            lift.setPower(0);
+            lift.setPower(liftHoldPower);
         }
 
         if (gamepad1.left_stick_button) {
@@ -205,8 +206,11 @@ public class DriversPickUpYourControllers extends OpMode {
             }
         }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 99d9f111f3f7ea09df2bab399e7264e960d32f70
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
         double rotX = gamepad1.right_stick_x;
@@ -266,16 +270,16 @@ public class DriversPickUpYourControllers extends OpMode {
         rb.setPower(drivePower * powerArray[3]);
     }
 
-    public double getLiftPower(double encoderTicks) {
+    public double getLiftPower(double ratio) {
         double L = 1;
         double b = .85;
         double k = 5.5;
         double v = 0.9;
 
-        if (encoderTicks >= 0 && encoderTicks < L) {
-            return L/1+Math.pow(Math.E, k*(encoderTicks-b));
-        } else if (encoderTicks >= v && encoderTicks <= 1) {
-            return L/1+Math.pow(Math.E, k*(v-b));
+        if (ratio >= 0 && ratio < v) {
+            return L/(1+Math.pow(Math.E,k*(ratio-b)));
+        } else if (ratio >= v && ratio <= 1) {
+            return L/(1+Math.pow(Math.E, k*(v-b)));
         }
         return 0;
     }
