@@ -15,8 +15,7 @@ public class PurePursuitFollower {
     private double lookahead = 6;
     private double lastOnPath = 0.0;
 
-    private double accelerationRange = 0.1;
-    private double decellerationRange = 0.9;
+    private double decellerationRange = 0.4;
 
     public PurePursuitFollower(Path path, double lookahead) {
         this.path = path;
@@ -66,11 +65,10 @@ public class PurePursuitFollower {
     public Vector2d end() {
         return path.end().vec().rotated(Math.PI/2);
     }
-    public double getPower(double powerLow1, double powerLow2, double powerHigh) {
-        if (lastOnPath < accelerationRange*path.length()) {
-            return MathUtils.map(lastOnPath, 0, accelerationRange*path.length(), powerLow1, powerHigh);
-        } else if (lastOnPath > decellerationRange*path.length()) {
-            return MathUtils.map(lastOnPath,accelerationRange*path.length(),path.length(), powerHigh, powerLow2);
+    public double getPower(double powerLow, double powerHigh, Vector2d currentPos) {
+        double d = Math.max(currentPos.distTo(end()),(path.length()-lastOnPath));
+        if (d <= decellerationRange*path.length()) {
+            return MathUtils.map(d, 0,decellerationRange*path.length(),powerLow,powerHigh);
         } else {
             return powerHigh;
         }

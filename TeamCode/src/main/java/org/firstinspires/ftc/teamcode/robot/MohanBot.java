@@ -244,7 +244,7 @@ public class MohanBot {
         return new PathBuilder(new Pose2d(currentPose.vec().rotated(-Math.PI/2),currentPose.getHeading()));
     }
 
-    public void follow(double powerLow1, double powerLow2, double powerHigh, Path path) {
+    public void follow(double powerLow, double powerHigh, Path path) {
         PurePursuitFollower follower = new PurePursuitFollower(path);
 
         Pose2d currentPose = getPose();
@@ -252,7 +252,7 @@ public class MohanBot {
             Log.d("pure pursuit", "loop");
             Vector2d targetVector = follower.update(currentPose);
 
-            double power = follower.getPower(powerLow1, powerLow2,powerHigh);
+            double power = follower.getPower(powerLow,powerHigh, currentPose.vec());
             drive.setDrivePower(toVector(currentPose, targetVector, power));
             currentPose = getPose();
         }
