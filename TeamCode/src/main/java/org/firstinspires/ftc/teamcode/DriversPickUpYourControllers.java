@@ -35,9 +35,9 @@ public class DriversPickUpYourControllers extends OpMode {
     double chainBarPower = 0.8;
     double drivePower = 1;
     double liftExtensionPower = 1;
-    double liftRetractionPower = -0.1;
-    double liftHoldPower = 0.25;
-    double liftMaxPosition = 1000;
+    double liftRetractionPower = -0.4;
+    double liftHoldPower = 0;
+    double liftMaxPosition = 1450;
 
     public DcMotorEx lf;
     public DcMotorEx lb;
