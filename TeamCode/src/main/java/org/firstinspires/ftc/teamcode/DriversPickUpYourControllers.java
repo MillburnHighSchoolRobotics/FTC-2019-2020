@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.os.Debug;
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -149,11 +152,16 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeL.setPower(-intakePower);
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
-            if (chainBarPot.getVoltage() > CHAINBAR_UP_VOLTAGE && !MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.03)) {
-                chainBar.setPower(chainBarPower);
-            } else if (chainBarPot.getVoltage() < CHAINBAR_UP_VOLTAGE && !MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.03)){
-                chainBar.setPower(-chainBarPower);
+
+            if (!MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.08)) {
+                if (chainBarPot.getVoltage() > CHAINBAR_UP_VOLTAGE) {
+                    chainBar.setPower(chainBarPower);
+                }
+                else if (chainBarPot.getVoltage() < CHAINBAR_UP_VOLTAGE) {
+                    chainBar.setPower(-chainBarPower);
+                }
             }
+
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
@@ -206,11 +214,8 @@ public class DriversPickUpYourControllers extends OpMode {
             }
         }
 
-<<<<<<< HEAD
+        telemetry.addData("Voltage", chainBarPot.getVoltage());
 
-
-=======
->>>>>>> 99d9f111f3f7ea09df2bab399e7264e960d32f70
         double transX = gamepad1.left_stick_x;
         double transY = -gamepad1.left_stick_y;
         double rotX = gamepad1.right_stick_x;
