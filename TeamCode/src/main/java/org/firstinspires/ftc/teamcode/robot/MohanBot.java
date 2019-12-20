@@ -37,6 +37,7 @@ public class MohanBot {
     private double poseThreshold = 2;
     private double purePursuitThreshold = 1;
     private double rotationThreshold = 2;
+    private double rotationThresholdMoveDone = 5;
     private double count;
 
     private double DEFUALT_STRAFE_POWER = 0.7;
@@ -138,6 +139,11 @@ public class MohanBot {
             currentPose = getPose();
             double[] motorPowers = toVector(currentPose,targetVector,strafePower);
             drive.setDrivePower(motorPowers);
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } while (currentPose.vec().distTo(targetVector) > poseThreshold);
         drive.setDrivePower(0);
     }
@@ -148,6 +154,8 @@ public class MohanBot {
 
         ElapsedTime time = new ElapsedTime();
         double lastTime = -1;
+
+        double threshold = rotationThreshold;
 
         boolean strafe = true;
         while (!shouldStop()) {
@@ -171,7 +179,10 @@ public class MohanBot {
             Log.d("turn pid", "output - " + output);
             Log.d("turn pid", "current heading - " + currentHeading);
             Log.d("turn pid", "target heading - " + targetHeading);
-            if (MathUtils.equals(currentHeading, targetHeading, rotationThreshold) && !strafe) {
+            if (!strafe) {
+                threshold = rotationThresholdMoveDone;
+            }
+            if (MathUtils.equals(currentHeading, targetHeading, threshold) && !strafe) {
                 if (lastTime == -1) lastTime = time.milliseconds();
                 else if (time.milliseconds() - lastTime > 50) {
                     drive.stop();

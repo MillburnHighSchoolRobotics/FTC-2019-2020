@@ -32,9 +32,9 @@ public class BarkerClass {
     static private HardwareMap hardwareMap;
     static private VuforiaLocalizerImplSubclass vuforiaInstance;
 
-    private static double BLUE_LINE_1_X = 80;
-    private static double BLUE_LINE_2_X = 280;
-    private static double BLUE_LINE_3_X = 480;
+    private static double BLUE_LINE_1_X = 200;
+    private static double BLUE_LINE_2_X = 580;
+    private static double BLUE_LINE_3_X = 1000;
     private static double RED_LINE_1_X = 100;
     private static double RED_LINE_2_X = 450;
     private static double RED_LINE_3_X = 845;
@@ -49,7 +49,7 @@ public class BarkerClass {
         GlobalConstants.side = side;
     }
 
-    public void init() {
+    public void wake() {
         params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -102,9 +102,9 @@ public class BarkerClass {
             }
         }
         Log.d("watbark",""+centroid.x);
-        Log.d("watbark",""+RED_LINE_1_X);
-        Log.d("watbark",""+RED_LINE_2_X);
-        Log.d("watbark",""+RED_LINE_3_X);
+        Log.d("watbark",""+BLUE_LINE_1_X);
+        Log.d("watbark",""+BLUE_LINE_2_X);
+        Log.d("watbark",""+BLUE_LINE_3_X);
 
         for (MatOfPoint mat : contours) {
             mat.release();

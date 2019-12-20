@@ -5,6 +5,7 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
@@ -40,6 +41,9 @@ public class PositionMonitor extends MonitorThread {
         el.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         eb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         eb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        el.setDirection(DcMotorSimple.Direction.FORWARD);
+        er.setDirection(DcMotorSimple.Direction.REVERSE);
+        eb.setDirection(DcMotorSimple.Direction.FORWARD);
 
         x = start.getX();
         y = start.getY();

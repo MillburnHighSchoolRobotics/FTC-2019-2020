@@ -5,11 +5,8 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.util.BarkerClass;
-import org.firstinspires.ftc.teamcode.util.SkystoneDetector;
-import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
 
@@ -29,7 +26,7 @@ public class BarkerClassTest extends LinearOpMode {
         telemetry.addData("Status", "Loading");
         telemetry.update();
 
-        barker.init();
+        barker.wake();
 
         telemetry.addData("Status", "Loaded!");
         telemetry.update();

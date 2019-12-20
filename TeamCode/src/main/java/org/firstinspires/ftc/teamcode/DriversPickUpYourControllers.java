@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.util.ChainBarPot;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
@@ -20,7 +21,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
-    final double[] squishPos = {0.3,1};
+    final double[] squishPos = {0.4,1};
     final double[] spinPos = {0,1};
     private int currentSpinPos = 1;
     final double[] foundationHookPosLeft = {0.3,0.7};
@@ -36,7 +37,7 @@ public class DriversPickUpYourControllers extends OpMode {
     ElapsedTime toggleHook;
 
     double intakePower = 0.6;
-    double chainBarPower = 0.8;
+    double chainBarPower = 0.6;
     double drivePower = 1;
     double liftExtensionPower = 1;
     double liftRetractionPower = -0.4;
@@ -164,8 +165,13 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeR.setPower(-intakePower);
             clawSquish.setPosition(squishPos[0]);
 
-            stoppedChainBar = false;
-            chainBarPid.setTarget(CHAINBAR_UP_VOLTAGE);
+            if (MathUtils.equals(chainBarPot.getVoltage(), CHAINBAR_UP_VOLTAGE, 0.02)) {
+                currentChainBarPower = 0;
+            } else if (chainBarPot.getVoltage() < CHAINBAR_UP_VOLTAGE) {
+                currentChainBarPower = chainBarPower;
+            } else {
+                currentChainBarPower = -chainBarPower;
+            }
         } else {
             intakeL.setPower(0);
             intakeR.setPower(0);
@@ -175,18 +181,9 @@ public class DriversPickUpYourControllers extends OpMode {
 
         if (gamepad1.left_bumper) {
             currentChainBarPower = chainBarPower;
-            stoppedChainBar = true;
         } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < chainBarMaxVoltage) {
             currentChainBarPower = -chainBarPower;
-            stoppedChainBar = true;
-        }// else if (stoppedChainBar){
-//            stoppedChainBar = false;
-//            chainBarPid.setTarget(chainBarPot.getVoltage());
-//        }
-//        if (!stoppedChainBar) {
-//            currentChainBarPower = -(chainBarPower * chainBarPid.getPIDOutput(chainBarPot.getVoltage()));
-//        }
-
+        }
         chainBar.setPower(currentChainBarPower);
 
         telemetry.addData("Voltage", chainBarPot.getVoltage());
@@ -235,13 +232,14 @@ public class DriversPickUpYourControllers extends OpMode {
         if (gamepad1.left_stick_button) {
             if (toggleDriveSpeed.milliseconds() > 250)  {
                 togglePower = !togglePower;
-                if (togglePower) {
-                    drivePower = 0.6;
-                } else {
-                    drivePower = 1;
-                }
+
                 toggleDriveSpeed.reset();
             }
+        }
+        if (togglePower) {
+            drivePower = 0.6;
+        } else {
+            drivePower = 1;
         }
 
         double transX = gamepad1.left_stick_x;
