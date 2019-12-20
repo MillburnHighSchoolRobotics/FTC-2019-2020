@@ -32,7 +32,7 @@ public class GlobalConstants {
     public static final double CHAINBAR_POWER = 0.8;
 
     public static final double CLAW_CLOSE_POS = 1;
-    public static final double CLAW_OPEN_POS = 0.3;
+    public static final double CLAW_OPEN_POS = 0.4;
     public static final double CLAW_NORMAL_POS = 1;
     public static final double CLAW_ROTATE_POS = 0;
     public static final double RIGHT_HOOK_DOWN_POS = 1;
