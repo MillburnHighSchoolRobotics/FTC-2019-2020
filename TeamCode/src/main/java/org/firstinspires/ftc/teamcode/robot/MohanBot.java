@@ -259,12 +259,19 @@ public class MohanBot {
         PurePursuitFollower follower = new PurePursuitFollower(path);
 
         Pose2d currentPose = getPose();
-        while (!MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && !shouldStop()) {
+        boolean strafe = true;
+        // MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && !
+        while (!shouldStop()) {
             Log.d("pure pursuit", "loop");
-            Vector2d targetVector = follower.update(currentPose);
+            Pose2d targetPose = follower.update(currentPose);
 
             double power = follower.getPower(powerLow,powerHigh, currentPose.vec());
-            drive.setDrivePower(toVector(currentPose, targetVector, power));
+            double[] powers = toVector(currentPose, targetPose.vec(), power);
+            double pidOutput = follower.getOutput(currentPose.getHeading());
+            powers[0] -= (1-power)*pidOutput;
+            powers[1] -= (1-power)*pidOutput;
+            powers[2] += (1-power)*pidOutput;
+            powers[3] += (1-power)*pidOutput;
             currentPose = getPose();
         }
 

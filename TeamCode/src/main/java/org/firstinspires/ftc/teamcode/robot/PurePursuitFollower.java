@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static org.firstinspires.ftc.teamcode.robot.MohanBot.shouldStop;
 
@@ -16,26 +17,30 @@ public class PurePursuitFollower {
     private double lastOnPath = 0.0;
 
     private double decellerationRange = 0.4;
+    private PIDController pidController;
+    private double kp = 0.014;
 
     public PurePursuitFollower(Path path, double lookahead) {
         this.path = path;
         this.lookahead = lookahead;
+        pidController = new PIDController(kp,0,0,1);
     }
     public PurePursuitFollower(Path path) {
         this.path = path;
     }
-    public Vector2d update(Pose2d currentPose) {
+    public Pose2d update(Pose2d currentPose) {
         double s = projectPoint(currentPose.vec());
-        Vector2d targetVector = (path.get(s).vec().rotated(Math.PI/2));
-        Vector2d nextVector = (path.get(s+lookahead).vec().rotated(Math.PI/2));
+        Pose2d targetPose = new Pose2d(path.get(s).vec().rotated(Math.PI/2),path.get(s).getHeading());
+        Pose2d nextPose = new Pose2d(path.get(s+lookahead).vec().rotated(Math.PI/2),path.get(s+lookahead).getHeading());
         if (MathUtils.equals(s,path.length())) {
-            nextVector = targetVector;
+            nextPose = targetPose;
         }
+        pidController.setTarget(nextPose.getHeading());
 
         Log.d("pure pursuit","S - " + s);
-        Log.d("pure pursuit","targetVector - " + targetVector.toString());
-        Log.d("pure pursuit","nextVector - " + nextVector.toString());
-        return nextVector;
+        Log.d("pure pursuit","targetVector - " + targetPose.toString());
+        Log.d("pure pursuit","nextVector - " + nextPose.toString());
+        return nextPose;
     }
     private double projectPoint(Vector2d currentPos) {
         double s = path.length();
@@ -72,5 +77,8 @@ public class PurePursuitFollower {
         } else {
             return powerHigh;
         }
+    }
+    public double getOutput(double heading) {
+        return pidController.getPIDOutput(heading);
     }
 }
