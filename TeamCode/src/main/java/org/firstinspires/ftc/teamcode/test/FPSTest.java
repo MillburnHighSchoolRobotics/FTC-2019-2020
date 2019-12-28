@@ -45,7 +45,7 @@ public class FPSTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!shouldStop()) {
-            telemetry.addData("theta", Math.toDegrees(ThreadManager.getInstance().getValue("theta", Double.class)));
+            telemetry.addData("heading", Math.toDegrees(ThreadManager.getInstance().getValue("yaw", Double.class)));
             telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
             telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
             telemetry.addData("orientation", Math.toDegrees(ThreadManager.getInstance().getValue("orientation", Double.class)));

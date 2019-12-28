@@ -7,10 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
-
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
@@ -18,9 +18,8 @@ public class PositionMonitor extends MonitorThread {
     private DcMotorEx el;
     private DcMotorEx eb;
 
-    double x;
-    double y;
-    double theta;
+    double x,y,z,roll,pitch,yaw;
+
     double orientation;
     double rotation;
     double count = 0;
@@ -47,14 +46,18 @@ public class PositionMonitor extends MonitorThread {
 
         x = start.getX();
         y = start.getY();
-        theta = start.getHeading();
-        orientation = theta;
+        z = 0;
+        yaw = start.getHeading();
+        orientation = yaw;
         rotation = 0;
 
 
-        setValue("x",start.getX());
-        setValue("y",start.getY());
-        setValue("theta",start.getHeading());
+        setValue("x",x);
+        setValue("y",y);
+        setValue("z",z);
+        setValue("roll",roll);
+        setValue("pitch",pitch);
+        setValue("yaw",yaw);
         setValue("count",count);
         setValue("orientation", orientation);
         setValue("rotation", rotation);
@@ -62,15 +65,20 @@ public class PositionMonitor extends MonitorThread {
     @Override
     protected void loop() {
         updatePosition();
-        setValue("x", x);
-        setValue("y", y);
-        setValue("theta", theta);
+        setValue("x",x);
+        setValue("y",y);
+        setValue("z",z);
+        setValue("roll",roll);
+        setValue("pitch",pitch);
+        setValue("yaw",yaw);
         setValue("orientation", orientation);
         setValue("rotation", rotation);
         setValue("count", count);
         count += 1;
     }
     protected void updatePosition() {
+        ElapsedTime e = new ElapsedTime();
+
         double erPos = GlobalConstants.encoderToDistance(er.getCurrentPosition());
         double elPos = -GlobalConstants.encoderToDistance(el.getCurrentPosition());
         double ebPos = GlobalConstants.encoderToDistance(eb.getCurrentPosition());
@@ -83,33 +91,53 @@ public class PositionMonitor extends MonitorThread {
         double dl = elPos-elPosLast;
         double db = ebPos-ebPosLast;
 
-        double dTheta = (dr-dl)/GlobalConstants.DEAD_WHEEL_BASE_WIDTH;
-        double dX = db+(GlobalConstants.DEAD_WHEEL_TURN_RADIUS*dTheta);
-        double dY = (dr+dl)/2.0;
+        double dRoll = 0;
+        double dPitch = 0;
+        double dYaw = (dr-dl)/GlobalConstants.DEAD_WHEEL_BASE_WIDTH;
+        double dx = db+(GlobalConstants.DEAD_WHEEL_TURN_RADIUS*dYaw);
+        double dy = (dr+dl)/2.0;
+        double dz = 0;
 
-        Log.d(TAG, "dTheta: " + dTheta);
-        Log.d(TAG, "dX: " + dX);
-        Log.d(TAG, "dY: " + dY);
+        Log.d(TAG, "dYaw: " + dYaw);
+        Log.d(TAG, "dx: " + dx);
+        Log.d(TAG, "dy: " + dy);
 
-        double s,c;
-        if (MathUtils.equals(dTheta,0)) {
-            s = 1-dTheta*dTheta/6.0;
-            c = dTheta/2.0;
-        } else {
-            s = Math.sin(dTheta)/dTheta;
-            c = (1-Math.cos(dTheta))/dTheta;
-        }
+        double cy = Math.cos(dYaw*0.5);
+        double sy = Math.sin(dYaw*0.5);
+        double cp = Math.cos(dPitch*0.5);
+        double sp = Math.sin(dPitch*0.5);
+        double cr = Math.cos(dRoll*0.5);
+        double sr = Math.sin(dRoll*0.5);
 
-        double dfX = dX*s-dY*c;
-        double dfY = dX*c+dY*s;
+        double qw = cy*cp*cr+sy*sp*sr;
+        double qx = cy*cp*sr-sy*sp*cr;
+        double qy = sy*cp*sr+cy*sp*cr;
+        double qz = sy*cp*cr-cy*sp*sr;
 
-        double dXPose = dfX*Math.cos(theta)-dfY*Math.sin(theta);
-        double dYPose = dfX*Math.sin(theta)+dfY*Math.cos(theta);
+        Log.d(TAG, "q: (" + qw + "," + qx + "," + qy + "," + qz +")");
 
-        x += dXPose;
-        y += dYPose;
-        orientation += dTheta;
-        theta = MathUtils.normalize(theta+dTheta);
+        double x1 = 1-2*(qy*qy+qz*qz);
+        double y1 = 2*(qx*qy-qz*qw);
+        double z1 = 2*(qx*qz+qy*qw);
+        double x2 = 2*(qx*qy+qz*qw);
+        double y2 = 1-2*(qx*qx+qz*qz);
+        double z2 = 2*(qy*qz-qx*qw);
+        double x3 = 2*(qx*qz-qy*qw);
+        double y3 = 2*(qy*qz+qx*qw);
+        double z3 = 1-2*(qx*qx+qy*qy);
+
+        double rx = x1*dx+y1*dy+z1*dz;
+        double ry = x2*dx+y2*dy+z2*dz;
+        double rz = x3*dx+y3*dy+z3*dz;
+
+        x += rx;
+        y += ry;
+        z += rz;
+        roll = MathUtils.normalize(roll+dRoll);
+        pitch = MathUtils.normalize(pitch+dPitch);
+        yaw = MathUtils.normalize(yaw+dYaw);
+
+        orientation += dYaw;
         rotation = orientation/(2*Math.PI);
         if (rotation > 0) rotation = Math.floor(rotation);
         else if (rotation < 0) rotation = Math.ceil(rotation);
@@ -118,10 +146,6 @@ public class PositionMonitor extends MonitorThread {
         elPosLast = elPos;
         ebPosLast = ebPos;
 
-        try {
-            Thread.sleep(GlobalConstants.FPS_UPDATE_PERIOD);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        while (e.milliseconds() < GlobalConstants.FPS_UPDATE_PERIOD);
     }
 }

@@ -28,7 +28,7 @@ public class MathUtils {
         return Math.max(lowerBound, Math.min(upperBound, number));
     }
     public static double truncate(double d, int place) {
-        return (double) ((int)(d * place)) / place;
+        return (double) ((int)(d*place)) / place;
     }
     public static boolean equals(double d, double e) {
         return equals(d,e,epsilon);
@@ -58,7 +58,7 @@ public class MathUtils {
         double stddev = 0;
         for (int i = 0; i < len; i++) {
             double diff = values[i] - mean;
-            stddev += diff * diff;
+            stddev += diff*diff;
         }
         stddev /= len;
         return Math.sqrt(stddev);
