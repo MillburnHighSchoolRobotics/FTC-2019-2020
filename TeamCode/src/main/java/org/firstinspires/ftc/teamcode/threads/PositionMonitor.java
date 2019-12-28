@@ -102,16 +102,20 @@ public class PositionMonitor extends MonitorThread {
         Log.d(TAG, "dx: " + dx);
         Log.d(TAG, "dy: " + dy);
 
-        double cy = Math.cos(dYaw*0.5);
-        double sy = Math.sin(dYaw*0.5);
-        double cp = Math.cos(dPitch*0.5);
-        double sp = Math.sin(dPitch*0.5);
-        double cr = Math.cos(dRoll*0.5);
-        double sr = Math.sin(dRoll*0.5);
+        roll = MathUtils.normalize(roll+dRoll);
+        pitch = MathUtils.normalize(pitch+dPitch);
+        yaw = MathUtils.normalize(yaw+dYaw);
+
+        double cy = Math.cos(yaw*0.5);
+        double sy = Math.sin(yaw*0.5);
+        double cp = Math.cos(pitch*0.5);
+        double sp = Math.sin(pitch*0.5);
+        double cr = Math.cos(roll*0.5);
+        double sr = Math.sin(roll*0.5);
 
         double qw = cy*cp*cr+sy*sp*sr;
         double qx = cy*cp*sr-sy*sp*cr;
-        double qy = sy*cp*sr+cy*sp*cr;
+        double qy = cy*sp*cr+sy*cp*sr;
         double qz = sy*cp*cr-cy*sp*sr;
 
         Log.d(TAG, "q: (" + qw + "," + qx + "," + qy + "," + qz +")");
@@ -133,9 +137,6 @@ public class PositionMonitor extends MonitorThread {
         x += rx;
         y += ry;
         z += rz;
-        roll = MathUtils.normalize(roll+dRoll);
-        pitch = MathUtils.normalize(pitch+dPitch);
-        yaw = MathUtils.normalize(yaw+dYaw);
 
         orientation += dYaw;
         rotation = orientation/(2*Math.PI);
