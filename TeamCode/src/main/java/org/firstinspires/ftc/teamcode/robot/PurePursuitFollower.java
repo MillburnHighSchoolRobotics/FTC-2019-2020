@@ -5,6 +5,7 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
+import com.acmerobotics.roadrunner.path.PathSegment;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
@@ -15,32 +16,32 @@ public class PurePursuitFollower {
     private Path path;
     private double lookahead = 6;
     private double lastOnPath = 0.0;
+    private double[] headingInterpolants;
 
     private double decellerationRange = 0.4;
-    private PIDController pidController;
     private double kp = 0.014;
 
-    public PurePursuitFollower(Path path, double lookahead) {
+    public PurePursuitFollower(Path path, double lookahead, double[] headingInterpolants) {
         this.path = path;
         this.lookahead = lookahead;
-        pidController = new PIDController(kp,0,0,1);
+        this.headingInterpolants = headingInterpolants;
     }
-    public PurePursuitFollower(Path path) {
+    public PurePursuitFollower(Path path, double[] headingInterpolants) {
         this.path = path;
+        this.headingInterpolants = headingInterpolants;
     }
-    public Pose2d update(Pose2d currentPose) {
-        double s = projectPoint(currentPose.vec());
-        Pose2d targetPose = new Pose2d(path.get(s).vec().rotated(Math.PI/2),path.get(s).getHeading());
-        Pose2d nextPose = new Pose2d(path.get(s+lookahead).vec().rotated(Math.PI/2),path.get(s+lookahead).getHeading());
+    public Vector2d updatePosition(Vector2d currentPos) {
+        double s = projectPoint(currentPos);
+        Vector2d targetPos = path.get(s).vec().rotated(Math.PI/2);
+        Vector2d nextPos = path.get(s+lookahead).vec().rotated(Math.PI/2);
         if (MathUtils.equals(s,path.length())) {
-            nextPose = targetPose;
+            nextPos = targetPos;
         }
-        pidController.setTarget(nextPose.getHeading());
 
         Log.d("pure pursuit","S - " + s);
-        Log.d("pure pursuit","targetVector - " + targetPose.toString());
-        Log.d("pure pursuit","nextVector - " + nextPose.toString());
-        return nextPose;
+        Log.d("pure pursuit","targetVector - " + targetPos.toString());
+        Log.d("pure pursuit","nextVector - " + nextPos.toString());
+        return nextPos;
     }
     private double projectPoint(Vector2d currentPos) {
         double s = path.length();
@@ -70,7 +71,7 @@ public class PurePursuitFollower {
     public Vector2d end() {
         return path.end().vec().rotated(Math.PI/2);
     }
-    public double getPower(double powerLow, double powerHigh, Vector2d currentPos) {
+    public double strafePower(double powerLow, double powerHigh, Vector2d currentPos) {
         double d = Math.max(currentPos.distTo(end()),(path.length()-lastOnPath));
         if (d <= decellerationRange*path.length()) {
             return MathUtils.map(d, 0,decellerationRange*path.length(),powerLow,powerHigh);
@@ -78,7 +79,22 @@ public class PurePursuitFollower {
             return powerHigh;
         }
     }
-    public double getOutput(double heading) {
-        return pidController.getPIDOutput(heading);
+    public int getCurrentSegment(double s) {
+        for (int p = 0; p < path.getSegments().size(); p++) {
+            if ((s-path.getSegments().get(p).length()) < 0) {
+                return p;
+            }
+            s -= path.getSegments().get(p).length();
+        }
+        return path.getSegments().size()-1;
+    }
+    public double headingCoefficient(Pose2d currentPose) {
+        double heading = Math.toDegrees(currentPose.getHeading());
+        double target = headingInterpolants[getCurrentSegment(currentPose.vec().distTo(end()))];
+        double coeff = kp*(target-heading);
+        if (MathUtils.equals(target, heading, 2)) {
+            return 0;
+        }
+        return coeff;
     }
 }

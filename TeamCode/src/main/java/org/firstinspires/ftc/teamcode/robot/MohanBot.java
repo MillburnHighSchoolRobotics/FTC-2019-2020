@@ -94,7 +94,7 @@ public class MohanBot {
         Log.d("Pose", pose.toString());
         return pose;
     }
-    private double[] toVector(Pose2d currentPose, Vector2d targetVector, double strafePower) {
+    private double[] powerVector(Pose2d currentPose, Vector2d targetVector, double strafePower) {
         double scale, lf = 0, lb = 0, rf = 0, rb = 0;
         double absoluteAngle = Math.atan2(targetVector.getY() - currentPose.getY(), targetVector.getX() - currentPose.getX());
         Log.d("absangle", "" + absoluteAngle);
@@ -137,7 +137,7 @@ public class MohanBot {
         Pose2d currentPose;
         do {
             currentPose = getPose();
-            double[] motorPowers = toVector(currentPose,targetVector,strafePower);
+            double[] motorPowers = powerVector(currentPose,targetVector,strafePower);
             drive.setDrivePower(motorPowers);
             try {
                 Thread.sleep(5);
@@ -165,7 +165,7 @@ public class MohanBot {
             }
             double lf = 0, lb = 0, rf = 0, rb = 0;
             if (strafe) {
-                double[] motorPowers = toVector(currentPose,targetPos,strafePower);
+                double[] motorPowers = powerVector(currentPose,targetPos,strafePower);
                 lf = motorPowers[0]; lb = motorPowers[1]; rf = motorPowers[2]; rb = motorPowers[3];
             }
 
@@ -247,34 +247,47 @@ public class MohanBot {
         }
     }
 
-    public PathBuilder path(double theta) {
-        return new PathBuilder(new Pose2d(getPose().vec().rotated(-Math.PI/2),theta));
+    public PathBuilder path(double angleofattack) {
+        return new PathBuilder(new Pose2d(getPose().vec().rotated(-Math.PI/2),angleofattack));
     }
     public PathBuilder path() {
         Pose2d currentPose = getPose();
         return new PathBuilder(new Pose2d(currentPose.vec().rotated(-Math.PI/2),currentPose.getHeading()));
     }
 
-    public void follow(double powerLow, double powerHigh, Path path) {
-        PurePursuitFollower follower = new PurePursuitFollower(path);
+    public void follow(double powerLow, double powerHigh, Path path, double... headingInterpolants) {
+        PurePursuitFollower follower = new PurePursuitFollower(path, headingInterpolants);
 
         Pose2d currentPose = getPose();
         boolean strafe = true;
-        // MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && !
         while (!shouldStop()) {
             Log.d("pure pursuit", "loop");
-            Pose2d targetPose = follower.update(currentPose);
+            if (MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && strafe) {
+                strafe = false;
+                Log.d("pure pursuit", "strafe false");
+            }
+            double power;
+            double[] powers;
+            if (strafe) {
+                Vector2d targetPose = follower.updatePosition(currentPose.vec());
+                power = follower.strafePower(powerLow,powerHigh, currentPose.vec());
+                powers = powerVector(currentPose, targetPose, power);
+            } else {
+                power = powerLow;
+                powers = new double[] {0,0,0,0};
+            }
 
-            double power = follower.getPower(powerLow,powerHigh, currentPose.vec());
-            double[] powers = toVector(currentPose, targetPose.vec(), power);
-            double pidOutput = follower.getOutput(currentPose.getHeading());
-            powers[0] -= (1-power)*pidOutput;
-            powers[1] -= (1-power)*pidOutput;
-            powers[2] += (1-power)*pidOutput;
-            powers[3] += (1-power)*pidOutput;
+            double headingCoeff = follower.headingCoefficient(currentPose);
+            if (headingCoeff == 0 && !strafe) {
+                break;
+            }
+            powers[0] -= (1-power)*headingCoeff;
+            powers[1] -= (1-power)*headingCoeff;
+            powers[2] += (1-power)*headingCoeff;
+            powers[3] += (1-power)*headingCoeff;
+
             currentPose = getPose();
         }
-
         drive.stop();
     }
 
