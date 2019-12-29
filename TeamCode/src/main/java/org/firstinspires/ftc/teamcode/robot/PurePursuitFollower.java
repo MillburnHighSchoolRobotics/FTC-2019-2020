@@ -5,10 +5,8 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
-import com.acmerobotics.roadrunner.path.PathSegment;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
-import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static org.firstinspires.ftc.teamcode.robot.MohanBot.shouldStop;
 
@@ -16,19 +14,30 @@ public class PurePursuitFollower {
     private Path path;
     private double lookahead = 6;
     private double lastOnPath = 0.0;
-    private double[] headingInterpolants;
+    private double[][] headingInterpolants;
 
     private double decellerationRange = 0.4;
     private double kp = 0.014;
 
-    public PurePursuitFollower(Path path, double lookahead, double[] headingInterpolants) {
+    public PurePursuitFollower(Path path, double lookahead, double[] angles) {
         this.path = path;
         this.lookahead = lookahead;
-        this.headingInterpolants = headingInterpolants;
+        this.headingInterpolants = new double[path.getSegments().size()][2];
+
+        int pathLength = 0;
+        for (int i = 0; i < headingInterpolants.length; i++) {
+            pathLength += path.getSegments().get(i).length();
+            this.headingInterpolants[i] = new double[] {angles[i],pathLength};
+        }
     }
-    public PurePursuitFollower(Path path, double[] headingInterpolants) {
+    public PurePursuitFollower(Path path, double[] angles) {
         this.path = path;
-        this.headingInterpolants = headingInterpolants;
+
+        int pathLength = 0;
+        for (int i = 0; i < headingInterpolants.length; i++) {
+            pathLength += path.getSegments().get(i).length();
+            this.headingInterpolants[i] = new double[] {angles[i],pathLength};
+        }
     }
     public Vector2d updatePosition(Vector2d currentPos) {
         double s = projectPoint(currentPos);
@@ -79,22 +88,20 @@ public class PurePursuitFollower {
             return powerHigh;
         }
     }
-    public int getCurrentSegment(double s) {
-        for (int p = 0; p < path.getSegments().size(); p++) {
-            if ((s-path.getSegments().get(p).length()) < 0) {
-                return p;
-            }
-            s -= path.getSegments().get(p).length();
-        }
-        return path.getSegments().size()-1;
-    }
-    public double headingCoefficient(Pose2d currentPose) {
+    public double headingCV(Pose2d currentPose) {
         double heading = Math.toDegrees(currentPose.getHeading());
-        double target = headingInterpolants[getCurrentSegment(currentPose.vec().distTo(end()))];
-        double coeff = kp*(target-heading);
-        if (MathUtils.equals(target, heading, 2)) {
-            return 0;
+        double s = projectPoint(currentPose.vec());
+        double target = headingInterpolants[headingInterpolants.length-1][0];
+        for (int r = 0; r < headingInterpolants.length; r++) {
+            if (s <= headingInterpolants[r][1]) {
+                target = headingInterpolants[r][0];
+                break;
+            }
         }
-        return coeff;
+        double u = kp*(target-heading);
+        if (MathUtils.equals(target, heading, 2)) {
+            u = 0;
+        }
+        return u;
     }
 }

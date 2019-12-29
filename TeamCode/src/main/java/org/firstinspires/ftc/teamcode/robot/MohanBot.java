@@ -258,35 +258,36 @@ public class MohanBot {
     public void follow(double powerLow, double powerHigh, Path path, double... headingInterpolants) {
         PurePursuitFollower follower = new PurePursuitFollower(path, headingInterpolants);
 
-        Pose2d currentPose = getPose();
         boolean strafe = true;
         while (!shouldStop()) {
+            Pose2d currentPose = getPose();
+
             Log.d("pure pursuit", "loop");
             if (MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && strafe) {
                 strafe = false;
                 Log.d("pure pursuit", "strafe false");
             }
-            double power;
-            double[] powers;
+            double drivePower;
+            double[] wheelPowers;
             if (strafe) {
                 Vector2d targetPose = follower.updatePosition(currentPose.vec());
-                power = follower.strafePower(powerLow,powerHigh, currentPose.vec());
-                powers = powerVector(currentPose, targetPose, power);
+                drivePower = follower.strafePower(powerLow,powerHigh, currentPose.vec());
+                wheelPowers = powerVector(currentPose, targetPose, drivePower);
             } else {
-                power = powerLow;
-                powers = new double[] {0,0,0,0};
+                drivePower = powerLow;
+                wheelPowers = new double[] {0,0,0,0};
             }
 
-            double headingCoeff = follower.headingCoefficient(currentPose);
-            if (headingCoeff == 0 && !strafe) {
+            double headingCV = follower.headingCV(currentPose);
+            if (headingCV == 0 && !strafe) {
                 break;
             }
-            powers[0] -= (1-power)*headingCoeff;
-            powers[1] -= (1-power)*headingCoeff;
-            powers[2] += (1-power)*headingCoeff;
-            powers[3] += (1-power)*headingCoeff;
+            wheelPowers[0] -= (1-drivePower)*headingCV;
+            wheelPowers[1] -= (1-drivePower)*headingCV;
+            wheelPowers[2] += (1-drivePower)*headingCV;
+            wheelPowers[3] += (1-drivePower)*headingCV;
 
-            currentPose = getPose();
+            drive.setDrivePower(wheelPowers);
         }
         drive.stop();
     }
