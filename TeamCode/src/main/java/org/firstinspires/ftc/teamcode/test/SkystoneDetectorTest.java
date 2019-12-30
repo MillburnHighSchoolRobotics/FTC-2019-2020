@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.test;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -11,7 +12,8 @@ import org.firstinspires.ftc.teamcode.util.SkystoneDetector;
 import org.firstinspires.ftc.teamcode.util.VuforiaLocalizerImplSubclass;
 import org.opencv.android.OpenCVLoader;
 
-
+@Disabled
+@Deprecated
 @Autonomous(group = "test")
 public class SkystoneDetectorTest extends LinearOpMode {
     static {

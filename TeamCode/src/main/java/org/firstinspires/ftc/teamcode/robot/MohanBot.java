@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.path.PathBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -26,6 +27,8 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TURN_POWER;
+
 public class MohanBot {
 
     private HardwareMap hardwareMap;
@@ -39,9 +42,6 @@ public class MohanBot {
     private double rotationThreshold = 2;
     private double rotationThresholdMoveDone = 5;
     private double count;
-
-    private double DEFUALT_STRAFE_POWER = 0.7;
-    private double DEFUALT_TURN_POWER = 0.6;
 
     private PIDCoefficients rotationPID = new PIDCoefficients(0.014,0.002,0.004);
 
@@ -73,8 +73,10 @@ public class MohanBot {
         Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
         Servo hookRight = hardwareMap.servo.get("foundationHookRight");
 
+        AnalogInput chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
+
         drive = new Drive(lf,lb,rf,rb);
-        chainBar = new ChainBar(chainbar,clawClamp,clawRotate);
+        chainBar = new ChainBar(chainbar,chainBarPot, clawClamp,clawRotate);
         intake = new Intake(intakeLeft,intakeRight);
         hook = new Hook(hookLeft,hookRight);
     }
@@ -102,25 +104,25 @@ public class MohanBot {
         Log.d("relangle", "" + relAngle);
 
         if (relAngle >= 0 && relAngle < 90) {
-            scale = Math.tan(Math.toRadians(relAngle - 45));
+            scale = MathUtils.tanDegrees(relAngle - 45);
             lf = 1;
             lb = scale;
             rf = scale;
             rb = 1;
         } else if (relAngle >= 90 && relAngle < 180) {
-            scale = Math.tan(Math.toRadians(relAngle - 135));
+            scale = MathUtils.tanDegrees(relAngle - 135);
             lf = -scale;
             lb = 1;
             rf = 1;
             rb = -scale;
         } else if (relAngle >= 180 && relAngle < 270) {
-            scale = Math.tan(Math.toRadians(relAngle - 225));
+            scale = MathUtils.tanDegrees(relAngle - 225);
             lf = -1;
             lb = -scale;
             rf = -scale;
             rb = -1;
         } else if (relAngle >= 270 && relAngle < 360) {
-            scale = Math.tan(Math.toRadians(relAngle - 315));
+            scale = MathUtils.tanDegrees(relAngle - 315);
             lf = scale;
             lb = -1;
             rf = -1;
@@ -202,14 +204,14 @@ public class MohanBot {
     }
 
     public void rotate(double angle) throws InterruptedException {
-        rotate(angle,DEFUALT_TURN_POWER);
+        rotate(angle,TURN_POWER);
     }
     public void rotate(double angle, double power) throws InterruptedException {
         double targetHeading = Math.toDegrees(getPose().getHeading())+angle;
         rotateTo(targetHeading,power);
     }
     public void rotateTo(double targetHeading) throws  InterruptedException {
-        rotateTo(targetHeading,DEFUALT_TURN_POWER);
+        rotateTo(targetHeading,TURN_POWER);
     }
     public void rotateTo(double targetHeading, double power) throws InterruptedException {
         targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));

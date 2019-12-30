@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
 
-@Autonomous(group = "test")
+@Autonomous(group = "util")
 public class SpamRotate extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
