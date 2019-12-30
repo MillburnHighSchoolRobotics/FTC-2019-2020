@@ -133,7 +133,7 @@ public class DriversPickUpYourControllers extends OpMode {
     @Override
     public void loop() {
 
-        if (gamepad2.x) { // reset
+        if (gamepad2.right_stick_button) { // reset
             chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
@@ -169,26 +169,40 @@ public class DriversPickUpYourControllers extends OpMode {
 
         //-------------------------------------------- Lift --------------------------------------------
 
-        if (gamepad2.dpad_up && (timerLiftUp.milliseconds() > 100)) { // auto raise lift
-            if (targetLiftHeight < LIFT_STONE_POS.length) {
-                targetLiftHeight++;
-                timerLiftUp.reset();
-            }
-        } else if (gamepad2.dpad_down && (timerLiftDown.milliseconds() > 100)) { // auto lower lift
-            if (targetLiftHeight > 1) {
-                targetLiftHeight--;
-                timerLiftDown.reset();
-            }
+//        if (gamepad2.dpad_up && (timerLiftUp.milliseconds() > 100)) { // auto raise lift
+//            if (targetLiftHeight < LIFT_STONE_POS.length) {
+//                targetLiftHeight++;
+//                timerLiftUp.reset();
+//            }
+//        } else if (gamepad2.dpad_down && (timerLiftDown.milliseconds() > 100)) { // auto lower lift
+//            if (targetLiftHeight > 1) {
+//                targetLiftHeight--;
+//                timerLiftDown.reset();
+//            }
+//        }
+        if (gamepad2.dpad_up) {
+            targetLiftHeight = 1;
+        } else if (gamepad2.dpad_right) {
+            targetLiftHeight = 2;
+        } else if (gamepad2.dpad_down) {
+            targetLiftHeight = 3;
+        } else if (gamepad2.dpad_left) {
+            targetLiftHeight = 4;
+        } else if (gamepad2.y) {
+            targetLiftHeight = 5;
+        } else if (gamepad2.b) {
+            targetLiftHeight = 6;
         }
-        if (gamepad2.a) { // set lift mode to auto
+
+        if (gamepad1.dpad_left) { // set lift mode to auto
             liftAutoMode = true;
             liftPID.setTarget(LIFT_STONE_POS[targetLiftHeight-1]);
-        } else if (gamepad2.b) { // set lift mode to driver
+        } else if (gamepad1.dpad_right) { // set lift mode to driver
             liftAutoMode = false;
             liftUpdatedPos = true;
         }
 
-        if (gamepad2.y) {
+        if (gamepad1.y) { // auto lower lift
             targetLiftHeight = 1;
             liftAutoMode = true;
             liftPID.setTarget(LIFT_STONE_POS[targetLiftHeight-1]);

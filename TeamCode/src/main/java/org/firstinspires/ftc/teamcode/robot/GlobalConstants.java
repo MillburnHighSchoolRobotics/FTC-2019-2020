@@ -54,7 +54,7 @@ public class GlobalConstants {
 
     public static final double LIFT_MAX_POS = 1450;
     public static final double LIFT_RAISED_MIN_POS = 200;
-    public static final double[] LIFT_STONE_POS = {0,250,500,750,1000,1250};
+    public static final double[] LIFT_STONE_POS = {0,275,550,825,1100,1375};
 
     public static final long FPS_UPDATE_PERIOD = 10;
 
