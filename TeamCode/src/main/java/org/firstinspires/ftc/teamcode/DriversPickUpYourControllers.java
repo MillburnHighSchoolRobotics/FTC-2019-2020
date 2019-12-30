@@ -12,13 +12,11 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MAX_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_HIGH_POWER;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MAX_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_CLOSE_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_NORMAL_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_OPEN_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_ROTATE_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_HIGH;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_LOW;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER;
@@ -45,7 +43,6 @@ public class DriversPickUpYourControllers extends OpMode {
 
     private boolean drivePowerLow = false;
     private boolean liftUpdatedPos = true;
-    private boolean clawNormal = true;
     private boolean hookUp = true;
     private boolean liftRaised = false;
     private boolean liftAutoMode = false;
@@ -65,7 +62,6 @@ public class DriversPickUpYourControllers extends OpMode {
     private DcMotorEx chainBar;
     private DcMotorEx lift;
     private Servo clawSquish;
-    private Servo clawSpin;
     private Servo foundationHookLeft;
     private Servo foundationHookRight;
     private AnalogInput chainBarPot;
@@ -86,7 +82,6 @@ public class DriversPickUpYourControllers extends OpMode {
         lift = (DcMotorEx)hardwareMap.dcMotor.get("lift");
 
         clawSquish = hardwareMap.servo.get("clawSquish");
-        clawSpin = hardwareMap.servo.get("clawSpin");
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookRight = hardwareMap.servo.get("foundationHookRight");
 
@@ -125,7 +120,6 @@ public class DriversPickUpYourControllers extends OpMode {
         chainBar.setPower(0);
 
         clawSquish.setPosition(CLAW_OPEN_POS);
-        clawSpin.setPosition(CLAW_NORMAL_POS);
         foundationHookRight.setPosition(RIGHT_HOOK_UP_POS);
         foundationHookLeft.setPosition(LEFT_HOOK_UP_POS);
 
@@ -238,16 +232,6 @@ public class DriversPickUpYourControllers extends OpMode {
             clawSquish.setPosition(CLAW_OPEN_POS);
         }
 
-        if (gamepad1.y && (toggleClawSpin.milliseconds() > 250)) { // toggle claw spin
-            clawNormal = !clawNormal;
-            if (clawNormal) {
-                clawSpin.setPosition(CLAW_NORMAL_POS);
-            } else {
-                clawSpin.setPosition(CLAW_ROTATE_POS);
-            }
-            toggleClawSpin.reset();
-        }
-
 
         //-------------------------------------------- Hook --------------------------------------------
 
@@ -310,7 +294,6 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("foundationHookLeft Pos", foundationHookLeft.getPosition());
         telemetry.addData("foundationHookRight Pos", foundationHookRight.getPosition());
         telemetry.addData("clawSquish Pos", clawSquish.getPosition());
-        telemetry.addData("clawSpin Pos", clawSpin.getPosition());
 
         telemetry.update();
     }

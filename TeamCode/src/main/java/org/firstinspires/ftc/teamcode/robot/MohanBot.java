@@ -69,14 +69,13 @@ public class MohanBot {
         DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
 
         Servo clawClamp = hardwareMap.servo.get("clawSquish");
-        Servo clawRotate = hardwareMap.servo.get("clawSpin");
         Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
         Servo hookRight = hardwareMap.servo.get("foundationHookRight");
 
         AnalogInput chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
 
         drive = new Drive(lf,lb,rf,rb);
-        chainBar = new ChainBar(chainbar,chainBarPot, clawClamp,clawRotate);
+        chainBar = new ChainBar(chainbar,chainBarPot, clawClamp);
         intake = new Intake(intakeLeft,intakeRight);
         hook = new Hook(hookLeft,hookRight);
     }

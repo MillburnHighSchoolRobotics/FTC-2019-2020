@@ -13,15 +13,14 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 public class ChainBar {
     DcMotorEx chainBar;
     AnalogInput chainBarPot;
-    Servo clawClamp, clawRotate;
+    Servo clawClamp;
 
     PIDController chainBarPID = new PIDController(1.5,0,0);
 
-    public ChainBar(DcMotorEx chainBar, AnalogInput chainBarPot, Servo clawClamp, Servo clawRotate) {
+    public ChainBar(DcMotorEx chainBar, AnalogInput chainBarPot, Servo clawClamp) {
         this.chainBar = chainBar;
         this.chainBarPot = chainBarPot;
         this.clawClamp = clawClamp;
-        this.clawRotate = clawRotate;
 
         chainBar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         chainBar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -32,12 +31,6 @@ public class ChainBar {
     }
     public void closeClaw() {
         clawClamp.setPosition(CLAW_CLOSE_POS);
-    }
-    public void normalClaw() {
-        clawRotate.setPosition(CLAW_NORMAL_POS);
-    }
-    public void rotatedClaw() {
-        clawRotate.setPosition(CLAW_ROTATE_POS);
     }
     public void chainBarIn() {
         chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
