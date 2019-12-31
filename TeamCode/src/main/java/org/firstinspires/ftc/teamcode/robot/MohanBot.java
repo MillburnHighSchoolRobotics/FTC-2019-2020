@@ -256,7 +256,7 @@ public class MohanBot {
         return new PathBuilder(new Pose2d(currentPose.vec().rotated(-Math.PI/2),currentPose.getHeading()));
     }
 
-    public void follow(double powerLow, double powerHigh, Path path, double... headingInterpolants) {
+    public void follow(double powerLow, double powerHigh, Path path, double[] headingInterpolants) {
         PurePursuitFollower follower = new PurePursuitFollower(path, headingInterpolants);
 
         boolean strafe = true;
@@ -279,7 +279,11 @@ public class MohanBot {
                 wheelPowers = new double[] {0,0,0,0};
             }
 
-            double headingCV = follower.headingCV(currentPose);
+            double threshold = rotationThreshold;
+            if (!strafe) {
+                threshold = rotationThresholdMoveDone;
+            }
+            double headingCV = follower.headingCV(currentPose,threshold);
             if (headingCV == 0 && !strafe) {
                 break;
             }

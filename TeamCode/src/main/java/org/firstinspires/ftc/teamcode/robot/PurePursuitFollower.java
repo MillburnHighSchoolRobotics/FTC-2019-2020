@@ -32,6 +32,7 @@ public class PurePursuitFollower {
     }
     public PurePursuitFollower(Path path, double[] angles) {
         this.path = path;
+        this.headingInterpolants = new double[path.getSegments().size()][2];
 
         int pathLength = 0;
         for (int i = 0; i < headingInterpolants.length; i++) {
@@ -88,7 +89,7 @@ public class PurePursuitFollower {
             return powerHigh;
         }
     }
-    public double headingCV(Pose2d currentPose) {
+    public double headingCV(Pose2d currentPose, double rotationThreshold) {
         double heading = Math.toDegrees(currentPose.getHeading());
         double s = projectPoint(currentPose.vec());
         double target = headingInterpolants[headingInterpolants.length-1][0];
@@ -98,8 +99,13 @@ public class PurePursuitFollower {
                 break;
             }
         }
+        if (heading - target > 180) {
+            heading -= 360;
+        } else if (target - heading > 180) {
+            heading += 360;
+        }
         double u = kp*(target-heading);
-        if (MathUtils.equals(target, heading, 2)) {
+        if (MathUtils.equals(target, heading, rotationThreshold)) {
             u = 0;
         }
         return u;

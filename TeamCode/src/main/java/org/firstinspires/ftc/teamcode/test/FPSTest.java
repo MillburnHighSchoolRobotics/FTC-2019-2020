@@ -39,7 +39,7 @@ public class FPSTest extends LinearOpMode {
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
-        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d());
+        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d(-63,-39,3*Math.PI/2));
         waitForStart();
 
         if (isStopRequested()) return;

@@ -20,7 +20,7 @@ public class SplineTest extends LinearOpMode {
                 drive.path(0)
                         .splineTo(new Pose2d(new Vector2d(36,36).rotated(-Math.PI/2),0))
                         .build(),
-                0
+                new double[]{90}
         );
 
         Thread.sleep(1000);
@@ -28,7 +28,9 @@ public class SplineTest extends LinearOpMode {
         drive.follow(0.1,0.9,
                 drive.path(Math.PI/2)
                         .splineTo(new Pose2d(new Vector2d(0,0).rotated(-Math.PI/2),Math.PI))
-                        .build()
+                        .build(),
+                new double[]{0}
+
         );
         Thread.sleep(1000);
     }

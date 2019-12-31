@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_HIGH_POWER;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_IN_VOLTAGE;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_LOW_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MAX_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_CLOSE_POS;
@@ -35,16 +37,18 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.RIGHT_HOOK_UP
 
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
-    private double drivePower;
+    private double drivePower = 1;
     private double chainBarPower;
     private double liftPower;
 
     private int targetLiftHeight = 1;
 
     private boolean drivePowerLow = false;
-    private boolean liftUpdatedPos = true;
+    private boolean intakeIn = false;
     private boolean hookUp = true;
+    private boolean liftUpdatedPos = true;
     private boolean liftRaised = false;
+    private boolean liftDown = false;
     private boolean liftAutoMode = false;
 
     private ElapsedTime toggleDriveSpeed;
@@ -144,27 +148,19 @@ public class DriversPickUpYourControllers extends OpMode {
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) { // intake out
             intakeL.setPower(-INTAKE_OUT_POWER);
             intakeR.setPower(INTAKE_OUT_POWER);
+            intakeIn = false;
         } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) { // intake in
             intakeL.setPower(-INTAKE_IN_POWER);
             intakeR.setPower(INTAKE_IN_POWER);
             clawSquish.setPosition(CLAW_OPEN_POS);
-            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
+//            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+//            intakeIn = true;
         } else { // stop intake
             intakeL.setPower(0);
             intakeR.setPower(0);
+            intakeIn = false;
         }
-
-
-        //-------------------------------------------- ChainBar --------------------------------------------
-
-        if (gamepad1.left_bumper) { // chain bar in
-            chainBarPower = CHAINBAR_HIGH_POWER;
-        } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
-            chainBarPower = -CHAINBAR_HIGH_POWER;
-        } else {
-            chainBarPower = 0;
-        }
-        chainBar.setPower(chainBarPower);
 
 
         //-------------------------------------------- Lift --------------------------------------------
@@ -202,10 +198,13 @@ public class DriversPickUpYourControllers extends OpMode {
             liftUpdatedPos = true;
         }
 
-        if (gamepad1.y) { // auto lower lift
+        if (gamepad1.y) { // auto lower lift and chainbar
             targetLiftHeight = 1;
             liftAutoMode = true;
             liftPID.setTarget(LIFT_STONE_POS[targetLiftHeight-1]);
+            chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
+            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            liftDown = true;
         }
 
         if (gamepad1.dpad_up) { // lift up with dampening
@@ -236,6 +235,20 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
         liftRaised = lift.getCurrentPosition() > LIFT_RAISED_MIN_POS;
+
+
+        //-------------------------------------------- ChainBar --------------------------------------------
+
+        if (gamepad1.left_bumper) { // chain bar in
+            chainBarPower = CHAINBAR_HIGH_POWER;
+            liftDown = false;
+        } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
+            chainBarPower = -CHAINBAR_HIGH_POWER;
+            liftDown = false;
+        } else if (!intakeIn && !liftDown) {
+            chainBarPower = 0;
+        }
+        chainBar.setPower(chainBarPower);
 
 
         //-------------------------------------------- Claw --------------------------------------------
@@ -294,16 +307,18 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("Lift Target Stone",targetLiftHeight);
         telemetry.addLine();
         telemetry.addData("Lift Raised",liftRaised);
+        telemetry.addData("Lift Down",liftDown);
         telemetry.addData("Lift Current Position",lift.getCurrentPosition());
         telemetry.addData("Lift Target Position",liftPID.getTarget());
-        telemetry.addData("Chain Bar Voltage",chainBarPot.getVoltage());
+        telemetry.addData("Chain Bar Current Voltage",chainBarPot.getVoltage());
+        telemetry.addData("Chain Bar Target Voltage",chainBarPID.getTarget());
         telemetry.addLine();
         telemetry.addData("Lift Power",liftPower);
         telemetry.addData("Chain Bar Power",chainBarPower);
-        telemetry.addData("lf Power",lf);
-        telemetry.addData("lb Power",lb);
-        telemetry.addData("rf Power",rf);
-        telemetry.addData("rb Power",rb);
+        telemetry.addData("lf Power",lf.getPower());
+        telemetry.addData("lb Power",lb.getPower());
+        telemetry.addData("rf Power",rf.getPower());
+        telemetry.addData("rb Power",rb.getPower());
         telemetry.addLine();
         telemetry.addData("foundationHookLeft Pos", foundationHookLeft.getPosition());
         telemetry.addData("foundationHookRight Pos", foundationHookRight.getPosition());

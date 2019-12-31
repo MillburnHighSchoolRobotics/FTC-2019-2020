@@ -30,10 +30,11 @@ public class GlobalConstants {
     public static final double DRIVE_POWER_LOW = 0.6;
     public static final double TURN_POWER = 0.6;
 
-    public static final double INTAKE_IN_POWER = -0.6;
+    public static final double INTAKE_IN_POWER = -0.4;
     public static final double INTAKE_OUT_POWER = 0.8;
+    public static final double CHAINBAR_LOW_POWER = 0.4;;
     public static final double CHAINBAR_HIGH_POWER = 0.6;
-    public static final double CHAINBAR_LOW_POWER = 0.4;
+    public static final double CHAINBAR_EVEN_HIGHER_POWER = 0.8;
     public static final double LIFT_EXTENSION_POWER = 0.6;
     public static final double LIFT_RETRACTION_POWER = -0.4;
     public static final double LIFT_HOLD_POWER = 0.25;
@@ -47,14 +48,16 @@ public class GlobalConstants {
     public static final double LEFT_HOOK_DOWN_POS = 0;
     public static final double LEFT_HOOK_UP_POS = 1;
 
-    public static final double CHAINBAR_IN_VOLTAGE = 2.13;
+    public static final double CHAINBAR_IN_VOLTAGE = 0.4;
     public static final double CHAINBAR_UP_VOLTAGE = 0.75;
-    public static final double CHAINBAR_OUT_VOLTAGE = 1.05;
+    public static final double CHAINBAR_OUT_VOLTAGE = 0.93;
     public static final double CHAINBAR_MAX_VOLTAGE = 3;
 
     public static final double LIFT_MAX_POS = 1450;
     public static final double LIFT_RAISED_MIN_POS = 200;
-    public static final double[] LIFT_STONE_POS = {0,275,550,825,1100,1375};
+    public static final double[] LIFT_STONE_POS = {0,450,730,980,1410
+    };
+
 
     public static final long FPS_UPDATE_PERIOD = 10;
 

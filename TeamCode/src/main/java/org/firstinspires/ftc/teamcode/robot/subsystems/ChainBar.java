@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
@@ -15,7 +17,7 @@ public class ChainBar {
     AnalogInput chainBarPot;
     Servo clawClamp;
 
-    PIDController chainBarPID = new PIDController(1.5,0,0);
+    PIDController chainBarPID = new PIDController(2.5,0,0);
 
     public ChainBar(DcMotorEx chainBar, AnalogInput chainBarPot, Servo clawClamp) {
         this.chainBar = chainBar;
@@ -33,16 +35,37 @@ public class ChainBar {
         clawClamp.setPosition(CLAW_CLOSE_POS);
     }
     public void chainBarIn() {
+        ElapsedTime e = new ElapsedTime();
         chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
-        chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+        while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
+            chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+            if (e.milliseconds() > 3000) {
+                break;
+            }
+        }
+        chainBarStop();
     }
     public void chainBarUp() {
+        ElapsedTime e = new ElapsedTime();
         chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
-        chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+        while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
+            chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+            if (e.milliseconds() > 3000) {
+                break;
+            }
+        }
+        chainBarStop();
     }
     public void chainBarOut() {
+        ElapsedTime e = new ElapsedTime();
         chainBarPID.setTarget(CHAINBAR_OUT_VOLTAGE);
-        chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+        while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
+            chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
+            if (e.milliseconds() > 3000) {
+                break;
+            }
+        }
+        chainBarStop();
     }
     public void chainBarStop() {
         chainBar.setPower(0);
