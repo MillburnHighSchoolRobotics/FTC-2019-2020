@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.ChainBar;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Hook;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystems.SideClaw;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
@@ -36,6 +37,7 @@ public class MohanBot {
     public ChainBar chainBar;
     public Intake intake;
     public Hook hook;
+    public SideClaw sideClaw;
 
     private double poseThreshold = 2;
     private double purePursuitThreshold = 1;
@@ -68,16 +70,19 @@ public class MohanBot {
         DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
         DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
 
-        Servo clawClamp = hardwareMap.servo.get("clawSquish");
+        Servo chainBarClawClamp = hardwareMap.servo.get("chainBarClawClamp");
+        Servo sideClawBar = hardwareMap.servo.get("sideClawBar");
+        Servo sideClawClamp = hardwareMap.servo.get("sideClawClamp");
         Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
         Servo hookRight = hardwareMap.servo.get("foundationHookRight");
 
         AnalogInput chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
 
         drive = new Drive(lf,lb,rf,rb);
-        chainBar = new ChainBar(chainbar,chainBarPot, clawClamp);
+        chainBar = new ChainBar(chainbar,chainBarPot, chainBarClawClamp);
         intake = new Intake(intakeLeft,intakeRight);
         hook = new Hook(hookLeft,hookRight);
+        sideClaw = new SideClaw(sideClawBar, sideClawClamp);
     }
 
     public Pose2d getPose() {

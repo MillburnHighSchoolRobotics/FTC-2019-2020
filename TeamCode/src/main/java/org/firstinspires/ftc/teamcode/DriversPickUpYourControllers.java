@@ -14,11 +14,10 @@ import org.firstinspires.ftc.teamcode.util.PIDController;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_HIGH_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_IN_VOLTAGE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_LOW_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MAX_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_VOLTAGE;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_CLOSE_POS;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CLAW_OPEN_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_CLAW_CLOSE_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_CLAW_OPEN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_HIGH;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_LOW;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER;
@@ -85,7 +84,7 @@ public class DriversPickUpYourControllers extends OpMode {
         chainBar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
         lift = (DcMotorEx)hardwareMap.dcMotor.get("lift");
 
-        clawSquish = hardwareMap.servo.get("clawSquish");
+        clawSquish = hardwareMap.servo.get("chainBarClawClamp");
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookRight = hardwareMap.servo.get("foundationHookRight");
 
@@ -123,7 +122,7 @@ public class DriversPickUpYourControllers extends OpMode {
         intakeR.setPower(0);
         chainBar.setPower(0);
 
-        clawSquish.setPosition(CLAW_OPEN_POS);
+        clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
         foundationHookRight.setPosition(RIGHT_HOOK_UP_POS);
         foundationHookLeft.setPosition(LEFT_HOOK_UP_POS);
 
@@ -152,7 +151,7 @@ public class DriversPickUpYourControllers extends OpMode {
         } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) { // intake in
             intakeL.setPower(-INTAKE_IN_POWER);
             intakeR.setPower(INTAKE_IN_POWER);
-            clawSquish.setPosition(CLAW_OPEN_POS);
+            clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
             chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
 //            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
 //            intakeIn = true;
@@ -254,9 +253,9 @@ public class DriversPickUpYourControllers extends OpMode {
         //-------------------------------------------- Claw --------------------------------------------
 
         if (gamepad1.a) { // claw close
-            clawSquish.setPosition(CLAW_CLOSE_POS);
+            clawSquish.setPosition(CHAINBAR_CLAW_CLOSE_POS);
         } else if (gamepad1.b) { // claw open
-            clawSquish.setPosition(CLAW_OPEN_POS);
+            clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
         }
 
 

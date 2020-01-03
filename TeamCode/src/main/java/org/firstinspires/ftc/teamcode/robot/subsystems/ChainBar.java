@@ -29,10 +29,10 @@ public class ChainBar {
         chainBar.setDirection(REVERSE);
     }
     public void openClaw() {
-        clawClamp.setPosition(CLAW_OPEN_POS);
+        clawClamp.setPosition(CHAINBAR_CLAW_OPEN_POS);
     }
     public void closeClaw() {
-        clawClamp.setPosition(CLAW_CLOSE_POS);
+        clawClamp.setPosition(CHAINBAR_CLAW_CLOSE_POS);
     }
     public void chainBarIn() {
         ElapsedTime e = new ElapsedTime();
@@ -69,5 +69,8 @@ public class ChainBar {
     }
     public void chainBarStop() {
         chainBar.setPower(0);
+    }
+    public double getVoltage() {
+        return chainBarPot.getVoltage();
     }
 }
