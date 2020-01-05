@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -32,9 +33,9 @@ public class GlobalConstants {
 
     public static final double INTAKE_IN_POWER = -0.4;
     public static final double INTAKE_OUT_POWER = 0.8;
-    public static final double CHAINBAR_LOW_POWER = 0.4;;
-    public static final double CHAINBAR_HIGH_POWER = 0.6;
-    public static final double CHAINBAR_EVEN_HIGHER_POWER = 0.8;
+    public static final double CHAINBAR_LOW_POWER = 0.2;
+    public static final double CHAINBAR_HIGH_POWER = 0.45;
+    public static final double CHAINBAR_EVEN_HIGHER_POWER = 0.6;
     public static final double LIFT_EXTENSION_POWER = 0.6;
     public static final double LIFT_RETRACTION_POWER = -0.4;
     public static final double LIFT_HOLD_POWER = 0.25;
@@ -54,17 +55,24 @@ public class GlobalConstants {
     public static final double CHAINBAR_CLAW_OPEN_POS = 0.4;
 
     public static final double SIDE_CLAW_UP_POS = 0.3;
+    public static final double SIDE_CLAW_MID_POS = 0.45;
     public static final double SIDE_CLAW_DOWN_POS = 0.7;
     public static final double SIDE_CLAW_CLOSE_POS = 0;
     public static final double SIDE_CLAW_OPEN_POS = 0.5;
 
     public static final double LIFT_MAX_POS = 1450;
     public static final double LIFT_RAISED_MIN_POS = 200;
-    public static final double[] LIFT_STONE_POS = {0,450,730,980,1410
-    };
+    public static final double[] LIFT_STONE_POS = {0,450,730,980,1410};
+
+    public static Vector2d BLUE_BLOCK_2 = new Vector2d(-36,-63);
+    public static Vector2d BLUE_BLOCK_3 = new Vector2d(-36,-56);
+    public static Vector2d BLUE_BLOCK_4 = new Vector2d(-36,-48);
+    public static Vector2d BLUE_BLOCK_5 = new Vector2d(-36,-40);
+    public static Vector2d BLUE_BLOCK_6 = new Vector2d(-36,-32);
 
 
     public static final long FPS_UPDATE_PERIOD = 10;
+    public static final long LOOK_AHEAD = 6;
 
     public static final String VUFORIA_KEY = "AcSW/tj/////AAABmUB3byzZQksfqhymb0Tr3M92yvtrzF4HgDl0t7Z07OZ2xscXR1yyeX4GxftrShvm9T926ZCW0VglQKXuQE5+JkrABVijohk5DCkcE9CcxHy3mTs2Ui76Nz+9CQTgOsr6/AMLV+Te6uyXTs3rZwGdnHGRo0Q1yboJCQ51Ap2rgJc//ehVdkp/QetIMnfhRffac0edAHFt0i2F5++S/OH/4kdxFd5ha0lswd4nTnqU2MiJrz+OH4WQPQ8JC94dQZ6F3m/iX5mk4TCq/9xg3cTJvFccEUawf7PIsapABxKMJB6hcPikwa0XtyGB+vEb7fQAXZ80tRal2mcwKSHrDM4ZvYisD73X+sTIAqQnXgxYiL14";
 

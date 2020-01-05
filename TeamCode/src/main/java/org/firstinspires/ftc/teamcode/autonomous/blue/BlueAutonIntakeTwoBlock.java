@@ -12,7 +12,7 @@ import org.opencv.android.OpenCVLoader;
 
 
 @Autonomous(group = "auton")
-public class BlueAutonRlyGoodPlsRunTrustMe extends LinearOpMode {
+public class BlueAutonIntakeTwoBlock extends LinearOpMode {
     static {
         if (OpenCVLoader.initDebug()) {
             Log.d("opencv", "yay it works");

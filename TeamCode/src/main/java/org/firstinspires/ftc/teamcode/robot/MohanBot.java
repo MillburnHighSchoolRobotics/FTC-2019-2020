@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LOOK_AHEAD;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TURN_POWER;
 
 public class MohanBot {
@@ -262,7 +263,13 @@ public class MohanBot {
     }
 
     public void follow(double powerLow, double powerHigh, Path path, double[] headingInterpolants) {
-        PurePursuitFollower follower = new PurePursuitFollower(path, headingInterpolants);
+        follow(powerLow,powerHigh,path,headingInterpolants,true,LOOK_AHEAD);
+    }
+    public void follow(double powerLow, double powerHigh, Path path, double[] headingInterpolants, boolean headingAdjustment) {
+        follow(powerLow,powerHigh,path,headingInterpolants,headingAdjustment, LOOK_AHEAD);
+    }
+    public void follow(double powerLow, double powerHigh, Path path, double[] headingInterpolants, boolean headingAdjustment, double lookahead) {
+        PurePursuitFollower follower = new PurePursuitFollower(path, lookahead, headingInterpolants);
 
         boolean strafe = true;
         while (!shouldStop()) {
@@ -286,6 +293,9 @@ public class MohanBot {
 
             double threshold = rotationThreshold;
             if (!strafe) {
+                if (!headingAdjustment) {
+                    break;
+                }
                 threshold = rotationThresholdMoveDone;
             }
             double headingCV = follower.headingCV(currentPose,threshold);

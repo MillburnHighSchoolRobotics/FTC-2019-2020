@@ -69,7 +69,7 @@ public class DriversPickUpYourControllers extends OpMode {
     private Servo foundationHookRight;
     private AnalogInput chainBarPot;
 
-    private PIDController chainBarPID = new PIDController(1.5,0,0,0,CHAINBAR_UP_VOLTAGE);
+    private PIDController chainBarPID = new PIDController(2.25,0,0,0,CHAINBAR_UP_VOLTAGE);
     private PIDController liftPID = new PIDController(0.01,0,0,0,0);
 
     @Override
@@ -131,6 +131,8 @@ public class DriversPickUpYourControllers extends OpMode {
         toggleHook = new ElapsedTime();
         timerLiftUp = new ElapsedTime();
         timerLiftDown = new ElapsedTime();
+
+        chainBarPID.setTarget(chainBarPot.getVoltage());
     }
 
     @Override
@@ -153,8 +155,8 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeR.setPower(INTAKE_IN_POWER);
             clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
             chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
-//            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
-//            intakeIn = true;
+            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            intakeIn = true;
         } else { // stop intake
             intakeL.setPower(0);
             intakeR.setPower(0);
@@ -239,13 +241,15 @@ public class DriversPickUpYourControllers extends OpMode {
         //-------------------------------------------- ChainBar --------------------------------------------
 
         if (gamepad1.left_bumper) { // chain bar in
-            chainBarPower = CHAINBAR_HIGH_POWER;
-            liftDown = false;
-        } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
             chainBarPower = -CHAINBAR_HIGH_POWER;
             liftDown = false;
+            chainBarPID.setTarget(chainBarPot.getVoltage());
+        } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
+            chainBarPower = CHAINBAR_HIGH_POWER;
+            liftDown = false;
+            chainBarPID.setTarget(chainBarPot.getVoltage());
         } else if (!intakeIn && !liftDown) {
-            chainBarPower = 0;
+            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
         }
         chainBar.setPower(chainBarPower);
 
