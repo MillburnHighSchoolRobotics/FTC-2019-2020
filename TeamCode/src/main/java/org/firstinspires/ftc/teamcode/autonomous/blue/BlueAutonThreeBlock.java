@@ -46,7 +46,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        int pos = 2;
+        int pos = 3;
         telemetry.addData("block",pos);
         telemetry.update();
 

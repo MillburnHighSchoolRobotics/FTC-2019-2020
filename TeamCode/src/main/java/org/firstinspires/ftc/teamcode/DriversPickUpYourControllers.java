@@ -42,19 +42,16 @@ public class DriversPickUpYourControllers extends OpMode {
 
     private int targetLiftHeight = 1;
 
-    private boolean drivePowerLow = false;
     private boolean intakeIn = false;
     private boolean hookUp = true;
     private boolean liftUpdatedPos = true;
     private boolean liftRaised = false;
     private boolean liftDown = false;
     private boolean liftAutoMode = false;
+    private boolean autoChainBar = true;
 
-    private ElapsedTime toggleDriveSpeed;
-    private ElapsedTime toggleClawSpin;
-    private ElapsedTime timerLiftUp;
-    private ElapsedTime timerLiftDown;
     private ElapsedTime toggleHook;
+    private ElapsedTime toggleChainBar;
 
     private DcMotorEx lf;
     private DcMotorEx lb;
@@ -126,11 +123,8 @@ public class DriversPickUpYourControllers extends OpMode {
         foundationHookRight.setPosition(RIGHT_HOOK_UP_POS);
         foundationHookLeft.setPosition(LEFT_HOOK_UP_POS);
 
-        toggleDriveSpeed = new ElapsedTime();
-        toggleClawSpin = new ElapsedTime();
         toggleHook = new ElapsedTime();
-        timerLiftUp = new ElapsedTime();
-        timerLiftDown = new ElapsedTime();
+        toggleChainBar = new ElapsedTime();
 
         chainBarPID.setTarget(chainBarPot.getVoltage());
     }
@@ -141,6 +135,10 @@ public class DriversPickUpYourControllers extends OpMode {
         if (gamepad2.right_stick_button) { // reset
             chainBar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             chainBar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        if (gamepad2.left_stick_button && toggleChainBar.milliseconds() > 250) { // toggle auto chainbar
+            autoChainBar = !autoChainBar;
+            toggleChainBar.reset();
         }
 
 
@@ -154,8 +152,10 @@ public class DriversPickUpYourControllers extends OpMode {
             intakeL.setPower(-INTAKE_IN_POWER);
             intakeR.setPower(INTAKE_IN_POWER);
             clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
-            chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
-            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            if (autoChainBar) {
+                chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
+                chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            }
             intakeIn = true;
         } else { // stop intake
             intakeL.setPower(0);
@@ -203,8 +203,10 @@ public class DriversPickUpYourControllers extends OpMode {
             targetLiftHeight = 1;
             liftAutoMode = true;
             liftPID.setTarget(LIFT_STONE_POS[targetLiftHeight-1]);
-            chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
-            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            if (autoChainBar) {
+                chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
+                chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            }
             liftDown = true;
         }
 
@@ -243,13 +245,19 @@ public class DriversPickUpYourControllers extends OpMode {
         if (gamepad1.left_bumper) { // chain bar in
             chainBarPower = -CHAINBAR_HIGH_POWER;
             liftDown = false;
-            chainBarPID.setTarget(chainBarPot.getVoltage());
+            if (autoChainBar) {
+                chainBarPID.setTarget(chainBarPot.getVoltage());
+            }
         } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
             chainBarPower = CHAINBAR_HIGH_POWER;
             liftDown = false;
-            chainBarPID.setTarget(chainBarPot.getVoltage());
-        } else if (!intakeIn && !liftDown) {
+            if (autoChainBar) {
+                chainBarPID.setTarget(chainBarPot.getVoltage());
+            }
+        } else if (!intakeIn && !liftDown && autoChainBar) {
             chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+        } else if (!autoChainBar) {
+            chainBarPower = 0;
         }
         chainBar.setPower(chainBarPower);
 
@@ -280,13 +288,7 @@ public class DriversPickUpYourControllers extends OpMode {
 
         //-------------------------------------------- Movement --------------------------------------------
 
-        if (gamepad1.left_stick_button) { // toggle drive speed
-            if (toggleDriveSpeed.milliseconds() > 250)  {
-                drivePowerLow = !drivePowerLow;
-                toggleDriveSpeed.reset();
-            }
-        }
-        if (liftRaised || drivePowerLow) {
+        if (liftRaised || gamepad1.left_stick_button) { // toggle drive speed
             drivePower = DRIVE_POWER_LOW;
         } else {
             drivePower = DRIVE_POWER_HIGH;
@@ -313,6 +315,7 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("Lift Down",liftDown);
         telemetry.addData("Lift Current Position",lift.getCurrentPosition());
         telemetry.addData("Lift Target Position",liftPID.getTarget());
+        telemetry.addData("Chain Bar Auto PID",autoChainBar);
         telemetry.addData("Chain Bar Current Voltage",chainBarPot.getVoltage());
         telemetry.addData("Chain Bar Target Voltage",chainBarPID.getTarget());
         telemetry.addLine();
