@@ -64,6 +64,8 @@ public class PurePursuitFollower {
             Vector2d dPos = currentPos.minus(pathPos);
             double ds = dPos.dot(derivPos);
 
+
+            Log.d("pure pursuit", "ds - " + ds);
             if (MathUtils.equals(ds,0.0)) {
                 lastOnPath = s;
                 break;

@@ -54,6 +54,7 @@ public class MohanBot {
     public MohanBot(HardwareMap hardwareMap, LinearOpMode opMode, Pose2d start) {
         this.hardwareMap = hardwareMap;
         ThreadManager manager = ThreadManager.getInstance();
+        manager.clean();
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);

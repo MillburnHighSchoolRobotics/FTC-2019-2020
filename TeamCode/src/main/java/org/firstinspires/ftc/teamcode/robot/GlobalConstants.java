@@ -54,17 +54,18 @@ public class GlobalConstants {
     public static final double CHAINBAR_CLAW_CLOSE_POS = 1;
     public static final double CHAINBAR_CLAW_OPEN_POS = 0.4;
 
-    public static final double SIDE_CLAW_UP_POS = 0.3;
-    public static final double SIDE_CLAW_MID_POS = 0.45;
-    public static final double SIDE_CLAW_DOWN_POS = 0.7;
-    public static final double SIDE_CLAW_CLOSE_POS = 0;
-    public static final double SIDE_CLAW_OPEN_POS = 0.5;
+    public static final double SIDE_CLAW_UP_POS = 0.05;
+    public static final double SIDE_CLAW_MID_POS = 0.3;
+    public static final double SIDE_CLAW_DOWN_POS = 0.5;
+    public static final double SIDE_CLAW_CLOSE_POS = 0.2;
+    public static final double SIDE_CLAW_OPEN_POS = 0.8;
+    public static final double SIDE_CLAW_MAX_POS = 1;
 
     public static final double LIFT_MAX_POS = 1450;
     public static final double LIFT_RAISED_MIN_POS = 200;
     public static final double[] LIFT_STONE_POS = {0,450,730,980,1410};
 
-    public static Vector2d BLUE_BLOCK_2 = new Vector2d(-36,-63);
+//    public static Vector2d BLUE_BLOCK_2 = new Vector2d(-36,-63);
     public static Vector2d BLUE_BLOCK_3 = new Vector2d(-36,-56);
     public static Vector2d BLUE_BLOCK_4 = new Vector2d(-36,-48);
     public static Vector2d BLUE_BLOCK_5 = new Vector2d(-36,-40);
