@@ -33,14 +33,18 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LIFT_RETRACTI
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LIFT_STONE_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.RIGHT_HOOK_DOWN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.RIGHT_HOOK_UP_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE_BAR_UP_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE_CLAW_IN_POS;
 
 @TeleOp(group = "teleop")
 public class DriversPickUpYourControllers extends OpMode {
     private double drivePower = 1;
     private double chainBarPower;
     private double liftPower;
-
     private int targetLiftHeight = 1;
+    private double barPos = 0;
+    private double clampPos = 0;
+    final private double sideClawIncrement = 0.05;
 
     private boolean intakeIn = false;
     private boolean hookUp = true;
@@ -52,6 +56,8 @@ public class DriversPickUpYourControllers extends OpMode {
 
     private ElapsedTime toggleHook;
     private ElapsedTime toggleChainBar;
+    private ElapsedTime changeSideBar;
+    private ElapsedTime changeSideClamp;
 
     private DcMotorEx lf;
     private DcMotorEx lb;
@@ -64,6 +70,8 @@ public class DriversPickUpYourControllers extends OpMode {
     private Servo clawSquish;
     private Servo foundationHookLeft;
     private Servo foundationHookRight;
+    private Servo sideClawBar;
+    private Servo sideClawClamp;
     private AnalogInput chainBarPot;
 
     private PIDController chainBarPID = new PIDController(2.25,0,0,0,CHAINBAR_UP_VOLTAGE);
@@ -122,9 +130,13 @@ public class DriversPickUpYourControllers extends OpMode {
         clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
         foundationHookRight.setPosition(RIGHT_HOOK_UP_POS);
         foundationHookLeft.setPosition(LEFT_HOOK_UP_POS);
+        sideClawClamp.setPosition(SIDE_CLAW_IN_POS);
+        sideClawBar.setPosition(SIDE_BAR_UP_POS);
 
         toggleHook = new ElapsedTime();
         toggleChainBar = new ElapsedTime();
+        changeSideBar = new ElapsedTime();
+        changeSideClamp = new ElapsedTime();
 
         chainBarPID.setTarget(chainBarPot.getVoltage());
     }
@@ -271,6 +283,27 @@ public class DriversPickUpYourControllers extends OpMode {
         }
 
 
+        //-------------------------------------------- Side Claw --------------------------------------------
+
+        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && barPos < 1 && changeSideBar.milliseconds() < 50) {
+            barPos += sideClawIncrement;
+            changeSideBar.reset();
+        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && barPos > 0 && changeSideBar.milliseconds() < 50) {
+            barPos -= sideClawIncrement;
+            changeSideBar.reset();
+        }
+        if (gamepad2.left_bumper && clampPos < 1 && changeSideClamp.milliseconds() < 50) {
+            clampPos += sideClawIncrement;
+            changeSideClamp.reset();
+        } else if (gamepad2.right_bumper && clampPos > 0 && changeSideClamp.milliseconds() < 50) {
+            clampPos -= sideClawIncrement;
+            changeSideClamp.reset();
+        }
+
+        sideClawBar.setPosition(barPos);
+        sideClawClamp.setPosition(clampPos);
+
+
         //-------------------------------------------- Hook --------------------------------------------
 
         if (gamepad1.x && (toggleHook.milliseconds() > 250)) { // toggle foundation hook
@@ -293,7 +326,6 @@ public class DriversPickUpYourControllers extends OpMode {
         } else {
             drivePower = DRIVE_POWER_HIGH;
         }
-
         double strafeX = gamepad1.left_stick_x;
         double strafeY = -gamepad1.left_stick_y;
         double rotation = gamepad1.right_stick_x;
@@ -326,9 +358,13 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("rf Power",rf.getPower());
         telemetry.addData("rb Power",rb.getPower());
         telemetry.addLine();
+        telemetry.addData("sideclaw clamp pos", sideClawClamp.getPosition());
+        telemetry.addData("sideclaw bar pos", sideClawBar.getPosition());
+        telemetry.addLine();
         telemetry.addData("foundationHookLeft Pos", foundationHookLeft.getPosition());
         telemetry.addData("foundationHookRight Pos", foundationHookRight.getPosition());
         telemetry.addData("clawSquish Pos", clawSquish.getPosition());
+
 
         telemetry.update();
     }

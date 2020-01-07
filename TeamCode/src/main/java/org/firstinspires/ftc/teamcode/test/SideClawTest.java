@@ -26,6 +26,9 @@ public class SideClawTest extends LinearOpMode {
 
         robot.sideClaw.closeClaw();
         Thread.sleep(2000);
+
+        robot.sideClaw.hideClaw();
+        Thread.sleep(2000);
     }
 
 }

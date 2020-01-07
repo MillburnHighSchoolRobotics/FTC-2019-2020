@@ -41,7 +41,7 @@ public class MohanBot {
     public SideClaw sideClaw;
 
     private double poseThreshold = 2;
-    private double purePursuitThreshold = 1;
+    private double purePursuitThreshold = 2;
     private double rotationThreshold = 2;
     private double rotationThresholdMoveDone = 5;
     private double count;

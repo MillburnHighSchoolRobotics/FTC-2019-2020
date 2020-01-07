@@ -18,12 +18,12 @@ public class SideClaw {
     public void closeClaw() {
         clawClamp.setPosition(SIDE_CLAW_CLOSE_POS);
     }
-    public void clawIn() {
-        clawClamp.setPosition(SIDE_CLAW_MAX_POS);
+    public void hideClaw() {
+        clawClamp.setPosition(SIDE_CLAW_IN_POS);
     }
-    public void barUp() { clawBar.setPosition(SIDE_CLAW_UP_POS); }
-    public void barMid() { clawBar.setPosition(SIDE_CLAW_MID_POS); }
-    public void barDown() { clawBar.setPosition(SIDE_CLAW_DOWN_POS); }
+    public void barUp() { clawBar.setPosition(SIDE_BAR_UP_POS); }
+    public void barMid() { clawBar.setPosition(SIDE_BAR_MID_POS); }
+    public void barDown() { clawBar.setPosition(SIDE_BAR_DOWN_POS); }
     public void grab() {
         openClaw();
         barDown();

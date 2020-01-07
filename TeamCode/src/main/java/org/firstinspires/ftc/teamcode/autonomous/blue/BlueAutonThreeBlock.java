@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
+import org.firstinspires.ftc.teamcode.util.BarkerClass;
 import org.opencv.android.OpenCVLoader;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
 
 
 @Autonomous(group = "auton")
@@ -25,39 +27,41 @@ public class BlueAutonThreeBlock extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(-63,-39,3*Math.PI/2));
-//        BarkerClass barker = new BarkerClass(hardwareMap, SIDE.BLUE);
+        BarkerClass barker = new BarkerClass(hardwareMap, SIDE.BLUE);
 
         robot.hook.hookUp();
         robot.intake.intakeStop();
         robot.chainBar.closeClaw();
+        robot.sideClaw.openClaw();
+        robot.sideClaw.barUp();
 
         telemetry.addData("position", robot.getPose().toString());
         telemetry.update();
 
-//        telemetry.addData("Barker", "Waking...");
-//        telemetry.update();
-//
-//        barker.wake();
-//
-//        telemetry.addData("Barker", "Waked!!!1!11!!");
-//        telemetry.update();
+        telemetry.addData("Barker", "Waking...");
+        telemetry.update();
+
+        barker.wake();
+
+        telemetry.addData("Barker", "Waked!!!1!11!!");
+        telemetry.update();
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        int pos = 3;
+        int pos = barker.bark();
         telemetry.addData("block",pos);
         telemetry.update();
 
-        if (pos == 1) {
+        if (pos == 3) {
             robot.sideClaw.barDown();
             robot.sideClaw.openClaw();
             robot.follow(0.1,0.8,
                     robot.path(Math.PI)
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
-                    new double[]{180}
+                    new double[]{180}, true, 6
             );
             robot.sideClaw.closeClaw();
             Thread.sleep(500);
@@ -65,12 +69,12 @@ public class BlueAutonThreeBlock extends LinearOpMode {
 
             robot.follow(0.2,0.7,
                     robot.path(Math.PI/2)
-                            .lineTo(new Vector2d(-39,-48).rotated(-Math.PI/2)) // 72-18-9-3
+                            .lineTo(new Vector2d(-39,-46).rotated(-Math.PI/2)) // 72-18-9-3
                             .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(0))) // 72-18-9-3
                             .splineTo(new Pose2d(new Vector2d(-40,36).rotated(-Math.PI/2),Math.toRadians(0)))
                             .splineTo(new Pose2d(new Vector2d(-31,51).rotated(-Math.PI/2),Math.toRadians(300)))
                             .build(),
-                    new double[]{90,90,90,180},true
+                    new double[]{90,90,90,180}
             );
         } else if (pos == 2) {
             robot.sideClaw.barDown();
@@ -79,7 +83,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                     robot.path(Math.PI)
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
-                    new double[]{180}
+                    new double[]{180}, true, 6
             );
             robot.sideClaw.closeClaw();
             Thread.sleep(500);
@@ -87,12 +91,12 @@ public class BlueAutonThreeBlock extends LinearOpMode {
 
             robot.follow(0.2,0.7,
                     robot.path(Math.PI/2)
-                            .lineTo(new Vector2d(-39,-40).rotated(-Math.PI/2)) // 72-18-9-3
+                            .lineTo(new Vector2d(-39,-38).rotated(-Math.PI/2)) // 72-18-9-3
                             .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(0))) // 72-18-9-3
                             .splineTo(new Pose2d(new Vector2d(-40,36).rotated(-Math.PI/2),Math.toRadians(0)))
                             .splineTo(new Pose2d(new Vector2d(-31,51).rotated(-Math.PI/2),Math.toRadians(300)))
                             .build(),
-                    new double[]{90,90,90,180},true
+                    new double[]{90,90,90,180}
             );
         } else {
             robot.sideClaw.barDown();
@@ -101,7 +105,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                     robot.path(Math.PI)
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
-                    new double[]{180}
+                    new double[]{180}, true, 6
             );
             robot.sideClaw.closeClaw();
             Thread.sleep(500);
@@ -114,19 +118,19 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(new Vector2d(-40,36).rotated(-Math.PI/2),Math.toRadians(0)))
                             .splineTo(new Pose2d(new Vector2d(-31,51).rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
-                    new double[]{90,90,90,180},true
+                    new double[]{90,90,90,180}
             );
         }
 
         robot.sideClaw.barDown();
         Thread.sleep(100);
         robot.sideClaw.openClaw();
-        Thread.sleep(100);
+        Thread.sleep(1000);
 
 
-        if (pos == 1) {
+        if (pos == 3) {
             robot.sideClaw.barUp();
-            robot.sideClaw.clawIn();
+            robot.sideClaw.openClaw();
 
             robot.intake.intakeIn();
             robot.follow(0.25,0.9,
@@ -135,7 +139,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(new Vector2d(-22,-48-8).rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
-                    new double[]{180,180,180},true
+                    new double[]{180,180,180}
             );
             robot.follow(0.3,0.5,
                     robot.path(Math.PI)
@@ -145,7 +149,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
         } else if (pos == 2) {
             robot.sideClaw.barUp();
-            robot.sideClaw.clawIn();
+            robot.sideClaw.openClaw();
 
             robot.intake.intakeIn();
 
@@ -155,7 +159,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(new Vector2d(-22,-48).rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
-                    new double[]{180,180,180}, true
+                    new double[]{180,180,180}
             );
             robot.follow(0.3,0.5,
                     robot.path(Math.PI)
@@ -165,13 +169,14 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
         } else {
             robot.sideClaw.barDown();
-            robot.sideClaw.clawIn();
+            robot.sideClaw.openClaw();
             robot.follow(0.1,0.9,
                     robot.path(Math.PI/2)
                             .splineTo(new Pose2d(new Vector2d(-40,-12).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_6.rotated(-Math.PI/2),Math.toRadians(200)))
+                            .back(5)
                             .build(),
-                    new double[]{180,180}, true
+                    new double[]{180,180,180}, true, 6
             );
 
             robot.sideClaw.closeClaw();
@@ -179,7 +184,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barMid();
         }
 
-        if(pos == 3) {
+        if(pos == 1) {
             robot.follow(0.2,0.7,
                     robot.path(Math.PI/2)
                             .lineTo(new Vector2d(-39,-32).rotated(-Math.PI/2)) // 72-18-9-3
@@ -187,14 +192,31 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(new Vector2d(-40,36).rotated(-Math.PI/2),Math.toRadians(0)))
                             .splineTo(new Pose2d(new Vector2d(-31,49).rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
-                    new double[]{90,90,90,180},true
+                    new double[]{90,90,90,180}
+            );
+
+            robot.follow(0.2,0.7,
+                    robot.path(Math.PI/2)
+                            .lineTo(new Vector2d(-39,-32).rotated(-Math.PI/2)) // 72-18-9-3
+                            .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(0))) // 72-18-9-3
+                            .splineTo(new Pose2d(new Vector2d(-40,36).rotated(-Math.PI/2),Math.toRadians(0)))
+                            .splineTo(new Pose2d(new Vector2d(-31,55).rotated(-Math.PI/2),Math.toRadians(270)))
+                            .build(),
+                    new double[]{90,90,90,180}
             );
 
             robot.sideClaw.barDown();
             Thread.sleep(100);
             robot.sideClaw.openClaw();
-            Thread.sleep(100);
+            Thread.sleep(1000);
             robot.rotateTo(90);
+            robot.follow(0.1,0.5,
+                    robot.path(Math.PI/2)
+                            .back(6)
+                            .build(),
+                    new double[]{90}
+            );
+
             robot.hook.hookDown();
             Thread.sleep(1000);
         } else {
@@ -203,7 +225,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(new Vector2d(-40,-24).rotated(-Math.PI/2),Math.toRadians(0))) // 72-18-9-3
                             .splineTo(new Pose2d(new Vector2d(-40,20).rotated(-Math.PI/2),Math.toRadians(0)))
                             .build(),
-                    new double[]{180,270}, true
+                    new double[]{180,270}
             );
             robot.intake.intakeOut();
             Thread.sleep(500);
@@ -211,8 +233,8 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.follow(0.1,0.8,
                     robot.path(0)
                             .splineTo(new Pose2d(new Vector2d(-40,31).rotated(-Math.PI/2),Math.toRadians(0)))
-                            .splineTo(new Pose2d(new Vector2d(-31,49).rotated(-Math.PI/2),Math.toRadians(270)))
-                            .splineTo(new Pose2d(new Vector2d(-28,49).rotated(-Math.PI/2),Math.toRadians(270)))
+                            .splineTo(new Pose2d(new Vector2d(-31,55).rotated(-Math.PI/2),Math.toRadians(270)))
+                            .splineTo(new Pose2d(new Vector2d(-28,55).rotated(-Math.PI/2),Math.toRadians(270)))
                             .build(),
                     new double[]{90,90,90}
             );
@@ -220,7 +242,14 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             Thread.sleep(1000);
             robot.follow(0.1,0.8,
                     robot.path(Math.PI/2)
-                            .lineTo(new Vector2d(-63,48).rotated(-Math.PI/2))
+                            .lineTo(new Vector2d(-63,55).rotated(-Math.PI/2))
+                            .build(),
+                    new double[]{90}, false
+            );
+            robot.hook.hookUp();
+            robot.follow(0.6,1,
+                    robot.path(Math.PI)
+                            .lineTo(new Vector2d(-63,0).rotated(-Math.PI/2))
                             .build(),
                     new double[]{90}, false
             );

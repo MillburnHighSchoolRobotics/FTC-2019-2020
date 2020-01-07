@@ -8,11 +8,12 @@ import com.acmerobotics.roadrunner.path.Path;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LOOK_AHEAD;
 import static org.firstinspires.ftc.teamcode.robot.MohanBot.shouldStop;
 
 public class PurePursuitFollower {
     private Path path;
-    private double lookahead = 6;
+    private double lookahead = LOOK_AHEAD;
     private double lastOnPath = 0.0;
     private double[][] headingInterpolants;
 
