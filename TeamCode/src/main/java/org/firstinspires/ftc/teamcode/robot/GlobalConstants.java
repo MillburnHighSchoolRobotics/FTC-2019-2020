@@ -57,7 +57,7 @@ public class GlobalConstants {
     public static final double SIDE_BAR_UP_POS = 0.3;
     public static final double SIDE_BAR_MID_POS = 0.6;
     public static final double SIDE_BAR_DOWN_POS = 0.8;
-    public static final double SIDE_CLAW_CLOSE_POS = 0.3;
+    public static final double SIDE_CLAW_CLOSE_POS = 0.2;
     public static final double SIDE_CLAW_OPEN_POS = 1;
     public static final double SIDE_CLAW_IN_POS = 0;
 
