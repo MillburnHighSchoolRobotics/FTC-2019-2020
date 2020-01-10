@@ -220,6 +220,9 @@ public class MohanBot {
         rotateTo(targetHeading,TURN_POWER);
     }
     public void rotateTo(double targetHeading, double power) throws InterruptedException {
+        rotateTo(targetHeading, power, rotationThreshold);
+    }
+    public void rotateTo(double targetHeading, double power, double rotThresh) throws InterruptedException {
         targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(targetHeading)));
         PIDController pidController = new PIDController(rotationPID.p,rotationPID.i,rotationPID.d,1,targetHeading);
 
@@ -240,7 +243,7 @@ public class MohanBot {
             Log.d("turn pid", "output - " + output);
             Log.d("turn pid", "current heading - " + currentHeading);
             Log.d("turn pid", "target heading - " + targetHeading);
-            if (MathUtils.equals(currentHeading, targetHeading, rotationThreshold)) {
+            if (MathUtils.equals(currentHeading, targetHeading, rotThresh)) {
                 if (lastTime == -1) lastTime = time.milliseconds();
                 else if (time.milliseconds() - lastTime > 50) {
                     drive.stop();

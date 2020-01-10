@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.test;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
+import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
@@ -22,6 +26,10 @@ public class DriveControl extends OpMode {
     private DcMotorEx lb;
     private DcMotorEx rf;
     private DcMotorEx rb;
+
+    DcMotorEx er;
+    DcMotorEx el;
+    DcMotorEx eb;
 
     @Override
     public void init() {
@@ -49,6 +57,23 @@ public class DriveControl extends OpMode {
         rb.setPower(0);
 
         toggleDriveSpeed = new ElapsedTime();
+
+        er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
+        el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
+        eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
+        er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        el.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        eb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        eb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        el.setDirection(DcMotorSimple.Direction.FORWARD);
+        er.setDirection(DcMotorSimple.Direction.REVERSE);
+        eb.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        ThreadManager manager = ThreadManager.getInstance();
+        manager.setHardwareMap(hardwareMap);
+        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d(-63,-39,3*Math.PI/2));
     }
 
     @Override
@@ -75,6 +100,18 @@ public class DriveControl extends OpMode {
         rf.setPower(drivePower*powerArray[2]);
         rb.setPower(drivePower*powerArray[3]);
 
+        telemetry.addData("heading", Math.toDegrees(ThreadManager.getInstance().getValue("yaw", Double.class)));
+        telemetry.addData("x", ThreadManager.getInstance().getValue("x", Double.class));
+        telemetry.addData("y", ThreadManager.getInstance().getValue("y", Double.class));
+        telemetry.addData("orientation", Math.toDegrees(ThreadManager.getInstance().getValue("orientation", Double.class)));
+        telemetry.addData("rotation", ThreadManager.getInstance().getValue("rotation", Double.class));
+        telemetry.addData("count", ThreadManager.getInstance().getValue("count", Double.class));
+
+        telemetry.addData("er", er.getCurrentPosition());
+        telemetry.addData("el", el.getCurrentPosition());
+        telemetry.addData("eb", eb.getCurrentPosition());
+
+        telemetry.addLine();
 
         telemetry.addData("Drive Power",drivePower);
         telemetry.addData("lf",lf);

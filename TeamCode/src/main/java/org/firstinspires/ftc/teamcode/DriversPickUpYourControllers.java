@@ -1,26 +1,32 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_AUTO_LIFT_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_HIGH_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_IN_VOLTAGE;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_LOW_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MAX_VOLTAGE;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_MID_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_UP_VOLTAGE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_CLAW_CLOSE_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.CHAINBAR_CLAW_OPEN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_HIGH;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.DRIVE_POWER_LOW;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_IN_POWER_FAST;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.INTAKE_OUT_POWER;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LEFT_HOOK_DOWN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LEFT_HOOK_UP_POS;
@@ -33,6 +39,7 @@ import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LIFT_RETRACTI
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LIFT_STONE_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.RIGHT_HOOK_DOWN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.RIGHT_HOOK_UP_POS;
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE_BAR_DOWN_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE_BAR_UP_POS;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE_CLAW_IN_POS;
 
@@ -42,17 +49,19 @@ public class DriversPickUpYourControllers extends OpMode {
     private double chainBarPower;
     private double liftPower;
     private int targetLiftHeight = 1;
-    private double barPos = 0;
-    private double clampPos = 0;
+    private double barPos = SIDE_BAR_UP_POS;
+    private double clampPos = SIDE_CLAW_IN_POS;
     final private double sideClawIncrement = 0.05;
 
-    private boolean intakeIn = false;
     private boolean hookUp = true;
     private boolean liftUpdatedPos = true;
     private boolean liftRaised = false;
-    private boolean liftDown = false;
     private boolean liftAutoMode = false;
     private boolean autoChainBar = true;
+    private boolean chainBarJustWasMoving = false;
+    private boolean intakeInChainBar = false;
+    private boolean liftDownChainBar = false;
+    private boolean liftRaiseChainBar = false;
 
     private ElapsedTime toggleHook;
     private ElapsedTime toggleChainBar;
@@ -92,6 +101,9 @@ public class DriversPickUpYourControllers extends OpMode {
         clawSquish = hardwareMap.servo.get("chainBarClawClamp");
         foundationHookLeft = hardwareMap.servo.get("foundationHookLeft");
         foundationHookRight = hardwareMap.servo.get("foundationHookRight");
+
+        sideClawBar = hardwareMap.servo.get("sideClawBar");
+        sideClawClamp = hardwareMap.servo.get("sideClawClamp");
 
         chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
 
@@ -159,20 +171,17 @@ public class DriversPickUpYourControllers extends OpMode {
         if (MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) { // intake out
             intakeL.setPower(-INTAKE_OUT_POWER);
             intakeR.setPower(INTAKE_OUT_POWER);
-            intakeIn = false;
         } else if (MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) { // intake in
-            intakeL.setPower(-INTAKE_IN_POWER);
-            intakeR.setPower(INTAKE_IN_POWER);
+            intakeL.setPower(-INTAKE_IN_POWER_FAST);
+            intakeR.setPower(INTAKE_IN_POWER_FAST);
             clawSquish.setPosition(CHAINBAR_CLAW_OPEN_POS);
             if (autoChainBar) {
                 chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
-                chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+                intakeInChainBar = true;
             }
-            intakeIn = true;
         } else { // stop intake
             intakeL.setPower(0);
             intakeR.setPower(0);
-            intakeIn = false;
         }
 
 
@@ -217,9 +226,8 @@ public class DriversPickUpYourControllers extends OpMode {
             liftPID.setTarget(LIFT_STONE_POS[targetLiftHeight-1]);
             if (autoChainBar) {
                 chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
-                chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+                liftDownChainBar = true;
             }
-            liftDown = true;
         }
 
         if (gamepad1.dpad_up) { // lift up with dampening
@@ -256,20 +264,20 @@ public class DriversPickUpYourControllers extends OpMode {
 
         if (gamepad1.left_bumper) { // chain bar in
             chainBarPower = -CHAINBAR_HIGH_POWER;
-            liftDown = false;
-            if (autoChainBar) {
-                chainBarPID.setTarget(chainBarPot.getVoltage());
-            }
+            chainBarJustWasMoving = true;
+            intakeInChainBar = false;
+            liftDownChainBar = false;
         } else if (gamepad1.right_bumper && chainBarPot.getVoltage() < CHAINBAR_MAX_VOLTAGE) { // chain bar out
             chainBarPower = CHAINBAR_HIGH_POWER;
-            liftDown = false;
-            if (autoChainBar) {
-                chainBarPID.setTarget(chainBarPot.getVoltage());
+            chainBarJustWasMoving = true;
+            intakeInChainBar = false;
+            liftDownChainBar = false;
+        } else { // no buttons pressed
+            if (autoChainBar && (intakeInChainBar || liftDownChainBar || liftRaiseChainBar)) {
+                chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
+            } else {
+                chainBarPower = 0;
             }
-        } else if (!intakeIn && !liftDown && autoChainBar) {
-            chainBarPower = chainBarPID.getPIDOutput(chainBarPot.getVoltage());
-        } else if (!autoChainBar) {
-            chainBarPower = 0;
         }
         chainBar.setPower(chainBarPower);
 
@@ -285,23 +293,24 @@ public class DriversPickUpYourControllers extends OpMode {
 
         //-------------------------------------------- Side Claw --------------------------------------------
 
-        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && barPos < 1 && changeSideBar.milliseconds() < 50) {
+        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && barPos < SIDE_BAR_DOWN_POS && changeSideBar.milliseconds() > 50) {
             barPos += sideClawIncrement;
             changeSideBar.reset();
-        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && barPos > 0 && changeSideBar.milliseconds() < 50) {
+            sideClawBar.setPosition(barPos);
+        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && barPos > SIDE_BAR_UP_POS && changeSideBar.milliseconds() > 50) {
             barPos -= sideClawIncrement;
             changeSideBar.reset();
+            sideClawBar.setPosition(barPos);
         }
-        if (gamepad2.left_bumper && clampPos < 1 && changeSideClamp.milliseconds() < 50) {
+        if (gamepad2.right_bumper && clampPos < 1 && changeSideClamp.milliseconds() > 50) {
             clampPos += sideClawIncrement;
             changeSideClamp.reset();
-        } else if (gamepad2.right_bumper && clampPos > 0 && changeSideClamp.milliseconds() < 50) {
+            sideClawClamp.setPosition(clampPos);
+        } else if (gamepad2.left_bumper && clampPos > 0 && changeSideClamp.milliseconds() > 50) {
             clampPos -= sideClawIncrement;
             changeSideClamp.reset();
+            sideClawClamp.setPosition(clampPos);
         }
-
-        sideClawBar.setPosition(barPos);
-        sideClawClamp.setPosition(clampPos);
 
 
         //-------------------------------------------- Hook --------------------------------------------
@@ -321,6 +330,9 @@ public class DriversPickUpYourControllers extends OpMode {
 
         //-------------------------------------------- Movement --------------------------------------------
 
+        if (gamepad1.left_stick_button) {
+
+        }
         if (liftRaised || gamepad1.left_stick_button) { // toggle drive speed
             drivePower = DRIVE_POWER_LOW;
         } else {
@@ -344,9 +356,9 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("Lift Target Stone",targetLiftHeight);
         telemetry.addLine();
         telemetry.addData("Lift Raised",liftRaised);
-        telemetry.addData("Lift Down",liftDown);
         telemetry.addData("Lift Current Position",lift.getCurrentPosition());
         telemetry.addData("Lift Target Position",liftPID.getTarget());
+        telemetry.addData("Chain Bar Just Was Moving",chainBarJustWasMoving);
         telemetry.addData("Chain Bar Auto PID",autoChainBar);
         telemetry.addData("Chain Bar Current Voltage",chainBarPot.getVoltage());
         telemetry.addData("Chain Bar Target Voltage",chainBarPID.getTarget());
@@ -358,13 +370,12 @@ public class DriversPickUpYourControllers extends OpMode {
         telemetry.addData("rf Power",rf.getPower());
         telemetry.addData("rb Power",rb.getPower());
         telemetry.addLine();
-        telemetry.addData("sideclaw clamp pos", sideClawClamp.getPosition());
-        telemetry.addData("sideclaw bar pos", sideClawBar.getPosition());
+        telemetry.addData("sideClawClamp Pos", sideClawClamp.getPosition());
+        telemetry.addData("sideClawBar Pos", sideClawBar.getPosition());
         telemetry.addLine();
         telemetry.addData("foundationHookLeft Pos", foundationHookLeft.getPosition());
         telemetry.addData("foundationHookRight Pos", foundationHookRight.getPosition());
         telemetry.addData("clawSquish Pos", clawSquish.getPosition());
-
 
         telemetry.update();
     }

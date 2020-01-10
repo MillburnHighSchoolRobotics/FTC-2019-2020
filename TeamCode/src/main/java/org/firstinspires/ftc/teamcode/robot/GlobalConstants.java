@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 public class GlobalConstants {
     public enum SIDE{
-        BLUE, RED;
+        BLUE, RED
     }
 
     public static SIDE side;
@@ -32,6 +32,7 @@ public class GlobalConstants {
     public static final double TURN_POWER = 0.6;
 
     public static final double INTAKE_IN_POWER = -0.4;
+    public static final double INTAKE_IN_POWER_FAST = -0.6;
     public static final double INTAKE_OUT_POWER = 0.8;
     public static final double CHAINBAR_LOW_POWER = 0.2;
     public static final double CHAINBAR_HIGH_POWER = 0.45;
@@ -46,10 +47,12 @@ public class GlobalConstants {
     public static final double LEFT_HOOK_DOWN_POS = 0;
     public static final double LEFT_HOOK_UP_POS = 1;
 
-    public static final double CHAINBAR_IN_VOLTAGE = 0.35;
-    public static final double CHAINBAR_UP_VOLTAGE = 0.55;
-    public static final double CHAINBAR_OUT_VOLTAGE = 1;
-    public static final double CHAINBAR_MAX_VOLTAGE = 1.16; //hard limit 1.175
+    public static final double CHAINBAR_MID_VOLTAGE = 0.38;
+    public static final double CHAINBAR_IN_VOLTAGE = 0.05;
+    public static final double CHAINBAR_UP_VOLTAGE = CHAINBAR_MID_VOLTAGE;
+    public static final double CHAINBAR_OUT_VOLTAGE = 0.6;
+    public static final double CHAINBAR_AUTO_LIFT_VOLTAGE = 0.2;
+    public static final double CHAINBAR_MAX_VOLTAGE = 1; //hard limit 1.175
 
     public static final double CHAINBAR_CLAW_CLOSE_POS = 1;
     public static final double CHAINBAR_CLAW_OPEN_POS = 0.4;

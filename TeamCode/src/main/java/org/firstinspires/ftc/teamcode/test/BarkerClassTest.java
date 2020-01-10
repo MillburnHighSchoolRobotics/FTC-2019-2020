@@ -21,7 +21,7 @@ public class BarkerClassTest extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        BarkerClass barker = new BarkerClass(hardwareMap, GlobalConstants.SIDE.RED);
+        BarkerClass barker = new BarkerClass(hardwareMap, GlobalConstants.SIDE.BLUE);
 
         telemetry.addData("Status", "Loading");
         telemetry.update();
