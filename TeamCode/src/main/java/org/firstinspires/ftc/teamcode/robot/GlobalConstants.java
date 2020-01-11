@@ -60,9 +60,10 @@ public class GlobalConstants {
     public static final double SIDE_BAR_UP_POS = 0.3;
     public static final double SIDE_BAR_MID_POS = 0.6;
     public static final double SIDE_BAR_DOWN_POS = 0.8;
-    public static final double SIDE_CLAW_CLOSE_POS = 0.2;
+    public static final double SIDE_CLAW_CLOSE_POS = 0.3;
     public static final double SIDE_CLAW_OPEN_POS = 1;
     public static final double SIDE_CLAW_IN_POS = 0;
+    public static final double SIDE_CLAW_INIT_POS = 0.8;
 
     public static final double LIFT_MAX_POS = 1450;
     public static final double LIFT_RAISED_MIN_POS = 200;
@@ -72,7 +73,12 @@ public class GlobalConstants {
     public static Vector2d BLUE_BLOCK_3 = new Vector2d(-36,-56);
     public static Vector2d BLUE_BLOCK_4 = new Vector2d(-36,-48);
     public static Vector2d BLUE_BLOCK_5 = new Vector2d(-36,-40);
-    public static Vector2d BLUE_BLOCK_6 = new Vector2d(-36,-32);
+    public static Vector2d BLUE_BLOCK_6 = new Vector2d(-36,-32); // 24+4 +4
+    public static Vector2d RED_BLOCK_2 = new Vector2d(36,-56);
+    public static Vector2d RED_BLOCK_3 = new Vector2d(36,-48);
+    public static Vector2d RED_BLOCK_4 = new Vector2d(36,-40);
+    public static Vector2d RED_BLOCK_5 = new Vector2d(36,-32);
+    public static Vector2d RED_BLOCK_6 = new Vector2d(36,-24); // 24+4 -4
 
 
     public static final long FPS_UPDATE_PERIOD = 10;

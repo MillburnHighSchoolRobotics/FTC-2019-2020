@@ -32,12 +32,12 @@ public class BarkerClass {
     static private HardwareMap hardwareMap;
     static private VuforiaLocalizerImplSubclass vuforiaInstance;
 
-    private static double BLUE_LINE_1_X = 200;
-    private static double BLUE_LINE_2_X = 580;
-    private static double BLUE_LINE_3_X = 1000;
+    private static double BLUE_LINE_1_X = 100;
+    private static double BLUE_LINE_2_X = 400;
+    private static double BLUE_LINE_3_X = 800;
     private static double RED_LINE_1_X = 100;
-    private static double RED_LINE_2_X = 450;
-    private static double RED_LINE_3_X = 845;
+    private static double RED_LINE_2_X = 400;
+    private static double RED_LINE_3_X = 800;
 
     private int widthCamera;
     private int heightCamera;
@@ -102,9 +102,12 @@ public class BarkerClass {
             }
         }
         Log.d("watbark",""+centroid.x);
-        Log.d("watbark",""+BLUE_LINE_1_X);
-        Log.d("watbark",""+BLUE_LINE_2_X);
-        Log.d("watbark",""+BLUE_LINE_3_X);
+        Log.d("watbark","blue1 "+BLUE_LINE_1_X);
+        Log.d("watbark","blue2 "+BLUE_LINE_2_X);
+        Log.d("watbark","blue3 "+BLUE_LINE_3_X);
+        Log.d("watbark","red1 "+RED_LINE_1_X);
+        Log.d("watbark","red2 "+RED_LINE_2_X);
+        Log.d("watbark","red3 "+RED_LINE_3_X);
 
         for (MatOfPoint mat : contours) {
             mat.release();
@@ -121,13 +124,13 @@ public class BarkerClass {
         } else {
             if (centroid.x > RED_LINE_1_X && centroid.x < RED_LINE_2_X)
                 pos = 1;
-            else if (centroid.x > RED_LINE_3_X || centroid.x < RED_LINE_1_X)
+            else if (centroid.x > RED_LINE_3_X)
                 pos = 2;
             else if (centroid.x > RED_LINE_2_X && centroid.x < RED_LINE_3_X)
                 pos = 3;
         }
 
-        Log.d("detection",""+pos);
+        Log.d("watbark",""+pos);
         if (pos == -1) {
             pos = 3;
         }

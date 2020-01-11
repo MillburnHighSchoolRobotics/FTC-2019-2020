@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.ftccommon.configuration.EditLegacyModuleControllerActivity;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,7 +12,8 @@ import org.firstinspires.ftc.teamcode.robot.GlobalConstants;
 import org.firstinspires.ftc.teamcode.robot.MohanBot;
 import org.firstinspires.ftc.teamcode.util.BarkerClass;
 import org.opencv.android.OpenCVLoader;
-import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.*;
+
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.SIDE;
 
 
 @Autonomous(group = "auton")
@@ -34,7 +34,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
         robot.hook.hookUp();
         robot.intake.intakeStop();
         robot.chainBar.closeClaw();
-        robot.sideClaw.openClaw();
+        robot.sideClaw.initClaw();
         robot.sideClaw.barUp();
 
         telemetry.addData("position", robot.getPose().toString());
@@ -58,12 +58,17 @@ public class BlueAutonThreeBlock extends LinearOpMode {
 
         if (pos == 3) {
             robot.sideClaw.barDown();
-            robot.sideClaw.openClaw();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
                     new double[]{180}, true, 6
+            );
+            robot.follow(0.1,0.5,
+                    robot.path(Math.PI)
+                            .strafeLeft(2)
+                            .build(),
+                    new double[]{180}, false, 6
             );
             robot.sideClaw.closeClaw();
             Thread.sleep(500);
@@ -81,7 +86,6 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
         } else if (pos == 2) {
             robot.sideClaw.barDown();
-            robot.sideClaw.openClaw();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(245)))
@@ -116,6 +120,12 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
                     new double[]{180}, true, 6
+            );
+            robot.follow(0.1,0.5,
+                    robot.path(Math.PI)
+                            .strafeLeft(2)
+                            .build(),
+                    new double[]{180}, false, 6
             );
             robot.sideClaw.closeClaw();
             Thread.sleep(500);
@@ -189,9 +199,14 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                             .build(),
                     new double[]{180,180,180}, true, 6
             );
-
+            robot.follow(0.1,0.5,
+                    robot.path(Math.PI)
+                            .strafeLeft(4)
+                            .build(),
+                    new double[]{180}, false, 6
+            );
             robot.sideClaw.closeClaw();
-            Thread.sleep(500);
+            Thread.sleep(1000);
             robot.sideClaw.barMid();
             Thread.sleep(500);
         }
@@ -243,40 +258,14 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.hook.hookDown();
             Thread.sleep(1000);
         }
-//        robot.follow(0.3,1,
-//                robot.path(3*Math.PI/2)
-//                        .splineTo(new Pose2d(new Vector2d(-48,24).rotated(-Math.PI/2),Math.PI))
-//                        .build(),
-//                new double[]{180}
-//        );
-//        robot.chainBar.openClaw();
-//        robot.hook.hookUp();
-//        robot.drive.setDrivePower(-1);
-//
+
         ElapsedTime gayshit = new ElapsedTime();
         while (gayshit.milliseconds() < 1500) {
             robot.drive.setDrivePower(1);
         }
         robot.rotateTo(180, 1, 5);
         robot.hook.hookUp();
-        robot.follow(0.6,1,
-                robot.path(Math.PI)
-                        .strafeTo(new Vector2d(-63,0).rotated(-Math.PI/2))
-                        .build(),
-                new double[]{180}, false
-        );
+        robot.strafeTo(new Vector2d(-40,0),1);
 
-//        ElapsedTime gayshit = new ElapsedTime();
-//        while (gayshit.milliseconds() < 2000) {
-//            robot.drive.setDrivePower(1);
-//        }
-//        robot.hook.hookUp();
-//        robot.rotateTo(90);
-//        robot.follow(0.6,1,
-//                robot.path(Math.PI)
-//                        .strafeTo(new Vector2d(-63,0).rotated(-Math.PI/2))
-//                        .build(),
-//                new double[]{90}, false
-//        );
     }
 }

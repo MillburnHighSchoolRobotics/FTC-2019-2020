@@ -21,6 +21,9 @@ public class SideClaw {
     public void hideClaw() {
         clawClamp.setPosition(SIDE_CLAW_IN_POS);
     }
+    public void initClaw() {
+        clawClamp.setPosition(SIDE_CLAW_INIT_POS);
+    }
     public void barUp() { clawBar.setPosition(SIDE_BAR_UP_POS); }
     public void barMid() { clawBar.setPosition(SIDE_BAR_MID_POS); }
     public void barDown() { clawBar.setPosition(SIDE_BAR_DOWN_POS); }
