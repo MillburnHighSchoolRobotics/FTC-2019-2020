@@ -114,7 +114,7 @@ public class PurePursuitFollower {
         return u;
     }
     public Vector2d reeeCollision(Pose2d currentPose) {
-        double deriv = path.deriv(projectPoint(currentPose.vec())).getHeading();
+        double deriv = MathUtils.normalize(Math.PI-path.deriv(projectPoint(currentPose.vec())).getHeading());
         return new Vector2d(GlobalConstants.COLLISION_RECOVERY_MOVEMENT*Math.cos(deriv),GlobalConstants.COLLISION_RECOVERY_MOVEMENT*Math.sin(deriv));
     }
 }
