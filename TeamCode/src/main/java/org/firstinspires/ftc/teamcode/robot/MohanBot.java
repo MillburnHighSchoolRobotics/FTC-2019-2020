@@ -23,11 +23,13 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Hook;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystems.SideClaw;
+import org.firstinspires.ftc.teamcode.threads.CollisionMonitor;
 import org.firstinspires.ftc.teamcode.threads.PositionMonitor;
 import org.firstinspires.ftc.teamcode.threads.ThreadManager;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
+import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.COLLISION_THRESHOLD_POSE;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.LOOK_AHEAD;
 import static org.firstinspires.ftc.teamcode.robot.GlobalConstants.TURN_POWER;
 
@@ -45,6 +47,9 @@ public class MohanBot {
     private double rotationThreshold = 2;
     private double rotationThresholdMoveDone = 5;
     private double count;
+    private boolean collisionDetected = false;
+    private Pose2d lastCollisionPose;
+    private ElapsedTime collisionStay = new ElapsedTime();
 
     private PIDCoefficients rotationPID = new PIDCoefficients(0.014,0.002,0.004);
 
@@ -58,6 +63,7 @@ public class MohanBot {
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);
+        manager.setupThread("CollisionMonitor", CollisionMonitor.class);
 
         count = ThreadManager.getInstance().getValue("count", Double.class);
         init();
@@ -279,41 +285,63 @@ public class MohanBot {
         while (!shouldStop()) {
             Pose2d currentPose = getPose();
 
-            Log.d("pure pursuit", "loop");
-            if (MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && strafe) {
-                strafe = false;
-                Log.d("pure pursuit", "strafe false");
-            }
-            double drivePower;
-            double[] wheelPowers;
-            if (strafe) {
-                Vector2d targetPose = follower.updatePosition(currentPose.vec());
-                drivePower = follower.strafePower(powerLow,powerHigh, currentPose.vec());
-                wheelPowers = powerVector(currentPose, targetPose, drivePower);
+            boolean collision = checkCollision(currentPose);
+            if (collision) {
+                Vector2d collisionRecovery = follower.reeeCollision(currentPose);
+                strafeTo(collisionRecovery,0.4);
+                collisionDetected = false;
             } else {
-                drivePower = powerLow;
-                wheelPowers = new double[] {0,0,0,0};
-            }
+                Log.d("pure pursuit", "loop");
+                if (MathUtils.equals(currentPose.vec().distTo(follower.end()),0,purePursuitThreshold) && strafe) {
+                    strafe = false;
+                    Log.d("pure pursuit", "strafe false");
+                }
+                double drivePower;
+                double[] wheelPowers;
+                if (strafe) {
+                    Vector2d targetPose = follower.updatePosition(currentPose.vec());
+                    drivePower = follower.strafePower(powerLow,powerHigh, currentPose.vec());
+                    wheelPowers = powerVector(currentPose, targetPose, drivePower);
+                } else {
+                    drivePower = powerLow;
+                    wheelPowers = new double[] {0,0,0,0};
+                }
 
-            double threshold = rotationThreshold;
-            if (!strafe) {
-                if (!headingAdjustment) {
+                double threshold = rotationThreshold;
+                if (!strafe) {
+                    if (!headingAdjustment) {
+                        break;
+                    }
+                    threshold = rotationThresholdMoveDone;
+                }
+                double headingCV = follower.headingCV(currentPose,threshold);
+                if (headingCV == 0 && !strafe) {
                     break;
                 }
-                threshold = rotationThresholdMoveDone;
-            }
-            double headingCV = follower.headingCV(currentPose,threshold);
-            if (headingCV == 0 && !strafe) {
-                break;
-            }
-            wheelPowers[0] -= (1-drivePower)*headingCV;
-            wheelPowers[1] -= (1-drivePower)*headingCV;
-            wheelPowers[2] += (1-drivePower)*headingCV;
-            wheelPowers[3] += (1-drivePower)*headingCV;
+                wheelPowers[0] -= (1-drivePower)*headingCV;
+                wheelPowers[1] -= (1-drivePower)*headingCV;
+                wheelPowers[2] += (1-drivePower)*headingCV;
+                wheelPowers[3] += (1-drivePower)*headingCV;
 
-            drive.setDrivePower(wheelPowers);
+                drive.setDrivePower(wheelPowers);
+            }
+
         }
         drive.stop();
+    }
+    public boolean checkCollision(Pose2d pose) {
+        boolean boomboom = ThreadManager.getInstance().getValue("collision", boolean.class);
+        if (boomboom) {
+            collisionDetected = true;
+            lastCollisionPose = pose;
+            collisionStay.reset();
+        }
+        if (collisionDetected) {
+            if (collisionStay.milliseconds() > 3000 && lastCollisionPose.vec().distTo(pose.vec()) < COLLISION_THRESHOLD_POSE) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public PIDCoefficients getTurnPID() {

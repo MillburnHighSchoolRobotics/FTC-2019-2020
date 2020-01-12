@@ -14,6 +14,13 @@ public class GlobalConstants {
     public static final double TILE_WIDTH = 24.0;
     public static final double BASEPLATE_WIDTH = 34;
 
+    public static final String IMU_TAG = "imu 1";
+    public static final double COLLISION_THRESHOLD_DELTA_G = 0.5;
+    public static final double COLLISION_THRESHOLD_POSE = 3;
+    public static final double COLLISION_RECOVERY_MOVEMENT = 3;
+    public static final double COLLISION_RECOVERY_POWER = 0.4;
+
+
     public static final double WHEEL_RADIUS = 2;
     public static final double WHEEL_BASE = 17.5;
     public static final double TRACK_WIDTH = 15.5;
