@@ -66,7 +66,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(Math.PI)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{180}, false, 6
             );
@@ -94,7 +94,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(Math.PI)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{180}, false, 6
             );
@@ -123,7 +123,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(Math.PI)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{180}, false, 6
             );
@@ -245,7 +245,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                     new double[]{180,270}
             );
             robot.intake.intakeOut();
-            Thread.sleep(500);
+            Thread.sleep(1000);
             robot.rotateTo(90,1);
             robot.follow(0.1,0.8,
                     robot.path(0)

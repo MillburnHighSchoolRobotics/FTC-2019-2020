@@ -28,14 +28,14 @@ public class GlobalConstants {
     public static final double DEAD_WHEEL_TURN_RADIUS = -2.75;
 
     public static final double DRIVE_POWER_HIGH = 1;
-    public static final double DRIVE_POWER_LOW = 0.6;
+    public static final double DRIVE_POWER_LOW = 0.4;
     public static final double TURN_POWER = 0.6;
 
     public static final double INTAKE_IN_POWER = -0.4;
     public static final double INTAKE_IN_POWER_FAST = -0.6;
     public static final double INTAKE_OUT_POWER = 0.8;
     public static final double CHAINBAR_LOW_POWER = 0.2;
-    public static final double CHAINBAR_HIGH_POWER = 0.45;
+    public static final double CHAINBAR_HIGH_POWER = 0.65;
     public static final double CHAINBAR_EVEN_HIGHER_POWER = 0.6;
     public static final double LIFT_EXTENSION_POWER = 0.6;
     public static final double LIFT_RETRACTION_POWER = -0.4;

@@ -66,7 +66,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(0)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{0}, false, 6
             );
@@ -94,7 +94,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(0)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{0}, false, 6
             );
@@ -122,7 +122,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             );
             robot.follow(0.1,0.5,
                     robot.path(0)
-                            .strafeLeft(2)
+                            .strafeLeft(4)
                             .build(),
                     new double[]{0}, false, 6
             );
@@ -246,7 +246,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
                     new double[]{180,90}
             );
             robot.intake.intakeOut();
-            Thread.sleep(500);
+            Thread.sleep(1000\);
             robot.rotateTo(270,1);
             robot.follow(0.1,0.8,
                     robot.path(0)
