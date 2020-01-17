@@ -46,10 +46,11 @@ public class MohanBot {
     private double purePursuitThreshold = 2;
     private double rotationThreshold = 2;
     private double rotationThresholdMoveDone = 5;
+    private double collisionRotationThreshold = 10;
     private double count;
     private boolean collisionDetected = false;
     private Pose2d lastCollisionPose;
-    private ElapsedTime collisionStay = new ElapsedTime();
+    private ElapsedTime collisionWindow = new ElapsedTime();
 
     private PIDCoefficients rotationPID = new PIDCoefficients(0.014,0.002,0.004);
 
@@ -63,7 +64,7 @@ public class MohanBot {
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);
-//        manager.setupThread("CollisionMonitor", CollisionMonitor.class);
+        manager.setupThread("CollisionMonitor", CollisionMonitor.class);
 
         count = ThreadManager.getInstance().getValue("count", Double.class);
         init();
@@ -285,7 +286,7 @@ public class MohanBot {
         while (!shouldStop()) {
             Pose2d currentPose = getPose();
 
-            boolean collision = false;//checkCollision(currentPose);
+            boolean collision = checkCollision(currentPose);
             if (collision) {
                 Vector2d collisionRecovery = follower.reeeCollision(currentPose);
                 strafeTo(collisionRecovery,0.4);
@@ -329,20 +330,20 @@ public class MohanBot {
         }
         drive.stop();
     }
-//    public boolean checkCollision(Pose2d pose) {
-//        boolean boomboom = ThreadManager.getInstance().getValue("collision", boolean.class);
-//        if (boomboom) {
-//            collisionDetected = true;
-//            lastCollisionPose = pose;
-//            collisionStay.reset();
-//        }
-//        if (collisionDetected) {
-//            if (collisionStay.milliseconds() > 3000 && lastCollisionPose.vec().distTo(pose.vec()) < COLLISION_THRESHOLD_POSE) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean checkCollision(Pose2d pose) {
+        collisionDetected = ThreadManager.getInstance().getValue("collision", boolean.class);
+        if (collisionDetected && lastCollisionPose == null) {
+            lastCollisionPose = pose;
+            collisionWindow.reset();
+        }
+        if (collisionWindow.milliseconds() >= 1000 && lastCollisionPose != null) {
+            if ((lastCollisionPose.vec().distTo(pose.vec()) < poseThreshold) && MathUtils.normalize(lastCollisionPose.getHeading()-pose.getHeading()) < collisionRotationThreshold) {
+                lastCollisionPose = null;
+                return true;
+            }
+        }
+        return false;
+    }
 
     public PIDCoefficients getTurnPID() {
         return rotationPID;
