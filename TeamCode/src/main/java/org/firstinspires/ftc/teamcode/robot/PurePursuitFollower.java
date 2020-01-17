@@ -17,7 +17,7 @@ public class PurePursuitFollower {
     private double lastOnPath = 0.0;
     private double[][] headingInterpolants;
 
-    private double decellerationRange = 0.4;
+    private double decellerationRange = 0.2;
     private double kp = 0.014;
 
     public PurePursuitFollower(Path path, double lookahead, double[] angles) {
