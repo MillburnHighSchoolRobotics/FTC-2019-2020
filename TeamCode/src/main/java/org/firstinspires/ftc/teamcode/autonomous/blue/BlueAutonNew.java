@@ -50,46 +50,54 @@ public class BlueAutonNew extends LinearOpMode {
 
         if (pos == 1) {
             sample12(BLUE_BLOCK_4);
+            Thread.sleep(1000);
             deliver(BLUE_DELIVERY_1);
+            Thread.sleep(1000);
 
             cycle(BLUE_BLOCK_1);
+            Thread.sleep(1000);
             deliver(BLUE_DELIVERY_2);
+            Thread.sleep(1000);
 
             cycle(BLUE_BLOCK_2);
+            Thread.sleep(1000);
             deliver(BLUE_DELIVERY_3);
+            Thread.sleep(1000);
 
             cycle(BLUE_BLOCK_3);
+            Thread.sleep(1000);
             deliver(BLUE_DELIVERY_4);
+            Thread.sleep(1000);
         } else if (pos == 2) {
 
         }
-        park();
+//        park();
     }
     public void sample12(Vector2d block) {
-        robot.follow(0.1,1,
+        robot.follow(0.1,0.7,
                 robot.path(Math.toRadians(270))
                         .lineTo(new Vector2d(-72+BOT_WIDTH/2.0+4,-48+BOT_LENGTH/2.0).rotated(-Math.PI/2))
                         .splineTo(new Pose2d(block.rotated(-Math.PI/2),Math.toRadians(270)))
                         .build(),
-                new double[]{0,0}, true, 10
+                new double[]{0,0}, true, 6
         );
     }
     public void cycle(Vector2d block) {
-        robot.follow(0.1,1,
+        robot.follow(0.2,0.85,
                 robot.path(Math.toRadians(170))
                         .splineTo(new Pose2d(new Vector2d(-38,0).rotated(-Math.PI/2),Math.toRadians(180)))
                         .splineTo(new Pose2d(block.rotated(-Math.PI/2),Math.toRadians(190)))
                         .build(),
-                new double[]{0,0}, true, 10
+                new double[]{0,0}, true, 6
         );
     }
     public void deliver(Vector2d deliver) {
-        robot.follow(0.2,1,
+        robot.follow(0.2,0.85,
                 robot.path(Math.toRadians(10))
-                        .splineTo(new Pose2d(new Vector2d(-38,0).rotated(-Math.PI/2),Math.toRadians(180)))
+                        .splineTo(new Pose2d(new Vector2d(-38,0).rotated(-Math.PI/2),Math.toRadians(0)))
                         .splineTo(new Pose2d(deliver.rotated(-Math.PI/2),Math.toRadians(345)))
                         .build(),
-                new double[]{0,0}
+                new double[]{0,0}, true, 8
         );
     }
     public void park() {
