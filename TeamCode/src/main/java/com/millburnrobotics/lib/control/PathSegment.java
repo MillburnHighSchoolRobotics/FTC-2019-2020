@@ -1,0 +1,20 @@
+package com.millburnrobotics.lib.control;
+
+import com.millburnrobotics.lib.math.Pose;
+
+public abstract class PathSegment {
+    Pose start,end;
+
+    abstract Pose get(double s);
+
+    abstract double length();
+    abstract Pose deriv(double s);
+    abstract Pose secondDeriv(double s);
+
+    public Pose start() {
+        return start;
+    }
+    public Pose end() {
+        return end;
+    }
+}
