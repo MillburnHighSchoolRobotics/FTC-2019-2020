@@ -12,6 +12,8 @@ public class CollisionMonitor extends MonitorThread {
     private Acceleration lastAccel;
 
     private boolean collision = false;
+    private double currentJerkX;
+    private double currentJerkY;
 
 
     public CollisionMonitor(Thread thread, HardwareMap hardwareMap) {
@@ -22,7 +24,7 @@ public class CollisionMonitor extends MonitorThread {
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         parameters.loggingEnabled = false;
-        parameters.loggingTag = "IMU";
+        parameters.loggingTag = "imu 1";
         parameters.accelerationIntegrationAlgorithm = null;
 
         synchronized (this.hardwareMap) {
@@ -38,22 +40,24 @@ public class CollisionMonitor extends MonitorThread {
     }
     @Override
     protected void loop() {
-        collision = checkCollision();
+        checkCollision();
         setValue("collision", collision);
+        setValue("currentJerkX", currentJerkX);
+        setValue("currentJerkY", currentJerkY);
     }
-    protected boolean checkCollision() {
+    protected void checkCollision() {
         Acceleration accel = imu.getLinearAcceleration();
         double linear_accel_x = accel.xAccel;
-        double currentJerkX = linear_accel_x - lastAccel.xAccel;
+        currentJerkX = linear_accel_x - lastAccel.xAccel;
         lastAccel.xAccel = linear_accel_x;
 
         double linear_accel_y = accel.yAccel;
-        double currentJerkY = linear_accel_y - lastAccel.yAccel;
+        currentJerkY = linear_accel_y - lastAccel.yAccel;
         lastAccel.yAccel = linear_accel_y;
 
         lastAccel = accel;
 
-        return !((Math.abs(currentJerkX) > GlobalConstants.COLLISION_THRESHOLD_DELTA_G) ||
+        collision = ((Math.abs(currentJerkX) > GlobalConstants.COLLISION_THRESHOLD_DELTA_G) ||
                 (Math.abs(currentJerkY) > GlobalConstants.COLLISION_THRESHOLD_DELTA_G));
     }
 }

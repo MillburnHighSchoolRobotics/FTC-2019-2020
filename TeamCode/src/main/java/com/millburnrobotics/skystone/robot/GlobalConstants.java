@@ -19,7 +19,7 @@ public class GlobalConstants {
     public static final double FOUNDATION_LENGTH = 34.5;
 
     public static final String IMU_TAG = "imu 1";
-    public static final double COLLISION_THRESHOLD_DELTA_G = 0.5;
+    public static final double COLLISION_THRESHOLD_DELTA_G = 0.7;
     public static final double COLLISION_THRESHOLD_POSE = 3;
     public static final double COLLISION_RECOVERY_MOVEMENT = 3;
     public static final double COLLISION_RECOVERY_POWER = 0.4;
