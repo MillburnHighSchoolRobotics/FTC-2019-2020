@@ -6,6 +6,7 @@ public abstract class PathSegment {
     Pose start,end;
 
     abstract Pose get(double s);
+    abstract Pose _get(double r);
 
     abstract double length();
     abstract Pose deriv(double s);

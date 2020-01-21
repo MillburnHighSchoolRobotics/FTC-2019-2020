@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -27,13 +27,13 @@ public class SkystoneDetectorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GlobalConstants.side = GlobalConstants.SIDE.RED;
+        Constants.FieldConstants.side = Constants.SIDE.RED;
 
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("Webcam1", "id", hardwareMap.appContext.getPackageName()));
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        params.vuforiaLicenseKey = GlobalConstants.VUFORIA_KEY;
+        params.vuforiaLicenseKey = Constants.VUFORIA_KEY;
         telemetry.addData("Vuforia Status: ", "Loading...");
         telemetry.update();
         VuforiaLocalizerImplSubclass vuforiaInstance = new VuforiaLocalizerImplSubclass(params);

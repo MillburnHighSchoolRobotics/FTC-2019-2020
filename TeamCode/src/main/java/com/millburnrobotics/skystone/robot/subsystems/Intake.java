@@ -3,8 +3,8 @@ package com.millburnrobotics.skystone.robot.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import static com.millburnrobotics.skystone.robot.GlobalConstants.INTAKE_IN_POWER;
-import static com.millburnrobotics.skystone.robot.GlobalConstants.INTAKE_OUT_POWER;
+import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_IN_POWER;
+import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_OUT_POWER;
 
 public class Intake {
     DcMotorEx intakeL, intakeR;

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.robot.MohanBot;
 import com.millburnrobotics.skystone.util.BarkerClass;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -27,7 +27,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(-63,-39,3*Math.PI/2));
-        BarkerClass barker = new BarkerClass(hardwareMap, GlobalConstants.SIDE.BLUE);
+        BarkerClass barker = new BarkerClass(hardwareMap, Constants.SIDE.BLUE);
 
         robot.hook.hookUp();
         robot.intake.intakeStop();
@@ -58,7 +58,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barDown();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
-                            .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(245)))
+                            .splineTo(new Pose2d(Constants.AutonConstants.BLUE_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
                     new double[]{180}, true, 6
             );
@@ -86,7 +86,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barDown();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
-                            .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(245)))
+                            .splineTo(new Pose2d(Constants.AutonConstants.BLUE_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
                     new double[]{180}, true, 6
             );
@@ -115,7 +115,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.openClaw();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
-                            .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(245)))
+                            .splineTo(new Pose2d(Constants.AutonConstants.BLUE_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(245)))
                             .build(),
                     new double[]{180}, true, 6
             );
@@ -193,7 +193,7 @@ public class BlueAutonThreeBlock extends LinearOpMode {
                     robot.path(Math.PI/2)
                             .splineTo(new Pose2d(new Vector2d(-36,24).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(new Vector2d(-40,-12).rotated(-Math.PI/2),Math.toRadians(180)))
-                            .splineTo(new Pose2d(GlobalConstants.BLUE_BLOCK_6.rotated(-Math.PI/2),Math.toRadians(200)))
+                            .splineTo(new Pose2d(Constants.AutonConstants.BLUE_BLOCK_6.rotated(-Math.PI/2),Math.toRadians(200)))
                             .build(),
                     new double[]{180,180,180}, true, 6
             );

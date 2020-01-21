@@ -1,25 +1,19 @@
 package com.millburnrobotics.skystone.test;
 
-import android.util.Log;
-
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.control.PathGenerator;
 import com.millburnrobotics.lib.math.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(group = "test")
-public class SplineGeneratorTest extends LinearOpMode {
-    @Override
-    public void runOpMode() throws InterruptedException {
-        if (isStopRequested()) return;
-
+public class SplineGeneratorTest {
+    public static void main(String[] args) {
         PathGenerator generator = new PathGenerator(new Pose(0,0,0));
-        Path path = generator.strafeTo(new Pose(24,36)).path;
-        Log.d("SplineGeneratorTest", "Start: " + path.start());
-        Log.d("SplineGeneratorTest", "End: " + path.end());
-        Log.d("SplineGeneratorTest", "Length: " + path.length());
-        Log.d("SplineGeneratorTest", "Get(10): " + path.get(10));
+        Path path = generator.splineTo(new Pose(24,24,0)).path;
+        System.out.println("Start: " + path.start());
+        System.out.println("End: " + path.end());
+        System.out.println("Length: " + path.length());
+        for (int x = 0; x < path.length(); x++) {
+            System.out.println("Get("+x+"): " + path.get(x));
+        }
     }
 }

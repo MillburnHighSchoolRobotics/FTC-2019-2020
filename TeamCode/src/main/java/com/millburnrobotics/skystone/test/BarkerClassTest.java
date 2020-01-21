@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.test;
 
 import android.util.Log;
 
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.util.BarkerClass;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,7 +21,7 @@ public class BarkerClassTest extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        BarkerClass barker = new BarkerClass(hardwareMap, GlobalConstants.SIDE.RED);
+        BarkerClass barker = new BarkerClass(hardwareMap, Constants.SIDE.RED);
 
         telemetry.addData("Status", "Loading");
         telemetry.update();

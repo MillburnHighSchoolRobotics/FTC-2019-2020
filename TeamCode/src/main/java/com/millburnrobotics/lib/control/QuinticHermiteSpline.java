@@ -19,6 +19,9 @@ public class QuinticHermiteSpline extends PathSegment {
     private List<Double> sSamples = new ArrayList<>();
 
     public QuinticHermiteSpline(Pose p0, Pose p1) {
+        this.start = p0;
+        this.end = p1;
+
         double scale = 1.2*p0.distTo(p1);
         x0 = p0.x;
         x1 = p1.x;
@@ -53,7 +56,8 @@ public class QuinticHermiteSpline extends PathSegment {
         fy = y0;
     }
 
-    private Pose _get(double t) {
+    @Override
+    public Pose _get(double t) {
         double x = ax*t*t*t*t*t+bx*t*t*t*t+cx*t*t*t+dx*t*t+ex*t+fx;
         double y = ay*t*t*t*t*t+by*t*t*t*t+cy*t*t*t+dy*t*t+ey*t+fy;
         return new Pose(x,y);
@@ -100,7 +104,7 @@ public class QuinticHermiteSpline extends PathSegment {
     }
 
     public double reparam(double s) {
-        if (s <= 0.0) return 0;
+        if (s <= 0.0) return 0.0;
         if (s >= length) return 1.0;
 
         int low = 0;
@@ -116,7 +120,7 @@ public class QuinticHermiteSpline extends PathSegment {
                 return tSamples.get(mid);
             }
         }
-        return tSamples.get(low)+(s-sSamples.get(low))*(sSamples.get(high)-tSamples.get(low))/(sSamples.get(high)-sSamples.get(low));
+        return tSamples.get(low)+(s-sSamples.get(low))*(tSamples.get(high)-tSamples.get(low))/(sSamples.get(high)-sSamples.get(low));
     }
 
     @Override

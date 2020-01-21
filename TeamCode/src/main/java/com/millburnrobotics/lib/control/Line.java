@@ -16,6 +16,13 @@ public class Line extends PathSegment {
         );
     }
     @Override
+    public Pose _get(double s) {
+        return new Pose(
+                MathUtils.map(s,0,1,start.x,end.x),
+                MathUtils.map(s,0,1,start.y,end.y)
+        );
+    }
+    @Override
     public double length() {
         return start.minus(end).norm();
     }

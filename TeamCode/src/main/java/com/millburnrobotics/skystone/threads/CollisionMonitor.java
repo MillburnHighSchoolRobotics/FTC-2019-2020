@@ -1,6 +1,6 @@
 package com.millburnrobotics.skystone.threads;
 
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -28,7 +28,7 @@ public class CollisionMonitor extends MonitorThread {
         parameters.accelerationIntegrationAlgorithm = null;
 
         synchronized (this.hardwareMap) {
-            this.imu = hardwareMap.get(BNO055IMU.class, GlobalConstants.IMU_TAG);
+            this.imu = hardwareMap.get(BNO055IMU.class, Constants.DriveConstants.kIMU);
         }
         synchronized (this.imu) {
             this.imu.initialize(parameters);
@@ -57,7 +57,7 @@ public class CollisionMonitor extends MonitorThread {
 
         lastAccel = accel;
 
-        collision = ((Math.abs(currentJerkX) > GlobalConstants.COLLISION_THRESHOLD_DELTA_G) ||
-                (Math.abs(currentJerkY) > GlobalConstants.COLLISION_THRESHOLD_DELTA_G));
+        collision = ((Math.abs(currentJerkX) > Constants.DriveConstants.COLLISION_THRESHOLD_DELTA_G) ||
+                (Math.abs(currentJerkY) > Constants.DriveConstants.COLLISION_THRESHOLD_DELTA_G));
     }
 }

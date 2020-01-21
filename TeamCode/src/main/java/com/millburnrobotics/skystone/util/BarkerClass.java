@@ -3,7 +3,7 @@ package com.millburnrobotics.skystone.util;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.opencv.android.OpenCVLoader;
@@ -42,9 +42,9 @@ public class BarkerClass {
 
     private VuforiaLocalizer.Parameters params;
 
-    public BarkerClass(HardwareMap hardwareMap, GlobalConstants.SIDE side) {
+    public BarkerClass(HardwareMap hardwareMap, Constants.SIDE side) {
         this.hardwareMap = hardwareMap;
-        GlobalConstants.side = side;
+        Constants.FieldConstants.side = side;
     }
 
     public void wake() {
@@ -52,7 +52,7 @@ public class BarkerClass {
 
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        params.vuforiaLicenseKey = GlobalConstants.VUFORIA_KEY;
+        params.vuforiaLicenseKey = Constants.VUFORIA_KEY;
 
         vuforiaInstance = new VuforiaLocalizerImplSubclass(params);
     }
@@ -112,7 +112,7 @@ public class BarkerClass {
         }
 
         int pos = -1;
-        if (GlobalConstants.side == GlobalConstants.SIDE.BLUE) {
+        if (Constants.FieldConstants.side == Constants.SIDE.BLUE) {
             if (centroid.x > BLUE_LINE_1_X && centroid.x < BLUE_LINE_2_X)
                 pos = 1;
             else if (centroid.x > BLUE_LINE_2_X && centroid.x < BLUE_LINE_3_X)

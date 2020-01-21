@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.robot.MohanBot;
 import com.millburnrobotics.skystone.util.BarkerClass;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -30,9 +30,9 @@ public class BlueAutonTwoBlock extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //forwards, to wall, on first tile beyond bridge, sideplate on tile edge nearest to audience
-        MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(-63, -2* GlobalConstants.TILE_WIDTH + BOT_WIDTH/2, Math.toRadians(270)));
+        MohanBot robot = new MohanBot(hardwareMap, this, new Pose2d(-63, -2* Constants.FieldConstants.TILE_WIDTH + BOT_WIDTH/2, Math.toRadians(270)));
 
-        BarkerClass barker = new BarkerClass(hardwareMap, GlobalConstants.SIDE.BLUE);
+        BarkerClass barker = new BarkerClass(hardwareMap, Constants.SIDE.BLUE);
 
 
         robot.intake.intakeStop();
@@ -55,13 +55,13 @@ public class BlueAutonTwoBlock extends LinearOpMode {
         telemetry.update();
 
         if (pos == 1) {
-            robot.moveTo(new Vector2d(-1.5* GlobalConstants.TILE_WIDTH, -1.5* GlobalConstants.TILE_WIDTH), 310,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
+            robot.moveTo(new Vector2d(-1.5* Constants.FieldConstants.TILE_WIDTH, -1.5* Constants.FieldConstants.TILE_WIDTH), 310,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(-20, -1* GlobalConstants.TILE_WIDTH),DEFAULT_STRAFE_POWER);
+            robot.strafeTo(new Vector2d(-20, -1* Constants.FieldConstants.TILE_WIDTH),DEFAULT_STRAFE_POWER);
         } else if (pos == 2) {
-            robot.moveTo(new Vector2d(-1.5* GlobalConstants.TILE_WIDTH, -1.5* GlobalConstants.TILE_WIDTH-4), 310, DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
+            robot.moveTo(new Vector2d(-1.5* Constants.FieldConstants.TILE_WIDTH, -1.5* Constants.FieldConstants.TILE_WIDTH-4), 310, DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
             robot.intake.intakeIn();
-            robot.strafeTo(new Vector2d(-20, -1* GlobalConstants.TILE_WIDTH-4),DEFAULT_STRAFE_POWER);
+            robot.strafeTo(new Vector2d(-20, -1* Constants.FieldConstants.TILE_WIDTH-4),DEFAULT_STRAFE_POWER);
         } else {
             robot.moveTo(new Vector2d(-24, -24), 180,DEFAULT_STRAFE_POWER,DEFAULT_ROTATION_POWER);
             robot.intake.intakeIn();

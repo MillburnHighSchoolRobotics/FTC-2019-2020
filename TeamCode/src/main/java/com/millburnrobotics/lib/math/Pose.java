@@ -63,4 +63,9 @@ public class Pose {
     public double sin() {
         return Math.sin(heading);
     }
+
+    @Override
+    public String toString() {
+        return ("("+x+","+y+","+heading+")");
+    }
 }

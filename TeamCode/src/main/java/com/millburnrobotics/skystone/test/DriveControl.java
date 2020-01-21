@@ -1,7 +1,7 @@
 package com.millburnrobotics.skystone.test;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -84,9 +84,9 @@ public class DriveControl extends OpMode {
             }
         }
         if (drivePowerLow) {
-            drivePower = GlobalConstants.DRIVE_POWER_LOW;
+            drivePower = Constants.DriveConstants.DRIVE_POWER_LOW;
         } else {
-            drivePower = GlobalConstants.DRIVE_POWER_HIGH;
+            drivePower = Constants.DriveConstants.DRIVE_POWER_HIGH;
         }
 
         double strafeX = gamepad1.left_stick_x;

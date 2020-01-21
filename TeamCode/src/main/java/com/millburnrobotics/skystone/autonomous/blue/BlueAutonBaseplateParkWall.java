@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.autonomous.blue;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.robot.MohanBot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,7 +15,7 @@ public class BlueAutonBaseplateParkWall extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(-63, 24 + GlobalConstants.BOT_WIDTH/2, Math.toRadians(90)));
+        MohanBot robot = new MohanBot(hardwareMap,this,new Pose2d(-63, 24 + Constants.DriveConstants.BOT_WIDTH/2, Math.toRadians(90)));
         if (isStopRequested()) return;
         waitForStart();
 

@@ -16,7 +16,7 @@ public class PathGenerator {
     }
     public PathGenerator splineTo(Pose splineEnd) {
         Pose splineStart = (path.size() == 0) ? start : path.end();
-        path.add(new Line(splineStart,splineEnd));
+        path.add(new QuinticHermiteSpline(splineStart,splineEnd));
         return this;
     }
 }

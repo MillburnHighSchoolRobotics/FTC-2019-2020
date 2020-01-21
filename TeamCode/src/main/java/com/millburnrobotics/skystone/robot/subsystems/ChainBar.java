@@ -10,7 +10,7 @@ import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-import static com.millburnrobotics.skystone.robot.GlobalConstants.*;
+import static com.millburnrobotics.skystone.Constants.*;
 
 public class ChainBar {
     DcMotorEx chainBar;
@@ -29,14 +29,14 @@ public class ChainBar {
         chainBar.setDirection(REVERSE);
     }
     public void openClaw() {
-        clawClamp.setPosition(CHAINBAR_CLAW_OPEN_POS);
+        clawClamp.setPosition(ChainBarConstants.CHAINBAR_CLAW_OPEN_POS);
     }
     public void closeClaw() {
-        clawClamp.setPosition(CHAINBAR_CLAW_CLOSE_POS);
+        clawClamp.setPosition(ChainBarConstants.CHAINBAR_CLAW_CLOSE_POS);
     }
     public void chainBarIn() {
         ElapsedTime e = new ElapsedTime();
-        chainBarPID.setTarget(CHAINBAR_IN_VOLTAGE);
+        chainBarPID.setTarget(ChainBarConstants.CHAINBAR_IN_VOLTAGE);
         while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
             chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
             if (e.milliseconds() > 3000) {
@@ -47,7 +47,7 @@ public class ChainBar {
     }
     public void chainBarUp() {
         ElapsedTime e = new ElapsedTime();
-        chainBarPID.setTarget(CHAINBAR_UP_VOLTAGE);
+        chainBarPID.setTarget(ChainBarConstants.CHAINBAR_UP_VOLTAGE);
         while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
             chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
             if (e.milliseconds() > 3000) {
@@ -58,7 +58,7 @@ public class ChainBar {
     }
     public void chainBarOut() {
         ElapsedTime e = new ElapsedTime();
-        chainBarPID.setTarget(CHAINBAR_OUT_VOLTAGE);
+        chainBarPID.setTarget(ChainBarConstants.CHAINBAR_OUT_VOLTAGE);
         while (!MathUtils.equals(chainBarPot.getVoltage(), chainBarPID.getTarget(), 0.1)) {
             chainBar.setPower(chainBarPID.getPIDOutput(chainBarPot.getVoltage()));
             if (e.milliseconds() > 3000) {

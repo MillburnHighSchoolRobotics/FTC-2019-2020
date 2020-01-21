@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 
 @TeleOp(group = "test")
 public class DriveSetVelocityTest extends OpMode {
@@ -32,7 +32,7 @@ public class DriveSetVelocityTest extends OpMode {
 
         lf.setVelocity(w_predicted, AngleUnit.RADIANS);
 
-        double w_calculated = (GlobalConstants.motorTicksToRadians(lf.getCurrentPosition() - startPosition))/(1);
+        double w_calculated = (Constants.DriveConstants.motorTicksToRadians(lf.getCurrentPosition() - startPosition))/(1);
 
         telemetry.addData("predicted w - ",w_predicted);
         telemetry.addData("calculated w - ",w_calculated);

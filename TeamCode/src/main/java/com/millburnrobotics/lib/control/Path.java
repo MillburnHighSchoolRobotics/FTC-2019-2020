@@ -47,6 +47,9 @@ public class Path {
     public List<PathSegment> segments() {
         return segments;
     }
+    public PathSegment segment(int i) {
+        return segments.get(i);
+    }
     public void add(PathSegment segment) {
         segments.add(segment);
     }
@@ -69,7 +72,7 @@ public class Path {
     public Pose end() {
         return segments.get(segments.size()-1).end();
     }
-    public double size() {
+    public int size() {
         return segments.size();
     }
 }

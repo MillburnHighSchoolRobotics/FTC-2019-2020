@@ -7,7 +7,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.path.PathBuilder;
-import com.millburnrobotics.lib.follower.PurePursuitFollower;
+import com.millburnrobotics.skystone.Constants;
+import com.millburnrobotics.skystone.util.PurePursuitFollower_OLD;
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.robot.subsystems.ChainBar;
 import com.millburnrobotics.skystone.robot.subsystems.Drive;
@@ -30,9 +31,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
-import static com.millburnrobotics.skystone.robot.GlobalConstants.CHECK_COLLISION;
-import static com.millburnrobotics.skystone.robot.GlobalConstants.LOOK_AHEAD;
-import static com.millburnrobotics.skystone.robot.GlobalConstants.TURN_POWER;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.CHECK_COLLISION;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.TURN_POWER;
 
 public class MohanBot {
 
@@ -71,20 +72,22 @@ public class MohanBot {
         init();
     }
     private void init() {
-        DcMotorEx lf = (DcMotorEx)hardwareMap.dcMotor.get("lf");
-        DcMotorEx lb = (DcMotorEx)hardwareMap.dcMotor.get("lb");
-        DcMotorEx rf = (DcMotorEx)hardwareMap.dcMotor.get("rf");
-        DcMotorEx rb = (DcMotorEx)hardwareMap.dcMotor.get("rb");
+        DcMotorEx lf = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants.kLeftFrontMotor);
+        DcMotorEx lb = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants.kLeftBackMotor);
+        DcMotorEx rf = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants.kRightFrontMotor);
+        DcMotorEx rb = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants.kRightBackMotor);
 
-        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get("intakeL");
-        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get("intakeR");
-        DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get("chainBar");
+        DcMotorEx intakeLeft = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants.kIntakeL);
+        DcMotorEx intakeRight = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants.kIntakeR);
 
-        Servo chainBarClawClamp = hardwareMap.servo.get("chainBarClawClamp");
-        Servo sideClawBar = hardwareMap.servo.get("sideClawBar");
-        Servo sideClawClamp = hardwareMap.servo.get("sideClawClamp");
-        Servo hookLeft = hardwareMap.servo.get("foundationHookLeft");
-        Servo hookRight = hardwareMap.servo.get("foundationHookRight");
+        DcMotorEx chainbar = (DcMotorEx)hardwareMap.dcMotor.get(Constants.ChainBarConstants.kChainBar);
+        Servo chainBarClawClamp = hardwareMap.servo.get(Constants.ChainBarConstants.kChainBarClamp);
+
+        Servo sideClawBar = hardwareMap.servo.get(Constants.SideClawConstants.kSideClawBar);
+        Servo sideClawClamp = hardwareMap.servo.get(Constants.SideClawConstants.kSideClawClamp);
+
+        Servo hookLeft = hardwareMap.servo.get(Constants.HookConstants.kHookL);
+        Servo hookRight = hardwareMap.servo.get(Constants.HookConstants.kHookR);
 
         AnalogInput chainBarPot = hardwareMap.get(AnalogInput.class, "chainBarPot");
 
@@ -281,7 +284,7 @@ public class MohanBot {
         follow(powerLow,powerHigh,path,headingInterpolants,headingAdjustment, LOOK_AHEAD);
     }
     public void follow(double powerLow, double powerHigh, Path path, double[] headingInterpolants, boolean headingAdjustment, double lookahead) {
-        PurePursuitFollower follower = new PurePursuitFollower(path, lookahead, headingInterpolants);
+        PurePursuitFollower_OLD follower = new PurePursuitFollower_OLD(path, lookahead, headingInterpolants);
 
         boolean strafe = true;
         while (!shouldStop()) {

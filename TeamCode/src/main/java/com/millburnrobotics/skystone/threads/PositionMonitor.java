@@ -3,7 +3,7 @@ package com.millburnrobotics.skystone.threads;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.millburnrobotics.skystone.robot.GlobalConstants;
+import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -79,9 +79,9 @@ public class PositionMonitor extends MonitorThread {
     protected void updatePosition() {
         ElapsedTime e = new ElapsedTime();
 
-        double erPos = GlobalConstants.encoderToDistance(er.getCurrentPosition());
-        double elPos = -GlobalConstants.encoderToDistance(el.getCurrentPosition());
-        double ebPos = GlobalConstants.encoderToDistance(eb.getCurrentPosition());
+        double erPos = Constants.DriveConstants.encoderToDistance(er.getCurrentPosition());
+        double elPos = -Constants.DriveConstants.encoderToDistance(el.getCurrentPosition());
+        double ebPos = Constants.DriveConstants.encoderToDistance(eb.getCurrentPosition());
 
         Log.d(TAG, "er pos (inches): " + erPos);
         Log.d(TAG, "el pos (inches): " + elPos);
@@ -93,8 +93,8 @@ public class PositionMonitor extends MonitorThread {
 
         double dRoll = 0;
         double dPitch = 0;
-        double dYaw = (dr-dl)/GlobalConstants.DEAD_WHEEL_BASE_WIDTH;
-        double dx = db+(GlobalConstants.DEAD_WHEEL_TURN_RADIUS*dYaw);
+        double dYaw = (dr-dl)/ Constants.OdometryConstants.DEAD_WHEEL_BASE_WIDTH;
+        double dx = db+(Constants.OdometryConstants.DEAD_WHEEL_TURN_RADIUS*dYaw);
         double dy = (dr+dl)/2.0;
         double dz = 0;
 
@@ -147,6 +147,6 @@ public class PositionMonitor extends MonitorThread {
         elPosLast = elPos;
         ebPosLast = ebPos;
 
-        while (e.milliseconds() < GlobalConstants.FPS_UPDATE_PERIOD);
+        while (e.milliseconds() < Constants.OdometryConstants.FPS_UPDATE_PERIOD);
     }
 }
