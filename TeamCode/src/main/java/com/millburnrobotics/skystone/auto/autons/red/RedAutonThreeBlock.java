@@ -1,11 +1,12 @@
-package com.millburnrobotics.skystone.autonomous.red;
+package com.millburnrobotics.skystone.auto.autons.red;
 
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.auto.autons.AutonConstants;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 import com.millburnrobotics.skystone.util.BarkerClass;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -58,7 +59,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barDown();
             robot.follow(0.1,0.7,
                     robot.path(Math.toRadians(165))
-                            .splineTo(new Pose2d(Constants.AutonConstants.RED_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(90)))
+                            .splineTo(new Pose2d(AutonConstants.RED_BLOCK_4.rotated(-Math.PI/2),Math.toRadians(90)))
                             .build(),
                     new double[]{0}, true, 6
             );
@@ -86,7 +87,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barDown();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
-                            .splineTo(new Pose2d(Constants.AutonConstants.RED_BLOCK_2.rotated(-Math.PI/2),Math.toRadians(115)))
+                            .splineTo(new Pose2d(AutonConstants.RED_BLOCK_2.rotated(-Math.PI/2),Math.toRadians(115)))
                             .build(),
                     new double[]{0}, true, 6
             );
@@ -114,7 +115,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
             robot.sideClaw.barDown();
             robot.follow(0.1,0.7,
                     robot.path(Math.PI)
-                            .splineTo(new Pose2d(Constants.AutonConstants.RED_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(65)))
+                            .splineTo(new Pose2d(AutonConstants.RED_BLOCK_3.rotated(-Math.PI/2),Math.toRadians(65)))
                             .build(),
                     new double[]{0}, true, 6
             );
@@ -172,7 +173,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
                     robot.path(3*Math.PI/2)
                             .splineTo(new Pose2d(new Vector2d(36,24).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(new Vector2d(42,-20).rotated(-Math.PI/2),Math.toRadians(180)))
-                            .splineTo(new Pose2d(Constants.AutonConstants.RED_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(160)))
+                            .splineTo(new Pose2d(AutonConstants.RED_BLOCK_5.rotated(-Math.PI/2),Math.toRadians(160)))
                             .build(),
                     new double[]{0,0,0}, true, 6
             );
@@ -194,7 +195,7 @@ public class RedAutonThreeBlock extends LinearOpMode {
                     robot.path(3*Math.PI/2)
                             .splineTo(new Pose2d(new Vector2d(36,24).rotated(-Math.PI/2),Math.toRadians(180)))
                             .splineTo(new Pose2d(new Vector2d(40,-12).rotated(-Math.PI/2),Math.toRadians(180)))
-                            .splineTo(new Pose2d(Constants.AutonConstants.RED_BLOCK_6.rotated(-Math.PI/2),Math.toRadians(160)))
+                            .splineTo(new Pose2d(AutonConstants.RED_BLOCK_6.rotated(-Math.PI/2),Math.toRadians(160)))
                             .build(),
                     new double[]{0,0,0}, true, 6
             );

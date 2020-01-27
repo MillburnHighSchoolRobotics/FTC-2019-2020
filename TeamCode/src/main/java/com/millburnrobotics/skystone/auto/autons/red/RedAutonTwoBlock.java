@@ -1,11 +1,11 @@
-package com.millburnrobotics.skystone.autonomous.red;
+package com.millburnrobotics.skystone.auto.autons.red;
 
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 import com.millburnrobotics.skystone.util.BarkerClass;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

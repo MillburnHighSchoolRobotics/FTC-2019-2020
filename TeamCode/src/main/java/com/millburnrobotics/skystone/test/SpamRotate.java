@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 
 @Autonomous(group = "util")
 public class SpamRotate extends LinearOpMode {

@@ -1,7 +1,7 @@
-package com.millburnrobotics.skystone.autonomous.general;
+package com.millburnrobotics.skystone.auto.autons.general;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 

@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.robot.subsystems;
+package com.millburnrobotics.skystone.subsystems;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;

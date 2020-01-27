@@ -19,6 +19,15 @@ public class Pose {
         this.y = 0;
         this.heading = 0;
     }
+    public double getX() {
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+    public double getHeading() {
+        return heading;
+    }
     public double norm() {
         return Math.sqrt(x*x+y*y);
     }

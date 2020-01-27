@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.robot.subsystems;
+package com.millburnrobotics.skystone.subsystems;
 
 import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.Servo;

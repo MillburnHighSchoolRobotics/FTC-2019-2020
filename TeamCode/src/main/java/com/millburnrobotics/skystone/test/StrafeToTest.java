@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 
 @Autonomous(group = "test")
 public class StrafeToTest extends LinearOpMode {

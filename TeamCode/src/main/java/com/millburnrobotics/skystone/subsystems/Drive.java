@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.robot.subsystems;
+package com.millburnrobotics.skystone.subsystems;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.millburnrobotics.skystone.Constants;

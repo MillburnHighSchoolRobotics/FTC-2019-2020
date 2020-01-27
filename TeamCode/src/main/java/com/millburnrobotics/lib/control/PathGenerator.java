@@ -3,8 +3,8 @@ package com.millburnrobotics.lib.control;
 import com.millburnrobotics.lib.math.Pose;
 
 public class PathGenerator {
-    public Path path;
-    Pose start;
+    private Path path;
+    private Pose start;
     public PathGenerator(Pose start) {
         this.path = new Path();
         this.start = start;
@@ -18,5 +18,8 @@ public class PathGenerator {
         Pose splineStart = (path.size() == 0) ? start : path.end();
         path.add(new QuinticHermiteSpline(splineStart,splineEnd));
         return this;
+    }
+    public Path generatePath() {
+        return path;
     }
 }

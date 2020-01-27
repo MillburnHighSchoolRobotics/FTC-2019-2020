@@ -1,6 +1,6 @@
 package com.millburnrobotics.skystone.test;
 
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 

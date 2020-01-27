@@ -8,7 +8,7 @@ import com.acmerobotics.roadrunner.path.Path;
 
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 
 public class PurePursuitFollower_OLD {
     private Path path;

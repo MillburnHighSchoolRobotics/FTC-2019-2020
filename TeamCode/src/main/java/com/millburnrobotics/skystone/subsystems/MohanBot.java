@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.robot;
+package com.millburnrobotics.skystone.subsystems;
 
 import android.app.Activity;
 import android.util.Log;
@@ -10,11 +10,6 @@ import com.acmerobotics.roadrunner.path.PathBuilder;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.util.PurePursuitFollower_OLD;
 import com.millburnrobotics.lib.math.MathUtils;
-import com.millburnrobotics.skystone.robot.subsystems.ChainBar;
-import com.millburnrobotics.skystone.robot.subsystems.Drive;
-import com.millburnrobotics.skystone.robot.subsystems.Hook;
-import com.millburnrobotics.skystone.robot.subsystems.Intake;
-import com.millburnrobotics.skystone.robot.subsystems.SideClaw;
 import com.millburnrobotics.skystone.threads.CollisionMonitor;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.millburnrobotics.skystone.threads.ThreadManager;

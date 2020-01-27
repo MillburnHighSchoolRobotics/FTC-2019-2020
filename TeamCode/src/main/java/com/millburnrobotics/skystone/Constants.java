@@ -1,6 +1,5 @@
 package com.millburnrobotics.skystone;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -44,7 +43,7 @@ public class Constants {
         public static final double TURN_POWER = 0.6;
 
         public static final long LOOK_AHEAD = 10;
-        public static final double ACCELERATION_RANGE = 0.4;
+        public static final double ACCELERATION_RANGE = 0.2;
         public static final double DECELERATION_RANGE = 0.4;
 
         public static double encoderToDistance(double ticks) {
@@ -134,43 +133,6 @@ public class Constants {
         public static final double RIGHT_HOOK_UP_POS = 0;
         public static final double LEFT_HOOK_DOWN_POS = 0;
         public static final double LEFT_HOOK_UP_POS = 1;
-    }
-
-    public static class AutonConstants {
-        public static Vector2d RED_BLOCK_2 = new Vector2d(36,-56);
-        public static Vector2d RED_BLOCK_3 = new Vector2d(36,-48);
-        public static Vector2d RED_BLOCK_4 = new Vector2d(36,-40);
-        public static Vector2d RED_BLOCK_5 = new Vector2d(36,-32);
-        public static Vector2d RED_BLOCK_6 = new Vector2d(36,-24); // 24+4 -4
-
-        public static double X_BLUE_BLOCK_CLAW = -24- DriveConstants.BOT_WIDTH/2.0- SideClawConstants.CLAW_EXTEND;
-        public static double Y_BLUE_BLOCK_CLAW = -24-4+(DriveConstants.BOT_LENGTH/2.0- SideClawConstants.CLAW_TO_BACK);
-
-        public static Vector2d BLUE_BLOCK_5 = new Vector2d(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -32);
-        public static Vector2d BLUE_BLOCK_4 = new Vector2d(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -24);
-        public static Vector2d BLUE_BLOCK_3 = new Vector2d(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -16);
-        public static Vector2d BLUE_BLOCK_2 = new Vector2d(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -8);
-        public static Vector2d BLUE_BLOCK_1 = new Vector2d(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW);
-
-        public static double X_BLUE_BLOCK_INTAKE = -24+2;
-        public static double Y_BLUE_BLOCK_INTAKE = -72+8+ DriveConstants.BOT_LENGTH/2.0+4;
-
-        public static Vector2d BLUE_BLOCK_6 = new Vector2d(X_BLUE_BLOCK_INTAKE, Y_BLUE_BLOCK_INTAKE);
-
-        public static double X_BLUE_DELIVERY = -24- DriveConstants.BOT_WIDTH/2.0- SideClawConstants.CLAW_EXTEND;
-        public static double Y_BLUE_DELIVERY = 72-4- FieldConstants.FOUNDATION_LENGTH/2.0+(DriveConstants.BOT_LENGTH/2.0- SideClawConstants.CLAW_TO_BACK);
-
-        public static Vector2d BLUE_DELIVERY_4 = new Vector2d(X_BLUE_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_BLUE_DELIVERY -6);
-        public static Vector2d BLUE_DELIVERY_3 = new Vector2d(X_BLUE_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_BLUE_DELIVERY +4);
-        public static Vector2d BLUE_DELIVERY_2 = new Vector2d(X_BLUE_DELIVERY,Y_BLUE_DELIVERY -6);
-        public static Vector2d BLUE_DELIVERY_1 = new Vector2d(X_BLUE_DELIVERY,Y_BLUE_DELIVERY +4);
-
-        public static double X_BLUE_FOUNDATION = -48+ DriveConstants.BOT_LENGTH/2.0;
-        public static double Y_BLUE_FOUNDATION = 72-4- FieldConstants.FOUNDATION_LENGTH/2.0;
-        public static Vector2d BLUE_FOUNDATION = new Vector2d(X_BLUE_FOUNDATION,Y_BLUE_FOUNDATION);
-
-        public static Vector2d BLUE_BRIDGE_PARK = new Vector2d(-36,0);
-        public static Vector2d BLUE_WALL_PARK = new Vector2d(-57,0);
     }
 
 

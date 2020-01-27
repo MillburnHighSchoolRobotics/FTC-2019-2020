@@ -6,10 +6,10 @@ import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.skystone.subsystems.MohanBot;
 
 public class PurePursuitFollower {
-    private Path path;
+    public Path path;
     private double lookahead = Constants.DriveConstants.LOOK_AHEAD;
     private double accellerationRange = Constants.DriveConstants.ACCELERATION_RANGE;
     private double decellerationRange = Constants.DriveConstants.DECELERATION_RANGE;

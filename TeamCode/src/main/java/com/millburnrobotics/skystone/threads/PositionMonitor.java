@@ -3,6 +3,7 @@ package com.millburnrobotics.skystone.threads;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -30,6 +31,9 @@ public class PositionMonitor extends MonitorThread {
 
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose2d start) {
+        this(thread, hardwareMap, new Pose(start.getX(), start.getY(), start.getHeading()));
+    }
+    public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose start) {
         super(thread, hardwareMap, TAG);
         er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
         el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");

@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.test;
 
 import android.app.Activity;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.millburnrobotics.skystone.threads.ThreadManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -39,7 +39,7 @@ public class FPSTest extends LinearOpMode {
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);
-        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose2d(-63,-39,3*Math.PI/2));
+        manager.setupThread("PositionMonitor", PositionMonitor.class, new Pose(-63,-39,3*Math.PI/2));
         waitForStart();
 
         if (isStopRequested()) return;

@@ -1,8 +1,7 @@
 package com.millburnrobotics.skystone.test;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.millburnrobotics.skystone.robot.MohanBot;
+import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -11,26 +10,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class SplineTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MohanBot drive = new MohanBot(hardwareMap,this, new Pose2d(0,0,0));
+        Robot drive = new Robot(hardwareMap,this, new Pose(0,0,0));
+
         if (isStopRequested()) return;
         waitForStart();
 
         drive.follow(0.1,0.9,
-                drive.path(0)
-                        .splineTo(new Pose2d(new Vector2d(36,36).rotated(-Math.PI/2),0))
-                        .build(),
-                new double[]{90}, false, 3
+                drive.pathGenerator()
+                        .splineTo(new Pose(36,36,0))
+                        .generatePath()
         );
 
         Thread.sleep(1000);
 
         drive.follow(0.1,0.9,
-                drive.path(Math.PI/2)
-                        .splineTo(new Pose2d(new Vector2d(0,0).rotated(-Math.PI/2),Math.PI))
-                        .build(),
-                new double[]{0}
-
+                drive.pathGenerator()
+                        .splineTo(new Pose(0,0,0))
+                        .generatePath()
         );
+
         Thread.sleep(1000);
     }
 }
