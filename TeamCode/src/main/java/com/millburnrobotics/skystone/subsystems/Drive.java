@@ -1,7 +1,5 @@
 package com.millburnrobotics.skystone.subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -29,22 +27,6 @@ public class Drive {
         }
         rf.setDirection(REVERSE);
         rb.setDirection(REVERSE);
-    }
-    public void setDriveVelocity(Pose2d velocity) {
-        double k = (Constants.DriveConstants.WHEEL_BASE+ Constants.DriveConstants.TRACK_WIDTH)/2;
-        double[] linearVelocity = new double[] {
-                velocity.getY()+velocity.getX()-k*velocity.getHeading(),
-                velocity.getY()-velocity.getX()-k*velocity.getHeading(),
-                velocity.getY()-velocity.getX()+k*velocity.getHeading(),
-                velocity.getY()+velocity.getX()+k*velocity.getHeading()
-        };
-
-        double[] angularVelocity = new double[linearVelocity.length];
-        for (int v = 0; v < angularVelocity.length; v++) {
-            angularVelocity[v] = linearVelocity[v] / Constants.DriveConstants.WHEEL_RADIUS;
-        }
-        setDriveVelocity(angularVelocity);
-
     }
     public void setDriveVelocity(double[] velocity) {
         lf.setVelocity(velocity[0], AngleUnit.RADIANS);

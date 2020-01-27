@@ -9,7 +9,6 @@ import com.millburnrobotics.lib.follower.PurePursuitFollower;
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.threads.CollisionMonitor;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.millburnrobotics.skystone.threads.ThreadManager;
 import com.millburnrobotics.skystone.util.PIDController;
@@ -53,7 +52,6 @@ public class Robot {
         manager.setHardwareMap(hardwareMap);
         manager.setCurrentAuton(opMode);
         manager.setupThread("PositionMonitor", PositionMonitor.class, start);
-        manager.setupThread("CollisionMonitor", CollisionMonitor.class);
 
         count = ThreadManager.getInstance().getValue("count", Double.class);
     }

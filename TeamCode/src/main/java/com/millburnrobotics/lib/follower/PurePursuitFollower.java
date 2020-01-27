@@ -6,7 +6,6 @@ import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.subsystems.MohanBot;
 
 public class PurePursuitFollower {
     public Path path;
@@ -41,7 +40,7 @@ public class PurePursuitFollower {
     private double project(Pose currentPos) {
         double s = path.length();
 
-        while (!MohanBot.shouldStop()) {
+        while (true) {
             Log.d("pure pursuit","project s - " + s);
             Pose pathPos = path.get(s);
             Log.d("pure pursuit","path s pos - " + pathPos.toString());
