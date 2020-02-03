@@ -1,6 +1,6 @@
 package com.millburnrobotics.lib.control;
 
-import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.lib.geometry.Pose;
 
 public abstract class PathSegment {
     Pose start,end;

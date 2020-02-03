@@ -20,12 +20,12 @@ public class Constants {
     }
 
     public static class DriveConstants {
-        public static final String kLeftFrontMotor = "lf";
-        public static final String kLeftBackMotor = "lb";
-        public static final String kRightFrontMotor = "rf";
-        public static final String kRightBackMotor = "rb";
+        public static final String _LeftFrontMotor = "lf";
+        public static final String _LeftBackMotor = "lb";
+        public static final String _RightFrontMotor = "rf";
+        public static final String _RightBackMotor = "rb";
 
-        public static final String kIMU = "imu 1";
+        public static final String _IMU = "imu 1";
 
         public static final double BOT_WIDTH = 17.5;
         public static final double BOT_LENGTH = 18;
@@ -45,6 +45,9 @@ public class Constants {
         public static final long LOOK_AHEAD = 10;
         public static final double ACCELERATION_RANGE = 0.2;
         public static final double DECELERATION_RANGE = 0.4;
+
+        public static final double MAX_VEL = 60;
+        public static final double MAX_ACC = 40;
 
         public static double encoderToDistance(double ticks) {
             double circumference = Math.PI* OdometryConstants.DEAD_WHEEL_DIAMETER;
@@ -69,8 +72,8 @@ public class Constants {
     }
 
     public static class IntakeConstants {
-        public static final String kIntakeL = "intakeL";
-        public static final String kIntakeR = "intakeR";
+        public static final String _IntakeLeft = "intakeL";
+        public static final String _IntakeRight = "intakeR";
 
         public static final double INTAKE_IN_POWER = -0.4;
         public static final double INTAKE_IN_POWER_FAST = -0.6;
@@ -79,8 +82,9 @@ public class Constants {
 
 
     public static class ChainBarConstants {
-        public static final String kChainBar = "chainBar";
-        public static final String kChainBarClamp = "chainBarClawClamp";
+        public static final String _ChainBarLeft = "chainBarL";
+        public static final String _ChainBarRight = "chainBarR";
+        public static final String _ChainBarClaw = "chainBarClaw";
 
         public static final double CHAINBAR_LOW_POWER = 0.2;
         public static final double CHAINBAR_HIGH_POWER = 0.65;
@@ -96,7 +100,8 @@ public class Constants {
     }
 
     public static class LiftConstants {
-        public static final String kLift = "lift";
+        public static final String _LiftLeft = "liftL";
+        public static final String _LiftRight = "liftR";
 
         public static final double LIFT_EXTENSION_POWER = 0.6;
         public static final double LIFT_RETRACTION_POWER = -0.4;
@@ -109,8 +114,8 @@ public class Constants {
     }
 
     public static class SideClawConstants {
-        public static final String kSideClawBar = "sideClawBar";
-        public static final String kSideClawClamp = "sideClawClamp";
+        public static final String _SideClawArm = "sideClawArm";
+        public static final String _SideClawHook = "sideClawHook";
 
         public static final double SIDE_BAR_UP_POS = 0.3;
         public static final double SIDE_BAR_MID_POS = 0.6;
@@ -126,8 +131,8 @@ public class Constants {
     }
 
     public static class HookConstants {
-        public static final String kHookL = "foundationHookLeft";
-        public static final String kHookR = "foundationHookRight";
+        public static final String _FoundationHookLeft = "foundationHookL";
+        public static final String _FoundationHookRight = "foundationHookR";
 
         public static final double RIGHT_HOOK_DOWN_POS = 1;
         public static final double RIGHT_HOOK_UP_POS = 0;

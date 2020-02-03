@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.test;
 
 import android.app.Activity;
 
-import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.millburnrobotics.skystone.threads.ThreadManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

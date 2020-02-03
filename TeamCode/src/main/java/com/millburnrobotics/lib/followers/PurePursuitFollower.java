@@ -1,21 +1,16 @@
-package com.millburnrobotics.lib.follower;
+package com.millburnrobotics.lib.followers;
 
 import android.util.Log;
 
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.math.MathUtils;
-import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
 
 public class PurePursuitFollower {
     public Path path;
     private double lookahead = Constants.DriveConstants.LOOK_AHEAD;
-    private double accellerationRange = Constants.DriveConstants.ACCELERATION_RANGE;
-    private double decellerationRange = Constants.DriveConstants.DECELERATION_RANGE;
-
     private double lastOnPath = 0.0;
-
-    private double kp = 0.014;
 
     public PurePursuitFollower(Path path, double lookahead) {
         this.path = path;
@@ -63,15 +58,7 @@ public class PurePursuitFollower {
         }
         return s;
     }
-    public double strafePower(double powerLow, double powerHigh, Pose currentPos) {
-        double ds = Math.max(currentPos.distTo(path.start()),lastOnPath);
-        double de = Math.max(currentPos.distTo(path.end()),(path.length()-lastOnPath));
-        if (ds <= accellerationRange*path.length()) {
-            return MathUtils.map(ds, 0,accellerationRange*path.length(),powerLow,powerHigh);
-        } else if (de <= decellerationRange*path.length()) {
-            return MathUtils.map(de, 0,decellerationRange*path.length(),powerLow,powerHigh);
-        } else {
-            return powerHigh;
-        }
+    public double strafePower(double s) {
+        return path.getPower(s);
     }
 }

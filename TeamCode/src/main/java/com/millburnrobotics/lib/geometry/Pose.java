@@ -1,4 +1,6 @@
-package com.millburnrobotics.lib.math;
+package com.millburnrobotics.lib.geometry;
+
+import com.millburnrobotics.lib.math.MathUtils;
 
 public class Pose {
     public double x = 0;
@@ -12,6 +14,16 @@ public class Pose {
     public Pose(double x, double y) {
         this.x = x;
         this.y = y;
+        this.heading = 0;
+    }
+    public Pose(double[] vector, double heading) {
+        this.x = vector[0];
+        this.y = vector[1];
+        this.heading = heading;
+    }
+    public Pose(double[] vector) {
+        this.x = vector[0];
+        this.y = vector[1];
         this.heading = 0;
     }
     public Pose() {
@@ -28,11 +40,14 @@ public class Pose {
     public double getHeading() {
         return heading;
     }
+    public double[] vec() {
+        return new double[] {x,y};
+    }
     public double norm() {
         return Math.sqrt(x*x+y*y);
     }
     public Pose plus(Pose p) {
-        return new Pose(x+p.x,y+p.y,MathUtils.normalize(heading+p.heading));
+        return new Pose(x+p.x,y+p.y, MathUtils.normalize(heading+p.heading));
     }
     public Pose minus(Pose p) {
         return new Pose(x-p.x,y-p.y,MathUtils.normalize(heading+p.heading));

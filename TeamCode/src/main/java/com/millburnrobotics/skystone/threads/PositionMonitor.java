@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.threads;
 
 import android.util.Log;
 
-import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;

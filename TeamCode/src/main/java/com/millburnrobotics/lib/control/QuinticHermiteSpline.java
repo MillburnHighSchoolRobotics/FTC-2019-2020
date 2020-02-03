@@ -1,7 +1,7 @@
 package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.math.MathUtils;
-import com.millburnrobotics.lib.math.Pose;
+import com.millburnrobotics.lib.geometry.Pose;
 
 import java.util.ArrayList;
 import java.util.List;
