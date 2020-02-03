@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.path.PathBuilder;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.util.PurePursuitFollower_OLD;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 import com.millburnrobotics.skystone.robot.subsystems.ChainBar;
 import com.millburnrobotics.skystone.robot.subsystems.Drive;
 import com.millburnrobotics.skystone.robot.subsystems.Hook;

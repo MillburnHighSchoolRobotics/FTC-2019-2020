@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 import com.millburnrobotics.skystone.util.PIDController;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;

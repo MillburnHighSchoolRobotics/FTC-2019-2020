@@ -24,9 +24,9 @@ public class FPSTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
-        el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
-        eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
+        er = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        el = (DcMotorEx) hardwareMap.dcMotor.get("rf");
+        eb = (DcMotorEx) hardwareMap.dcMotor.get("rb");
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

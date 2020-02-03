@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";
@@ -31,9 +31,9 @@ public class PositionMonitor extends MonitorThread {
 
     public PositionMonitor(Thread thread, HardwareMap hardwareMap, Pose2d start) {
         super(thread, hardwareMap, TAG);
-        er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
-        el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
-        eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
+        er = (DcMotorEx) hardwareMap.dcMotor.get("lf");
+        el = (DcMotorEx) hardwareMap.dcMotor.get("rf");
+        eb = (DcMotorEx) hardwareMap.dcMotor.get("rb");
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

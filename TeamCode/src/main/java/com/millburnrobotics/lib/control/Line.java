@@ -1,6 +1,6 @@
 package com.millburnrobotics.lib.control;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 import com.millburnrobotics.lib.math.Pose;
 
 public class Line extends PathSegment {

@@ -1,12 +1,11 @@
-package com.millburnrobotics.lib.follower;
+package com.millburnrobotics.skystone.robot;
 
 import android.util.Log;
 
 import com.millburnrobotics.lib.control.Path;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 import com.millburnrobotics.lib.math.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.robot.MohanBot;
 
 public class PurePursuitFollower {
     private Path path;

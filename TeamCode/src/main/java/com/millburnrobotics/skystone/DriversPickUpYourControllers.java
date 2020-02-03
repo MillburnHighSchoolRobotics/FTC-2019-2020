@@ -1,6 +1,6 @@
 package com.millburnrobotics.skystone;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.MathUtils;
 import com.millburnrobotics.skystone.util.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

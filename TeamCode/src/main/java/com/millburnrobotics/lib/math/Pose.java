@@ -1,5 +1,7 @@
 package com.millburnrobotics.lib.math;
 
+import com.millburnrobotics.skystone.util.MathUtils;
+
 public class Pose {
     public double x = 0;
     public double y = 0;
@@ -23,7 +25,7 @@ public class Pose {
         return Math.sqrt(x*x+y*y);
     }
     public Pose plus(Pose p) {
-        return new Pose(x+p.x,y+p.y,MathUtils.normalize(heading+p.heading));
+        return new Pose(x+p.x,y+p.y, MathUtils.normalize(heading+p.heading));
     }
     public Pose minus(Pose p) {
         return new Pose(x-p.x,y-p.y,MathUtils.normalize(heading+p.heading));
