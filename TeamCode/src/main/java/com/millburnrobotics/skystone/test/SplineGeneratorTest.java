@@ -7,7 +7,6 @@ import com.millburnrobotics.lib.geometry.Waypoint;
 
 import java.util.ArrayList;
 
-
 public class SplineGeneratorTest {
     public static void main(String[] args) {
         ArrayList<Waypoint> waypoints = new ArrayList<>();

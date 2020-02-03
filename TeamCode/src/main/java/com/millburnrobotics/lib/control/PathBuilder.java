@@ -17,12 +17,14 @@ public class PathBuilder {
             for (int i = 0; i < w.size()-1; i++) {
                 Waypoint w1 = w.get(i);
                 Waypoint w2 = w.get(i+1);
-                Pose splineStart = new Pose(w1.pose.vec()[0],w1.pose.vec()[1],w1.heading);
-                Pose splineEnd = new Pose(w2.pose.vec()[0],w2.pose.vec()[1],w2.heading);
+                Pose splineStart = new Pose(w1.pose.vec()[0],w1.pose.vec()[1],w1.bearing);
+                Pose splineEnd = new Pose(w2.pose.vec()[0],w2.pose.vec()[1],w2.bearing);
                 p.add(new QuinticHermiteSpline(splineStart,splineEnd));
             }
         }
         p.setMotionProfile(maxPower,k);
+        p.startHeading = w.get(0).pose.heading;
+        p.endHeading = w.get(w.size()-1).pose.heading;
         return p;
     }
 }

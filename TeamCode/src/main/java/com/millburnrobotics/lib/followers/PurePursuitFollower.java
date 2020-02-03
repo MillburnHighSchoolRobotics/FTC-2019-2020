@@ -3,23 +3,19 @@ package com.millburnrobotics.lib.followers;
 import android.util.Log;
 
 import com.millburnrobotics.lib.control.Path;
-import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.Constants;
 
 public class PurePursuitFollower {
     public Path path;
-    private double lookahead = Constants.DriveConstants.LOOK_AHEAD;
+    private final double lookahead = Constants.DriveConstants.LOOK_AHEAD;
     private double lastOnPath = 0.0;
 
-    public PurePursuitFollower(Path path, double lookahead) {
-        this.path = path;
-        this.lookahead = lookahead;
-    }
     public PurePursuitFollower(Path path) {
         this.path = path;
     }
-    public Pose update(Pose currentPose) {
+    public Pose updatePose(Pose currentPose) {
         double s = project(currentPose);
         Pose targetPose = path.get(s);
         Pose nextPose = path.get(s+lookahead);
@@ -30,6 +26,7 @@ public class PurePursuitFollower {
         Log.d("pure pursuit","S - " + s);
         Log.d("pure pursuit","targetVector - " + targetPose.toString());
         Log.d("pure pursuit","nextVector - " + nextPose.toString());
+
         return nextPose;
     }
     private double project(Pose currentPos) {
@@ -58,7 +55,13 @@ public class PurePursuitFollower {
         }
         return s;
     }
-    public double strafePower(double s) {
+    public double powerAtDistance(double s) {
         return path.getPower(s);
+    }
+    public double updatePower() {
+        return path.getPower(lastOnPath);
+    }
+    public double getLastOnPath() {
+        return lastOnPath;
     }
 }

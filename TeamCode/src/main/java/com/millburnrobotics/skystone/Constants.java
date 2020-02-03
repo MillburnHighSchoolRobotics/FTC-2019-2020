@@ -115,7 +115,7 @@ public class Constants {
 
     public static class SideClawConstants {
         public static final String _SideClawArm = "sideClawArm";
-        public static final String _SideClawHook = "sideClawHook";
+        public static final String _SideClawClaw = "sideClawClaw";
 
         public static final double SIDE_BAR_UP_POS = 0.3;
         public static final double SIDE_BAR_MID_POS = 0.6;

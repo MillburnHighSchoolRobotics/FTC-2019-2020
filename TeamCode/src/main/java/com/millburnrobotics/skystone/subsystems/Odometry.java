@@ -9,10 +9,12 @@ import com.millburnrobotics.skystone.Constants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Odometry extends Subsystem {
+    private String TAG = "Odometry";
     private Pose pose;
     private double x, y, z, yaw, pitch, roll;
-    private double heading, orientation;
+    private double orientation, rotation;
     private double erPosLast, elPosLast, ebPosLast;
+
     @Override
     public void init(boolean auto) {
         pose = new Pose(0,0,0);
@@ -25,9 +27,12 @@ public class Odometry extends Subsystem {
 
     @Override
     public void update() {
-        double erPos = Constants.DriveConstants.encoderToDistance(er.getCurrentPosition());
-        double elPos = -Constants.DriveConstants.encoderToDistance(el.getCurrentPosition());
-        double ebPos = Constants.DriveConstants.encoderToDistance(eb.getCurrentPosition());
+        this.pose = getPoseEstimate();
+    }
+    private Pose getPoseEstimate() {
+        double erPos = Constants.DriveConstants.encoderToDistance(Robot.getInstance().er.getCurrentPosition());
+        double elPos = -Constants.DriveConstants.encoderToDistance(Robot.getInstance().el.getCurrentPosition());
+        double ebPos = Constants.DriveConstants.encoderToDistance(Robot.getInstance().eb.getCurrentPosition());
 
         Log.d(TAG, "er pos (inches): " + erPos);
         Log.d(TAG, "el pos (inches): " + elPos);
@@ -89,9 +94,21 @@ public class Odometry extends Subsystem {
         if (rotation > 0) rotation = Math.floor(rotation);
         else if (rotation < 0) rotation = Math.ceil(rotation);
 
+        Log.d(TAG, "rotation: " + rotation);
+        Log.d(TAG, "orientation: " + orientation);
+
+        Log.d(TAG, "x: " + x);
+        Log.d(TAG, "y: " + y);
+        Log.d(TAG, "z: " + z);
+        Log.d(TAG, "yaw: " + yaw);
+        Log.d(TAG, "pitch: " + pitch);
+        Log.d(TAG, "roll: " + roll);
+
         erPosLast = erPos;
         elPosLast = elPos;
         ebPosLast = ebPos;
+
+        return new Pose(x,y,yaw);
     }
 
     public void setPose(Pose pose) {
@@ -99,5 +116,14 @@ public class Odometry extends Subsystem {
     }
     public Pose getPose() {
         return pose;
+    }
+    public double getX() {
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+    public double getHeading() {
+        return yaw;
     }
 }

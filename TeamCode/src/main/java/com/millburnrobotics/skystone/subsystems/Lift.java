@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.subsystems;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class ChainBar extends Subsystem {
+public class Lift extends Subsystem {
     @Override
     public void init(boolean auto) {
 

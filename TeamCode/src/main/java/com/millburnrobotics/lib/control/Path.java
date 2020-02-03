@@ -1,6 +1,7 @@
 package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,8 @@ import java.util.List;
 public class Path {
     List<PathSegment> segments;
     MotionProfile profile;
+    double startHeading;
+    double endHeading;
     public Path() {
         this.segments = new ArrayList<>();
     }
@@ -25,13 +28,18 @@ public class Path {
         return profile.getPower(s);
     }
     public Pose get(double s) {
+        double heading = MathUtils.map(s,0,length(),startHeading,endHeading);
+        Pose p = null;
         for (PathSegment segment : segments) {
             if ((s-segment.length()) < 0) {
-                return segment.get(s);
+                p = segment.get(s);
             }
             s -= segment.length();
         }
-        return end(); // s > path.length
+        if (p == null) {
+            p = end(); // s > path.length
+        }
+        return new Pose(p.x, p.y, heading);
     }
     public Pose deriv(double s) {
         for (PathSegment segment : segments) {
@@ -50,6 +58,12 @@ public class Path {
             s -= segment.length();
         }
         return segments.get(segments.size()-1).secondDeriv(s);
+    }
+    public void setStartHeading(double h) {
+        this.startHeading = h;
+    }
+    public void setEndHeading(double h) {
+        this.endHeading = h;
     }
     public List<PathSegment> segments() {
         return segments;
@@ -74,10 +88,12 @@ public class Path {
         return segments.get(segments.size()-1);
     }
     public Pose start() {
-        return segments.get(0).start();
+        Pose v = segments.get(0).start();
+        return new Pose(v.x, v.y, startHeading);
     }
     public Pose end() {
-        return segments.get(segments.size()-1).end();
+        Pose v = segments.get(segments.size()-1).end();
+        return new Pose(v.x, v.y, endHeading);
     }
     public int size() {
         return segments.size();

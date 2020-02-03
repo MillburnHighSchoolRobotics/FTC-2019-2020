@@ -1,41 +1,39 @@
 package com.millburnrobotics.skystone.subsystems;
 
-import com.millburnrobotics.skystone.Constants;
-import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class SideClaw {
-    public Servo clawBar;
-    public Servo clawClamp;
+public class SideClaw extends Subsystem {
+    @Override
+    public void init(boolean auto) {
+    }
 
-    public SideClaw(Servo clawBar, Servo clawClamp) {
-        this.clawBar = clawBar;
-        this.clawClamp = clawClamp;
+    @Override
+    public void outputToTelemetry(Telemetry telemetry) {
+
     }
-    public void openClaw() {
-        clawClamp.setPosition(Constants.SideClawConstants.SIDE_CLAW_OPEN_POS);
+
+    @Override
+    public void update() {
+
     }
-    public void closeClaw() {
-        clawClamp.setPosition(Constants.SideClawConstants.SIDE_CLAW_CLOSE_POS);
+
+    public void armUp() {
+        setArmPosition(0);
     }
-    public void hideClaw() {
-        clawClamp.setPosition(Constants.SideClawConstants.SIDE_CLAW_IN_POS);
+    public void armDown() {
+        setArmPosition(1);
     }
-    public void initClaw() {
-        clawClamp.setPosition(Constants.SideClawConstants.SIDE_CLAW_INIT_POS);
+    public void setArmPosition(double pos) {
+        Robot.getInstance().sideClawArm.setPosition(pos);
     }
-    public void barUp() { clawBar.setPosition(Constants.SideClawConstants.SIDE_BAR_UP_POS); }
-    public void barMid() { clawBar.setPosition(Constants.SideClawConstants.SIDE_BAR_MID_POS); }
-    public void barDown() { clawBar.setPosition(Constants.SideClawConstants.SIDE_BAR_DOWN_POS); }
-    public void grab() {
-        openClaw();
-        barDown();
-        closeClaw();
-        barUp();
+
+    public void clawUp() {
+        setClawPosition(0);
     }
-    public void release() {
-        barDown();
-        openClaw();
-        barUp();
-        closeClaw();
+    public void clawDown() {
+        setClawPosition(1);
+    }
+    public void setClawPosition(double pos) {
+        Robot.getInstance().sideClawClaw.setPosition(pos);
     }
 }

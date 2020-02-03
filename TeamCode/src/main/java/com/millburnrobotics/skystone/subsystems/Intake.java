@@ -8,7 +8,7 @@ import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_OUT
 public class Intake extends Subsystem {
     @Override
     public void init(boolean auto) {
-
+        stop();
     }
 
     @Override

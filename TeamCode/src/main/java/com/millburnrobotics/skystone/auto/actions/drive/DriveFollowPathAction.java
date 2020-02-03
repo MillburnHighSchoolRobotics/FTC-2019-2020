@@ -2,19 +2,17 @@ package com.millburnrobotics.skystone.auto.actions.drive;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.auto.actions.Action;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.millburnrobotics.skystone.paths.PathContainer;
+import com.millburnrobotics.skystone.subsystems.Robot;
 
 public class DriveFollowPathAction implements Action {
 
-    private ArrayList<Pose> waypoints;
+    private PathContainer container;
 
-    public DriveFollowPathAction(List<Pose> poses) {
-        this.waypoints = new ArrayList<>(poses);
-
+    public DriveFollowPathAction(PathContainer container) {
+        this.container = container;
+        Robot.getInstance().getDrive().followPath(container.buildPath());
     }
-
 
     @Override
     public void start() {
@@ -23,16 +21,17 @@ public class DriveFollowPathAction implements Action {
 
     @Override
     public void update() {
-
+        Pose current = Robot.getInstance().getOdometry().getPose();
+        Robot.getInstance().getDrive().updatePathFollower(current);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Robot.getInstance().getDrive().isDoneWithPath();
     }
 
     @Override
     public void done() {
-
+        Robot.getInstance().getDrive().stop();
     }
 }
