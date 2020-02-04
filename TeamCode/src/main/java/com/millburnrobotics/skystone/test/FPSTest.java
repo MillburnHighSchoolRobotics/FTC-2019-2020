@@ -3,6 +3,7 @@ package com.millburnrobotics.skystone.test;
 import android.app.Activity;
 
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.threads.PositionMonitor;
 import com.millburnrobotics.skystone.threads.ThreadManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -24,18 +25,15 @@ public class FPSTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        er = (DcMotorEx) hardwareMap.dcMotor.get("chainBar");
-        el = (DcMotorEx) hardwareMap.dcMotor.get("intakeR");
-        eb = (DcMotorEx) hardwareMap.dcMotor.get("intakeL");
+        er = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._LeftFrontMotor);
+        el = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._RightBackMotor);
+        eb = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._RightFrontMotor);
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         el.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         eb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         eb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        el.setDirection(DcMotorSimple.Direction.FORWARD);
-        er.setDirection(DcMotorSimple.Direction.REVERSE);
-        eb.setDirection(DcMotorSimple.Direction.FORWARD);
 
         ThreadManager manager = ThreadManager.getInstance();
         manager.setHardwareMap(hardwareMap);

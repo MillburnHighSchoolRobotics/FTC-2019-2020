@@ -9,14 +9,15 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 import java.util.ArrayList;
 
 
-public class TestPath implements PathContainer {
-
+public class ToFoundation implements PathContainer {
     @Override
-    public Path buildPath() {
+    public Path buildPath(boolean blueSide) {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
-        waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
-        waypoints.add(new Waypoint(new Pose(24,24,90),0));
+        if (blueSide) {
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            waypoints.add(new Waypoint(new Pose(24,24,90),0));
+        }
 
         return PathBuilder.buildPath(waypoints, 1, 0.4);
     }

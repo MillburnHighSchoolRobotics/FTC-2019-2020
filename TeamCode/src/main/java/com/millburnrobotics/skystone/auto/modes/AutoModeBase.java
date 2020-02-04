@@ -1,8 +1,12 @@
 package com.millburnrobotics.skystone.auto.modes;
 
 import com.millburnrobotics.skystone.auto.actions.Action;
+import com.millburnrobotics.skystone.auto.actions.RobotUpdateAction;
+import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.List;
 
 public abstract class AutoModeBase extends LinearOpMode {
 
@@ -15,13 +19,12 @@ public abstract class AutoModeBase extends LinearOpMode {
         waitForStart();
         autoTimer.reset();
 
-//        ThreadAction(new RobotUpdate(autoTimer));
+        Robot.getInstance().init(hardwareMap, true);
+        ThreadAction(new RobotUpdateAction(autoTimer));
 
         if (opModeIsActive() && !isStopRequested()) {
             routine();
         }
-
-//        done();
     }
     public void runAction(Action action) {
         if(opModeIsActive() && !isStopRequested()) {
@@ -29,8 +32,8 @@ public abstract class AutoModeBase extends LinearOpMode {
         }
         while (!action.isFinished() && (opModeIsActive() && !isStopRequested())) {
             action.update();
-//            robot.outputToTelemetry(telemetry);
-//            telemetry.update();
+            Robot.getInstance().outputToTelemetry(telemetry);
+            telemetry.update();
         }
 
         if(opModeIsActive() && !isStopRequested()) {
@@ -38,15 +41,31 @@ public abstract class AutoModeBase extends LinearOpMode {
         }
     }
 
-//    public void ThreadAction(final Action action){
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                runAction(action);
-//            }
-//        };
-//
-//        if(opModeIsActive() && !isStopRequested())
-//            new Thread(runnable).start();
-//    }
+    public void ThreadAction(final Action action){
+        Runnable runnable = () -> runAction(action);
+
+        if(opModeIsActive() && !isStopRequested())
+            new Thread(runnable).start();
+    }
+
+    public void ParallelActions(List<Action> actions) {
+        for (Action action : actions) {
+            action.start();
+        }
+
+        double finished = 0;
+        while (finished != actions.size() && opModeIsActive() && !isStopRequested()) {
+            finished = 0;
+            for (Action action : actions) {
+                if (action.isFinished()) {
+                    finished ++;
+                } else {
+                    action.update();
+                }
+            }
+        }
+        for (Action action : actions) {
+            action.done();
+        }
+    }
 }

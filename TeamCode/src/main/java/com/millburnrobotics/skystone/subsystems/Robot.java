@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -144,5 +146,10 @@ public class Robot {
         }
         Log.d("Update Timer", ""+updateTimer.milliseconds());
         updateTimer.reset();
+    }
+    public void outputToTelemetry(Telemetry telemetry) {
+        for (int s = 0; s < subsystems.length; s++) {
+            subsystems[s].outputToTelemetry(telemetry);
+        }
     }
 }
