@@ -1,18 +1,27 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import android.util.Log;
+
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.followers.PurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.skystone.util.PIDController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Drive extends Subsystem {
     private PurePursuitFollower follower = null;
     private Path current_path;
+
     private double strafeThreshold = 2;
     private double rotationThreshold = 2;
-    private double kp = 0.014;
+
+    private double targetHeading;
+
+    private PIDController pidController;
 
     @Override
     public void init(boolean auto) {
@@ -50,6 +59,22 @@ public class Drive extends Subsystem {
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power) {
         setDrivePower(powerVector(currentPose, targetPose, power));
+    }
+    public void rotateTo(double target, double power) {
+        this.targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(target)));
+        pidController = new PIDController(0.014,0.002,0.004,1,targetHeading);
+
+        double currentHeading = Math.toDegrees(Robot.getInstance().pose.getHeading());
+        if (currentHeading - targetHeading > 180) {
+            currentHeading -= 360;
+        } else if (targetHeading - currentHeading > 180) {
+            currentHeading += 360;
+        }
+        double output = pidController.getPIDOutput(currentHeading);
+        Log.d("turn pid", "output - " + output);
+        Log.d("turn pid", "current heading - " + currentHeading);
+        Log.d("turn pid", "target heading - " + targetHeading);
+        setDrivePower(-power*output,power*output);
     }
     private double[] powerVector(Pose currentPose, Pose targetPose, double power) {
         double scale, lf = 0, lb = 0, rf = 0, rb = 0;
@@ -93,7 +118,7 @@ public class Drive extends Subsystem {
         } else if (targetPose.getHeading() - heading > 180) {
             heading += 360;
         }
-        double u = kp*(targetPose.getHeading()-heading);
+        double u = pidController.getKp()*(targetPose.getHeading()-heading);
         if (MathUtils.equals(targetPose.getHeading(), heading, rotationThreshold)) {
             u = 0;
         }
@@ -107,6 +132,7 @@ public class Drive extends Subsystem {
     }
     public void followPath(Path path) {
         this.current_path = path;
+        this.targetHeading = path.end().heading;
         follower = new PurePursuitFollower(current_path);
     }
     public void updatePathFollower(Pose currentPose) {
@@ -117,5 +143,8 @@ public class Drive extends Subsystem {
 
     public boolean isDoneWithPath() {
         return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,strafeThreshold);
+    }
+    public boolean isDoneRotating() {
+        return (MathUtils.equals(targetHeading,Math.toDegrees(Robot.getInstance().pose.heading),rotationThreshold));
     }
 }

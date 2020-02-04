@@ -2,6 +2,7 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
+import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -36,6 +37,8 @@ public class Robot {
 
     public HardwareMap hardwareMap;
     public Constants.SIDE side;
+
+    public Pose pose;
 
     public static Robot INSTANCE = null;
 
@@ -139,12 +142,18 @@ public class Robot {
         return sideClaw;
     }
 
+    public Pose getPose() {
+        return this.getOdometry().getPose();
+    }
+
     public void update() {
         ElapsedTime updateTimer = new ElapsedTime();
 
         for (int s = 0; s < subsystems.length; s++) {
             subsystems[s].update();
         }
+        pose = odometry.getPose();
+
         Log.d("Update Timer", ""+updateTimer.milliseconds());
         updateTimer.reset();
     }
