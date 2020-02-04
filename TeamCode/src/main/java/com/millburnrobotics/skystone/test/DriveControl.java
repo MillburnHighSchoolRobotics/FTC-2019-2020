@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.test;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.threads.PositionMonitor;
+import com.millburnrobotics.skystone.util.threads.PositionMonitor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.millburnrobotics.skystone.threads.ThreadManager;
+import com.millburnrobotics.skystone.util.threads.ThreadManager;
 import com.millburnrobotics.lib.math.MathUtils;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;

@@ -7,16 +7,21 @@ public class Constants {
     public enum SIDE{
         BLUE, RED
     }
+    public enum STONE{
+        LEFT, CENTER, RIGHT
+    }
 
     public static final String VUFORIA_KEY = "AcSW/tj/////AAABmUB3byzZQksfqhymb0Tr3M92yvtrzF4HgDl0t7Z07OZ2xscXR1yyeX4GxftrShvm9T926ZCW0VglQKXuQE5+JkrABVijohk5DCkcE9CcxHy3mTs2Ui76Nz+9CQTgOsr6/AMLV+Te6uyXTs3rZwGdnHGRo0Q1yboJCQ51Ap2rgJc//ehVdkp/QetIMnfhRffac0edAHFt0i2F5++S/OH/4kdxFd5ha0lswd4nTnqU2MiJrz+OH4WQPQ8JC94dQZ6F3m/iX5mk4TCq/9xg3cTJvFccEUawf7PIsapABxKMJB6hcPikwa0XtyGB+vEb7fQAXZ80tRal2mcwKSHrDM4ZvYisD73X+sTIAqQnXgxYiL14";
 
 
     public static class FieldConstants {
         public static SIDE side;
+        public static STONE stone;
 
         public static final double TILE_WIDTH = 24.0;
         public static final double FOUNDATION_WIDTH = 18.5;
         public static final double FOUNDATION_LENGTH = 34.5;
+
     }
 
     public static class DriveConstants {

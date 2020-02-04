@@ -35,6 +35,7 @@ public class Robot {
     private Subsystem[] subsystems = new Subsystem[] {drive, odometry, intake, lift, chainBar, sideClaw};
 
     public HardwareMap hardwareMap;
+    public Constants.SIDE side;
 
     public static Robot INSTANCE = null;
 

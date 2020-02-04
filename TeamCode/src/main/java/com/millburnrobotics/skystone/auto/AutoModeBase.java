@@ -1,5 +1,6 @@
-package com.millburnrobotics.skystone.auto.modes;
+package com.millburnrobotics.skystone.auto;
 
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.auto.actions.RobotUpdateAction;
 import com.millburnrobotics.skystone.subsystems.Robot;
@@ -11,6 +12,7 @@ import java.util.List;
 public abstract class AutoModeBase extends LinearOpMode {
 
     protected ElapsedTime autoTimer = new ElapsedTime();
+    protected Constants.SIDE side;
 
     public abstract void routine();
 
@@ -34,6 +36,11 @@ public abstract class AutoModeBase extends LinearOpMode {
             action.update();
             Robot.getInstance().outputToTelemetry(telemetry);
             telemetry.update();
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         if(opModeIsActive() && !isStopRequested()) {
@@ -62,6 +69,11 @@ public abstract class AutoModeBase extends LinearOpMode {
                 } else {
                     action.update();
                 }
+            }
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         for (Action action : actions) {

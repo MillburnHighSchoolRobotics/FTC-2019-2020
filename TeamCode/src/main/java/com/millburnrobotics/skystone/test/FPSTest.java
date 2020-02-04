@@ -4,14 +4,13 @@ import android.app.Activity;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.threads.PositionMonitor;
-import com.millburnrobotics.skystone.threads.ThreadManager;
+import com.millburnrobotics.skystone.util.threads.PositionMonitor;
+import com.millburnrobotics.skystone.util.threads.ThreadManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
