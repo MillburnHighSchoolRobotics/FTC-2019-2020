@@ -33,7 +33,7 @@ public class Robot {
     private ChainBar chainBar = new ChainBar();
     private Hook hook = new Hook();
     private SideClaw sideClaw = new SideClaw();
-    private Subsystem[] subsystems = new Subsystem[] {drive, odometry, intake, lift, chainBar, sideClaw};
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw};
 
     public HardwareMap hardwareMap;
     public Constants.SIDE side;

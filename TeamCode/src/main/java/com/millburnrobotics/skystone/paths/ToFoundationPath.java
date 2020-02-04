@@ -20,7 +20,7 @@ public class ToFoundationPath implements PathContainer {
         if (Robot.getInstance().side == Constants.SIDE.BLUE) {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
             waypoints.add(new Waypoint(new Pose(-36,9,Math.PI),0));
-        }
+        }:
 
         return PathBuilder.buildPath(waypoints, 1, 0.4);
     }

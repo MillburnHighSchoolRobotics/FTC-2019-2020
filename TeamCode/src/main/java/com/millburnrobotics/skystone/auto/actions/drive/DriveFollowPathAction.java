@@ -11,12 +11,11 @@ public class DriveFollowPathAction implements Action {
 
     public DriveFollowPathAction(PathContainer container) {
         this.container = container;
-        Robot.getInstance().getDrive().followPath(container.buildPath());
     }
 
     @Override
     public void start() {
-
+        Robot.getInstance().getDrive().followPath(container.buildPath());
     }
 
     @Override
