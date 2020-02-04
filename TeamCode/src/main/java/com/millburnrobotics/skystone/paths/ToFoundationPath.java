@@ -7,8 +7,6 @@ import com.millburnrobotics.lib.geometry.Waypoint;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.subsystems.Robot;
 
-import org.firstinspires.ftc.robotcore.external.Const;
-
 import java.util.ArrayList;
 
 
@@ -18,10 +16,13 @@ public class ToFoundationPath implements PathContainer {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
         if (Robot.getInstance().side == Constants.SIDE.BLUE) {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
-            waypoints.add(new Waypoint(new Pose(-36,9,Math.PI),0));
-        }:
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            waypoints.add(new Waypoint(new Pose(-36,49,Math.PI),0));
+        } else {
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
+            waypoints.add(new Waypoint(new Pose(36,49,0),Math.PI));
+        }
 
-        return PathBuilder.buildPath(waypoints, 1, 0.4);
+        return PathBuilder.buildPath(waypoints, 1, 0.5);
     }
 }

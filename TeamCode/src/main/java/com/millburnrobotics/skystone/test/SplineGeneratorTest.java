@@ -12,15 +12,16 @@ public class SplineGeneratorTest {
     public static void main(String[] args) {
         ElapsedTime timer = new ElapsedTime();
         ArrayList<Waypoint> waypoints = new ArrayList<>();
-        waypoints.add(new Waypoint(new Pose(0,0,0),0));
-        waypoints.add(new Waypoint(new Pose(24,24,0),0));
-        waypoints.add(new Waypoint(new Pose(24,12,0),Math.PI));
-        waypoints.add(new Waypoint(new Pose(18,0,0),3*Math.PI/2));
-        waypoints.add(new Waypoint(new Pose(12,0,0),Math.PI/2));
-        waypoints.add(new Waypoint(new Pose(36,12,0),Math.PI/4));
-        waypoints.add(new Waypoint(new Pose(18,18,0),5*Math.PI/4));
-        waypoints.add(new Waypoint(new Pose(12,6,0),5*Math.PI/4));
+        waypoints.add(new Waypoint(new Pose(24,0,0),Math.PI));
         waypoints.add(new Waypoint(new Pose(0,0,0),Math.PI));
+//        waypoints.add(new Waypoint(new Pose(24,24,0),0));
+//        waypoints.add(new Waypoint(new Pose(24,12,0),Math.PI));
+//        waypoints.add(new Waypoint(new Pose(18,0,0),3*Math.PI/2));
+//        waypoints.add(new Waypoint(new Pose(12,0,0),Math.PI/2));
+//        waypoints.add(new Waypaoint(new Pose(36,12,0),Math.PI/4));
+//        waypoints.add(new Waypoint(new Pose(18,18,0),5*Math.PI/4));
+//        waypoints.add(new Waypoint(new Pose(12,6,0),5*Math.PI/4));
+//        waypoints.add(new Waypoint(new Pose(0,0,0),Math.PI));
         Path path =  PathBuilder.buildPath(waypoints, 1, 0.4);
 
         System.out.println("Start: " + path.start());
@@ -28,7 +29,8 @@ public class SplineGeneratorTest {
         System.out.println("Length: " + path.length() + "\n");
 
         for (int x = 0; x < path.length(); x++) {
-            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
+//            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
+            System.out.println(path.deriv(x));
         }
 
         System.out.println("\nTime: " + timer.milliseconds());

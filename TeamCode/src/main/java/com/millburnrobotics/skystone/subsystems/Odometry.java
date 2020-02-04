@@ -113,6 +113,12 @@ public class Odometry extends Subsystem {
 
     public void setPose(Pose pose) {
         this.pose = pose;
+        this.x = pose.x;
+        this.y = pose.y;
+        this.z = 0;
+        this.yaw = pose.heading;
+        this.pitch = 0;
+        this.roll = 0;
     }
     public Pose getPose() {
         return pose;

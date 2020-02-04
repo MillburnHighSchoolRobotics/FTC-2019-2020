@@ -15,13 +15,12 @@ public class DriveTimedFollowPathAction implements Action {
     public DriveTimedFollowPathAction(PathContainer container, double time) {
         this.container = container;
         this.time = time;
-        this.timer = new ElapsedTime();
         Robot.getInstance().getDrive().followPath(container.buildPath());
     }
 
     @Override
     public void start() {
-
+        this.timer = new ElapsedTime();
     }
 
     @Override

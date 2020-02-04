@@ -22,7 +22,7 @@ public abstract class AutoModeBase extends LinearOpMode {
         autoTimer.reset();
 
         Robot.getInstance().init(hardwareMap, true);
-        ThreadAction(new RobotUpdateAction(autoTimer));
+        threadAction(new RobotUpdateAction(autoTimer));
 
         if (opModeIsActive() && !isStopRequested()) {
             routine();
@@ -48,14 +48,14 @@ public abstract class AutoModeBase extends LinearOpMode {
         }
     }
 
-    public void ThreadAction(final Action action){
+    public void threadAction(final Action action){
         Runnable runnable = () -> runAction(action);
 
         if(opModeIsActive() && !isStopRequested())
             new Thread(runnable).start();
     }
 
-    public void ParallelActions(List<Action> actions) {
+    public void parallelActions(List<Action> actions) {
         for (Action action : actions) {
             action.start();
         }
