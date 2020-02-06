@@ -18,10 +18,12 @@ import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_UP_VOLTAGE;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_HIGH;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_LOW;
-import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_IN_POWER_FAST;
-import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_OUT_POWER;
 import static com.millburnrobotics.skystone.Constants.HookConstants.LEFT_HOOK_DOWN_POS;
 import static com.millburnrobotics.skystone.Constants.HookConstants.LEFT_HOOK_UP_POS;
+import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_UP_POS;
+import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_IN_POWER_FAST;
+import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_OUT_POWER;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_DAMPEN_POWER;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_EXTENSION_POWER;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_HOLD_POWER;
@@ -29,8 +31,6 @@ import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_MAX_POS
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RAISED_MIN_POS;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RETRACTION_POWER;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_POS;
-import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_DOWN_POS;
-import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_UP_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_BAR_DOWN_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_BAR_UP_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_IN_POS;

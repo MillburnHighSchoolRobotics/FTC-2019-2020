@@ -31,8 +31,11 @@ public class Path {
         double heading = MathUtils.map(s,0,length(),startHeading,endHeading);
         Pose p = null;
         for (PathSegment segment : segments) {
-            if ((s-segment.length()) <= 0) {
-                p = segment.get(Math.round(s*1000000)/1000000);
+            if (MathUtils.equals(s, segment.length())) {
+                s = segment.length();
+            }
+            if (s <= segment.length()) {
+                p = segment.get(s);
                 break;
             }
             s -= segment.length();

@@ -1,7 +1,7 @@
 package com.millburnrobotics.lib.control;
 
-import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,19 +108,25 @@ public class QuinticHermiteSpline extends PathSegment {
         if (s >= length) return 1.0;
 
         int low = 0;
-        int high = sSamples.size();
+        int high = sSamples.size()-1;
         while (low <= high) {
-            int mid = (int)Math.round((low+high)/2.0);
-
-            if (s < sSamples.get(mid)) {
-                high = mid-1;
-            } else if (s > sSamples.get(mid)) {
+            int mid = low+(high-low)/2;
+            double sMid = sSamples.get(mid);
+            if (MathUtils.equals(s, sMid)) {
+                return tSamples.get(mid);
+            } else if (sMid < s) {
                 low = mid+1;
             } else {
-                return tSamples.get(mid);
+                high = mid-1;
+            }
+            if (high <= 0) {
+                return tSamples.get(low);
+            }
+            if (low >= sSamples.size()-1) {
+                return tSamples.get(high);
             }
         }
-        return tSamples.get(low)+(s-sSamples.get(low))*(tSamples.get(high)-tSamples.get(low))/(sSamples.get(high)-sSamples.get(low));
+        return MathUtils.map(s,sSamples.get(low), sSamples.get(high), tSamples.get(low), tSamples.get(high));
     }
 
     @Override
@@ -137,7 +143,7 @@ public class QuinticHermiteSpline extends PathSegment {
     public Pose deriv(double s) {
         double t = reparam(s);
         Pose deriv = new Pose(dx(t),dy(t));
-        double k = 1.0/Math.sqrt(dx(t)*dx(t)+dy(t)+dy(t));
+        double k = 1.0/Math.sqrt(dx(t)*dx(t)+dy(t)*dy(t));
         return deriv.times(k);
     }
     @Override

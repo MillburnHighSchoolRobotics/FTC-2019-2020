@@ -16,13 +16,13 @@ public class ParkWallPath implements PathContainer {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
         if (Robot.getInstance().side == Constants.SIDE.BLUE) {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
-            waypoints.add(new Waypoint(new Pose(-63, 0, Math.PI),3*Math.PI/2));
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
+            waypoints.add(new Waypoint(new Pose(-63, 0, Math.PI/2),Math.PI));
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
-            waypoints.add(new Waypoint(new Pose(63, 0, 0),3*Math.PI/2));
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
+            waypoints.add(new Waypoint(new Pose(63, 0, 3*Math.PI/2),Math.PI));
         }
 
-        return PathBuilder.buildPath(waypoints, 1, 0.5);
+        return PathBuilder.buildPath(waypoints, 0.7, 0.5);
     }
 }

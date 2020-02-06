@@ -31,6 +31,13 @@ public class Pose {
         this.y = 0;
         this.heading = 0;
     }
+
+    Pose (Pose p) {
+        this.x = p.x;
+        this.y = p.y;
+        this.heading = p.heading;
+    }
+
     public double getX() {
         return x;
     }
@@ -90,6 +97,6 @@ public class Pose {
 
     @Override
     public String toString() {
-        return ("("+x+","+y+","+heading+")");
+        return ("("+Math.round(x*1000.0)/1000.0+","+Math.round(y*1000.0)/1000.0+","+Math.round(heading*1000.0)/1000.0+")");
     }
 }

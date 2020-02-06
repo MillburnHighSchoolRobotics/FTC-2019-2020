@@ -1,6 +1,8 @@
 package com.millburnrobotics.skystone.auto.actions.drive;
 
+import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.paths.PathContainer;
 import com.millburnrobotics.skystone.subsystems.Robot;
@@ -8,6 +10,7 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 public class DriveFollowPathAction implements Action {
 
     private PathContainer container;
+    private Path current_path;
 
     public DriveFollowPathAction(PathContainer container) {
         this.container = container;
@@ -15,7 +18,8 @@ public class DriveFollowPathAction implements Action {
 
     @Override
     public void start() {
-        Robot.getInstance().getDrive().followPath(container.buildPath());
+        current_path = container.buildPath();
+        Robot.getInstance().getDrive().followPath(current_path);
     }
 
     @Override
@@ -26,7 +30,7 @@ public class DriveFollowPathAction implements Action {
 
     @Override
     public boolean isFinished() {
-        return Robot.getInstance().getDrive().isDoneWithPath();
+        return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,Robot.getInstance().getDrive().strafeThreshold);
     }
 
     @Override

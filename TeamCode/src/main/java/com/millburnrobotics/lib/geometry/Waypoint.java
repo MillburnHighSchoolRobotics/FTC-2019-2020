@@ -14,4 +14,9 @@ public class Waypoint {
         this.bearing = bearing;
         this.marker = marker;
     }
+    Waypoint(Waypoint w) {
+        this.pose = w.pose;
+        this.bearing = w.bearing;
+        this.marker = w.marker;
+    }
 }

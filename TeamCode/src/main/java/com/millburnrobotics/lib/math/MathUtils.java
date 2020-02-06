@@ -64,7 +64,7 @@ public class MathUtils {
         return Math.sqrt(stddev);
     }
     public static double map(double value, double lower1, double upper1, double lower2, double upper2) {
-        return (value-lower1)*(upper2-lower2)/(upper1-lower1)+lower2;
+        return ((value-lower1)*(upper2-lower2)/(upper1-lower1))+lower2;
     }
     public static double maxArray(double[] array) {
         double max = Math.abs(array[0]);

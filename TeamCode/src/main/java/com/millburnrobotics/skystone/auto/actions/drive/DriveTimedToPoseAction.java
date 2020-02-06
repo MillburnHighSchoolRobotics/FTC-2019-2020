@@ -1,36 +1,33 @@
 package com.millburnrobotics.skystone.auto.actions.drive;
 
-import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.math.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.paths.PathContainer;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class DriveTimedFollowPathAction implements Action {
+public class DriveTimedToPoseAction implements Action {
 
-    private PathContainer container;
-    private Path current_path;
+    private Pose target;
+    private double power;
     private double time;
     private ElapsedTime timer;
 
-    public DriveTimedFollowPathAction(PathContainer container, double time) {
-        this.container = container;
+    public DriveTimedToPoseAction(Pose pose, double power, double time) {
+        this.target = pose;
+        this.power = power;
         this.time = time;
     }
 
     @Override
     public void start() {
-        current_path = container.buildPath();
-        Robot.getInstance().getDrive().followPath(current_path);
         this.timer = new ElapsedTime();
     }
 
     @Override
     public void update() {
         Pose current = Robot.getInstance().getOdometry().getPose();
-        Robot.getInstance().getDrive().updatePathFollower(current);
+        Robot.getInstance().getDrive().vectorTo(current, target, power);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class DriveTimedFollowPathAction implements Action {
         if (this.timer.milliseconds() >= time) {
             return true;
         }
-        return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,Robot.getInstance().getDrive().strafeThreshold);
+        return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(target),0,Robot.getInstance().getDrive().strafeThreshold);
     }
 
     @Override

@@ -23,6 +23,9 @@ public class Odometry extends Subsystem {
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
         telemetry.addData("Pose", pose);
+        telemetry.addData("er", Robot.getInstance().er.getCurrentPosition());
+        telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());
+        telemetry.addData("eb", Robot.getInstance().eb.getCurrentPosition());
     }
 
     @Override

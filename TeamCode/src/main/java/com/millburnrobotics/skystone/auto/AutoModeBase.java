@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
+import static com.millburnrobotics.skystone.Constants.UPDATE_PERIOD;
+
 public abstract class AutoModeBase extends LinearOpMode {
 
     protected ElapsedTime autoTimer = new ElapsedTime();
@@ -18,10 +20,11 @@ public abstract class AutoModeBase extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        waitForStart();
-        autoTimer.reset();
-
+        telemetry.setMsTransmissionInterval(50);
         Robot.getInstance().init(hardwareMap, true);
+        waitForStart();
+
+        autoTimer.reset();
         threadAction(new RobotUpdateAction(autoTimer));
 
         if (opModeIsActive() && !isStopRequested()) {
@@ -37,7 +40,7 @@ public abstract class AutoModeBase extends LinearOpMode {
             Robot.getInstance().outputToTelemetry(telemetry);
             telemetry.update();
             try {
-                Thread.sleep(2);
+                Thread.sleep(UPDATE_PERIOD);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,10 +71,12 @@ public abstract class AutoModeBase extends LinearOpMode {
                     finished ++;
                 } else {
                     action.update();
+                    Robot.getInstance().outputToTelemetry(telemetry);
+                    telemetry.update();
                 }
             }
             try {
-                Thread.sleep(2);
+                Thread.sleep(UPDATE_PERIOD);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

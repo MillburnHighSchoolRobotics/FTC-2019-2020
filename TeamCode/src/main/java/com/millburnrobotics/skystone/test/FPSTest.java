@@ -6,7 +6,7 @@ import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.util.threads.PositionMonitor;
 import com.millburnrobotics.skystone.util.threads.ThreadManager;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,7 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
-@Autonomous(group = "util")
+@Disabled
+//@Autonomous(group = "util")
 public class FPSTest extends LinearOpMode {
 
     DcMotorEx er;
