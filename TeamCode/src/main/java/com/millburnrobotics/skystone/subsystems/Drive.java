@@ -5,20 +5,19 @@ import android.util.Log;
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.followers.PurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
-import com.millburnrobotics.skystone.util.PIDController;
+import com.millburnrobotics.lib.util.MathUtils;
+import com.millburnrobotics.lib.util.PIDController;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
 
-public class Drive extends Subsystem {
-    public final double strafeThreshold = 2;
-    public final double rotationThreshold = 2;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
 
+public class Drive extends Subsystem {
     private PurePursuitFollower follower = null;
 
-    private PIDController pidController = new PIDController(0.014,0.002,0.004,rotationThreshold);
+    private PIDController pidController = new PIDController(0.014,0.002,0.004);
 
     @Override
     public void init(boolean auto) {
@@ -74,12 +73,32 @@ public class Drive extends Subsystem {
     public void vectorTo(Pose currentPose, Pose targetPose, double power) {
         setDrivePower(powerVector(currentPose, targetPose, power));
     }
+    public void vectorTo(Pose currentPose, Pose targetPose, double power, double rotationPower) {
+        double[] motorPowers = {0,0,0,0};
+
+        if (!MathUtils.equals(currentPose.distTo(targetPose), 0, 0.05)) {
+            motorPowers = powerVector(currentPose, targetPose, Math.pow(Math.abs(currentPose.distTo(targetPose)),(9.0/7.0)));
+        }
+        motorPowers[0] += rotationPower;
+        motorPowers[1] += rotationPower;
+        motorPowers[2] -= rotationPower;
+        motorPowers[3] -= rotationPower;
+
+        double maxPower = MathUtils.maxArray(motorPowers);
+        if (maxPower > 1) {
+            for (int x = 0; x < motorPowers.length; x++) {
+                motorPowers[x] = MathUtils.sgn(motorPowers[x]) * MathUtils.map(Math.abs(motorPowers[x]),0,maxPower,0,1);
+            }
+        }
+        for (int i = 0; i < motorPowers.length; i++) {
+            motorPowers[i] *= power;
+        }
+        setDrivePower(motorPowers);
+    }
     private double[] powerVector(Pose currentPose, Pose targetPose, double power) {
         double scale, lf = 0, lb = 0, rf = 0, rb = 0;
         double absoluteAngle = Math.atan2(targetPose.getY() - currentPose.getY(), targetPose.getX() - currentPose.getX());
         double relAngle = Math.toDegrees(MathUtils.normalize(absoluteAngle - currentPose.getHeading()));
-        Log.d("relangle", relAngle+"");
-        Log.d("absAngle", absoluteAngle+"");
 
         if (relAngle >= 0 && relAngle < 90) {
             scale = MathUtils.tanDegrees(relAngle - 45);
@@ -112,14 +131,15 @@ public class Drive extends Subsystem {
         rb *= power;
 
 
-        double heading = currentPose.getHeading();
-        if (heading - targetPose.getHeading() > 180) {
-            heading -= 360;
-        } else if (targetPose.getHeading() - heading > 180) {
-            heading += 360;
+        double currentHeading = Math.toDegrees(currentPose.getHeading());
+        double targetHeading = Math.toDegrees(targetPose.getHeading());
+        if (currentHeading - targetHeading > 180) {
+            currentHeading -= 360;
+        } else if (targetHeading - currentHeading > 180) {
+            currentHeading += 360;
         }
-        double u = pidController.getKp()*(targetPose.getHeading()-heading);
-        if (MathUtils.equals(targetPose.getHeading(), heading, rotationThreshold)) {
+        double u = pidController.getKp()*(targetHeading-currentHeading);
+        if (MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD)) {
             u = 0;
         }
 

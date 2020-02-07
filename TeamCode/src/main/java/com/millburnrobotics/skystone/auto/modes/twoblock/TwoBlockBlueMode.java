@@ -10,6 +10,6 @@ public class TwoBlockBlueMode extends AutoModeBase {
 
     @Override
     public void routine() {
-        Robot.getInstance().side = Constants.SIDE.BLUE;
+        Robot.getInstance().side = Constants.Side.BLUE;
     }
 }

@@ -21,7 +21,7 @@ public class DetectPath implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
-        if (Robot.getInstance().side == Constants.SIDE.BLUE) {
+        if (Robot.getInstance().side == Constants.Side.BLUE) {
             if (initialBlock == 3) {
 
             } else {
@@ -34,6 +34,6 @@ public class DetectPath implements PathContainer {
             waypoints.add(new Waypoint(new Pose(36,49,0),Math.PI));
         }
 
-        return PathBuilder.buildPath(waypoints, 1, 0.5);
+        return PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.5);
     }
 }

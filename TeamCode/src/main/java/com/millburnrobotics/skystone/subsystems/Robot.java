@@ -4,24 +4,23 @@ import android.util.Log;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Robot {
     public DcMotorEx lf,lb,rf,rb;
     public DcMotorEx liftL, liftR;
     public DcMotorEx intakeL, intakeR;
     public DcMotorEx er, el, eb;
-    public Servo chainBarL, chainBarR, claw;
+    public Servo chainBarL, chainBarR;
+    public CRServo claw;
     public Servo hookL, hookR;
     public Servo sideClawArm, sideClawClaw;
 
@@ -32,11 +31,10 @@ public class Robot {
     private ChainBar chainBar = new ChainBar();
     private Hook hook = new Hook();
     private SideClaw sideClaw = new SideClaw();
-//    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw};
-private Subsystem[] subsystems = new Subsystem[] {odometry, drive};
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw};
 
     public HardwareMap hardwareMap;
-    public Constants.SIDE side;
+    public Constants.Side side;
 
     public Pose pose;
 
@@ -51,11 +49,6 @@ private Subsystem[] subsystems = new Subsystem[] {odometry, drive};
 
     public void init(HardwareMap hardwareMap, boolean auto) {
         this.hardwareMap = hardwareMap;
-
-        Date currentData = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd.M.yyyy hh:mm:ss");
-
-        RobotLog.a("Robot Init Started at " + format.format(currentData));
 
         lf = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants._LeftFrontMotor);
         lb = (DcMotorEx)hardwareMap.dcMotor.get(Constants.DriveConstants._LeftBackMotor);
@@ -80,34 +73,35 @@ private Subsystem[] subsystems = new Subsystem[] {odometry, drive};
         eb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         eb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//        intakeL = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants._IntakeLeft);
-//        intakeR = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants._IntakeRight);
-//        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        liftL = (DcMotorEx)hardwareMap.dcMotor.get(Constants.LiftConstants._LiftLeft);
-//        liftR = (DcMotorEx)hardwareMap.dcMotor.get(Constants.LiftConstants._LiftRight);
-//
-//        chainBarL = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarLeft);
-//        chainBarR = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarRight);
-//        claw = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarClaw);
-//
-//        hookL = hardwareMap.servo.get(Constants.HookConstants._FoundationHookLeft);
-//        hookR = hardwareMap.servo.get(Constants.HookConstants._FoundationHookRight);
-//
-//        sideClawArm = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArm);
-//        sideClawClaw = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClaw);
+        intakeL = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants._IntakeLeft);
+        intakeR = (DcMotorEx)hardwareMap.dcMotor.get(Constants.IntakeConstants._IntakeRight);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeR.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        liftL = (DcMotorEx)hardwareMap.dcMotor.get(Constants.LiftConstants._LiftLeft);
+        liftR = (DcMotorEx)hardwareMap.dcMotor.get(Constants.LiftConstants._LiftRight);
+
+        chainBarL = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarLeft);
+        chainBarR = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarRight);
+        claw = hardwareMap.crservo.get(Constants.ChainBarConstants._ChainBarClaw);
+
+        hookL = hardwareMap.servo.get(Constants.HookConstants._FoundationHookLeft);
+        hookR = hardwareMap.servo.get(Constants.HookConstants._FoundationHookRight);
+
+        sideClawArm = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArm);
+        sideClawClaw = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClaw);
 
 
         getDrive().init(auto);
         getOdometry().init(auto);
-//        getIntake().init(auto);
-//        getLift().init(auto);
-//        getChainBar().init(auto);
-//        getHook().init(auto);
-//        getSideClaw().init(auto);
+        getIntake().init(auto);
+        getLift().init(auto);
+        getChainBar().init(auto);
+        getHook().init(auto);
+        getSideClaw().init(auto);
     }
     public Drive getDrive() {
         return drive;

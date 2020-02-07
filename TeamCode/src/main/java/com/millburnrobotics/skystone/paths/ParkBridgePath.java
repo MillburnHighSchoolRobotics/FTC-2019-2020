@@ -15,7 +15,7 @@ public class ParkBridgePath implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
-        if (Robot.getInstance().side == Constants.SIDE.BLUE) {
+        if (Robot.getInstance().side == Constants.Side.BLUE) {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
             waypoints.add(new Waypoint(new Pose(-63, 12),Math.PI));
             waypoints.add(new Waypoint(new Pose(-36, 0),0));
@@ -25,6 +25,6 @@ public class ParkBridgePath implements PathContainer {
             waypoints.add(new Waypoint(new Pose(36, 0),Math.PI));
         }
 
-        return PathBuilder.buildPath(waypoints, 0.7, 0.5);
+        return PathBuilder.buildPath(waypoints, 0.1, 0.7, 0.5);
     }
 }

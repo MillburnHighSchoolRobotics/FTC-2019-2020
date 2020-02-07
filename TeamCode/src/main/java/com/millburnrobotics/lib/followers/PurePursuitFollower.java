@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.Constants;
 
 public class PurePursuitFollower {

@@ -8,7 +8,6 @@ import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveTimedFollowPathAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveTimedToPoseAction;
-import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookDownAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookUpAction;
 import com.millburnrobotics.skystone.paths.FoundationPullBackPath;
@@ -24,7 +23,7 @@ public class FoundationRedMode extends AutoModeBase {
 
     @Override
     public void routine() {
-        Robot.getInstance().side = Constants.SIDE.RED;
+        Robot.getInstance().side = Constants.Side.RED;
         Robot.getInstance().getOdometry().setPose(new Pose(63, 24+Constants.DriveConstants.BOT_WIDTH/2, 3*Math.PI/2));
 
         runAction(new DriveFollowPathAction(new ToFoundationPath()));

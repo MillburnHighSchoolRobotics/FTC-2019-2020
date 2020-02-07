@@ -14,7 +14,7 @@ import static com.millburnrobotics.skystone.Constants.UPDATE_PERIOD;
 public abstract class AutoModeBase extends LinearOpMode {
 
     protected ElapsedTime autoTimer = new ElapsedTime();
-    protected Constants.SIDE side;
+    protected Constants.Side side;
 
     public abstract void routine();
 

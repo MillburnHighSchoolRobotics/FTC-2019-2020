@@ -1,8 +1,10 @@
 package com.millburnrobotics.skystone.auto.actions.drive;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.subsystems.Robot;
+
+import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
 
 public class DriveRotationAction implements Action {
 
@@ -26,7 +28,7 @@ public class DriveRotationAction implements Action {
 
     @Override
     public boolean isFinished() {
-        return MathUtils.equals(targetHeading,Math.toDegrees(Robot.getInstance().pose.heading),Robot.getInstance().getDrive().rotationThreshold);
+        return MathUtils.equals(targetHeading,Math.toDegrees(Robot.getInstance().pose.heading),ROTATION_THRESHOLD);
     }
 
     @Override

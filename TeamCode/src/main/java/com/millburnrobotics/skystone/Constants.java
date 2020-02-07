@@ -1,14 +1,13 @@
 package com.millburnrobotics.skystone;
 
-import com.millburnrobotics.lib.geometry.Pose;
 import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 public class Constants {
-    public enum SIDE{
+    public enum Side {
         BLUE, RED
     }
-    public enum STONE{
+    public enum Stone {
         LEFT, CENTER, RIGHT
     }
 
@@ -17,13 +16,8 @@ public class Constants {
 
 
     public static class FieldConstants {
-        public static SIDE side;
-        public static STONE stone;
-
-        public static final double TILE_WIDTH = 24.0;
-        public static final double FOUNDATION_WIDTH = 18.5;
-        public static final double FOUNDATION_LENGTH = 34.5;
-
+        public static Side side;
+        public static Stone stone;
     }
 
     public static class DriveConstants {
@@ -41,20 +35,15 @@ public class Constants {
         public static final double COLLISION_RECOVERY_MOVEMENT = 3;
         public static final boolean CHECK_COLLISION = false;
 
-        public static final double WHEEL_RADIUS = 2;
-        public static final double WHEEL_BASE = 17.5;
-        public static final double TRACK_WIDTH = 15.5;
-
         public static final double DRIVE_POWER_HIGH = 1;
         public static final double DRIVE_POWER_LOW = 0.4;
         public static final double TURN_POWER = 0.6;
 
-        public static final long LOOK_AHEAD = 10;
-        public static final double ACCELERATION_RANGE = 0.2;
-        public static final double DECELERATION_RANGE = 0.4;
+        public static final double PATH_HEADING_TIME = 500;
+        public static final double STRAFE_THRESHOLD = 2;
+        public static final double ROTATION_THRESHOLD = 2;
 
-        public static final double MAX_VEL = 60;
-        public static final double MAX_ACC = 40;
+        public static final long LOOK_AHEAD = 10;
 
         public static double encoderToDistance(double ticks) {
             double circumference = Math.PI* OdometryConstants.DEAD_WHEEL_DIAMETER;
@@ -75,16 +64,15 @@ public class Constants {
         public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
         public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
         public static final double DEAD_WHEEL_TURN_RADIUS = -2.75;
-        public static final long FPS_UPDATE_PERIOD = 10;
+        public static final long FPS_UPDATE_PERIOD = 5;
     }
 
     public static class IntakeConstants {
         public static final String _IntakeLeft = "intakeL";
         public static final String _IntakeRight = "intakeR";
 
-        public static final double INTAKE_IN_POWER = -0.4;
-        public static final double INTAKE_IN_POWER_FAST = -0.6;
-        public static final double INTAKE_OUT_POWER = 0.8;
+        public static final double INTAKE_IN_POWER = 0.4;
+        public static final double INTAKE_OUT_POWER = -0.6;
     }
 
 
@@ -93,17 +81,12 @@ public class Constants {
         public static final String _ChainBarRight = "chainBarR";
         public static final String _ChainBarClaw = "chainBarClaw";
 
-        public static final double CHAINBAR_LOW_POWER = 0.2;
-        public static final double CHAINBAR_HIGH_POWER = 0.65;
-        public static final double CHAINBAR_EVEN_HIGHER_POWER = 0.6;
-        public static final double CHAINBAR_MID_VOLTAGE = 0.38;
-        public static final double CHAINBAR_UP_VOLTAGE = CHAINBAR_MID_VOLTAGE;
-        public static final double CHAINBAR_IN_VOLTAGE = 0.05;
-        public static final double CHAINBAR_OUT_VOLTAGE = 0.6;
-        public static final double CHAINBAR_AUTO_LIFT_VOLTAGE = 0.2;
-        public static final double CHAINBAR_MAX_VOLTAGE = 1; //hard limit 1.175
-        public static final double CHAINBAR_CLAW_CLOSE_POS = 1;
-        public static final double CHAINBAR_CLAW_OPEN_POS = 0.4;
+        public static final double CHAINBARL_IN_POS = 0.3;
+        public static final double CHAINBARR_IN_POS = 0.7;
+        public static final double CHAINBARL_OUT_POS = 0.7;
+        public static final double CHAINBARR_OUT_POS = 0.3;
+        public static final double CHAINBARL_UP_POS = 0.5;
+        public static final double CHAINBARR_UP_POS = 0.5;
     }
 
     public static class LiftConstants {
@@ -124,17 +107,13 @@ public class Constants {
         public static final String _SideClawArm = "sideClawArm";
         public static final String _SideClawClaw = "sideClawClaw";
 
-        public static final double SIDE_BAR_UP_POS = 0.3;
-        public static final double SIDE_BAR_MID_POS = 0.6;
-        public static final double SIDE_BAR_DOWN_POS = 0.8;
+        public static final double SIDE_ARM_UP_POS = 0.3;
+        public static final double SIDE_ARM_MID_POS = 0.6;
+        public static final double SIDE_ARM_DOWN_POS = 0.8;
 
         public static final double SIDE_CLAW_CLOSE_POS = 0.3;
         public static final double SIDE_CLAW_OPEN_POS = 1;
         public static final double SIDE_CLAW_IN_POS = 0;
-        public static final double SIDE_CLAW_INIT_POS = 0.8;
-
-        public static final double CLAW_EXTEND = 3;
-        public static final double CLAW_TO_BACK = 6;
     }
 
     public static class HookConstants {
@@ -145,44 +124,7 @@ public class Constants {
         public static final double RIGHT_HOOK_UP_POS = 0;
         public static final double LEFT_HOOK_DOWN_POS = 0;
         public static final double LEFT_HOOK_UP_POS = 1;
-    }
 
-    public static class AutonConstants {
-        public static double X_BLUE_BLOCK_CLAW = -24 - DriveConstants.BOT_WIDTH/2.0- SideClawConstants.CLAW_EXTEND;
-        public static double Y_BLUE_BLOCK_CLAW = -24 - 4 + (DriveConstants.BOT_LENGTH/2.0- SideClawConstants.CLAW_TO_BACK);
-        public static double X_BLUE_BLOCK_INTAKE = -24+2;
-        public static double Y_BLUE_BLOCK_INTAKE = -72+8+ DriveConstants.BOT_LENGTH/2.0+4;
-
-        public static Pose BLUE_BLOCK_1 = new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW);
-        public static Pose BLUE_BLOCK_2 = new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -8);
-        public static Pose BLUE_BLOCK_3 = new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -16);
-        public static Pose BLUE_BLOCK_4 = new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -24);
-        public static Pose BLUE_BLOCK_5 = new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW -32);
-        public static Pose BLUE_BLOCK_6 = new Pose(X_BLUE_BLOCK_INTAKE, Y_BLUE_BLOCK_INTAKE);
-
-
-        public static Pose RED_BLOCK_2 = new Pose(36,-56);
-        public static Pose RED_BLOCK_3 = new Pose(36,-48);
-        public static Pose RED_BLOCK_4 = new Pose(36,-40);
-        public static Pose RED_BLOCK_5 = new Pose(36,-32);
-        public static Pose RED_BLOCK_6 = new Pose(36,-24); // 24+4 offset -4
-
-
-        public static double X_BLUE_DELIVERY = -24- DriveConstants.BOT_WIDTH/2.0- SideClawConstants.CLAW_EXTEND;
-        public static double Y_BLUE_DELIVERY = 72-4- FieldConstants.FOUNDATION_LENGTH/2.0+(DriveConstants.BOT_LENGTH/2.0- SideClawConstants.CLAW_TO_BACK);
-
-        public static Pose BLUE_DELIVERY_1 = new Pose(X_BLUE_DELIVERY,Y_BLUE_DELIVERY +4);
-        public static Pose BLUE_DELIVERY_2 = new Pose(X_BLUE_DELIVERY,Y_BLUE_DELIVERY -6);
-        public static Pose BLUE_DELIVERY_3 = new Pose(X_BLUE_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_BLUE_DELIVERY +4);
-        public static Pose BLUE_DELIVERY_4 = new Pose(X_BLUE_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_BLUE_DELIVERY -6);
-
-
-        public static double X_RED_DELIVERY = -24- DriveConstants.BOT_WIDTH/2.0- SideClawConstants.CLAW_EXTEND;
-        public static double Y_RED_DELIVERY = 72-4- FieldConstants.FOUNDATION_LENGTH/2.0+(DriveConstants.BOT_LENGTH/2.0- SideClawConstants.CLAW_TO_BACK);
-
-        public static Pose RED_DELIVERY_1 = new Pose(X_RED_DELIVERY,Y_RED_DELIVERY +4);
-        public static Pose RED_DELIVERY_2 = new Pose(X_RED_DELIVERY,Y_RED_DELIVERY -6);
-        public static Pose RED_DELIVERY_3 = new Pose(X_RED_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_RED_DELIVERY +4);
-        public static Pose RED_DELIVERY_4 = new Pose(X_RED_DELIVERY + SideClawConstants.CLAW_EXTEND,Y_RED_DELIVERY -6);
+        public static final double timer = 250;
     }
 }

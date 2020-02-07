@@ -1,9 +1,11 @@
 package com.millburnrobotics.skystone.auto.actions.drive;
 
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.subsystems.Robot;
+
+import static com.millburnrobotics.skystone.Constants.DriveConstants.STRAFE_THRESHOLD;
 
 public class DriveToPoseAction implements Action {
 
@@ -27,7 +29,7 @@ public class DriveToPoseAction implements Action {
 
     @Override
     public boolean isFinished() {
-        return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(target),0,Robot.getInstance().getDrive().strafeThreshold);
+        return MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(target),0,STRAFE_THRESHOLD);
     }
 
     @Override

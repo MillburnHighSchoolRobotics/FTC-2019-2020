@@ -1,14 +1,16 @@
 package com.millburnrobotics.lib.control;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 
 public class MotionProfile {
 //    private double A;
     private double maxPower;
+    private double minPower;
     private double s;
     private double k;
-    public MotionProfile(double maxPower, double s, double k) {
+    public MotionProfile(double minPower, double maxPower, double s, double k) {
 //        this.A = maxPower/2.0;
+        this.minPower = minPower;
         this.maxPower = maxPower;
         this.s = s;
         this.k = k;
@@ -26,6 +28,13 @@ public class MotionProfile {
 //        } else if (d > (k*s) && d <= s) {
 //            return -A*Math.cos(Math.PI*(1.0/(s*(1-k)))*(d-s))+A;
 //        }
-        return 0.4;
+        if (d <= k*s) {
+            return MathUtils.map(d, 0,k*s,minPower,maxPower);
+        } else if (d >= (1-k)*s) {
+            return MathUtils.map(d, (1-k)*s,s,maxPower,minPower);
+        } else {
+            return maxPower;
+        }
+//        return 0.4;
     }
 }

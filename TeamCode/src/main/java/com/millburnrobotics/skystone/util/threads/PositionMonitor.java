@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 
 public class PositionMonitor extends MonitorThread {
     private static final String TAG = "PositionMonitor";

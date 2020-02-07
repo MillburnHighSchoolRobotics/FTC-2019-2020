@@ -3,6 +3,7 @@ package com.millburnrobotics.skystone.util;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.millburnrobotics.lib.util.VuforiaLocalizerImplSubclass;
 import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -42,7 +43,7 @@ public class BarkerClass {
 
     private VuforiaLocalizer.Parameters params;
 
-    public BarkerClass(HardwareMap hardwareMap, Constants.SIDE side) {
+    public BarkerClass(HardwareMap hardwareMap, Constants.Side side) {
         this.hardwareMap = hardwareMap;
         Constants.FieldConstants.side = side;
     }
@@ -112,7 +113,7 @@ public class BarkerClass {
         }
 
         int pos = -1;
-        if (Constants.FieldConstants.side == Constants.SIDE.BLUE) {
+        if (Constants.FieldConstants.side == Constants.Side.BLUE) {
             if (centroid.x > BLUE_LINE_1_X && centroid.x < BLUE_LINE_2_X)
                 pos = 1;
             else if (centroid.x > BLUE_LINE_2_X && centroid.x < BLUE_LINE_3_X)

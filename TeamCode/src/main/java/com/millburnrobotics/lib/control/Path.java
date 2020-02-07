@@ -1,7 +1,7 @@
 package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +21,8 @@ public class Path {
     public Path(List<PathSegment> segments) {
         this.segments = segments;
     }
-    public void setMotionProfile(double maxPower, double k) {
-        this.profile = new MotionProfile(maxPower, length(), k);
+    public void setMotionProfile(double minPower, double maxPower, double k) {
+        this.profile = new MotionProfile(minPower, maxPower, length(), k);
     }
     public double getPower(double s) {
         return profile.getPower(s);

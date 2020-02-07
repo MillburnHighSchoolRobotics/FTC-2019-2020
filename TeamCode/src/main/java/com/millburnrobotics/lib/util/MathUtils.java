@@ -1,4 +1,4 @@
-package com.millburnrobotics.lib.math;
+package com.millburnrobotics.lib.util;
 
 /**
  * Created by 17osullivand on 9/26/16.

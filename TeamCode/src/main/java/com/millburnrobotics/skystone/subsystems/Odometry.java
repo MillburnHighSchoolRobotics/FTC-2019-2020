@@ -3,7 +3,7 @@ package com.millburnrobotics.skystone.subsystems;
 import android.util.Log;
 
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.Constants;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,6 +18,17 @@ public class Odometry extends Subsystem {
     @Override
     public void init(boolean auto) {
         pose = new Pose(0,0,0);
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.yaw = 0;
+        this.pitch = 0;
+        this.roll = 0;
+        this.orientation = 0;
+        this.rotation = 0;
+        this.erPosLast = 0;
+        this.elPosLast = 0;
+        this.ebPosLast = 0;
     }
 
     @Override
@@ -122,6 +133,11 @@ public class Odometry extends Subsystem {
         this.yaw = pose.heading;
         this.pitch = 0;
         this.roll = 0;
+        this.orientation = pose.heading;
+        this.rotation = 0;
+        this.erPosLast = 0;
+        this.elPosLast = 0;
+        this.ebPosLast = 0;
     }
     public Pose getPose() {
         return pose;

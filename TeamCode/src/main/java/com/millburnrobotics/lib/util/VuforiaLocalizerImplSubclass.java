@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.util;
+package com.millburnrobotics.lib.util;
 
 import com.qualcomm.robotcore.util.RobotLog;
 import com.vuforia.Frame;

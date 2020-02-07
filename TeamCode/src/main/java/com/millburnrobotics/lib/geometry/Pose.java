@@ -1,6 +1,6 @@
 package com.millburnrobotics.lib.geometry;
 
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 
 public class Pose {
     public double x = 0;
@@ -71,11 +71,11 @@ public class Pose {
     public double dot(Pose p) {
         return(x*p.x+y*p.y);
     }
-    public void rotate(double theta) {
+    public Pose rotate(double theta) {
         double x1 = x*Math.cos(theta)-y*Math.sin(theta);
         double y1 = x*Math.sin(theta)+y*Math.cos(theta);
-        x = x1;
-        y = y1;
+        double heading1 = MathUtils.normalize(heading+theta);
+        return new Pose(x1,y1,heading1);
     }
     public Pose polar(double r) {
         return new Pose(r*Math.cos(heading),r*Math.sin(heading));
@@ -97,6 +97,6 @@ public class Pose {
 
     @Override
     public String toString() {
-        return ("("+Math.round(x*1000.0)/1000.0+","+Math.round(y*1000.0)/1000.0+","+Math.round(heading*1000.0)/1000.0+")");
+        return ("("+Math.round(x*1000.0)/1000.0+","+Math.round(y*1000.0)/1000.0+","+Math.round(Math.toDegrees(heading)*1000.0)/1000.0+")");
     }
 }

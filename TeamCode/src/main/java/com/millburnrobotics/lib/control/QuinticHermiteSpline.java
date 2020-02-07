@@ -1,7 +1,7 @@
 package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.math.MathUtils;
+import com.millburnrobotics.lib.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +25,14 @@ public class QuinticHermiteSpline extends PathSegment {
         double scale = 1.2*p0.distTo(p1);
         x0 = p0.x;
         x1 = p1.x;
-        dx0 = p0.cos()*scale;
-        dx1 = p1.cos()*scale;
+        dx0 = (p0.rotate(Math.PI/2)).cos()*scale;
+        dx1 = (p1.rotate(Math.PI/2).cos())*scale;
         ddx0 = 0;
         ddx1 = 0;
         y0 = p0.y;
         y1 = p1.y;
-        dy0 = p0.sin()*scale;
-        dy1 = p1.sin()*scale;
+        dy0 = (p0.rotate(Math.PI/2)).sin()*scale;
+        dy1 = (p0.rotate(Math.PI/2)).sin()*scale;
         ddy0 = 0;
         ddy1 = 0;
 
