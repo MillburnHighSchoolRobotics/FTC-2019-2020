@@ -2,6 +2,10 @@ package com.millburnrobotics.skystone.subsystems;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_MID_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
+
 public class SideClaw extends Subsystem {
     @Override
     public void init(boolean auto) {
@@ -18,11 +22,15 @@ public class SideClaw extends Subsystem {
     }
 
     public void armUp() {
-        setArmPosition(0);
+        setArmPosition(SIDE_ARM_UP_POS);
+    }
+    public void armMid() {
+        setArmPosition(SIDE_ARM_MID_POS);
     }
     public void armDown() {
-        setArmPosition(1);
+        setArmPosition(SIDE_ARM_DOWN_POS);
     }
+
     public void setArmPosition(double pos) {
         Robot.getInstance().sideClawArm.setPosition(pos);
     }

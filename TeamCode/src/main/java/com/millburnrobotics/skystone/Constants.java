@@ -107,9 +107,9 @@ public class Constants {
         public static final String _SideClawArm = "sideClawArm";
         public static final String _SideClawClaw = "sideClawClaw";
 
-        public static final double SIDE_ARM_UP_POS = 0.3;
-        public static final double SIDE_ARM_MID_POS = 0.6;
-        public static final double SIDE_ARM_DOWN_POS = 0.8;
+        public static final double SIDE_ARM_UP_POS = 0.5;
+        public static final double SIDE_ARM_MID_POS = 0.3;
+        public static final double SIDE_ARM_DOWN_POS = 0.15;
 
         public static final double SIDE_CLAW_CLOSE_POS = 0.3;
         public static final double SIDE_CLAW_OPEN_POS = 1;

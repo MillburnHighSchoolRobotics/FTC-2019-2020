@@ -23,6 +23,6 @@ public class FoundationPullBackPath implements PathContainer {
             waypoints.add(new Waypoint(new Pose(66, 24+Constants.DriveConstants.BOT_WIDTH/2, 3*Math.PI/2),3*Math.PI/2));
         }
 
-        return PathBuilder.buildPath(waypoints, 0.1, 0.7, 0.5);
+        return PathBuilder.buildPath(waypoints, 0.3, 1, 0.5);
     }
 }

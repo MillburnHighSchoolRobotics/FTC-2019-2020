@@ -29,7 +29,7 @@ public class FoundationRedMode extends AutoModeBase {
         runAction(new DriveFollowPathAction(new ToFoundationPath()));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, 49, 3*Math.PI/2),0.4,1000),
+                new DriveTimedToPoseAction(new Pose(0, 49, 3*Math.PI/2),0.4,500),
                 new HookDownAction()
         ));
 
