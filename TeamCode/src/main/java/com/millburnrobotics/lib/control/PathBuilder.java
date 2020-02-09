@@ -2,6 +2,7 @@ package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.geometry.Waypoint;
+import com.millburnrobotics.skystone.subsystems.Robot;
 
 import java.util.List;
 
@@ -23,8 +24,15 @@ public class PathBuilder {
             }
         }
         p.setMotionProfile(minPower, maxPower,k);
+
         p.startHeading = w.get(0).pose.heading;
         p.endHeading = w.get(w.size()-1).pose.heading;
+        if (p.startHeading - p.endHeading > Math.PI) {
+            p.startHeading -= 2*Math.PI;
+        } else if (p.endHeading - p.startHeading > Math.PI) {
+            p.startHeading += 2*Math.PI;
+        }
+
         return p;
     }
 }

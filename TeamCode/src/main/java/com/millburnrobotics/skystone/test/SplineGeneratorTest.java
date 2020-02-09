@@ -23,15 +23,15 @@ public class SplineGeneratorTest {
 //        waypoints.add(new Waypoint(new Pose(0,0,0),Math.PI));
         waypoints.add(new Waypoint(new Pose(0,0,0),0));
         waypoints.add(new Waypoint(new Pose(48,48,0),0));
-        Path path =  PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.4);
+        Path path =  PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.9);
 
         System.out.println("Start: " + path.start());
         System.out.println("End: " + path.end());
         System.out.println("Length: " + path.length() + "\n");
 
         for (int x = 0; x < path.length(); x++) {
-            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
-//            System.out.println(path.getPower(x));
+//            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
+            System.out.println(path.getPower(x));
         }
 
         System.out.println("\nTime: " + timer.milliseconds());

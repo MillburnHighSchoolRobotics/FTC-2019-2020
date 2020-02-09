@@ -7,10 +7,18 @@ import com.millburnrobotics.skystone.subsystems.Intake;
 import com.millburnrobotics.skystone.subsystems.Lift;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_OUT_POS;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_INCREMENT;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_HIGH;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_LOW;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RAISED_MIN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INCREMENT;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_INCREMENT;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
 public class TeleOp extends OpMode {
@@ -18,6 +26,9 @@ public class TeleOp extends OpMode {
     public void init() {
         telemetry.setMsTransmissionInterval(1000);
         Robot.getInstance().init(hardwareMap, false);
+        Robot.getInstance().getChainBar().chainBarIn();
+        Robot.getInstance().liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.getInstance().liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -40,17 +51,41 @@ public class TeleOp extends OpMode {
             }
         }
 
+        //-------------------------------------------- Side Claw --------------------------------------------//
+        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().getArmPosition() > SIDE_ARM_DOWN_POS && Robot.getInstance().getSideClaw().canToggleSideArm()) {
+            Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() - SIDE_ARM_INCREMENT);
+        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().getArmPosition() < SIDE_ARM_UP_POS && Robot.getInstance().getSideClaw().canToggleSideArm()) {
+            Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() + SIDE_ARM_INCREMENT);
+        }
+        if (gamepad2.right_bumper && Robot.getInstance().getSideClaw().getClawPosition() < 1 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
+            Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() + SIDE_CLAW_INCREMENT);
+        } else if (gamepad2.left_bumper && Robot.getInstance().getSideClaw().getClawPosition() > 0 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
+            Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() - SIDE_CLAW_INCREMENT);
+        }
         //-------------------------------------------- ChainBar --------------------------------------------//
-        if (Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
+        if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+            Robot.getInstance().getChainBar().setChainBarPosition(
+                    Robot.getInstance().getChainBar().getChainBarLPosition() + CHAINBAR_INCREMENT,
+                    Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
+            );
+        } else if (gamepad1.left_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() > CHAINBARL_IN_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+            Robot.getInstance().getChainBar().setChainBarPosition(
+                    Robot.getInstance().getChainBar().getChainBarLPosition() - CHAINBAR_INCREMENT,
+                    Robot.getInstance().getChainBar().getChainBarRPosition() + CHAINBAR_INCREMENT
+            );
+        } else if (Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().chainBarUp();
-        } else if (gamepad1.right_bumper) {
-            Robot.getInstance().getChainBar().chainBarOut();
-        } else if (gamepad1.left_bumper) {
-            Robot.getInstance().getChainBar().chainBarIn();
+        }
+
+        //-------------------------------------------- Claw --------------------------------------------//
+        if (gamepad1.a && Robot.getInstance().getChainBar().canToggleClaw()) {
+            Robot.getInstance().getChainBar().clawClose();
+        } else if (gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) {
+            Robot.getInstance().getChainBar().clawOpen();
         }
 
         //-------------------------------------------- Movement --------------------------------------------
-        double drivePower = (Robot.getInstance().liftL.getCurrentPosition() > LIFT_RAISED_MIN_POS) ? DRIVE_POWER_LOW : DRIVE_POWER_HIGH;
+        double drivePower = (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) ? DRIVE_POWER_LOW : DRIVE_POWER_HIGH;
         double strafeX = gamepad1.left_stick_x;
         double strafeY = -gamepad1.left_stick_y;
         double rotationPower = gamepad1.right_stick_x;
@@ -67,7 +102,10 @@ public class TeleOp extends OpMode {
                 Robot.getInstance().getLift().setState(Lift.LiftState.FAIL);
             }
         }
-        if (gamepad1.dpad_up) {
+        if (gamepad1.y) {
+            Robot.getInstance().getLift().autoLiftDown();
+            Robot.getInstance().getChainBar().chainBarUp();
+        } else if (gamepad1.dpad_up) {
             Robot.getInstance().getLift().manualLiftUp();
         } else if (gamepad1.dpad_down) {
             Robot.getInstance().getLift().manualLiftDown();

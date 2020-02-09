@@ -28,9 +28,14 @@ public class MotionProfile {
 //        } else if (d > (k*s) && d <= s) {
 //            return -A*Math.cos(Math.PI*(1.0/(s*(1-k)))*(d-s))+A;
 //        }
-        if (d <= k*s) {
-            return MathUtils.map(d, 0,k*s,minPower,maxPower);
-        } else if (d >= (1-k)*s) {
+//        if (d <= k*s) {
+////            return MathUtils.map(d, 0,k*s,minPower,maxPower);
+////        } else if (d >= (1-k)*s) {
+////            return MathUtils.map(d, (1-k)*s,s,maxPower,minPower);
+////        } else {
+////            return maxPower;
+////        }
+        if (d >= (1-k)*s) {
             return MathUtils.map(d, (1-k)*s,s,maxPower,minPower);
         } else {
             return maxPower;

@@ -13,7 +13,7 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_TH
 import static com.millburnrobotics.skystone.Constants.DriveConstants.STRAFE_THRESHOLD;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.TURN_POWER;
 
-public class DriveFollowPathAction implements Action {
+public class DriveFollowPathArmDownAction implements Action {
 
     private PathContainer container;
     private Path current_path;
@@ -21,32 +21,32 @@ public class DriveFollowPathAction implements Action {
     private ElapsedTime rotationTimer;
     private ElapsedTime lastInThreshTimer;
     private double lastTime;
-    private double strafeThreshold;
-    private double rotationThreshold;
+    private double crossY;
+    private boolean cross;
 
-    public DriveFollowPathAction(PathContainer container) {
-        this(container, STRAFE_THRESHOLD, ROTATION_THRESHOLD);
-    }
-    public DriveFollowPathAction(PathContainer container, double strafeThreshold, double rotationThreshold) {
+    public DriveFollowPathArmDownAction(PathContainer container, double crossY) {
         this.container = container;
-        this.strafeThreshold = strafeThreshold;
-        this.rotationThreshold = rotationThreshold;
+        this.crossY = crossY;
     }
 
     @Override
     public void start() {
         strafe = true;
+        cross = false;
         current_path = container.buildPath();
         lastInThreshTimer = new ElapsedTime();
-        rotationTimer = new ElapsedTime();
         lastTime = -1;
         Robot.getInstance().getDrive().followPath(current_path);
     }
 
     @Override
     public void update() {
+        Pose current = Robot.getInstance().getOdometry().getPose();
+        if ((current.y < crossY) && !cross) {
+            cross = true;
+            Robot.getInstance().getSideClaw().armDown();
+        }
         if (strafe) {
-            Pose current = Robot.getInstance().getOdometry().getPose();
             Robot.getInstance().getDrive().updatePathFollower(current);
         } else {
             if (rotationTimer == null) {
@@ -59,7 +59,7 @@ public class DriveFollowPathAction implements Action {
     @Override
     public boolean isFinished() {
         if (strafe) {
-            if (MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,strafeThreshold)) {
+            if (MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,STRAFE_THRESHOLD)) {
                 if (lastTime == -1) {
                     lastTime = lastInThreshTimer.milliseconds();
                 } else if (lastInThreshTimer.milliseconds() - lastTime > 200) {
@@ -69,7 +69,7 @@ public class DriveFollowPathAction implements Action {
                 lastTime = -1;
             }
         } else {
-            if (rotationTimer != null && rotationTimer.milliseconds() > PATH_HEADING_TIME) {
+            if (rotationTimer.milliseconds() > PATH_HEADING_TIME) {
                 return true;
             }
             double currentHeading = Math.toDegrees(Robot.getInstance().pose.getHeading());
@@ -79,7 +79,7 @@ public class DriveFollowPathAction implements Action {
             } else if (targetHeading - currentHeading > 180) {
                 currentHeading += 360;
             }
-            return MathUtils.equals(targetHeading, currentHeading, rotationThreshold);
+            return MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD);
         }
         return false;
     }

@@ -19,8 +19,7 @@ public class Robot {
     public DcMotorEx liftL, liftR;
     public DcMotorEx intakeL, intakeR;
     public DcMotorEx er, el, eb;
-    public Servo chainBarL, chainBarR;
-    public CRServo claw;
+    public Servo chainBarL, chainBarR, claw;
     public Servo hookL, hookR;
     public Servo sideClawArm, sideClawClaw;
 
@@ -35,6 +34,7 @@ public class Robot {
 
     public HardwareMap hardwareMap;
     public Constants.Side side;
+    public Constants.Block block;
 
     public Pose pose;
 
@@ -86,7 +86,7 @@ public class Robot {
 
         chainBarL = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarLeft);
         chainBarR = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarRight);
-        claw = hardwareMap.crservo.get(Constants.ChainBarConstants._ChainBarClaw);
+        claw = hardwareMap.servo.get(Constants.ChainBarConstants._ChainBarClaw);
 
         hookL = hardwareMap.servo.get(Constants.HookConstants._FoundationHookLeft);
         hookR = hardwareMap.servo.get(Constants.HookConstants._FoundationHookRight);

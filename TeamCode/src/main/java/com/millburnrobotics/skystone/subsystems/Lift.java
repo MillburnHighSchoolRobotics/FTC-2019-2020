@@ -20,7 +20,7 @@ public class Lift extends Subsystem {
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
-        telemetry.addData("Lift position", Robot.getInstance().liftL.getCurrentPosition());
+        telemetry.addData("Lift position", Robot.getInstance().liftR.getCurrentPosition());
     }
 
     @Override
@@ -33,21 +33,25 @@ public class Lift extends Subsystem {
     }
     public void autoLiftDown() {
         currentBlock = 0;
-        liftController.setTarget(currentBlock);
+        liftController.setTarget(LIFT_MIN_POS);
     }
 
     public void manualLiftUp() {
         setLiftPower(LIFT_DAMPEN_POWER * calcLiftDampen(
-                Robot.getInstance().liftL.getCurrentPosition()/LIFT_MAX_POS));
-        liftController.setTarget(Robot.getInstance().liftL.getCurrentPosition());
+                Robot.getInstance().liftR.getCurrentPosition()/LIFT_MAX_POS));
+        liftController.setTarget(Robot.getInstance().liftR.getCurrentPosition());
     }
     public void manualLiftDown() {
-        setLiftPower(LIFT_RETRACTION_POWER);
-        liftController.setTarget(Robot.getInstance().liftL.getCurrentPosition());
+        if (Robot.getInstance().liftR.getCurrentPosition() > LIFT_MIN_POS) {
+            setLiftPower(LIFT_RETRACTION_POWER);
+        } else {
+            setLiftPower(0);
+        }
+        liftController.setTarget(Robot.getInstance().liftR.getCurrentPosition());
     }
 
     public void updateLiftPID() {
-        double output = liftController.getPIDOutput(Robot.getInstance().liftL.getCurrentPosition());
+        double output = liftController.getPIDOutput(Robot.getInstance().liftR.getCurrentPosition());
         setLiftPower(output * LIFT_EXTENSION_POWER);
     }
 
@@ -57,7 +61,7 @@ public class Lift extends Subsystem {
 
     public void setLiftPower(double liftPower) {
         Robot.getInstance().liftL.setPower(liftPower);
-        Robot.getInstance().liftR.setPower(-liftPower);
+        Robot.getInstance().liftR.setPower(liftPower);
     }
     public void setState(LiftState state) {
         this.state = state;
@@ -69,8 +73,8 @@ public class Lift extends Subsystem {
 
     private double calcLiftDampen(double ratio) {
         double L = 1;
-        double b = .85;
-        double k = 5.5;
+        double b = .95;
+        double k = 7;
         double v = 0.9;
 
         if (ratio < 0) {

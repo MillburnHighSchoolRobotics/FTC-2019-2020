@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.millburnrobotics.lib.util.VuforiaLocalizerImplSubclass;
+import com.millburnrobotics.skystone.subsystems.Robot;
 
 import static com.millburnrobotics.skystone.Constants.*;
 
@@ -86,7 +87,7 @@ public class SkystoneDetector {
         }
 
         int pos = -1;
-        if (FieldConstants.side == Side.BLUE) {
+        if (Robot.getInstance().side == Side.BLUE) {
             if (centroid.x > BLUE_LINE_1_X && centroid.x < BLUE_LINE_2_X)
                 pos = 1;
             else if (centroid.x > BLUE_LINE_2_X && centroid.x < BLUE_LINE_3_X)

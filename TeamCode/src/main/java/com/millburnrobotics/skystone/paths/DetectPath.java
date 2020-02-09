@@ -9,31 +9,28 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 
 import java.util.ArrayList;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.BOT_LENGTH;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.BOT_WIDTH;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.CLAW_EXTEND;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.CLAW_TO_BACK;
+
 
 public class DetectPath implements PathContainer {
-    private int initialBlock;
-
-    public DetectPath(int initialBlock) {
-        this.initialBlock = initialBlock;
-    }
-
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
-
         if (Robot.getInstance().side == Constants.Side.BLUE) {
-            if (initialBlock == 3) {
-
-            } else {
-
+            double X_BLUE_BLOCK_CLAW = -24-BOT_WIDTH/2.0-CLAW_EXTEND;
+            double Y_BLUE_BLOCK_CLAW = -24-4+(BOT_LENGTH/2.0-CLAW_TO_BACK);
+            if (Robot.getInstance().block == Constants.Block.CENTER) {
+                waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(-72+ BOT_WIDTH/2.0+4,-48+ BOT_LENGTH/2.0,0),3*Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-32,0),3*Math.PI/2));
             }
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
-            waypoints.add(new Waypoint(new Pose(-36,49,Math.PI),0));
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
-            waypoints.add(new Waypoint(new Pose(36,49,0),Math.PI));
+
         }
 
-        return PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.5);
+        return PathBuilder.buildPath(waypoints, 0.25, 0.6, 0.6);
     }
 }
