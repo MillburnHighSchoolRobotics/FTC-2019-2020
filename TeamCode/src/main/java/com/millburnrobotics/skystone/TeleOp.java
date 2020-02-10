@@ -26,9 +26,6 @@ public class TeleOp extends OpMode {
     public void init() {
         telemetry.setMsTransmissionInterval(1000);
         Robot.getInstance().init(hardwareMap, false);
-        Robot.getInstance().getChainBar().chainBarIn();
-        Robot.getInstance().liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.getInstance().liftL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() - SIDE_CLAW_INCREMENT);
         }
         //-------------------------------------------- ChainBar --------------------------------------------//
-        if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+       if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
             Robot.getInstance().getChainBar().setChainBarPosition(
                     Robot.getInstance().getChainBar().getChainBarLPosition() + CHAINBAR_INCREMENT,
                     Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
@@ -73,7 +70,7 @@ public class TeleOp extends OpMode {
                     Robot.getInstance().getChainBar().getChainBarLPosition() - CHAINBAR_INCREMENT,
                     Robot.getInstance().getChainBar().getChainBarRPosition() + CHAINBAR_INCREMENT
             );
-        } else if (Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
+        } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().chainBarUp();
         }
 
@@ -81,6 +78,8 @@ public class TeleOp extends OpMode {
         if (gamepad1.a && Robot.getInstance().getChainBar().canToggleClaw()) {
             Robot.getInstance().getChainBar().clawClose();
         } else if (gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) {
+            Robot.getInstance().getChainBar().clawOpen();
+        } else if (gamepad1.y) {
             Robot.getInstance().getChainBar().clawOpen();
         }
 
@@ -93,7 +92,7 @@ public class TeleOp extends OpMode {
 
         //-------------------------------------------- Lift --------------------------------------------//
         if (gamepad2.dpad_up){
-            Robot.getInstance().getLift().setLiftPosition(4);
+            Robot.getInstance().getLift().updateLiftTargetBlock(4);
         }
         if (gamepad1.dpad_right) {
             if (Robot.getInstance().getLift().getState() == Lift.LiftState.FAIL) {

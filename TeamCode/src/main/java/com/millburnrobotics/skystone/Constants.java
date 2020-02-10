@@ -84,7 +84,7 @@ public class Constants {
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 
-        public static final double CHAINBAR_CLAW_CLOSE = 0.55;
+        public static final double CHAINBAR_CLAW_CLOSE = 0.6;
         public static final double CHAINBAR_CLAW_OPEN = 0.3;
     }
 
@@ -96,7 +96,7 @@ public class Constants {
         public static final double LIFT_RETRACTION_POWER = -0.7;
         public static final double LIFT_DAMPEN_POWER = 1;
 
-        public static final double LIFT_MAX_POS = 2650;
+        public static final double LIFT_MAX_POS = 2700;
         public static final double LIFT_MIN_POS = 0;
         public static final double LIFT_RAISED_MIN_POS = 200;
         public static final double[] LIFT_STONE_POS = {0,450,730,980,1410};
@@ -106,6 +106,7 @@ public class Constants {
         public static final String _SideClawArm = "sideClawArm";
         public static final String _SideClawClaw = "sideClawClaw";
 
+        public static final double SIDE_ARM_INIT_POS = 0.6;
         public static final double SIDE_ARM_UP_POS = 0.5;
         public static final double SIDE_ARM_MID_POS = 0.2;
         public static final double SIDE_ARM_DOWN_POS = 0.18;

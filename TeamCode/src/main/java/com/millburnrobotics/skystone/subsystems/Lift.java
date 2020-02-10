@@ -1,6 +1,8 @@
 package com.millburnrobotics.skystone.subsystems;
 
 import com.millburnrobotics.lib.util.PIDController;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static com.millburnrobotics.skystone.Constants.LiftConstants.*;
@@ -10,12 +12,14 @@ public class Lift extends Subsystem {
         WORK, FAIL
     }
     private LiftState state;
-    private int currentBlock;
+    private int targetLiftBlock;
     private PIDController liftController = new PIDController(0.01,0,0,0,0);
 
     @Override
     public void init(boolean auto) {
-        currentBlock = 0;
+        Robot.getInstance().liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.getInstance().liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        targetLiftBlock = 0;
     }
 
     @Override
@@ -29,10 +33,9 @@ public class Lift extends Subsystem {
     }
 
     public void autoLiftToBlock() {
-        liftController.setTarget(currentBlock);
+        liftController.setTarget(targetLiftBlock);
     }
     public void autoLiftDown() {
-        currentBlock = 0;
         liftController.setTarget(LIFT_MIN_POS);
     }
 
@@ -54,9 +57,12 @@ public class Lift extends Subsystem {
         double output = liftController.getPIDOutput(Robot.getInstance().liftR.getCurrentPosition());
         setLiftPower(output * LIFT_EXTENSION_POWER);
     }
+    public void updateLiftTargetBlock(int block) {
+        this.targetLiftBlock = block;
+    }
 
-    public void setLiftPosition(int block) {
-        currentBlock = block;
+    public void setLiftPosition() {
+        liftController.setTarget(LIFT_STONE_POS[targetLiftBlock]);
     }
 
     public void setLiftPower(double liftPower) {

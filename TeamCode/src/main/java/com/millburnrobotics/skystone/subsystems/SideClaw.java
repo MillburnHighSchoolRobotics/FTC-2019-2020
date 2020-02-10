@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INIT_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_MID_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_CLOSE_POS;
@@ -18,9 +19,11 @@ public class SideClaw extends Subsystem {
     @Override
     public void init(boolean auto) {
         if (auto) {
-            armUp();
+            armInit();
             clawOpen();
         } else {
+            armUp();
+            clawClose();
             changeSideArm.reset();
             changeSideClaw.reset();
         }
@@ -45,6 +48,9 @@ public class SideClaw extends Subsystem {
     }
     public void armDown() {
         setArmPosition(SIDE_ARM_DOWN_POS);
+    }
+    public void armInit() {
+        setArmPosition(SIDE_ARM_INIT_POS);
     }
     public void setArmPosition(double pos) {
         currentArmPos = pos;
