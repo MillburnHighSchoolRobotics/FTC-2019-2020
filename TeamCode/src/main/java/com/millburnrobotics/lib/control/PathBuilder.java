@@ -2,7 +2,6 @@ package com.millburnrobotics.lib.control;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.geometry.Waypoint;
-import com.millburnrobotics.skystone.subsystems.Robot;
 
 import java.util.List;
 

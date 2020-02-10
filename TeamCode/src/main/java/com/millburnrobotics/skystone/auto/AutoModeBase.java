@@ -30,6 +30,9 @@ public abstract class AutoModeBase extends LinearOpMode {
         }
     }
     public void runAction(Action action) {
+        runAction(action, UPDATE_PERIOD);
+    }
+    public void runAction(Action action, long period) {
         if(opModeIsActive() && !isStopRequested()) {
             action.start();
         }
@@ -38,7 +41,7 @@ public abstract class AutoModeBase extends LinearOpMode {
             Robot.getInstance().outputToTelemetry(telemetry);
             telemetry.update();
             try {
-                Thread.sleep(UPDATE_PERIOD);
+                Thread.sleep(period);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -50,7 +53,7 @@ public abstract class AutoModeBase extends LinearOpMode {
     }
 
     public void threadAction(final Action action){
-        Runnable runnable = () -> runAction(action);
+        Runnable runnable = () -> runAction(action, 5);
 
         if(opModeIsActive() && !isStopRequested())
             new Thread(runnable).start();

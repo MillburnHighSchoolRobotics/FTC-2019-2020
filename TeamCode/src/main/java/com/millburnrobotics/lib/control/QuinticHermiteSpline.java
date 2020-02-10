@@ -32,7 +32,7 @@ public class QuinticHermiteSpline extends PathSegment {
         y0 = p0.y;
         y1 = p1.y;
         dy0 = (p0.rotate(Math.PI/2)).sin()*scale;
-        dy1 = (p0.rotate(Math.PI/2)).sin()*scale;
+        dy1 = (p1.rotate(Math.PI/2)).sin()*scale;
         ddy0 = 0;
         ddy1 = 0;
 

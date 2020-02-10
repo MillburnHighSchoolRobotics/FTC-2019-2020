@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.auto.modes.twoblock;
+package com.millburnrobotics.skystone.auto.modes.threeblock;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
@@ -6,7 +6,6 @@ import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.millburnrobotics.skystone.auto.actions.WaitAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathArmDownAction;
-import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveTimedToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmDownAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmUpAction;
@@ -21,7 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import java.util.Arrays;
 
 @Autonomous(group = "Blue")
-public class TwoBlockBlueMode extends AutoModeBase {
+public class ThreeBlockBlueMode extends AutoModeBase {
 
     @Override
     public void routine() {

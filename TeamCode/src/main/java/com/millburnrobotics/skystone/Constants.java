@@ -12,7 +12,7 @@ public class Constants {
     }
 
     public static final String VUFORIA_KEY = "AcSW/tj/////AAABmUB3byzZQksfqhymb0Tr3M92yvtrzF4HgDl0t7Z07OZ2xscXR1yyeX4GxftrShvm9T926ZCW0VglQKXuQE5+JkrABVijohk5DCkcE9CcxHy3mTs2Ui76Nz+9CQTgOsr6/AMLV+Te6uyXTs3rZwGdnHGRo0Q1yboJCQ51Ap2rgJc//ehVdkp/QetIMnfhRffac0edAHFt0i2F5++S/OH/4kdxFd5ha0lswd4nTnqU2MiJrz+OH4WQPQ8JC94dQZ6F3m/iX5mk4TCq/9xg3cTJvFccEUawf7PIsapABxKMJB6hcPikwa0XtyGB+vEb7fQAXZ80tRal2mcwKSHrDM4ZvYisD73X+sTIAqQnXgxYiL14";
-    public static long UPDATE_PERIOD = 5;
+    public static long UPDATE_PERIOD = 10;
 
     public static class FieldConstants {
         public static final double FOUNDATION_WIDTH = 18.5;
@@ -36,6 +36,7 @@ public class Constants {
         public static final double STRAFE_THRESHOLD = 2;
         public static final double ROTATION_THRESHOLD = 2;
 
+        public static final double PURE_PURSUIT_THRESH = 1;
         public static final long LOOK_AHEAD = 10;
 
         public static double encoderToDistance(double ticks) {

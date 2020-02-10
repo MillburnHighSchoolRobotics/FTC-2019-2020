@@ -45,6 +45,11 @@ public class Path {
         }
         return new Pose(p.x, p.y, heading);
     }
+    public Pose _get(double r) {
+        double heading = MathUtils.map(r,0,size(),startHeading,endHeading);
+        int seg = (int) Math.floor(r);
+        return new Pose(segments.get(seg)._get(r-seg).vec(), heading);
+    }
     public Pose deriv(double s) {
         for (PathSegment segment : segments) {
             if ((s-segment.length()) < 0) {

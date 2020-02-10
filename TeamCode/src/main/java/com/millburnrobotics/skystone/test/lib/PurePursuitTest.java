@@ -1,38 +1,71 @@
-package com.millburnrobotics.lib.followers;
-
-import android.util.Log;
+package com.millburnrobotics.skystone.test.lib;
 
 import com.millburnrobotics.lib.control.Path;
+import com.millburnrobotics.lib.control.PathBuilder;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.geometry.Waypoint;
 import com.millburnrobotics.lib.util.MathUtils;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.PURE_PURSUIT_THRESH;
 import static java.lang.Math.signum;
 
-public class PurePursuitFollower {
-    public Path path;
-    private double lastOnPath;
-    private double posOnPath;
-    private boolean updateProject;
-    private Pose nextPose;
+public class PurePursuitTest {
+    private static double pr = 0;
+    public static void main(String[] args) {
+        ElapsedTime timer = new ElapsedTime();
+//        List<Double> times = new ArrayList<>();
 
-    public PurePursuitFollower(Path path) {
-        this.path = path;
-        lastOnPath = 0.0;
-        posOnPath = 0.0;
-        updateProject = false;
+        ArrayList<Waypoint> waypoints = new ArrayList<>();
+        waypoints.add(new Waypoint(new Pose(0,0,0),0));
+        waypoints.add(new Waypoint(new Pose(48,48,0),0));
+        Path path =  PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.9);
+
+//        for (int i = 0; i < 1000; i++) {
+//            double px = Math.random()*(waypoints.get(waypoints.size()-1).pose.x-waypoints.get(0).pose.x+1)+waypoints.get(0).pose.x;
+//            double py = Math.random()*(waypoints.get(waypoints.size()-1).pose.y-waypoints.get(0).pose.y+1)+waypoints.get(0).pose.y;
+//            Pose p = new Pose(px,py);
+//
+//            timer.reset();
+//            Pose lookahead = getLookaheadPoint(p, path);
+//            times.add(timer.milliseconds());
+//        }
+//
+//        double mean = 0;
+//        for (double t : times) mean += t/times.size();
+//
+//        System.out.println("Average Time: " + mean);
+//        System.out.println("Max Time: " + Collections.max(times));
+//        System.out.println("Min Time: " + Collections.min(times));
+//        System.out.println("Projections: " + pr);
+
+        Pose p = new Pose(17.3,18.4);
+        timer.reset();
+        Pose pose1 = getLookaheadPoint(p, path);
+        double ppTime1 = timer.milliseconds();
+
+        timer.reset();
+        Pose pose2 = project(p,path);
+        double ppTime2 = timer.milliseconds();
+
+        System.out.println("(x-"+pose1.x+")^{2}+(y-"+pose1.y+")^{2}=10");
+        System.out.println("(x-"+pose2.x+")^{2}+(y-"+pose2.y+")^{2}=6");
+        System.out.println("(x-"+p.x+")^{2}+(y-"+p.y+")^{2}=25");
+        for (double x = 0; x < path.length(); x+=0.5) {
+            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
+        }
+
+        System.out.println("\nPure Pursuit Time1: " + ppTime1);
+        System.out.println("\nPure Pursuit Time2: " + ppTime2);
+        if (pr > 1)
+            System.out.println("Projection");
     }
-    public Pose updatePose(Pose currentPose) {
-        Log.d("pure pursuit len","l - " + path.length());
-        updateProject = false;
-
-        nextPose = getLookaheadPoint(currentPose);
-        Log.d("pure pursuit","nextPose - " + nextPose);
-
-        return nextPose;
-    }
-    private Pose getLookaheadPoint(Pose currentPose) {
+    private static Pose getLookaheadPoint(Pose currentPose, Path path) {
         double inc = 1;
         Pose lookahead = null;
         Pose lastEnd = path.end();
@@ -85,25 +118,19 @@ public class PurePursuitFollower {
                 return end;
             }
         }
-        return lookahead == null ? path.get(project(currentPose)+LOOK_AHEAD) : lookahead;
+        return lookahead == null ? project(currentPose,path) : lookahead;
     }
-    private double project(Pose currentPos) {
-        updateProject = true;
+    private static Pose project(Pose currentPos, Path path) {
+        pr++;
         double s = path.length();
         double prev_ds = 0;
         while (true) {
-//            Log.d("pure pursuit","s - " + s);
             Pose pathPos = path.get(s);
-//            Log.d("pure pursuit","path s pos - " + pathPos);
             Pose derivPos = path.deriv(s);
-//            Log.d("pure pursuit","path deriv s pos - " + derivPos);
             Pose dPos = currentPos.minus(pathPos);
-//            Log.d("pure pursuit","path d pos - " + dPos);
             double ds = dPos.dot(derivPos);
 
-//            Log.d("pure pursuit", "ds - " + ds);
             if (MathUtils.equals(ds,0.0, PURE_PURSUIT_THRESH)) {
-                lastOnPath = s;
                 break;
             } else if (MathUtils.equals(Math.abs(ds),Math.abs(prev_ds))) {
                 break;
@@ -112,25 +139,10 @@ public class PurePursuitFollower {
             prev_ds = ds;
             s += ds / 2.0;
 
-            if (s <= lastOnPath || s >= path.length()) {
-                s = Math.max(lastOnPath, Math.min(s, path.length()));
+            if (s >= path.length()) {
                 break;
             }
         }
-        posOnPath = s;
-        return s;
-    }
-    public double powerAtDistance(double s) {
-        return path.getPower(s);
-    }
-    public double updatePower(Pose pose) {
-        if (!updateProject) {
-            return path.getPower(project(pose));
-        } else {
-            return path.getPower(posOnPath);
-        }
-    }
-    public Pose getNextPose() {
-        return nextPose;
+        return path.get(s+LOOK_AHEAD);
     }
 }
