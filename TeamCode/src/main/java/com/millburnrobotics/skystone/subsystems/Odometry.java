@@ -37,6 +37,8 @@ public class Odometry extends Subsystem {
         telemetry.addData("er", Robot.getInstance().er.getCurrentPosition());
         telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());
         telemetry.addData("eb", Robot.getInstance().eb.getCurrentPosition());
+
+        Log.d("OdometryDisplay", ""+pose);
     }
 
     @Override
