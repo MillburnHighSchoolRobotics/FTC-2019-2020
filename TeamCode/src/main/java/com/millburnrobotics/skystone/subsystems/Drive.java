@@ -155,7 +155,7 @@ public class Drive extends Subsystem {
     }
     public void updatePathFollower(Pose currentPose) {
         Pose nextPose = follower.updatePose(currentPose);
-        double power = follower.updatePower(currentPose);
+        double power = follower.updatePower();
         vectorTo(currentPose, nextPose, power);
     }
 }

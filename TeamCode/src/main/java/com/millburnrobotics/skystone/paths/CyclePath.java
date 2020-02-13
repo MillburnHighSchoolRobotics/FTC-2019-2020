@@ -52,9 +52,9 @@ public class CyclePath implements PathContainer {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(170)));
             waypoints.add(new Waypoint(new Pose(-40,0,0),Math.toRadians(190)));
             if (pos == 1) {
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW-2, Y_BLUE_BLOCK_CLAW,0),Math.toRadians(220)));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW,0),Math.toRadians(220)));
             } else if (pos == 2) {
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW-4, Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
             } /*else if (pos == 2) {
                 waypoints.add(new Waypoint(Constants.AutonConstants.BLUE_DELIVERY_2,0));
             } else if (pos == 3) {
@@ -75,6 +75,6 @@ public class CyclePath implements PathContainer {
 //            }
         }
 
-        return PathBuilder.buildPath(waypoints, 0.25, 0.7, 0.7);
+        return PathBuilder.buildPath(waypoints, 0.25, 0.8, 0.7);
     }
 }

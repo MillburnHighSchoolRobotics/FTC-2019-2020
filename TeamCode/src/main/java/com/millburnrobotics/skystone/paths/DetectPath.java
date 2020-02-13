@@ -31,6 +31,6 @@ public class DetectPath implements PathContainer {
 
         }
 
-        return PathBuilder.buildPath(waypoints, 0.25, 0.6, 0.6);
+        return PathBuilder.buildPath(waypoints, 0.25, 0.7, 0.6);
     }
 }

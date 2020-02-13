@@ -18,6 +18,9 @@ public class ChainBar extends Subsystem {
     double currentRightPos;
     ElapsedTime changeChainbar = new ElapsedTime();
     ElapsedTime changeClaw = new ElapsedTime();
+
+    boolean chainBarIn = false;
+    ElapsedTime chainBarInTimer = new ElapsedTime();
     @Override
     public void init(boolean auto) {
         if (!auto) {
@@ -45,6 +48,20 @@ public class ChainBar extends Subsystem {
     }
     public void chainBarOut() {
         setChainBarPosition(CHAINBARL_OUT_POS, CHAINBARR_OUT_POS);
+    }
+    public void chainBarInAuto() {
+        chainBarIn();
+        chainBarIn = true;
+        chainBarInTimer.reset();
+    }
+    public void chainBarInUpdate() {
+        if (chainBarInTimer.milliseconds() > 1000) {
+            chainBarIn = false;
+            chainBarUp();
+        }
+    }
+    public boolean isChainBarIn() {
+        return chainBarIn;
     }
     public void setChainBarPosition(double leftPos, double rightPos) {
         this.currentLeftPos = leftPos;

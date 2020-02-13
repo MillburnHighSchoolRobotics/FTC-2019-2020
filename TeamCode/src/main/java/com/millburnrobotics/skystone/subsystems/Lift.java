@@ -2,6 +2,7 @@ package com.millburnrobotics.skystone.subsystems;
 
 import com.millburnrobotics.lib.util.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -13,18 +14,25 @@ public class Lift extends Subsystem {
     }
     private LiftState state;
     private int targetLiftBlock;
-    private PIDController liftController = new PIDController(0.01,0,0,0,0);
+    private PIDController liftController;
+
+    boolean liftUpReset = false;
+    boolean clawOpenReset = false;
+    ElapsedTime liftUpResetTimer = new ElapsedTime();
+    ElapsedTime clawOpenResetTimer = new ElapsedTime();
 
     @Override
     public void init(boolean auto) {
         Robot.getInstance().liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.getInstance().liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         targetLiftBlock = 0;
+        liftController = new PIDController(0.01,0,0,0,0);
     }
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
         telemetry.addData("Lift position", Robot.getInstance().liftR.getCurrentPosition());
+        telemetry.addData("Target stone", targetLiftBlock);
     }
 
     @Override
@@ -33,10 +41,30 @@ public class Lift extends Subsystem {
     }
 
     public void autoLiftToBlock() {
-        liftController.setTarget(targetLiftBlock);
+        liftController.setTarget(LIFT_STONE_POS[targetLiftBlock]);
     }
     public void autoLiftDown() {
-        liftController.setTarget(LIFT_MIN_POS);
+        if (clawOpenResetTimer.milliseconds() > 200 && !clawOpenReset) {
+            clawOpenReset = true;
+            liftUpResetTimer.reset();
+        }
+        if (clawOpenReset) {
+            if (liftUpResetTimer.milliseconds() > 200) {
+                liftUpReset = false;
+                clawOpenReset = false;
+                liftController.setTarget(LIFT_MIN_POS);
+            } else {
+                setLiftPower(0.4);
+            }
+        }
+    }
+    public void autoLiftReset() {
+        clawOpenReset = false;
+        liftUpReset = true;
+        clawOpenResetTimer.reset();
+    }
+    public boolean isLiftUpReset() {
+        return liftUpReset;
     }
 
     public void manualLiftUp() {
@@ -60,11 +88,9 @@ public class Lift extends Subsystem {
     public void updateLiftTargetBlock(int block) {
         this.targetLiftBlock = block;
     }
-
-    public void setLiftPosition() {
-        liftController.setTarget(LIFT_STONE_POS[targetLiftBlock]);
+    public int getLiftTargetBlock() {
+        return targetLiftBlock;
     }
-
     public void setLiftPower(double liftPower) {
         Robot.getInstance().liftL.setPower(liftPower);
         Robot.getInstance().liftR.setPower(liftPower);

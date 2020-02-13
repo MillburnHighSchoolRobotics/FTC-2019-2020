@@ -59,13 +59,13 @@ public class ThreeBlockBlueMode extends AutoModeBase {
         runAction(new DriveFollowPathArmDownAction(new CyclePath(), 0));
 //        runAction(new SideClawCloseAction());
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.4,150),
+                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,200),
                 new SideClawCloseAction()
         ));
         runAction(new WaitAction(500));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.4,150),
+                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.6,200),
                 new SideClawArmUpAction()
         ));
         runAction(new DriveFollowPathAction(new DeliverPath(2), 4, 10));
@@ -81,19 +81,19 @@ public class ThreeBlockBlueMode extends AutoModeBase {
 
         runAction(new DriveFollowPathArmDownAction(new CyclePath(1), 0));
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.4,150),
+                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,250),
                 new SideClawCloseAction()
         ));
 //        runAction(new SideClawCloseAction());
         runAction(new WaitAction(500));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.4,150),
+                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.6,200),
                 new SideClawArmUpAction()
         ));
         runAction(new DriveFollowPathAction(new DeliverPath(2), 4, 10));
 
-        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.4,300));
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,200));
         runAction(new SideClawArmDownAction());
         runAction(new WaitAction(100));
         runAction(new SideClawOpenAction());

@@ -15,6 +15,7 @@ import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_HIGH;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_LOW;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RAISED_MIN_POS;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INCREMENT;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
@@ -60,7 +61,7 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() - SIDE_CLAW_INCREMENT);
         }
         //-------------------------------------------- ChainBar --------------------------------------------//
-       if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+        if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
             Robot.getInstance().getChainBar().setChainBarPosition(
                     Robot.getInstance().getChainBar().getChainBarLPosition() + CHAINBAR_INCREMENT,
                     Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
@@ -72,6 +73,10 @@ public class TeleOp extends OpMode {
             );
         } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().chainBarUp();
+        } else if (gamepad1.dpad_right) {
+           Robot.getInstance().getChainBar().chainBarInAuto();
+        } else if (Robot.getInstance().getChainBar().isChainBarIn()) {
+           Robot.getInstance().getChainBar().chainBarInUpdate();
         }
 
         //-------------------------------------------- Claw --------------------------------------------//
@@ -81,6 +86,8 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getChainBar().clawOpen();
         } else if (gamepad1.y) {
             Robot.getInstance().getChainBar().clawOpen();
+        } else if (gamepad1.dpad_right) {
+            Robot.getInstance().getChainBar().clawClose();
         }
 
         //-------------------------------------------- Movement --------------------------------------------
@@ -91,23 +98,27 @@ public class TeleOp extends OpMode {
         Robot.getInstance().getDrive().vectorTo(new Pose(), new Pose(strafeX, strafeY, 0), drivePower, rotationPower);
 
         //-------------------------------------------- Lift --------------------------------------------//
-        if (gamepad2.dpad_up){
-            Robot.getInstance().getLift().updateLiftTargetBlock(4);
+        if (gamepad2.dpad_up && Robot.getInstance().getLift().getLiftTargetBlock() < LIFT_STONE_POS.length-2){
+            Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() + 1);
+        } else if (gamepad2.dpad_down && Robot.getInstance().getLift().getLiftTargetBlock() > 1) {
+            Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() - 1);
         }
-        if (gamepad1.dpad_right) {
+        if (gamepad2.left_stick_button) {
             if (Robot.getInstance().getLift().getState() == Lift.LiftState.FAIL) {
                 Robot.getInstance().getLift().setState(Lift.LiftState.WORK);
             } else {
                 Robot.getInstance().getLift().setState(Lift.LiftState.FAIL);
             }
         }
-        if (gamepad1.y) {
-            Robot.getInstance().getLift().autoLiftDown();
-            Robot.getInstance().getChainBar().chainBarUp();
-        } else if (gamepad1.dpad_up) {
+        if (gamepad1.dpad_up) {
             Robot.getInstance().getLift().manualLiftUp();
         } else if (gamepad1.dpad_down) {
             Robot.getInstance().getLift().manualLiftDown();
+        } else if (gamepad1.y) {
+            Robot.getInstance().getLift().autoLiftReset();
+            Robot.getInstance().getChainBar().chainBarUp();
+        } else if (Robot.getInstance().getLift().isLiftUpReset()) {
+            Robot.getInstance().getLift().autoLiftDown();
         } else if (Robot.getInstance().getLift().getState() != Lift.LiftState.FAIL){
             if (gamepad1.dpad_left) {
                 Robot.getInstance().getLift().autoLiftToBlock();

@@ -51,6 +51,6 @@ public class DeliverPath implements PathContainer {
 //            }
         }
 
-        return PathBuilder.buildPath(waypoints, 0.3, 0.9, 0.7);
+        return PathBuilder.buildPath(waypoints, 0.3, 1, 0.7);
     }
 }

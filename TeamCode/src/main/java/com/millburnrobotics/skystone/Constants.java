@@ -36,7 +36,7 @@ public class Constants {
         public static final double STRAFE_THRESHOLD = 2;
         public static final double ROTATION_THRESHOLD = 2;
 
-        public static final double PURE_PURSUIT_THRESH = 1;
+        public static final double PURE_PURSUIT_THRESH = 4;
         public static final long LOOK_AHEAD = 10;
 
         public static double encoderToDistance(double ticks) {
@@ -57,7 +57,7 @@ public class Constants {
         public static final double DEAD_WHEEL_TICKS_PER_REV = 360*4;
         public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
         public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
-        public static final double DEAD_WHEEL_TURN_RADIUS = -1.9;//-2.75;
+        public static final double DEAD_WHEEL_TURN_RADIUS = 3.5;
         public static final long FPS_UPDATE_PERIOD = 5;
     }
 
@@ -65,8 +65,8 @@ public class Constants {
         public static final String _IntakeLeft = "intakeL";
         public static final String _IntakeRight = "intakeR";
 
-        public static final double INTAKE_IN_POWER = 0.6;
-        public static final double INTAKE_OUT_POWER = -0.6;
+        public static final double INTAKE_IN_POWER = 1;
+        public static final double INTAKE_OUT_POWER = -0.4;
     }
 
 
@@ -79,13 +79,13 @@ public class Constants {
         public static final double CHAINBARR_IN_POS = 1;
         public static final double CHAINBARL_OUT_POS = 0.8;
         public static final double CHAINBARR_OUT_POS = 0.2;
-        public static final double CHAINBARL_UP_POS = 0.15;
-        public static final double CHAINBARR_UP_POS = 0.85;
+        public static final double CHAINBARL_UP_POS = 0.13;
+        public static final double CHAINBARR_UP_POS = 0.87;
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 
-        public static final double CHAINBAR_CLAW_CLOSE = 0.6;
-        public static final double CHAINBAR_CLAW_OPEN = 0.3;
+        public static final double CHAINBAR_CLAW_CLOSE = 0.45;
+        public static final double CHAINBAR_CLAW_OPEN = 0.2;
     }
 
     public static class LiftConstants {
@@ -96,10 +96,10 @@ public class Constants {
         public static final double LIFT_RETRACTION_POWER = -0.7;
         public static final double LIFT_DAMPEN_POWER = 1;
 
-        public static final double LIFT_MAX_POS = 2700;
+        public static final double LIFT_MAX_POS = 3250;
         public static final double LIFT_MIN_POS = 0;
         public static final double LIFT_RAISED_MIN_POS = 200;
-        public static final double[] LIFT_STONE_POS = {0,450,730,980,1410};
+        public static final double[] LIFT_STONE_POS = {0,330,720,980,1190, 1713, 2265, 2960};
     }
 
     public static class SideClawConstants {
