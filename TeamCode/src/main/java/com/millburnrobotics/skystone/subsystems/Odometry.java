@@ -5,6 +5,7 @@ import android.util.Log;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.Constants;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -14,6 +15,8 @@ public class Odometry extends Subsystem {
     private double x, y, z, yaw, pitch, roll;
     private double orientation, rotation;
     private double erPosLast, elPosLast, ebPosLast;
+
+    private ElapsedTime displayTimer = new ElapsedTime();
 
     @Override
     public void init(boolean auto) {
@@ -38,12 +41,18 @@ public class Odometry extends Subsystem {
         telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());
         telemetry.addData("eb", Robot.getInstance().eb.getCurrentPosition());
 
-        Log.d("OdometryDisplay", ""+pose);
+        if (displayTimer.milliseconds() > 100) {
+            Log.d("OdometryDisplay", ""+pose);
+            displayTimer.reset();
+        }
     }
 
     @Override
     public void update() {
         this.pose = getPoseEstimate();
+        Robot.getInstance().savePreference("x", String.valueOf(pose.x));
+        Robot.getInstance().savePreference("y", String.valueOf(pose.y));
+        Robot.getInstance().savePreference("heading", String.valueOf(Math.toDegrees(pose.heading)));
     }
     private Pose getPoseEstimate() {
         double erPos = Constants.DriveConstants.encoderToDistance(Robot.getInstance().er.getCurrentPosition());

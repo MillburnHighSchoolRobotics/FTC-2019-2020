@@ -40,15 +40,6 @@ public class DeliverPath implements PathContainer {
             }
         } else {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
-//            if (pos == 1) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_1,0));
-//            } else if (pos == 2) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_2,0));
-//            } else if (pos == 3) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_3,0));
-//            } else {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_4,0));
-//            }
         }
 
         return PathBuilder.buildPath(waypoints, 0.3, 1, 0.7);

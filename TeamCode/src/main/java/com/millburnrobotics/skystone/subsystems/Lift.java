@@ -16,17 +16,19 @@ public class Lift extends Subsystem {
     private int targetLiftBlock;
     private PIDController liftController;
 
-    boolean liftUpReset = false;
-    boolean clawOpenReset = false;
-    ElapsedTime liftUpResetTimer = new ElapsedTime();
-    ElapsedTime clawOpenResetTimer = new ElapsedTime();
+    private boolean clawOpenReset = false;
+    private boolean liftUpReset = false;
+    private ElapsedTime clawOpenResetTimer = new ElapsedTime(); // waits for claw to open
+    private ElapsedTime liftUpResetTimer = new ElapsedTime(); // after claw open, lift up before down
+
+    private ElapsedTime liftSetBlockTimer = new ElapsedTime(); // for 2nd driver
+    private ElapsedTime changeStateTimer = new ElapsedTime();
 
     @Override
     public void init(boolean auto) {
-        Robot.getInstance().liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.getInstance().liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        targetLiftBlock = 0;
         liftController = new PIDController(0.01,0,0,0,0);
+        targetLiftBlock = 0;
+        reset();
     }
 
     @Override
@@ -38,6 +40,12 @@ public class Lift extends Subsystem {
     @Override
     public void update() {
 
+    }
+
+    public void reset() {
+        Robot.getInstance().liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.getInstance().liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftController.setTarget(0);
     }
 
     public void autoLiftToBlock() {
@@ -54,7 +62,7 @@ public class Lift extends Subsystem {
                 clawOpenReset = false;
                 liftController.setTarget(LIFT_MIN_POS);
             } else {
-                setLiftPower(0.4);
+                setLiftPower(LIFT_AUTO_RESET_POWER);
             }
         }
     }
@@ -86,7 +94,10 @@ public class Lift extends Subsystem {
         setLiftPower(output * LIFT_EXTENSION_POWER);
     }
     public void updateLiftTargetBlock(int block) {
-        this.targetLiftBlock = block;
+        if (liftSetBlockTimer.milliseconds() > 250) {
+            this.targetLiftBlock = block;
+            liftSetBlockTimer.reset();
+        }
     }
     public int getLiftTargetBlock() {
         return targetLiftBlock;
@@ -94,13 +105,6 @@ public class Lift extends Subsystem {
     public void setLiftPower(double liftPower) {
         Robot.getInstance().liftL.setPower(liftPower);
         Robot.getInstance().liftR.setPower(liftPower);
-    }
-    public void setState(LiftState state) {
-        this.state = state;
-    }
-
-    public LiftState getState() {
-        return state;
     }
 
     private double calcLiftDampen(double ratio) {
@@ -118,5 +122,15 @@ public class Lift extends Subsystem {
             return L/(1+Math.pow(Math.E, k*(v-b)));
         }
         return 0;
+    }
+
+    public void setState(LiftState state) {
+        if (changeStateTimer.milliseconds() > 250) {
+            this.state = state;
+            changeStateTimer.reset();
+        }
+    }
+    public LiftState getState() {
+        return state;
     }
 }

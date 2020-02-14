@@ -28,7 +28,7 @@ public class DriveRotationAction implements Action {
 
     @Override
     public boolean isFinished() {
-        return MathUtils.equals(targetHeading,Math.toDegrees(Robot.getInstance().pose.heading),ROTATION_THRESHOLD);
+        return MathUtils.equals(targetHeading,Math.toDegrees(Robot.getInstance().getOdometry().getPose().heading),ROTATION_THRESHOLD);
     }
 
     @Override

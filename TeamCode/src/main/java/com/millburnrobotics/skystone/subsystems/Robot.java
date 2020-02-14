@@ -2,9 +2,7 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
-import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import java.util.prefs.Preferences;
 
 public class Robot {
     public DcMotorEx lf,lb,rf,rb;
@@ -30,13 +29,14 @@ public class Robot {
     private ChainBar chainBar = new ChainBar();
     private Hook hook = new Hook();
     private SideClaw sideClaw = new SideClaw();
-    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw};
+    private Camera camera = new Camera();
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw, camera};
+
+    private int cameraMonitorViewerID;
 
     public HardwareMap hardwareMap;
     public Constants.Side side;
-    public Constants.Block block;
-
-    public Pose pose;
+    public Constants.Block block = Constants.Block.NULL;
 
     public static Robot INSTANCE = null;
 
@@ -94,6 +94,8 @@ public class Robot {
         sideClawArm = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArm);
         sideClawClaw = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClaw);
 
+        cameraMonitorViewerID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
 
         getDrive().init(auto);
         getOdometry().init(auto);
@@ -102,6 +104,7 @@ public class Robot {
         getChainBar().init(auto);
         getHook().init(auto);
         getSideClaw().init(auto);
+        getCamera().init(auto);
     }
     public Drive getDrive() {
         return drive;
@@ -124,9 +127,11 @@ public class Robot {
     public SideClaw getSideClaw() {
         return sideClaw;
     }
-
-    public Pose getPose() {
-        return getOdometry().getPose();
+    public Camera getCamera() {
+        return camera;
+    }
+    public int getCameraMonitorViewerID() {
+        return cameraMonitorViewerID;
     }
 
     public void update() {
@@ -135,8 +140,6 @@ public class Robot {
         for (int s = 0; s < subsystems.length; s++) {
             subsystems[s].update();
         }
-        pose = odometry.getPose();
-
         Log.d("Update Timer", ""+updateTimer.milliseconds());
         updateTimer.reset();
     }
@@ -144,5 +147,14 @@ public class Robot {
         for (int s = 0; s < subsystems.length; s++) {
             subsystems[s].outputToTelemetry(telemetry);
         }
+    }
+
+    public void savePreference(String key, String value) {
+        Preferences prefs = Preferences.userNodeForPackage(Robot.class);
+        prefs.put(key, value);
+    }
+    public String readPreference(String key) {
+        Preferences prefs = Preferences.userNodeForPackage(Robot.class);
+        return prefs.get(key, "0");
     }
 }

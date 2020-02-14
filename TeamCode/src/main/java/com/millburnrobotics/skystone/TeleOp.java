@@ -2,12 +2,14 @@ package com.millburnrobotics.skystone;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
+import com.millburnrobotics.skystone.subsystems.Drive;
 import com.millburnrobotics.skystone.subsystems.Hook;
 import com.millburnrobotics.skystone.subsystems.Intake;
 import com.millburnrobotics.skystone.subsystems.Lift;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_OUT_POS;
@@ -23,10 +25,17 @@ import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLA
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
 public class TeleOp extends OpMode {
+    private ElapsedTime odomUpdate = new ElapsedTime();
+
     @Override
     public void init() {
+        Robot.getInstance().side = Constants.Side.BLUE;
         telemetry.setMsTransmissionInterval(1000);
         Robot.getInstance().init(hardwareMap, false);
+        double pref_x = Double.valueOf(Robot.getInstance().readPreference("x"));
+        double pref_y = Double.valueOf(Robot.getInstance().readPreference("x"));
+        double pref_heading = Double.valueOf(Robot.getInstance().readPreference("x"));
+        Robot.getInstance().getOdometry().setPose(new Pose(pref_x, pref_y, pref_heading));
     }
 
     @Override
@@ -90,20 +99,13 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getChainBar().clawClose();
         }
 
-        //-------------------------------------------- Movement --------------------------------------------
-        double drivePower = (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) ? DRIVE_POWER_LOW : DRIVE_POWER_HIGH;
-        double strafeX = gamepad1.left_stick_x;
-        double strafeY = -gamepad1.left_stick_y;
-        double rotationPower = gamepad1.right_stick_x;
-        Robot.getInstance().getDrive().vectorTo(new Pose(), new Pose(strafeX, strafeY, 0), drivePower, rotationPower);
-
         //-------------------------------------------- Lift --------------------------------------------//
         if (gamepad2.dpad_up && Robot.getInstance().getLift().getLiftTargetBlock() < LIFT_STONE_POS.length-2){
             Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() + 1);
         } else if (gamepad2.dpad_down && Robot.getInstance().getLift().getLiftTargetBlock() > 1) {
             Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() - 1);
         }
-        if (gamepad2.left_stick_button) {
+        if (gamepad2.a) {
             if (Robot.getInstance().getLift().getState() == Lift.LiftState.FAIL) {
                 Robot.getInstance().getLift().setState(Lift.LiftState.WORK);
             } else {
@@ -116,7 +118,6 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getLift().manualLiftDown();
         } else if (gamepad1.y) {
             Robot.getInstance().getLift().autoLiftReset();
-            Robot.getInstance().getChainBar().chainBarUp();
         } else if (Robot.getInstance().getLift().isLiftUpReset()) {
             Robot.getInstance().getLift().autoLiftDown();
         } else if (Robot.getInstance().getLift().getState() != Lift.LiftState.FAIL){
@@ -126,7 +127,33 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getLift().updateLiftPID();
         }
 
+        //-------------------------------------------- Movement --------------------------------------------
+        if (gamepad2.y) {
+            if (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) {
+                Robot.getInstance().getDrive().setState(Drive.DriveState.ROBOT_CENTRIC);
+            } else {
+                Robot.getInstance().getDrive().setState(Drive.DriveState.FIELD_CENTRIC);
+            }
+        }
+        if (gamepad2.x) {
+            Robot.getInstance().getOdometry().setPose(new Pose());
+        }
+        double drivePower = (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) ? DRIVE_POWER_LOW : DRIVE_POWER_HIGH;
+        double strafeX = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ? -gamepad1.left_stick_y : gamepad1.left_stick_y;
+        double strafeY = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ?
+                (Robot.getInstance().side == Constants.Side.BLUE ? -gamepad1.left_stick_x : gamepad1.left_stick_x) :
+                -gamepad1.left_stick_y;
+        double currentHeading = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ? Robot.getInstance().getOdometry().getPose().heading : 0;
+        double rotationPower = gamepad1.right_stick_x;
+        Robot.getInstance().getDrive().vectorTo(new Pose(0,0,currentHeading), new Pose(strafeX, strafeY, currentHeading), drivePower, rotationPower);
+
+        //-------------------------------------------- Update --------------------------------------------
+        if (odomUpdate.milliseconds() > 10) {
+            Robot.getInstance().getOdometry().update();
+            odomUpdate.reset();
+        }
         Robot.getInstance().outputToTelemetry(telemetry);
         telemetry.update();
+
     }
 }

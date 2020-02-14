@@ -18,14 +18,15 @@ public abstract class AutoModeBase extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        telemetry.setMsTransmissionInterval(50);
+        telemetry.setMsTransmissionInterval(5);
         Robot.getInstance().init(hardwareMap, true);
+        telemetry.addData("startup", "Loaded!");
+        telemetry.update();
         waitForStart();
 
-        autoTimer.reset();
-        threadAction(new RobotUpdateAction(autoTimer));
-
         if (opModeIsActive() && !isStopRequested()) {
+            autoTimer.reset();
+            threadAction(new RobotUpdateAction(autoTimer));
             routine();
         }
     }

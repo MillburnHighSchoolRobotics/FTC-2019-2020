@@ -7,6 +7,7 @@ import com.millburnrobotics.lib.followers.PurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.lib.util.PIDController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -15,20 +16,28 @@ import java.util.Arrays;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
 
 public class Drive extends Subsystem {
-    private PurePursuitFollower follower = null;
+    public enum DriveState {
+        FIELD_CENTRIC,
+        ROBOT_CENTRIC
+    }
+    private DriveState state;
 
+    private PurePursuitFollower follower = null;
     private PIDController pidController = new PIDController(0.014,0.002,0.004);
+
+    private ElapsedTime changeStateTimer = new ElapsedTime();
 
     @Override
     public void init(boolean auto) {
         stop();
+        if (!auto) {
+            this.state = DriveState.FIELD_CENTRIC;
+        }
     }
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
-        if (follower != null) {
-            telemetry.addData("Next Pose", follower.getNextPose());
-        }
+        telemetry.addData("DriveState", state.name());
     }
 
     @Override
@@ -58,7 +67,7 @@ public class Drive extends Subsystem {
         double targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(target)));
         pidController.setTarget(targetHeading);
 
-        double currentHeading = Math.toDegrees(Robot.getInstance().pose.getHeading());
+        double currentHeading = Math.toDegrees(Robot.getInstance().getOdometry().getPose().getHeading());
         if (currentHeading - targetHeading > 180) {
             currentHeading -= 360;
         } else if (targetHeading - currentHeading > 180) {
@@ -157,5 +166,14 @@ public class Drive extends Subsystem {
         Pose nextPose = follower.updatePose(currentPose);
         double power = follower.updatePower();
         vectorTo(currentPose, nextPose, power);
+    }
+    public void setState(DriveState state) {
+        if (changeStateTimer.milliseconds() > 250) {
+            this.state = state;
+            changeStateTimer.reset();
+        }
+    }
+    public DriveState getState() {
+        return state;
     }
 }

@@ -8,11 +8,11 @@ public class Constants {
         BLUE, RED
     }
     public enum Block {
-        LEFT, CENTER, RIGHT
+        LEFT, CENTER, RIGHT, NULL
     }
 
     public static final String VUFORIA_KEY = "AcSW/tj/////AAABmUB3byzZQksfqhymb0Tr3M92yvtrzF4HgDl0t7Z07OZ2xscXR1yyeX4GxftrShvm9T926ZCW0VglQKXuQE5+JkrABVijohk5DCkcE9CcxHy3mTs2Ui76Nz+9CQTgOsr6/AMLV+Te6uyXTs3rZwGdnHGRo0Q1yboJCQ51Ap2rgJc//ehVdkp/QetIMnfhRffac0edAHFt0i2F5++S/OH/4kdxFd5ha0lswd4nTnqU2MiJrz+OH4WQPQ8JC94dQZ6F3m/iX5mk4TCq/9xg3cTJvFccEUawf7PIsapABxKMJB6hcPikwa0XtyGB+vEb7fQAXZ80tRal2mcwKSHrDM4ZvYisD73X+sTIAqQnXgxYiL14";
-    public static long UPDATE_PERIOD = 10;
+    public static final long UPDATE_PERIOD = 10;
 
     public static class FieldConstants {
         public static final double FOUNDATION_WIDTH = 18.5;
@@ -84,7 +84,7 @@ public class Constants {
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 
-        public static final double CHAINBAR_CLAW_CLOSE = 0.45;
+        public static final double CHAINBAR_CLAW_CLOSE = 0.5;
         public static final double CHAINBAR_CLAW_OPEN = 0.2;
     }
 
@@ -95,6 +95,7 @@ public class Constants {
         public static final double LIFT_EXTENSION_POWER = 0.75;
         public static final double LIFT_RETRACTION_POWER = -0.7;
         public static final double LIFT_DAMPEN_POWER = 1;
+        public static final double LIFT_AUTO_RESET_POWER = 0.4;
 
         public static final double LIFT_MAX_POS = 3250;
         public static final double LIFT_MIN_POS = 0;
@@ -129,7 +130,5 @@ public class Constants {
         public static final double RIGHT_HOOK_UP_POS = 0;
         public static final double LEFT_HOOK_DOWN_POS = 0;
         public static final double LEFT_HOOK_UP_POS = 1;
-
-        public static final double timer = 250;
     }
 }

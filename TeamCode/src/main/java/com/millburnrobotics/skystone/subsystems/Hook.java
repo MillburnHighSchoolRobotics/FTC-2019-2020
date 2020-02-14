@@ -8,7 +8,6 @@ import static com.millburnrobotics.skystone.Constants.HookConstants.LEFT_HOOK_DO
 import static com.millburnrobotics.skystone.Constants.HookConstants.LEFT_HOOK_UP_POS;
 import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_DOWN_POS;
 import static com.millburnrobotics.skystone.Constants.HookConstants.RIGHT_HOOK_UP_POS;
-import static com.millburnrobotics.skystone.Constants.HookConstants.timer;
 
 public class Hook extends Subsystem {
     public enum HookState {
@@ -47,7 +46,7 @@ public class Hook extends Subsystem {
         toggleHook.reset();
     }
     public boolean toggleHook() {
-        return (toggleHook.milliseconds() > timer);
+        return (toggleHook.milliseconds() > 250);
     }
     public HookState getState() {
         return state;

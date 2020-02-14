@@ -25,10 +25,12 @@ public class CyclePath implements PathContainer {
         if (Robot.getInstance().side == Constants.Side.BLUE) {
             if (Robot.getInstance().block == Constants.Block.LEFT) {
                 this.pos = 1;
-            } if (Robot.getInstance().block == Constants.Block.CENTER) {
+            } else if (Robot.getInstance().block == Constants.Block.CENTER) {
                 this.pos = 2;
-            } else {
+            } else if (Robot.getInstance().block == Constants.Block.RIGHT) {
                 this.pos = 3;
+            } else if (Robot.getInstance().block == Constants.Block.NULL) {
+                this.pos = 2;
             }
         } else {
             if (Robot.getInstance().block == Constants.Block.RIGHT) {
@@ -54,25 +56,10 @@ public class CyclePath implements PathContainer {
             if (pos == 1) {
                 waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW,0),Math.toRadians(220)));
             } else if (pos == 2) {
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
-            } /*else if (pos == 2) {
-                waypoints.add(new Waypoint(Constants.AutonConstants.BLUE_DELIVERY_2,0));
-            } else if (pos == 3) {
-                waypoints.add(new Waypoint(Constants.AutonConstants.BLUE_DELIVERY_3,0));
-            } else {
-                waypoints.add(new Waypoint(Constants.AutonConstants.BLUE_DELIVERY_4,0));
-            }*/
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
+            }
         } else {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
-//            if (pos == 1) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_1,0));
-//            } else if (pos == 2) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_2,0));
-//            } else if (pos == 3) {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_3,0));
-//            } else {
-//                waypoints.add(new Waypoint(Constants.AutonConstants.RED_DELIVERY_4,0));
-//            }
         }
 
         return PathBuilder.buildPath(waypoints, 0.25, 0.8, 0.7);

@@ -25,7 +25,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
     @Override
     public void routine() {
         Robot.getInstance().side = Constants.Side.BLUE;
-        Robot.getInstance().block = Constants.Block.CENTER;
+        Robot.getInstance().getCamera().detectBlock();
         Robot.getInstance().getOdometry().setPose(new Pose(-72+Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0));
 
         // ----------------------------------- ONE BLOCK ----------------------------------- //
@@ -40,17 +40,14 @@ public class ThreeBlockBlueMode extends AutoModeBase {
         runAction(new SideClawArmUpAction());
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.4,150),
+                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.4,150),
                 new SideClawArmUpAction()
         ));
         runAction(new DriveFollowPathAction(new DeliverPath(1), 4, 10));
-//        runAction(new DriveRotationAction(0,0.6));
-        parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.4,300),
-                new SideClawArmDownAction()
-        ));
-//        runAction(new SideClawArmDownAction());
-//        runAction(new WaitAction(100));
+
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,250));
+        runAction(new SideClawArmDownAction());
+        runAction(new WaitAction(100));
         runAction(new SideClawOpenAction());
         runAction(new SideClawArmUpAction());
 
@@ -58,20 +55,22 @@ public class ThreeBlockBlueMode extends AutoModeBase {
 
         runAction(new DriveFollowPathArmDownAction(new CyclePath(), 0));
 //        runAction(new SideClawCloseAction());
-        parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,200),
-                new SideClawCloseAction()
-        ));
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.6,100));
+        runAction(new SideClawCloseAction());
+//        parallelActions(Arrays.asList(
+//                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,200),
+//                new SideClawCloseAction()
+//        ));
         runAction(new WaitAction(500));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.6,200),
+                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,200),
                 new SideClawArmUpAction()
         ));
         runAction(new DriveFollowPathAction(new DeliverPath(2), 4, 10));
 //        runAction(new DriveRotationAction(0,0.6));
 
-        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.4,300));
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,250));
         runAction(new SideClawArmDownAction());
         runAction(new WaitAction(100));
         runAction(new SideClawOpenAction());
@@ -79,21 +78,27 @@ public class ThreeBlockBlueMode extends AutoModeBase {
 
         // ----------------------------------- THREE BLOCK ----------------------------------- //
 
-        runAction(new DriveFollowPathArmDownAction(new CyclePath(1), 0));
-        parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,250),
-                new SideClawCloseAction()
-        ));
+        if (Robot.getInstance().block == Constants.Block.LEFT) {
+            runAction(new DriveFollowPathArmDownAction(new CyclePath(2), 0));
+        } else {
+            runAction(new DriveFollowPathArmDownAction(new CyclePath(1), 0));
+        }
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.6,100));
+        runAction(new SideClawCloseAction());
+//        parallelActions(Arrays.asList(
+//                new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,250),
+//                new SideClawCloseAction()
+//        ));
 //        runAction(new SideClawCloseAction());
         runAction(new WaitAction(500));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().pose.y, 0),0.6,200),
+                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,200),
                 new SideClawArmUpAction()
         ));
         runAction(new DriveFollowPathAction(new DeliverPath(2), 4, 10));
 
-        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().pose.y, 0),0.6,200));
+        runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,250));
         runAction(new SideClawArmDownAction());
         runAction(new WaitAction(100));
         runAction(new SideClawOpenAction());

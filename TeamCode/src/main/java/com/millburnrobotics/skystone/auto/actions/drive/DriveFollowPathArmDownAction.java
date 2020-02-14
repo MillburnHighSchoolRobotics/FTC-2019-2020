@@ -72,7 +72,7 @@ public class DriveFollowPathArmDownAction implements Action {
             if (rotationTimer.milliseconds() > PATH_HEADING_TIME) {
                 return true;
             }
-            double currentHeading = Math.toDegrees(Robot.getInstance().pose.getHeading());
+            double currentHeading = Math.toDegrees(Robot.getInstance().getOdometry().getPose().getHeading());
             double targetHeading = Math.toDegrees(current_path.get(current_path.length()).heading);
             if (currentHeading - targetHeading > 180) {
                 currentHeading -= 360;
