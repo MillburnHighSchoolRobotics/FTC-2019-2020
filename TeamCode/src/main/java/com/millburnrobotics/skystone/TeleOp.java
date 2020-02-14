@@ -33,8 +33,8 @@ public class TeleOp extends OpMode {
         telemetry.setMsTransmissionInterval(1000);
         Robot.getInstance().init(hardwareMap, false);
         double pref_x = Double.valueOf(Robot.getInstance().readPreference("x"));
-        double pref_y = Double.valueOf(Robot.getInstance().readPreference("x"));
-        double pref_heading = Double.valueOf(Robot.getInstance().readPreference("x"));
+        double pref_y = Double.valueOf(Robot.getInstance().readPreference("y"));
+        double pref_heading = Double.valueOf(Robot.getInstance().readPreference("heading"));
         Robot.getInstance().getOdometry().setPose(new Pose(pref_x, pref_y, pref_heading));
     }
 

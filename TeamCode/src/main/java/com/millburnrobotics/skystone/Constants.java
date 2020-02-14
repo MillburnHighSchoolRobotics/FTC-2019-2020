@@ -100,7 +100,7 @@ public class Constants {
         public static final double LIFT_MAX_POS = 3250;
         public static final double LIFT_MIN_POS = 0;
         public static final double LIFT_RAISED_MIN_POS = 200;
-        public static final double[] LIFT_STONE_POS = {0,330,720,980,1190, 1713, 2265, 2960};
+        public static final double[] LIFT_STONE_POS = {0,330,720,980,1190,1713,2265,2960,3269};
     }
 
     public static class SideClawConstants {
