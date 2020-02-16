@@ -48,7 +48,7 @@ public class CyclePath implements PathContainer {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
-            double X_BLUE_BLOCK_CLAW = -24-BOT_WIDTH/2.0-CLAW_EXTEND;
+            double X_BLUE_BLOCK_CLAW = 24+BOT_WIDTH/2.0+CLAW_EXTEND;
             double Y_BLUE_BLOCK_CLAW = -24-4+(BOT_LENGTH/2.0-CLAW_TO_BACK);
 
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(170)));
@@ -60,7 +60,17 @@ public class CyclePath implements PathContainer {
                 waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
             }
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            double X_BLUE_BLOCK_CLAW = -24-BOT_WIDTH/2.0-CLAW_EXTEND;
+            double Y_BLUE_BLOCK_CLAW = -24-4+(BOT_LENGTH/2.0-CLAW_TO_BACK);
+
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(190)));
+            if (pos == 1) {
+                waypoints.add(new Waypoint(new Pose(40,0,0),Math.toRadians(170)));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW,0),Math.toRadians(140)));
+            } else if (pos == 2) {
+                waypoints.add(new Waypoint(new Pose(40,0,0),Math.toRadians(170)));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(140)));
+            }
         }
 
         return PathBuilder.buildPath(waypoints, 0.25, 0.8, 0.7);

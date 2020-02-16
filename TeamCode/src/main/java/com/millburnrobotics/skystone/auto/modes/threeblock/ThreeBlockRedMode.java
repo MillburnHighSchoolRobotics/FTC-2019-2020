@@ -4,12 +4,10 @@ import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.millburnrobotics.skystone.auto.actions.WaitAction;
-import com.millburnrobotics.skystone.auto.actions.chainbar.ChainBarOutAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathArmDownAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveTimedToPoseAction;
-import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookDownAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookUpAction;
 import com.millburnrobotics.skystone.auto.actions.intake.IntakeInAction;
@@ -29,14 +27,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import java.util.Arrays;
 
-@Autonomous(group = "Blue")
-public class ThreeBlockBlueMode extends AutoModeBase {
+@Autonomous(group = "Red")
+public class ThreeBlockRedMode extends AutoModeBase {
 
     @Override
     public void routine() {
-        Robot.getInstance().side = Constants.Side.BLUE;
+        Robot.getInstance().side = Constants.Side.RED;
         Robot.getInstance().getCamera().detectBlock();
-        Robot.getInstance().getOdometry().setPose(new Pose(-72+Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0));
+        Robot.getInstance().getOdometry().setPose(new Pose(72-Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0));
 
         // ----------------------------------- ONE BLOCK ----------------------------------- //
         runAction(new SideClawArmDownAction());
@@ -47,9 +45,10 @@ public class ThreeBlockBlueMode extends AutoModeBase {
         runAction(new WaitAction(500));
 
         parallelActions(Arrays.asList(
-                new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.4,200),
+                new DriveTimedToPoseAction(new Pose(72, Robot.getInstance().getOdometry().getPose().y, 0),0.4,200),
                 new SideClawArmUpAction()
         ));
+
         runAction(new DriveFollowPathAction(new DeliverPath(1), 4, 10));
 
         runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,250));
@@ -63,7 +62,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
         if (Robot.getInstance().block == Constants.Block.RIGHT) {
             runAction(new IntakeInAction());
             runAction(new DriveFollowPathAction(new IntakeCyclePath()));
-            runAction(new DriveTimedToPoseAction(new Pose(Robot.getInstance().getOdometry().getPose().x, -72,0),0.6,500));
+            runAction(new DriveTimedToPoseAction(new Pose(Robot.getInstance().getOdometry().getPose().x, 72,0),0.6,500));
 
             runAction(new DriveFollowPathAction(new IntakeDeliverPath()));
             runAction(new IntakeStopAction());
@@ -72,7 +71,6 @@ public class ThreeBlockBlueMode extends AutoModeBase {
             runAction(new HookDownAction());
             runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,500));
             runAction(new WaitAction(1000));
-
         } else {
             runAction(new DriveFollowPathArmDownAction(new CyclePath(), 0));
             runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.6,200));
@@ -81,7 +79,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
             runAction(new WaitAction(500));
 
             parallelActions(Arrays.asList(
-                    new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,200),
+                    new DriveTimedToPoseAction(new Pose(72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,200),
                     new SideClawArmUpAction()
             ));
             runAction(new DriveFollowPathAction(new DeliverPath(2), 4, 10));
@@ -92,7 +90,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
             runAction(new SideClawOpenAction());
             runAction(new SideClawArmUpAction());
 
-            runAction(new DriveRotationAction(90, 0.8));
+            runAction(new DriveRotationAction(270, 0.8));
             runAction(new HookDownAction());
             runAction(new DriveTimedToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y, 0),0.8,500));
             runAction(new WaitAction(1000));
@@ -123,7 +121,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
 //        runAction(new SideClawArmUpAction());
 
         // ----------------------------------- FOUNDATION ----------------------------------- //
-        runAction(new DriveTimedToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,3000));
+        runAction(new DriveTimedToPoseAction(new Pose(72, Robot.getInstance().getOdometry().getPose().y, 0),0.6,3000));
         runAction(new HookUpAction());
         runAction(new DriveFollowPathAction(new ParkWallPath()));
     }

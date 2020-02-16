@@ -33,8 +33,9 @@ public class FoundationRedMode extends AutoModeBase {
                 new HookDownAction()
         ));
 
+        runAction(new WaitAction(2000));
         runAction(new DriveTimedFollowPathAction(new FoundationPullBackPath(),3000));
-        runAction(new DriveRotationAction(180, 0.5));
+        runAction(new DriveRotationAction(180, 0.3));
 
         runAction(new HookUpAction());
         runAction(new WaitAction(500));

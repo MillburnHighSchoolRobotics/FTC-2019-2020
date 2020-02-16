@@ -25,9 +25,9 @@ public class ChainBar extends Subsystem {
     public void init(boolean auto) {
         if (!auto) {
             changeChainbar.reset();
-            chainBarUp();
-            clawOpen();
         }
+        chainBarUp();
+        clawOpen();
     }
 
     @Override

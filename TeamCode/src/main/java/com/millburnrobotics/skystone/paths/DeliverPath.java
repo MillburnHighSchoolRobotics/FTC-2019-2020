@@ -39,7 +39,15 @@ public class DeliverPath implements PathContainer {
                 waypoints.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-6,0),Math.toRadians(320)));
             }
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            double X_BLUE_DELIVERY = 24+BOT_WIDTH/2.0+CLAW_EXTEND;
+            double Y_BLUE_DELIVERY = 72-4-FOUNDATION_LENGTH/2.0+(BOT_LENGTH/2.0-CLAW_TO_BACK);
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(340)));
+            waypoints.add(new Waypoint(new Pose(42,0,0),0));
+            if (pos == 1) {
+                waypoints.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+4,0),Math.toRadians(40)));
+            } else if (pos == 2) {
+                waypoints.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-6,0),Math.toRadians(40)));
+            }
         }
 
         return PathBuilder.buildPath(waypoints, 0.3, 1, 0.7);

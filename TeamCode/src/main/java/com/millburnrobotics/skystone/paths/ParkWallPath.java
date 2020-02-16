@@ -17,10 +17,10 @@ public class ParkWallPath implements PathContainer {
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
-            waypoints.add(new Waypoint(new Pose(-63, 0, Math.PI),Math.PI));
+            waypoints.add(new Waypoint(new Pose(-63, 0, 3*Math.PI/2),Math.PI));
         } else {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
-            waypoints.add(new Waypoint(new Pose(63, 0, Math.PI),Math.PI));
+            waypoints.add(new Waypoint(new Pose(63, 0, 3*Math.PI/2),Math.PI));
         }
 
         return PathBuilder.buildPath(waypoints, 0.3, 0.8, 0.5);

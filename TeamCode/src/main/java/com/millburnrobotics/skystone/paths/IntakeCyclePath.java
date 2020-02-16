@@ -21,7 +21,10 @@ public class IntakeCyclePath implements PathContainer {
             waypoints.add(new Waypoint(new Pose(-40,-24,Math.PI),Math.toRadians(180)));
             waypoints.add(new Waypoint(new Pose(-24, -54, Math.PI), Math.toRadians(270)));
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(180)));
+            waypoints.add(new Waypoint(new Pose(40,36,Math.PI),Math.toRadians(180)));
+            waypoints.add(new Waypoint(new Pose(40,-24,Math.PI),Math.toRadians(180)));
+            waypoints.add(new Waypoint(new Pose(24, -54, Math.PI), Math.toRadians(90)));
         }
 
         return PathBuilder.buildPath(waypoints, 0.25, 0.9, 0.5);
