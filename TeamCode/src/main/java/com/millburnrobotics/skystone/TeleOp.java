@@ -8,7 +8,6 @@ import com.millburnrobotics.skystone.subsystems.Intake;
 import com.millburnrobotics.skystone.subsystems.Lift;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
@@ -30,7 +29,6 @@ public class TeleOp extends OpMode {
     @Override
     public void init() {
         Robot.getInstance().side = Constants.Side.BLUE;
-        telemetry.setMsTransmissionInterval(1000);
         Robot.getInstance().init(hardwareMap, false);
         double pref_x = Double.valueOf(Robot.getInstance().readPreference("x"));
         double pref_y = Double.valueOf(Robot.getInstance().readPreference("y"));
@@ -64,9 +62,9 @@ public class TeleOp extends OpMode {
         } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().getArmPosition() < SIDE_ARM_UP_POS && Robot.getInstance().getSideClaw().canToggleSideArm()) {
             Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() + SIDE_ARM_INCREMENT);
         }
-        if (gamepad2.right_bumper && Robot.getInstance().getSideClaw().getClawPosition() < 1 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
+        if (gamepad2.left_bumper && Robot.getInstance().getSideClaw().getClawPosition() < 1 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
             Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() + SIDE_CLAW_INCREMENT);
-        } else if (gamepad2.left_bumper && Robot.getInstance().getSideClaw().getClawPosition() > 0 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
+        } else if (gamepad2.right_bumper && Robot.getInstance().getSideClaw().getClawPosition() > 0 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
             Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() - SIDE_CLAW_INCREMENT);
         }
         //-------------------------------------------- ChainBar --------------------------------------------//
@@ -93,14 +91,14 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getChainBar().clawClose();
         } else if (gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) {
             Robot.getInstance().getChainBar().clawOpen();
-        } else if (gamepad1.y) {
+        } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().clawOpen();
         } else if (gamepad1.dpad_right) {
             Robot.getInstance().getChainBar().clawClose();
         }
 
         //-------------------------------------------- Lift --------------------------------------------//
-        if (gamepad2.dpad_up && Robot.getInstance().getLift().getLiftTargetBlock() < LIFT_STONE_POS.length-2){
+        if (gamepad2.dpad_up && Robot.getInstance().getLift().getLiftTargetBlock() < LIFT_STONE_POS.length){
             Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() + 1);
         } else if (gamepad2.dpad_down && Robot.getInstance().getLift().getLiftTargetBlock() > 1) {
             Robot.getInstance().getLift().updateLiftTargetBlock(Robot.getInstance().getLift().getLiftTargetBlock() - 1);
@@ -125,6 +123,8 @@ public class TeleOp extends OpMode {
                 Robot.getInstance().getLift().autoLiftToBlock();
             }
             Robot.getInstance().getLift().updateLiftPID();
+        } else {
+            Robot.getInstance().getLift().setLiftPower(0);
         }
 
         //-------------------------------------------- Movement --------------------------------------------
@@ -139,7 +139,7 @@ public class TeleOp extends OpMode {
             Robot.getInstance().getOdometry().setPose(new Pose());
         }
         double drivePower = (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) ? DRIVE_POWER_LOW : DRIVE_POWER_HIGH;
-        double strafeX = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ? -gamepad1.left_stick_y : gamepad1.left_stick_y;
+        double strafeX = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ? -gamepad1.left_stick_y : gamepad1.left_stick_x;
         double strafeY = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ?
                 (Robot.getInstance().side == Constants.Side.BLUE ? -gamepad1.left_stick_x : gamepad1.left_stick_x) :
                 -gamepad1.left_stick_y;

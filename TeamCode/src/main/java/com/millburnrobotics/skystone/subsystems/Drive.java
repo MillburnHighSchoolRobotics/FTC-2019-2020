@@ -30,9 +30,7 @@ public class Drive extends Subsystem {
     @Override
     public void init(boolean auto) {
         stop();
-        if (!auto) {
-            this.state = DriveState.FIELD_CENTRIC;
-        }
+        this.state = DriveState.ROBOT_CENTRIC;
     }
 
     @Override

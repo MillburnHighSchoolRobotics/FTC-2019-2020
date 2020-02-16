@@ -16,18 +16,16 @@ public class Lift extends Subsystem {
     private int targetLiftBlock;
     private PIDController liftController;
 
-    private boolean clawOpenReset = false;
     private boolean liftUpReset = false;
-    private ElapsedTime clawOpenResetTimer = new ElapsedTime(); // waits for claw to open
-    private ElapsedTime liftUpResetTimer = new ElapsedTime(); // after claw open, lift up before down
+    private ElapsedTime liftUpResetTimer = new ElapsedTime();
 
-    private ElapsedTime liftSetBlockTimer = new ElapsedTime(); // for 2nd driver
+    private ElapsedTime liftSetBlockTimer = new ElapsedTime();
     private ElapsedTime changeStateTimer = new ElapsedTime();
 
     @Override
     public void init(boolean auto) {
         liftController = new PIDController(0.01,0,0,0,0);
-        targetLiftBlock = 0;
+        targetLiftBlock = 1;
         reset();
     }
 
@@ -45,31 +43,25 @@ public class Lift extends Subsystem {
     public void reset() {
         Robot.getInstance().liftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Robot.getInstance().liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftController.setTarget(0);
+        liftController.setTarget(LIFT_MIN_POS);
     }
 
     public void autoLiftToBlock() {
-        liftController.setTarget(LIFT_STONE_POS[targetLiftBlock]);
+        liftController.setTarget(LIFT_STONE_POS[targetLiftBlock-1]);
     }
     public void autoLiftDown() {
-        if (clawOpenResetTimer.milliseconds() > 200 && !clawOpenReset) {
-            clawOpenReset = true;
-            liftUpResetTimer.reset();
-        }
-        if (clawOpenReset) {
-            if (liftUpResetTimer.milliseconds() > 200) {
-                liftUpReset = false;
-                clawOpenReset = false;
-                liftController.setTarget(LIFT_MIN_POS);
-            } else {
-                setLiftPower(LIFT_AUTO_RESET_POWER);
-            }
+        if (liftUpResetTimer.milliseconds() > 350) {
+            liftUpReset = false;
+            setLiftPower(LIFT_DAMPEN_POWER * calcLiftDampenReset(
+                    1-(Robot.getInstance().liftR.getCurrentPosition()/LIFT_MAX_POS)));
+            liftController.setTarget(LIFT_MIN_POS);
+        } else {
+            setLiftPower(LIFT_AUTO_RESET_POWER);
         }
     }
     public void autoLiftReset() {
-        clawOpenReset = false;
         liftUpReset = true;
-        clawOpenResetTimer.reset();
+        liftUpResetTimer.reset();
     }
     public boolean isLiftUpReset() {
         return liftUpReset;
@@ -110,7 +102,23 @@ public class Lift extends Subsystem {
     private double calcLiftDampen(double ratio) {
         double L = 1;
         double b = .95;
-        double k = 7;
+        double k = 9;
+        double v = 0.8;
+
+        if (ratio < 0) {
+            ratio = 0;
+        }
+        if (ratio >= 0 && ratio < v) {
+            return L/(1+Math.pow(Math.E,k*(ratio-b)));
+        } else if (ratio >= v && ratio <= 1) {
+            return L/(1+Math.pow(Math.E, k*(v-b)));
+        }
+        return 0;
+    }
+    private double calcLiftDampenReset(double ratio) {
+        double L = 1;
+        double b = .8;
+        double k = 3;
         double v = 0.9;
 
         if (ratio < 0) {

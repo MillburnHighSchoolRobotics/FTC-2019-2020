@@ -57,7 +57,7 @@ public class Constants {
         public static final double DEAD_WHEEL_TICKS_PER_REV = 360*4;
         public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
         public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
-        public static final double DEAD_WHEEL_TURN_RADIUS = 3.5;
+        public static final double DEAD_WHEEL_TURN_RADIUS = -2.75; //3.5;
         public static final long FPS_UPDATE_PERIOD = 5;
     }
 
@@ -79,8 +79,8 @@ public class Constants {
         public static final double CHAINBARR_IN_POS = 1;
         public static final double CHAINBARL_OUT_POS = 0.8;
         public static final double CHAINBARR_OUT_POS = 0.2;
-        public static final double CHAINBARL_UP_POS = 0.13;
-        public static final double CHAINBARR_UP_POS = 0.87;
+        public static final double CHAINBARL_UP_POS = 0.15;
+        public static final double CHAINBARR_UP_POS = 0.85;
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 
@@ -95,12 +95,12 @@ public class Constants {
         public static final double LIFT_EXTENSION_POWER = 0.75;
         public static final double LIFT_RETRACTION_POWER = -0.7;
         public static final double LIFT_DAMPEN_POWER = 1;
-        public static final double LIFT_AUTO_RESET_POWER = 0.4;
+        public static final double LIFT_AUTO_RESET_POWER = 0.15;
 
-        public static final double LIFT_MAX_POS = 3250;
-        public static final double LIFT_MIN_POS = 0;
+        public static final double LIFT_MAX_POS = 4320;
+        public static final double LIFT_MIN_POS = 20;
         public static final double LIFT_RAISED_MIN_POS = 200;
-        public static final double[] LIFT_STONE_POS = {0,330,720,980,1190,1713,2265,2960,3269};
+        public static final double[] LIFT_STONE_POS = {0,140,750,1190,1713,2265,2740,3275, 3875};
     }
 
     public static class SideClawConstants {
@@ -129,6 +129,6 @@ public class Constants {
         public static final double RIGHT_HOOK_DOWN_POS = 1;
         public static final double RIGHT_HOOK_UP_POS = 0;
         public static final double LEFT_HOOK_DOWN_POS = 0;
-        public static final double LEFT_HOOK_UP_POS = 1;
+        public static final double LEFT_HOOK_UP_POS = 0.8;
     }
 }

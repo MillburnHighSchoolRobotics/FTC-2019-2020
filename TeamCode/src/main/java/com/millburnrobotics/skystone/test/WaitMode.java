@@ -18,14 +18,6 @@ public class WaitMode extends AutoModeBase {
         Robot.getInstance().rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         Robot.getInstance().rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        Robot.getInstance().getSideClaw().armUp();
-        runAction(new WaitAction(1000));
-        Robot.getInstance().getSideClaw().armMid();
-        runAction(new WaitAction(1000));
-        Robot.getInstance().getSideClaw().armDown();
-        runAction(new WaitAction(1000));
-//        Robot.getInstance().getSideClaw().setClawPosition(0.8);
-
         while(!isStopRequested() && opModeIsActive());
     }
 }

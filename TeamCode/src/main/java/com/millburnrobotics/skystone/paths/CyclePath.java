@@ -52,10 +52,11 @@ public class CyclePath implements PathContainer {
             double Y_BLUE_BLOCK_CLAW = -24-4+(BOT_LENGTH/2.0-CLAW_TO_BACK);
 
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(170)));
-            waypoints.add(new Waypoint(new Pose(-40,0,0),Math.toRadians(190)));
             if (pos == 1) {
+                waypoints.add(new Waypoint(new Pose(-40,0,0),Math.toRadians(190)));
                 waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW, Y_BLUE_BLOCK_CLAW,0),Math.toRadians(220)));
             } else if (pos == 2) {
+                waypoints.add(new Waypoint(new Pose(-40,0,0),Math.toRadians(190)));
                 waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-8,0),Math.toRadians(220)));
             }
         } else {

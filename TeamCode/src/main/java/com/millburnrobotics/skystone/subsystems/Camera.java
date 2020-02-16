@@ -37,9 +37,8 @@ public class Camera extends Subsystem {
     private String TAG = "BarkerClass";
     private VuforiaLocalizerImplSubclass vuforiaInstance;
 
-    private final static double BLUE_LINE_1_Y = 0;
-    private final static double BLUE_LINE_2_Y = 215;
-    private final static double BLUE_LINE_3_Y = 550;
+    private final static double BLUE_LINE_1_Y = 215;
+    private final static double BLUE_LINE_3_Y = 515;
     private final static double RED_LINE_1_Y = 100/2.7;
     private final static double RED_LINE_2_Y = 650/2.7;
     private final static double RED_LINE_3_Y = 1250/2.7;
@@ -125,7 +124,6 @@ public class Camera extends Subsystem {
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
             Imgproc.line(crop,new Point(0,BLUE_LINE_1_Y),new Point(height,BLUE_LINE_1_Y),new Scalar(255,0,0),5);
-            Imgproc.line(crop,new Point(0,BLUE_LINE_2_Y),new Point(height,BLUE_LINE_2_Y),new Scalar(255,0,0),5);
             Imgproc.line(crop,new Point(0,BLUE_LINE_3_Y),new Point(height,BLUE_LINE_3_Y),new Scalar(255,0,0),5);
         } else {
             Imgproc.line(crop,new Point(0,RED_LINE_1_Y),new Point(height,RED_LINE_1_Y),new Scalar(255,0,0),5);
@@ -148,9 +146,9 @@ public class Camera extends Subsystem {
         }
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
-            if (centroid.y > BLUE_LINE_1_Y && centroid.y < BLUE_LINE_2_Y)
+            if (centroid.y < BLUE_LINE_1_Y)
                 Robot.getInstance().block = Constants.Block.LEFT;
-            else if (centroid.y > BLUE_LINE_2_Y && centroid.y < BLUE_LINE_3_Y)
+            else if (centroid.y > BLUE_LINE_1_Y && centroid.y < BLUE_LINE_3_Y)
                 Robot.getInstance().block = Constants.Block.CENTER;
             else if (centroid.y > BLUE_LINE_3_Y) {
                 Robot.getInstance().block = Constants.Block.RIGHT;

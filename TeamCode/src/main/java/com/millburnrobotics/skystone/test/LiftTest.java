@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone;
+package com.millburnrobotics.skystone.test;
 
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
