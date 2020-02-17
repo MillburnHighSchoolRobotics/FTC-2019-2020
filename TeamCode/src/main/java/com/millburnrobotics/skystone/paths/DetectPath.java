@@ -37,19 +37,19 @@ public class DetectPath implements PathContainer {
             }
         } else {
             double X_BLUE_BLOCK_CLAW = 24+BOT_WIDTH/2.0+CLAW_EXTEND;
-            double Y_BLUE_BLOCK_CLAW = -24-4+(CLAW_TO_BACK);
+            double Y_BLUE_BLOCK_CLAW = -24-4-(BOT_LENGTH/2.0-CLAW_TO_BACK);
             if (Robot.getInstance().block == Constants.Block.CENTER) {
                 waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(72-BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,0),Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-32,0),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(72-BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,Math.PI),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-32,Math.PI),Math.PI/2));
             } else if (Robot.getInstance().block == Constants.Block.LEFT || Robot.getInstance().block == Constants.Block.NULL) {
-                waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(72- BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,0),Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-24,0),Math.PI/2));
+                waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(72- BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,Math.PI),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-24,Math.PI),Math.PI/2));
             } else if (Robot.getInstance().block == Constants.Block.RIGHT) {
-                waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),3*Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(72-BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,0),Math.PI/2));
-                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-16,0),Math.PI/2));
+                waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(72-BOT_WIDTH/2.0-4,-48+ BOT_LENGTH/2.0,Math.PI),Math.PI/2));
+                waypoints.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,Y_BLUE_BLOCK_CLAW-16,Math.PI),Math.PI/2));
             }
         }
 

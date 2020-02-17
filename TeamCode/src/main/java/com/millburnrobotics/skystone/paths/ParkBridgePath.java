@@ -17,12 +17,13 @@ public class ParkBridgePath implements PathContainer {
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
-            waypoints.add(new Waypoint(new Pose(-63, 12),Math.PI));
-            waypoints.add(new Waypoint(new Pose(-36, 0),0));
+            waypoints.add(new Waypoint(new Pose(-63, 12, Robot.getInstance().getOdometry().getPose().heading),Math.PI));
+            waypoints.add(new Waypoint(new Pose(-36, 0, Robot.getInstance().getOdometry().getPose().heading),0));
         } else {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
-            waypoints.add(new Waypoint(new Pose(63, 12),Math.PI));
-            waypoints.add(new Waypoint(new Pose(36, 0),Math.PI));
+
+            waypoints.add(new Waypoint(new Pose(63, 12, Robot.getInstance().getOdometry().getPose().heading),Math.PI));
+            waypoints.add(new Waypoint(new Pose(36, 0, Robot.getInstance().getOdometry().getPose().heading),Math.PI));
         }
 
         return PathBuilder.buildPath(waypoints, 0.1, 0.7, 0.5);

@@ -39,10 +39,8 @@ public class Camera extends Subsystem {
 
     private final static double BLUE_LINE_1_Y = 215;
     private final static double BLUE_LINE_3_Y = 515;
-    private final static double RED_LINE_1_Y = 100/2.7;
-    private final static double RED_LINE_2_Y = 650/2.7;
-    private final static double RED_LINE_3_Y = 1250/2.7;
-    private final static double RED_LINE_4_Y = 1850/2.7;
+    private final static double RED_LINE_2_Y = 220;
+    private final static double RED_LINE_3_Y = 490;
     private final static double croppingConstant = 0.4;
 
     @Override
@@ -126,10 +124,8 @@ public class Camera extends Subsystem {
             Imgproc.line(crop,new Point(0,BLUE_LINE_1_Y),new Point(height,BLUE_LINE_1_Y),new Scalar(255,0,0),5);
             Imgproc.line(crop,new Point(0,BLUE_LINE_3_Y),new Point(height,BLUE_LINE_3_Y),new Scalar(255,0,0),5);
         } else {
-            Imgproc.line(crop,new Point(0,RED_LINE_1_Y),new Point(height,RED_LINE_1_Y),new Scalar(255,0,0),5);
             Imgproc.line(crop,new Point(0,RED_LINE_2_Y),new Point(height,RED_LINE_2_Y),new Scalar(255,0,0),5);
             Imgproc.line(crop,new Point(0,RED_LINE_3_Y),new Point(height,RED_LINE_3_Y),new Scalar(255,0,0),5);
-            Imgproc.line(crop,new Point(0,RED_LINE_4_Y),new Point(height,RED_LINE_4_Y),new Scalar(255,0,0),5);
         }
 
         try {
@@ -154,12 +150,12 @@ public class Camera extends Subsystem {
                 Robot.getInstance().block = Constants.Block.RIGHT;
             }
         } else {
-            if (centroid.y > RED_LINE_1_Y && centroid.y < RED_LINE_2_Y || centroid.y > RED_LINE_4_Y)
-                Robot.getInstance().block = Constants.Block.RIGHT;
-            else if (centroid.y > RED_LINE_3_Y)
+            if (centroid.y <= RED_LINE_2_Y)
+                Robot.getInstance().block = Constants.Block.LEFT;
+            else if (centroid.y >= RED_LINE_3_Y)
                 Robot.getInstance().block = Constants.Block.CENTER;
             else if (centroid.y > RED_LINE_2_Y && centroid.y < RED_LINE_3_Y) {
-                Robot.getInstance().block = Constants.Block.LEFT;
+                Robot.getInstance().block = Constants.Block.RIGHT;
             }
         }
     }

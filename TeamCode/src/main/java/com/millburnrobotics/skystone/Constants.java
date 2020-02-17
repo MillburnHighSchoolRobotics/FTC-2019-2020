@@ -65,7 +65,7 @@ public class Constants {
         public static final String _IntakeLeft = "intakeL";
         public static final String _IntakeRight = "intakeR";
 
-        public static final double INTAKE_IN_POWER = 1;
+        public static final double INTAKE_IN_POWER = 0.6;
         public static final double INTAKE_OUT_POWER = -0.4;
     }
 
@@ -79,8 +79,8 @@ public class Constants {
         public static final double CHAINBARR_IN_POS = 1;
         public static final double CHAINBARL_OUT_POS = 0.8;
         public static final double CHAINBARR_OUT_POS = 0.2;
-        public static final double CHAINBARL_UP_POS = 0.15;
-        public static final double CHAINBARR_UP_POS = 0.85;
+        public static final double CHAINBARL_UP_POS = 0.12;
+        public static final double CHAINBARR_UP_POS = 0.88;
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 

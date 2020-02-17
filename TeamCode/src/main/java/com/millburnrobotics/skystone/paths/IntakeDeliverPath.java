@@ -24,14 +24,20 @@ public class IntakeDeliverPath implements PathContainer {
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
             waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(40)));
-            waypoints.add(new Waypoint(new Pose(-42,0,Math.PI/2),0));
+            waypoints.add(new Waypoint(new Pose(-38,0,Math.PI/2),0));
 
             double X_BLUE_DELIVERY = -24-BOT_WIDTH/2.0-CLAW_EXTEND;
             double Y_BLUE_DELIVERY = 72-4-FOUNDATION_LENGTH/2.0+(BOT_LENGTH/2.0-CLAW_TO_BACK);
 
             waypoints.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+4,Math.PI/2),Math.toRadians(320)));
         } else {
-            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),0));
+            waypoints.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(320)));
+            waypoints.add(new Waypoint(new Pose(-38,0,3*Math.PI/2),0));
+
+            double X_BLUE_DELIVERY = 24+BOT_WIDTH/2.0+CLAW_EXTEND;
+            double Y_BLUE_DELIVERY = 72-4-FOUNDATION_LENGTH/2.0+(BOT_LENGTH/2.0-CLAW_TO_BACK);
+
+            waypoints.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+4,3*Math.PI/2),Math.toRadians(40)));
         }
 
         return PathBuilder.buildPath(waypoints, 0.3, 1, 0.7);
