@@ -14,7 +14,6 @@ import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookDownAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookUpAction;
 import com.millburnrobotics.skystone.auto.actions.intake.IntakeInAction;
-import com.millburnrobotics.skystone.auto.actions.intake.IntakeStopAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmDownAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmUpAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawCloseAction;
@@ -23,11 +22,9 @@ import com.millburnrobotics.skystone.paths.CyclePath;
 import com.millburnrobotics.skystone.paths.DeliverPath;
 import com.millburnrobotics.skystone.paths.DetectPath;
 import com.millburnrobotics.skystone.paths.IntakeCyclePath;
-import com.millburnrobotics.skystone.paths.IntakeDeliverPath;
 import com.millburnrobotics.skystone.paths.ParkWallPath;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.vuforia.RotationalDeviceTracker;
 
 import java.util.Arrays;
 

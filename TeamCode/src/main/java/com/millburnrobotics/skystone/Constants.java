@@ -39,17 +39,17 @@ public class Constants {
         public static final double PURE_PURSUIT_THRESH = 4;
         public static final long LOOK_AHEAD = 10;
 
-        public static double encoderToDistance(double ticks) {
-            double circumference = Math.PI* OdometryConstants.DEAD_WHEEL_DIAMETER;
-            double circumferenceGeared = circumference* OdometryConstants.DEAD_WHEEL_GEARING;
-            double distance = circumferenceGeared * (ticks/ OdometryConstants.DEAD_WHEEL_TICKS_PER_REV);
-            return distance;
-        }
         public static double motorTicksToRadians(double ticks) {
             double rev = ticks/(MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class).getTicksPerRev());
             double radians = 2*Math.PI*rev;
             return radians;
         }
+    }
+    public static class IMUConstants {
+        public static final String _IMU = "imu 1";
+
+        public static final double COLLISION_RECOVERY_TIME = 1500;
+        public static final double COLLISION_JERK_THRESHOLD = 1.5;
     }
 
     public static class OdometryConstants {

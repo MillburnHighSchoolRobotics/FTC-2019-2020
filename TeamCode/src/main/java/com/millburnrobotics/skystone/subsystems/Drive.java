@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.Arrays;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
+import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_RECOVERY_TIME;
 
 public class Drive extends Subsystem {
     public enum DriveState {
@@ -163,7 +164,13 @@ public class Drive extends Subsystem {
     public void updatePathFollower(Pose currentPose) {
         Pose nextPose = follower.updatePose(currentPose);
         double power = follower.updatePower();
-        vectorTo(currentPose, nextPose, power);
+        if (Robot.getInstance().getIMU().collided()) {
+            vectorTo(nextPose, currentPose, power);
+            ElapsedTime collisionWait = new ElapsedTime();
+            while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
+        } else {
+            vectorTo(currentPose, nextPose, power);
+        }
     }
     public void setState(DriveState state) {
         if (changeStateTimer.milliseconds() > 250) {

@@ -33,7 +33,7 @@ public abstract class AutoModeBase extends LinearOpMode {
     public void runAction(Action action) {
         runAction(action, UPDATE_PERIOD);
     }
-    public void runAction(Action action, long period) {
+    public void runAction(Action action, long period) { // single complete action
         if(opModeIsActive() && !isStopRequested()) {
             action.start();
         }
@@ -53,14 +53,34 @@ public abstract class AutoModeBase extends LinearOpMode {
         }
     }
 
-    public void threadAction(final Action action){
+    public void threadAction(final Action action) { // action on separate thread
         Runnable runnable = () -> runAction(action, 5);
 
         if(opModeIsActive() && !isStopRequested())
             new Thread(runnable).start();
     }
 
-    public void parallelActions(List<Action> actions) {
+    public void timedAction(Action action, double time) { // action that stops after *time* milliseconds
+        ElapsedTime timer = new ElapsedTime();
+        if(opModeIsActive() && !isStopRequested()) {
+            action.start();
+        }
+        while ((timer.milliseconds() > time) || (!action.isFinished() && (opModeIsActive() && !isStopRequested()))) {
+            action.update();
+            Robot.getInstance().outputToTelemetry(telemetry);
+            telemetry.update();
+            try {
+                Thread.sleep(UPDATE_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(opModeIsActive() && !isStopRequested()) {
+            action.done();
+        }
+    }
+    public void parallelActions(List<Action> actions) { // two simultaneous actions
         for (Action action : actions) {
             action.start();
         }
@@ -87,7 +107,8 @@ public abstract class AutoModeBase extends LinearOpMode {
             action.done();
         }
     }
-    public void seriesActions(Action action1, Action action2, double time) {
+
+    public void seriesActions(Action action1, Action action2, double time) { // one action starting *time* milliseconds after another action
         ElapsedTime timer = new ElapsedTime();
         boolean started = false;
         if(opModeIsActive() && !isStopRequested()) {

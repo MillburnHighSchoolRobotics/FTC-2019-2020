@@ -3,6 +3,7 @@ package com.millburnrobotics.skystone.subsystems;
 import android.util.Log;
 
 import com.millburnrobotics.skystone.Constants;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.prefs.Preferences;
 
 public class Robot {
@@ -21,6 +23,7 @@ public class Robot {
     public Servo chainBarL, chainBarR, claw;
     public Servo hookL, hookR;
     public Servo sideClawArm, sideClawClaw;
+    public BNO055IMU bno055IMU;
 
     private Drive drive = new Drive();
     private Odometry odometry = new Odometry();
@@ -30,7 +33,8 @@ public class Robot {
     private Hook hook = new Hook();
     private SideClaw sideClaw = new SideClaw();
     private Camera camera = new Camera();
-    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw, camera};
+    private IMU imu = new IMU();
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw, camera, imu};
 
     private int cameraMonitorViewerID;
 
@@ -96,6 +100,17 @@ public class Robot {
 
         cameraMonitorViewerID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
+        if (imu.isDetectingCollisions()) {
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+            parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+            parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+            parameters.loggingEnabled = false;
+            parameters.loggingTag = "imu 1";
+            parameters.accelerationIntegrationAlgorithm = null;
+            bno055IMU = hardwareMap.get(BNO055IMU.class, Constants.IMUConstants._IMU);
+            bno055IMU.initialize(parameters);
+        }
 
         getDrive().init(auto);
         getOdometry().init(auto);
@@ -105,6 +120,7 @@ public class Robot {
         getHook().init(auto);
         getSideClaw().init(auto);
         getCamera().init(auto);
+        getIMU().init(auto);
     }
     public Drive getDrive() {
         return drive;
@@ -129,6 +145,9 @@ public class Robot {
     }
     public Camera getCamera() {
         return camera;
+    }
+    public IMU getIMU() {
+        return imu;
     }
     public int getCameraMonitorViewerID() {
         return cameraMonitorViewerID;

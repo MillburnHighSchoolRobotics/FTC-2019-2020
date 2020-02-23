@@ -1,4 +1,4 @@
-package com.millburnrobotics.skystone.test;
+package com.millburnrobotics.skystone.test.modes;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;

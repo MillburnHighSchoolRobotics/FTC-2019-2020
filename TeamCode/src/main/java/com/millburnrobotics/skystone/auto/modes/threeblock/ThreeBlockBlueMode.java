@@ -36,7 +36,7 @@ public class ThreeBlockBlueMode extends AutoModeBase {
     public void routine() {
         Robot.getInstance().side = Constants.Side.BLUE;
         Robot.getInstance().getCamera().detectBlock();
-        Robot.getInstance().getOdometry().setPose(new Pose(-72+Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0));
+        Robot.getInstance().getOdometry().setPose(new Pose(-7-2+Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0));
 
         // ----------------------------------- ONE BLOCK ----------------------------------- //
         runAction(new SideClawArmDownAction());

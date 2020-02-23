@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Odometry extends Subsystem {
+public class Odometry2 extends Subsystem {
     private String TAG = "Odometry";
     private Pose pose;
-    private double x, y, heading;
+    private double x, y, z, yaw, pitch, roll;
     private double orientation, rotation;
     private double erPosLast, elPosLast, ebPosLast;
 
@@ -24,7 +24,10 @@ public class Odometry extends Subsystem {
         pose = new Pose(0,0,0);
         this.x = 0;
         this.y = 0;
-        this.heading = 0;
+        this.z = 0;
+        this.yaw = 0;
+        this.pitch = 0;
+        this.roll = 0;
         this.orientation = 0;
         this.rotation = 0;
         this.erPosLast = 0;
@@ -65,35 +68,54 @@ public class Odometry extends Subsystem {
         double dl = elPos-elPosLast;
         double db = ebPos-ebPosLast;
 
-        double dHeading = (dr-dl)/ Constants.OdometryConstants.DEAD_WHEEL_BASE_WIDTH;
-        double dx = db+(Constants.OdometryConstants.DEAD_WHEEL_TURN_RADIUS*dHeading);
+        double dRoll = 0;
+        double dPitch = 0;
+        double dYaw = (dr-dl)/ Constants.OdometryConstants.DEAD_WHEEL_BASE_WIDTH;
+        double dx = db+(Constants.OdometryConstants.DEAD_WHEEL_TURN_RADIUS*dYaw);
         double dy = (dr+dl)/2.0;
+        double dz = 0;
 
-        Log.d(TAG, "dYaw: " + dHeading);
+        Log.d(TAG, "dYaw: " + dYaw);
         Log.d(TAG, "dx: " + dx);
         Log.d(TAG, "dy: " + dy);
 
-        heading = MathUtils.normalize(heading+dHeading);
+        roll = MathUtils.normalize(roll+dRoll);
+        pitch = MathUtils.normalize(pitch+dPitch);
+        yaw = MathUtils.normalize(yaw+dYaw);
 
-        double s,c;
-        if (MathUtils.equals(dHeading,0)) {
-            s = 1-dHeading*dHeading/6.0;
-            c = dHeading/2.0;
-        } else {
-            s = Math.sin(dHeading)/dHeading;
-            c = (1-Math.cos(dHeading))/dHeading;
-        }
+        double cy = Math.cos(yaw*0.5);
+        double sy = Math.sin(yaw*0.5);
+        double cp = Math.cos(pitch*0.5);
+        double sp = Math.sin(pitch*0.5);
+        double cr = Math.cos(roll*0.5);
+        double sr = Math.sin(roll*0.5);
 
-        double dfX = dx*s-dy*c;
-        double dfY = dx*c+dy*s;
+        double qw = cy*cp*cr+sy*sp*sr;
+        double qx = cy*cp*sr-sy*sp*cr;
+        double qy = cy*sp*cr+sy*cp*sr;
+        double qz = sy*cp*cr-cy*sp*sr;
 
-        double dxp = dfX*Math.cos(heading)-dfY*Math.sin(heading);
-        double dyp = dfX*Math.sin(heading)+dfY*Math.cos(heading);
+        Log.d(TAG, "q: (" + qw + "," + qx + "," + qy + "," + qz +")");
 
-        x += dxp;
-        y += dyp;
+        double x1 = 1-2*(qy*qy+qz*qz);
+        double y1 = 2*(qx*qy-qz*qw);
+        double z1 = 2*(qx*qz+qy*qw);
+        double x2 = 2*(qx*qy+qz*qw);
+        double y2 = 1-2*(qx*qx+qz*qz);
+        double z2 = 2*(qy*qz-qx*qw);
+        double x3 = 2*(qx*qz-qy*qw);
+        double y3 = 2*(qy*qz+qx*qw);
+        double z3 = 1-2*(qx*qx+qy*qy);
 
-        orientation += dHeading;
+        double rx = x1*dx+y1*dy+z1*dz;
+        double ry = x2*dx+y2*dy+z2*dz;
+        double rz = x3*dx+y3*dy+z3*dz;
+
+        x += rx;
+        y += ry;
+        z += rz;
+
+        orientation += dYaw;
         rotation = orientation/(2*Math.PI);
         if (rotation > 0) rotation = Math.floor(rotation);
         else if (rotation < 0) rotation = Math.ceil(rotation);
@@ -103,20 +125,26 @@ public class Odometry extends Subsystem {
 
         Log.d(TAG, "x: " + x);
         Log.d(TAG, "y: " + y);
-        Log.d(TAG, "heading: " + heading);
+        Log.d(TAG, "z: " + z);
+        Log.d(TAG, "yaw: " + yaw);
+        Log.d(TAG, "pitch: " + pitch);
+        Log.d(TAG, "roll: " + roll);
 
         erPosLast = erPos;
         elPosLast = elPos;
         ebPosLast = ebPos;
 
-        return new Pose(x,y,heading);
+        return new Pose(x,y,yaw);
     }
 
     public void setPose(Pose pose) {
         this.pose = pose;
         this.x = pose.x;
         this.y = pose.y;
-        this.heading = pose.heading;
+        this.z = 0;
+        this.yaw = pose.heading;
+        this.pitch = 0;
+        this.roll = 0;
         this.orientation = pose.heading;
         this.rotation = 0;
         this.erPosLast = 0;
@@ -133,7 +161,7 @@ public class Odometry extends Subsystem {
         return y;
     }
     public double getHeading() {
-        return heading;
+        return yaw;
     }
 
     public static double encoderToDistance(double ticks) {
