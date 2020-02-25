@@ -22,8 +22,9 @@ public class Robot {
     public DcMotorEx er, el, eb;
     public Servo chainBarL, chainBarR, claw;
     public Servo hookL, hookR;
-    public Servo sideClawArmLeft, sideClawClawLeft;
-    public Servo sideClawArmRight, sideClawClawRight;
+    public Servo sideClawArmL, sideClawArmR;
+    public Servo sideClawClawL, sideClawClawR;
+    public Servo capstone;
     public BNO055IMU bno055IMU;
 
     private Drive drive = new Drive();
@@ -32,11 +33,10 @@ public class Robot {
     private Lift lift = new Lift();
     private ChainBar chainBar = new ChainBar();
     private Hook hook = new Hook();
-    private SideClaw sideClawLeft = new SideClaw();
-    private SideClaw sideClawRight = new SideClaw();
+    private SideClaw sideClaw = new SideClaw();
     private Camera camera = new Camera();
     private IMU imu = new IMU();
-    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClawLeft, sideClawRight, camera, imu};
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw, camera, imu};
 
     private int cameraMonitorViewerID;
 
@@ -97,10 +97,12 @@ public class Robot {
         hookL = hardwareMap.servo.get(Constants.HookConstants._FoundationHookLeft);
         hookR = hardwareMap.servo.get(Constants.HookConstants._FoundationHookRight);
 
-        sideClawArmLeft = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmLeft);
-        sideClawClawLeft = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawLeft);
-        sideClawArmRight = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmRight);
-        sideClawClawRight = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawRight);
+        sideClawArmL = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmL);
+        sideClawClawL = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawL);
+        sideClawArmR = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmR);
+        sideClawClawR = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawR);
+
+        capstone = hardwareMap.servo.get(Constants.ChainBarConstants._Capstone);
 
         cameraMonitorViewerID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -122,13 +124,11 @@ public class Robot {
         getLift().init(auto);
         getChainBar().init(auto);
         getHook().init(auto);
-        getSideClawLeft().init(auto);
-        getSideClawRight().init(auto);
+        getSideClaw().init(auto);
         getCamera().init(auto);
         getIMU().init(auto);
 
-        getSideClawLeft().setSide(SideClaw.SideClawSide.LEFT);
-        getSideClawRight().setSide(SideClaw.SideClawSide.RIGHT);
+        getSideClaw().setSide(SideClaw.SideClawSide.LEFT);
     }
     public Drive getDrive() {
         return drive;
@@ -148,11 +148,8 @@ public class Robot {
     public Hook getHook() {
         return hook;
     }
-    public SideClaw getSideClawLeft() {
-        return sideClawLeft;
-    }
-    public SideClaw getSideClawRight() {
-        return sideClawRight;
+    public SideClaw getSideClaw() {
+        return sideClaw;
     }
     public Camera getCamera() {
         return camera;

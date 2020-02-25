@@ -80,6 +80,8 @@ public class Constants {
         public static final String _ChainBarRight = "chainBarR";
         public static final String _ChainBarClaw = "chainBarClaw";
 
+        public static final String _Capstone = "capstone";
+
         public static final double CHAINBARL_IN_POS = 0;
         public static final double CHAINBARR_IN_POS = 1;
         public static final double CHAINBARL_OUT_POS = 0.8;
@@ -91,6 +93,9 @@ public class Constants {
 
         public static final double CHAINBAR_CLAW_CLOSE = 0.5;
         public static final double CHAINBAR_CLAW_OPEN = 0.2;
+
+        public static final double CAPSTONE_OPEN = 0;
+        public static final double CAPSTONE_CLOSE = 1;
     }
 
     public static class LiftConstants {
@@ -109,10 +114,10 @@ public class Constants {
     }
 
     public static class SideClawConstants {
-        public static final String _SideClawArmLeft = "sideClawArmL";
-        public static final String _SideClawClawLeft = "sideClawClawL";
-        public static final String _SideClawArmRight = "sideClawArmR";
-        public static final String _SideClawClawRight = "sideClawClawR";
+        public static final String _SideClawArmL = "sideClawArmL";
+        public static final String _SideClawClawL = "sideClawClawL";
+        public static final String _SideClawArmR = "sideClawArmR";
+        public static final String _SideClawClawR = "sideClawClawR";
 
         public static final double SIDE_ARM_L_INIT_POS = 0.6;
         public static final double SIDE_ARM_L_UP_POS = 0.5;
@@ -122,13 +127,13 @@ public class Constants {
         public static final double SIDE_CLAW_L_CLOSE_POS = 1;
         public static final double SIDE_CLAW_L_OPEN_POS = 0;
 
-        public static final double SIDE_ARM_R_INIT_POS = 0.6;
-        public static final double SIDE_ARM_R_UP_POS = 0.5;
-        public static final double SIDE_ARM_R_MID_POS = 0.4;
-        public static final double SIDE_ARM_R_DOWN_POS = 0.1;
+        public static final double SIDE_ARM_R_INIT_POS = 0;
+        public static final double SIDE_ARM_R_UP_POS = 0.4;
+        public static final double SIDE_ARM_R_MID_POS = 0.65;
+        public static final double SIDE_ARM_R_DOWN_POS = 0.75;
 
-        public static final double SIDE_CLAW_R_CLOSE_POS = 1;
-        public static final double SIDE_CLAW_R_OPEN_POS = 0;
+        public static final double SIDE_CLAW_R_CLOSE_POS = 0;
+        public static final double SIDE_CLAW_R_OPEN_POS = 1;
 
         public static final double SIDE_ARM_INCREMENT = 0.05;
         public static final double SIDE_CLAW_INCREMENT = 0.05;

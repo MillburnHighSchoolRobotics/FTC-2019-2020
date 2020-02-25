@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -44,6 +45,14 @@ public class SideClaw extends Subsystem {
         this.side = side;
     }
 
+    public void toggleSide() {
+        if (side == SideClawSide.LEFT) {
+            side = SideClawSide.RIGHT;
+        } else {
+            side = SideClawSide.LEFT;
+        }
+    }
+
     public void armUp() {
         if (side == SideClawSide.LEFT) {
             setArmPosition(SIDE_ARM_L_UP_POS);
@@ -75,9 +84,18 @@ public class SideClaw extends Subsystem {
     public void setArmPosition(double pos) {
         currentArmPos = pos;
         changeSideArm.reset();
-        Robot.getInstance().sideClawArmLeft.setPosition(currentArmPos);
+        if (side == SideClawSide.LEFT) {
+            Robot.getInstance().sideClawArmL.setPosition(currentArmPos);
+        } else {
+            Robot.getInstance().sideClawArmR.setPosition(currentArmPos);
+        }
     }
     public double getArmPosition() {
+        if (side == SideClawSide.LEFT) {
+            currentArmPos = Robot.getInstance().sideClawArmL.getPosition();
+        } else {
+            currentArmPos = Robot.getInstance().sideClawArmR.getPosition();
+        }
         return currentArmPos;
     }
     public boolean canToggleSideArm() {
@@ -102,15 +120,20 @@ public class SideClaw extends Subsystem {
         currentClawPos = pos;
         changeSideClaw.reset();
         if (side == SideClawSide.LEFT) {
-            Robot.getInstance().sideClawClawLeft.setPosition(currentClawPos);
+            Robot.getInstance().sideClawClawL.setPosition(currentClawPos);
         } else {
-            Robot.getInstance().sideClawClawRight.setPosition(currentClawPos);
+            Robot.getInstance().sideClawClawR.setPosition(currentClawPos);
         }
     }
     public double getClawPosition() {
+        currentClawPos = (side == SideClawSide.LEFT) ? Robot.getInstance().sideClawClawL.getPosition() : Robot.getInstance().sideClawClawR.getPosition();
         return currentClawPos;
     }
     public boolean canToggleSideClaw() {
         return changeSideClaw.milliseconds() > 25;
+    }
+
+    public SideClawSide getSide() {
+        return side;
     }
 }

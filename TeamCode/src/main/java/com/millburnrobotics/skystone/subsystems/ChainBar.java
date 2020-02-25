@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CAPSTONE_CLOSE;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CAPSTONE_OPEN;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_UP_POS;
@@ -18,6 +20,7 @@ public class ChainBar extends Subsystem {
     double currentRightPos;
     ElapsedTime changeChainbar = new ElapsedTime();
     ElapsedTime changeClaw = new ElapsedTime();
+    ElapsedTime changeCapstone = new ElapsedTime();
 
     boolean chainBarIn = false;
     ElapsedTime chainBarInTimer = new ElapsedTime();
@@ -28,6 +31,7 @@ public class ChainBar extends Subsystem {
         }
         chainBarUp();
         clawOpen();
+        capstoneClose();
     }
 
     @Override
@@ -91,5 +95,15 @@ public class ChainBar extends Subsystem {
     }
     public boolean canToggleClaw() {
         return changeClaw.milliseconds() > 50;
+    }
+
+    public void capstoneClose() { setCapstonePosition(CAPSTONE_CLOSE); }
+    public void capstoneOpen() { setCapstonePosition(CAPSTONE_OPEN); }
+    public void setCapstonePosition(double pos) {
+        changeCapstone.reset();
+        Robot.getInstance().capstone.setPosition(pos);
+    }
+    public boolean canToggleCapstone() {
+        return (changeCapstone.milliseconds() > 250);
     }
 }
