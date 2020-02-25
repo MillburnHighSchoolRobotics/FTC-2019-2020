@@ -57,15 +57,15 @@ public class TeleOp extends OpMode {
         }
 
         //-------------------------------------------- Side Claw --------------------------------------------//
-        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().getArmPosition() > SIDE_ARM_DOWN_POS && Robot.getInstance().getSideClaw().canToggleSideArm()) {
-            Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() - SIDE_ARM_INCREMENT);
-        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().getArmPosition() < SIDE_ARM_UP_POS && Robot.getInstance().getSideClaw().canToggleSideArm()) {
-            Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() + SIDE_ARM_INCREMENT);
+        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() > SIDE_ARM_DOWN_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
+            Robot.getInstance().getSideClawRight().setArmPosition(Robot.getInstance().getSideClawRight().getArmPosition() - SIDE_ARM_INCREMENT);
+        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() < SIDE_ARM_UP_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
+            Robot.getInstance().getSideClawRight().setArmPosition(Robot.getInstance().getSideClawRight().getArmPosition() + SIDE_ARM_INCREMENT);
         }
-        if (gamepad2.left_bumper && Robot.getInstance().getSideClaw().getClawPosition() < 1 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
-            Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() + SIDE_CLAW_INCREMENT);
-        } else if (gamepad2.right_bumper && Robot.getInstance().getSideClaw().getClawPosition() > 0 && Robot.getInstance().getSideClaw().canToggleSideClaw()) {
-            Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() - SIDE_CLAW_INCREMENT);
+        if (gamepad2.left_bumper && Robot.getInstance().getSideClawRight().getClawPosition() < 1 && Robot.getInstance().getSideClawRight().canToggleSideClaw()) {
+            Robot.getInstance().getSideClawRight().setClawPosition(Robot.getInstance().getSideClawRight().getClawPosition() + SIDE_CLAW_INCREMENT);
+        } else if (gamepad2.right_bumper && Robot.getInstance().getSideClawRight().getClawPosition() > 0 && Robot.getInstance().getSideClawRight().canToggleSideClaw()) {
+            Robot.getInstance().getSideClawRight().setClawPosition(Robot.getInstance().getSideClawRight().getClawPosition() - SIDE_CLAW_INCREMENT);
         }
         //-------------------------------------------- ChainBar --------------------------------------------//
         if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
@@ -145,7 +145,7 @@ public class TeleOp extends OpMode {
                 -gamepad1.left_stick_y;
         double currentHeading = (Robot.getInstance().getDrive().getState() == Drive.DriveState.FIELD_CENTRIC) ? Robot.getInstance().getOdometry().getPose().heading : 0;
         double rotationPower = gamepad1.right_stick_x;
-        Robot.getInstance().getDrive().vectorTo(new Pose(0,0,currentHeading), new Pose(strafeX, strafeY, currentHeading), drivePower, rotationPower);
+        Robot.getInstance().getDrive().vectorTo(new Pose(0,0,currentHeading), new Pose(strafeX, strafeY, currentHeading),drivePower, rotationPower);
 
         //-------------------------------------------- Update --------------------------------------------
         if (odomUpdate.milliseconds() > 10) {

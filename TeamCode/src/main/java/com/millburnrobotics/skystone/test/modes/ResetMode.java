@@ -18,6 +18,6 @@ public class ResetMode extends AutoModeBase {
         double pref_heading = Math.toRadians(Double.valueOf(Robot.getInstance().readPreference("heading")));
         Robot.getInstance().getOdometry().setPose(new Pose(pref_x, pref_y, pref_heading));
 
-        runAction(new DriveToPoseAction(new Pose(-72+Constants.DriveConstants.BOT_WIDTH/2.0,-48+Constants.DriveConstants.BOT_LENGTH/2.0,0), 0.6));
+        runAction(new DriveToPoseAction(new Pose(), 0.4));
     }
 }

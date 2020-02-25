@@ -28,7 +28,7 @@ public class SplineGeneratorTest {
 //        waypoints.add(new Waypoint(new Pose(48,48,0),0));
 
         timer.reset();
-        Path path =  PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.9);
+        Path path =  PathBuilder.buildPath(waypoints);
         buildTime = timer.milliseconds();
 
         System.out.println("Start: " + path.start());

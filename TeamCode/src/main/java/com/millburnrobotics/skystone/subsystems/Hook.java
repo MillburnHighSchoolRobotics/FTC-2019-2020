@@ -19,12 +19,12 @@ public class Hook extends Subsystem {
 
     @Override
     public void init(boolean auto) {
-//        hookUp();
+        hookUp();
     }
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
-//        telemetry.addData("HookState", state.name());
+        telemetry.addData("HookState", state.name());
     }
 
     @Override

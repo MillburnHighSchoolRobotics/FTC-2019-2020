@@ -25,7 +25,7 @@ public class Constants {
         public static final String _RightFrontMotor = "rf";
         public static final String _RightBackMotor = "rb";
 
-        public static final double BOT_WIDTH = 17.5;
+        public static final double BOT_WIDTH = 18;
         public static final double BOT_LENGTH = 18;
 
         public static final double DRIVE_POWER_HIGH = 1;
@@ -37,7 +37,7 @@ public class Constants {
         public static final double ROTATION_THRESHOLD = 2;
 
         public static final double PURE_PURSUIT_THRESH = 4;
-        public static final long LOOK_AHEAD = 10;
+        public static final long LOOK_AHEAD = 6;
 
         public static double motorTicksToRadians(double ticks) {
             double rev = ticks/(MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class).getTicksPerRev());
@@ -49,16 +49,21 @@ public class Constants {
         public static final String _IMU = "imu 1";
 
         public static final double COLLISION_RECOVERY_TIME = 1500;
-        public static final double COLLISION_JERK_THRESHOLD = 1.5;
+        public static final double COLLISION_JERK_THRESHOLD = 15;
+
+        public static final boolean COLLISION_RECOVERY = false;
     }
 
     public static class OdometryConstants {
+        public static final String _LeftEncoder = "rf";
+        public static final String _RightEncoder = "rb";
+        public static final String _BackEncoder = "lf";
         public static final double DEAD_WHEEL_DIAMETER = 60/25.4;
         public static final double DEAD_WHEEL_TICKS_PER_REV = 360*4;
         public static final double DEAD_WHEEL_GEARING = 32.0/48.0;
-        public static final double DEAD_WHEEL_BASE_WIDTH = 15.5;
-        public static final double DEAD_WHEEL_TURN_RADIUS = -2.75; //3.5;
-        public static final long FPS_UPDATE_PERIOD = 5;
+        public static final double DEAD_WHEEL_BASE_WIDTH = 15.75;
+        public static final double DEAD_WHEEL_TURN_RADIUS = 1.5;
+        public static final long FPS_UPDATE_PERIOD = 7;
     }
 
     public static class IntakeConstants {
@@ -126,9 +131,9 @@ public class Constants {
         public static final String _FoundationHookLeft = "foundationHookL";
         public static final String _FoundationHookRight = "foundationHookR";
 
-        public static final double RIGHT_HOOK_DOWN_POS = 1;
-        public static final double RIGHT_HOOK_UP_POS = 0;
-        public static final double LEFT_HOOK_DOWN_POS = 0;
-        public static final double LEFT_HOOK_UP_POS = 0.8;
+        public static final double RIGHT_HOOK_DOWN_POS = 0;
+        public static final double RIGHT_HOOK_UP_POS = 1;
+        public static final double LEFT_HOOK_DOWN_POS = 1;
+        public static final double LEFT_HOOK_UP_POS = 0;
     }
 }

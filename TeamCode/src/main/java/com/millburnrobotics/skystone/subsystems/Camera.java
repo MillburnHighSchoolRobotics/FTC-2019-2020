@@ -35,6 +35,7 @@ public class Camera extends Subsystem {
         }
     }
     private String TAG = "BarkerClass";
+    private boolean detectingSkystone = false;
     private VuforiaLocalizerImplSubclass vuforiaInstance;
 
     private final static double BLUE_LINE_1_Y = 215;
@@ -45,7 +46,8 @@ public class Camera extends Subsystem {
 
     @Override
     public void init(boolean auto) {
-        if (auto) {
+        detectingSkystone = false;
+        if (detectingSkystone) {
             VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(Robot.getInstance().getCameraMonitorViewerID());
             params.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
             params.vuforiaLicenseKey = Constants.VUFORIA_KEY;

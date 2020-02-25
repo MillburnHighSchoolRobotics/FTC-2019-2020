@@ -4,7 +4,6 @@ import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.paths.PathContainer;
 import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,7 +14,6 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.TURN_POWER;
 
 public class DriveFollowPathArmDownAction implements Action {
 
-    private PathContainer container;
     private Path current_path;
     private boolean strafe;
     private ElapsedTime rotationTimer;
@@ -24,16 +22,19 @@ public class DriveFollowPathArmDownAction implements Action {
     private double crossY;
     private boolean cross;
 
-    public DriveFollowPathArmDownAction(PathContainer container, double crossY) {
-        this.container = container;
+    private double minPower, maxPower;
+
+    public DriveFollowPathArmDownAction(Path path, double crossY, double minPower, double maxPower) {
+        this.current_path = path;
         this.crossY = crossY;
+        this.minPower = minPower;
+        this.maxPower = maxPower;
     }
 
     @Override
     public void start() {
         strafe = true;
         cross = false;
-        current_path = container.buildPath();
         lastInThreshTimer = new ElapsedTime();
         lastTime = -1;
         Robot.getInstance().getDrive().followPath(current_path);
@@ -47,7 +48,7 @@ public class DriveFollowPathArmDownAction implements Action {
             Robot.getInstance().getSideClaw().armDown();
         }
         if (strafe) {
-            Robot.getInstance().getDrive().updatePathFollower(current);
+            Robot.getInstance().getDrive().updatePathFollower(current, minPower, maxPower);
         } else {
             if (rotationTimer == null) {
                 rotationTimer = new ElapsedTime();

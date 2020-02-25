@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,6 +13,11 @@ import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLA
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_OPEN_POS;
 
 public class SideClaw extends Subsystem {
+    public enum SideClawSide {
+        LEFT,
+        RIGHT
+    }
+    private SideClawSide side;
     double currentArmPos;
     double currentClawPos;
     ElapsedTime changeSideArm = new ElapsedTime();
@@ -38,6 +44,10 @@ public class SideClaw extends Subsystem {
     @Override
     public void update() {
 
+    }
+
+    public void setSide(SideClawSide side) {
+        this.side = side;
     }
 
     public void armUp() {

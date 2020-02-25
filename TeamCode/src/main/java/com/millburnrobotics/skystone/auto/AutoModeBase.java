@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.auto;
 
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.auto.actions.RobotUpdateAction;
 import com.millburnrobotics.skystone.subsystems.Robot;
@@ -54,7 +55,7 @@ public abstract class AutoModeBase extends LinearOpMode {
     }
 
     public void threadAction(final Action action) { // action on separate thread
-        Runnable runnable = () -> runAction(action, 5);
+        Runnable runnable = () -> runAction(action, Constants.OdometryConstants.FPS_UPDATE_PERIOD);
 
         if(opModeIsActive() && !isStopRequested())
             new Thread(runnable).start();

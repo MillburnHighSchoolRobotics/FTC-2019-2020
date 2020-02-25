@@ -5,25 +5,30 @@ import android.util.Log;
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
+import com.millburnrobotics.lib.util.PIDController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
-import static com.millburnrobotics.skystone.Constants.DriveConstants.PURE_PURSUIT_THRESH;
-import static java.lang.Math.signum;
 
 public class PurePursuitFollower {
     public Path path;
     private double lastOnPath;
-    private Pose nextPose;
+    private Pose currentPose = new Pose();
+    private PIDController controller = new PIDController(0.08,0.1,0.18);
+    private ElapsedTime timer;
 
     public PurePursuitFollower(Path path) {
         this.path = path;
         lastOnPath = 0.0;
+        controller.setTarget(0);
+        timer = new ElapsedTime();
     }
     public Pose updatePose(Pose currentPose) {
+        this.currentPose = currentPose;
         Log.d("ppursuit","l - " + path.length());
         double s = project(currentPose);
         Pose targetPose = path.get(s);
-        nextPose = path.get(s+LOOK_AHEAD);
+        Pose nextPose = path.get(s + LOOK_AHEAD);
         if (MathUtils.equals(s,path.length())) {
             nextPose = targetPose;
         }
@@ -62,16 +67,9 @@ public class PurePursuitFollower {
         }
         return s;
     }
-    public double powerAtDistance(double s) {
-        return path.getPower(s);
-    }
     public double updatePower() {
-        return path.getPower(lastOnPath);
-    }
-    public double getLastOnPath() {
-        return lastOnPath;
-    }
-    public Pose getNextPose() {
-        return nextPose;
+        Log.d("Desmos", "(" + timer.milliseconds()/100.0 + "," + currentPose.distTo(path.end()) + ")");
+        double power = Math.abs(controller.getPIDOutput(currentPose.distTo(path.end())));
+        return (power > 1 ? 1 : power);
     }
 }

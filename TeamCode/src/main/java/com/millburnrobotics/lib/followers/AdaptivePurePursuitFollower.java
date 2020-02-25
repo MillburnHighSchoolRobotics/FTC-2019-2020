@@ -120,16 +120,16 @@ public class AdaptivePurePursuitFollower {
         posOnPath = s;
         return s;
     }
-    public double powerAtDistance(double s) {
-        return path.getPower(s);
-    }
-    public double updatePower(Pose pose) {
-        if (!updateProject) {
-            return path.getPower(project(pose));
-        } else {
-            return path.getPower(posOnPath);
-        }
-    }
+//    public double powerAtDistance(double s) {
+//        return path.getPower(s);
+//    }
+//    public double updatePower(Pose pose) {
+//        if (!updateProject) {
+//            return path.getPower(project(pose));
+//        } else {
+//            return path.getPower(posOnPath);
+//        }
+//    }
     public Pose getNextPose() {
         return nextPose;
     }

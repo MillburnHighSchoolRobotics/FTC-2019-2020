@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Path {
     List<PathSegment> segments;
-    MotionProfile profile;
     double startHeading;
     double endHeading;
     public Path() {
@@ -20,12 +19,6 @@ public class Path {
     }
     public Path(List<PathSegment> segments) {
         this.segments = segments;
-    }
-    public void setMotionProfile(double minPower, double maxPower, double k) {
-        this.profile = new MotionProfile(minPower, maxPower, length(), k);
-    }
-    public double getPower(double s) {
-        return profile.getPower(s);
     }
     public Pose get(double s) {
         double heading = MathUtils.map(s,0,length(),startHeading,endHeading);

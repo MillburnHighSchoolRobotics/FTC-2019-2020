@@ -24,7 +24,7 @@ public class PurePursuitTest {
         ArrayList<Waypoint> waypoints = new ArrayList<>();
         waypoints.add(new Waypoint(new Pose(0,0,0),0));
         waypoints.add(new Waypoint(new Pose(48,48,0),0));
-        Path path =  PathBuilder.buildPath(waypoints, 0.1, 0.8, 0.9);
+        Path path =  PathBuilder.buildPath(waypoints);
 
 //        for (int i = 0; i < 1000; i++) {
 //            double px = Math.random()*(waypoints.get(waypoints.size()-1).pose.x-waypoints.get(0).pose.x+1)+waypoints.get(0).pose.x;

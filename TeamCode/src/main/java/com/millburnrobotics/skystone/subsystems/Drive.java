@@ -79,7 +79,12 @@ public class Drive extends Subsystem {
         setDrivePower(-power*output,power*output);
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power) {
-        setDrivePower(powerVector(currentPose, targetPose, power));
+        vectorTo(currentPose, targetPose, power, 0, 1);
+    }
+    public void vectorTo(Pose currentPose, Pose targetPose, double power, double minPower, double maxPower) {
+        double[] motorPowers = powerVector(currentPose, targetPose, Math.min(power, maxPower));
+
+        setDrivePower(scalePowerArray(motorPowers, minPower));
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power, double rotationPower) {
         double[] motorPowers = {0,0,0,0};
@@ -92,16 +97,21 @@ public class Drive extends Subsystem {
         motorPowers[2] -= rotationPower;
         motorPowers[3] -= rotationPower;
 
-        double maxPower = MathUtils.maxArray(motorPowers);
-        if (maxPower > 1) {
-            for (int x = 0; x < motorPowers.length; x++) {
-                motorPowers[x] = MathUtils.sgn(motorPowers[x]) * MathUtils.map(Math.abs(motorPowers[x]),0,maxPower,0,1);
-            }
-        }
-        for (int i = 0; i < motorPowers.length; i++) {
-            motorPowers[i] *= power;
+        motorPowers = scalePowerArray(motorPowers, 0);
+        for (int x = 0; x < motorPowers.length; x++) {
+            motorPowers[x] = motorPowers[x]*power;
         }
         setDrivePower(motorPowers);
+    }
+    private double[] scalePowerArray(double[] motorPowers, double minPower) {
+        double maxArrayPower = MathUtils.maxArray(motorPowers);
+        if (maxArrayPower < 1) {
+            maxArrayPower = 1;
+        }
+        for (int x = 0; x < motorPowers.length; x++) {
+            motorPowers[x] = MathUtils.sgn(motorPowers[x]) * MathUtils.map(Math.abs(motorPowers[x]),0,maxArrayPower,minPower,1);
+        }
+        return motorPowers;
     }
     private double[] powerVector(Pose currentPose, Pose targetPose, double power) {
         double scale, lf = 0, lb = 0, rf = 0, rb = 0;
@@ -161,15 +171,15 @@ public class Drive extends Subsystem {
     public void followPath(Path path) {
         follower = new PurePursuitFollower(path);
     }
-    public void updatePathFollower(Pose currentPose) {
+    public void updatePathFollower(Pose currentPose, double minPower, double maxPower) {
         Pose nextPose = follower.updatePose(currentPose);
         double power = follower.updatePower();
         if (Robot.getInstance().getIMU().collided()) {
-            vectorTo(nextPose, currentPose, power);
+            vectorTo(nextPose, currentPose, power, minPower, maxPower);
             ElapsedTime collisionWait = new ElapsedTime();
             while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
         } else {
-            vectorTo(currentPose, nextPose, power);
+            vectorTo(currentPose, nextPose, power, minPower, maxPower);
         }
     }
     public void setState(DriveState state) {

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Odometry2 extends Subsystem {
-    private String TAG = "Odometry";
+    private String TAG = "Odometry2";
     private Pose pose;
     private double x, y, z, yaw, pitch, roll;
     private double orientation, rotation;

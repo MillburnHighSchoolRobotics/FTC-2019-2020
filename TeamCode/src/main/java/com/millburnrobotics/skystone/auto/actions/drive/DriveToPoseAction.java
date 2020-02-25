@@ -4,8 +4,10 @@ import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.subsystems.Robot;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.STRAFE_THRESHOLD;
+import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_RECOVERY_TIME;
 
 public class DriveToPoseAction implements Action {
 
@@ -24,7 +26,14 @@ public class DriveToPoseAction implements Action {
     @Override
     public void update() {
         Pose current = Robot.getInstance().getOdometry().getPose();
-        Robot.getInstance().getDrive().vectorTo(current, target, power);
+
+        if (Robot.getInstance().getIMU().collided()) {
+            Robot.getInstance().getDrive().vectorTo(target, current, 0.3);
+            ElapsedTime collisionWait = new ElapsedTime();
+            while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
+        } else {
+            Robot.getInstance().getDrive().vectorTo(current, target, power);
+        }
     }
 
     @Override

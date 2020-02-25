@@ -6,10 +6,7 @@ import com.millburnrobotics.lib.geometry.Waypoint;
 import java.util.List;
 
 public class PathBuilder {
-    public static Path buildPath(List<Waypoint> w, double minPower, double maxPower) {
-        return buildPath(w, minPower, maxPower, 0.5);
-    }
-    public static Path buildPath(List<Waypoint> w, double minPower, double maxPower, double k) {
+    public static Path buildPath(List<Waypoint> w) {
         Path p = new Path();
         if (w.size() < 2) {
             throw new Error("Path must contain at least 2 waypoints");
@@ -22,7 +19,6 @@ public class PathBuilder {
                 p.add(new QuinticHermiteSpline(splineStart,splineEnd));
             }
         }
-        p.setMotionProfile(minPower, maxPower,k);
 
         p.startHeading = w.get(0).pose.heading;
         p.endHeading = w.get(w.size()-1).pose.heading;

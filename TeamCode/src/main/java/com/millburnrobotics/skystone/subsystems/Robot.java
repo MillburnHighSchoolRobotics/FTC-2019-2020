@@ -31,10 +31,11 @@ public class Robot {
     private Lift lift = new Lift();
     private ChainBar chainBar = new ChainBar();
     private Hook hook = new Hook();
-    private SideClaw sideClaw = new SideClaw();
+    private SideClaw sideClawLeft = new SideClaw();
+    private SideClaw sideClawRight = new SideClaw();
     private Camera camera = new Camera();
     private IMU imu = new IMU();
-    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClaw, camera, imu};
+    private Subsystem[] subsystems = new Subsystem[] {odometry, drive, intake, lift, chainBar, sideClawLeft, sideClawRight, camera, imu};
 
     private int cameraMonitorViewerID;
 
@@ -67,9 +68,9 @@ public class Robot {
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        er = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._LeftFrontMotor);
-        el = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._RightBackMotor);
-        eb = (DcMotorEx) hardwareMap.dcMotor.get(Constants.DriveConstants._RightFrontMotor);
+        er = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._RightEncoder);
+        el = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._LeftEncoder);
+        eb = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._BackEncoder);
         er.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         er.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         el.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -118,9 +119,13 @@ public class Robot {
         getLift().init(auto);
         getChainBar().init(auto);
         getHook().init(auto);
-        getSideClaw().init(auto);
+        getSideClawLeft().init(auto);
+        getSideClawRight().init(auto);
         getCamera().init(auto);
         getIMU().init(auto);
+
+        getSideClawLeft().setSide(SideClaw.SideClawSide.LEFT);
+        getSideClawRight().setSide(SideClaw.SideClawSide.RIGHT);
     }
     public Drive getDrive() {
         return drive;
@@ -140,8 +145,11 @@ public class Robot {
     public Hook getHook() {
         return hook;
     }
-    public SideClaw getSideClaw() {
-        return sideClaw;
+    public SideClaw getSideClawLeft() {
+        return sideClawLeft;
+    }
+    public SideClaw getSideClawRight() {
+        return sideClawRight;
     }
     public Camera getCamera() {
         return camera;
