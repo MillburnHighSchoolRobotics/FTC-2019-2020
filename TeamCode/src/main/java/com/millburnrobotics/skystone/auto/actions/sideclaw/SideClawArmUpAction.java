@@ -5,19 +5,10 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 import com.millburnrobotics.skystone.subsystems.SideClaw;
 
 public class SideClawArmUpAction implements Action {
-    private SideClaw.SideClawSide side;
-
-    public SideClawArmUpAction(SideClaw.SideClawSide side) {
-        this.side = side;
-    }
 
     @Override
     public void start() {
-        if (side == SideClaw.SideClawSide.LEFT){
-            Robot.getInstance().getSideClawLeft().armUp();
-        } else {
-            Robot.getInstance().getSideClawRight().armUp();
-        }
+        Robot.getInstance().getSideClaw().armUp();
     }
 
     @Override

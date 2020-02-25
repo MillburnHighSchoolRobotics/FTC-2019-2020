@@ -13,11 +13,7 @@ public class SideClawCloseAction implements Action {
 
     @Override
     public void start() {
-        if (side == SideClaw.SideClawSide.LEFT){
-            Robot.getInstance().getSideClawLeft().clawClose();
-        } else {
-            Robot.getInstance().getSideClawRight().clawClose();
-        }
+        Robot.getInstance().getSideClaw().clawClose();
     }
 
     @Override

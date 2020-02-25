@@ -13,11 +13,7 @@ public class SideClawOpenAction implements Action {
 
     @Override
     public void start() {
-        if (side == SideClaw.SideClawSide.LEFT){
-            Robot.getInstance().getSideClawLeft().clawOpen();
-        } else {
-            Robot.getInstance().getSideClawRight().clawOpen();
-        }
+        Robot.getInstance().getSideClaw().clawOpen();
     }
 
     @Override
