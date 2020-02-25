@@ -2,11 +2,22 @@ package com.millburnrobotics.skystone.auto.actions.sideclaw;
 
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.subsystems.SideClaw;
 
 public class SideClawCloseAction implements Action {
+    private SideClaw.SideClawSide side;
+
+    public SideClawCloseAction(SideClaw.SideClawSide side) {
+        this.side = side;
+    }
+
     @Override
     public void start() {
-        Robot.getInstance().getSideClaw().clawClose();
+        if (side == SideClaw.SideClawSide.LEFT){
+            Robot.getInstance().getSideClawLeft().clawClose();
+        } else {
+            Robot.getInstance().getSideClawRight().clawClose();
+        }
     }
 
     @Override

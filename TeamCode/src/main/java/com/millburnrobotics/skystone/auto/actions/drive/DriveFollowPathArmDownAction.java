@@ -45,7 +45,7 @@ public class DriveFollowPathArmDownAction implements Action {
         Pose current = Robot.getInstance().getOdometry().getPose();
         if ((current.y < crossY) && !cross) {
             cross = true;
-            Robot.getInstance().getSideClaw().armDown();
+            Robot.getInstance().getSideClawLeft().armDown();
         }
         if (strafe) {
             Robot.getInstance().getDrive().updatePathFollower(current, minPower, maxPower);

@@ -2,6 +2,7 @@ package com.millburnrobotics.skystone.test;
 
 import android.util.Log;
 
+import com.millburnrobotics.lib.util.MathUtils;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,8 +14,8 @@ public class SideClawServo extends OpMode {
 
     @Override
     public void init() {
-        sideClawBar = hardwareMap.servo.get("sideClawBar");
-        sideClawClamp = hardwareMap.servo.get("sideClawClamp");
+        sideClawBar = hardwareMap.servo.get("sideClawArmR");
+        sideClawClamp = hardwareMap.servo.get("sideClawClawR");
         barPos = clampPos = 0.5;
         inc = 0.1;
     }
@@ -27,17 +28,17 @@ public class SideClawServo extends OpMode {
             Log.d("IE", ie+"");
         }
 
-        if (gamepad1.dpad_up && clampPos < 1) {
+        if ((gamepad1.dpad_up || gamepad1.left_bumper) && clampPos < 1) {
             clampPos += inc;
         }
-        if (gamepad1.dpad_down && clampPos > 0) {
+        if ((gamepad1.dpad_down || MathUtils.equals(gamepad1.left_trigger, 1, 0.05)) && clampPos > 0) {
             clampPos -= inc;
         }
 
-        if (gamepad1.dpad_left && barPos < 1) {
+        if ((gamepad1.dpad_left || gamepad1.right_bumper) && barPos < 1) {
             barPos += inc;
         }
-        if (gamepad1.dpad_right && barPos > 0) {
+        if ((gamepad1.dpad_right || MathUtils.equals(gamepad1.right_trigger, 1, 0.05)) && barPos > 0) {
             barPos -= inc;
         }
 

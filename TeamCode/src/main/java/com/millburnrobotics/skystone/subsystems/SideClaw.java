@@ -4,12 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_DOWN_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_INIT_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_MID_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_UP_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_CLOSE_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_OPEN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.*;
 
 public class SideClaw extends Subsystem {
     public enum SideClawSide {
@@ -36,8 +31,8 @@ public class SideClaw extends Subsystem {
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
-        telemetry.addData("CurrentSideArmPosition", currentArmPos);
-        telemetry.addData("CurrentSideClawPosition", currentClawPos);
+        telemetry.addData("CurrentSideArmPosition" + side.toString().charAt(0), currentArmPos);
+        telemetry.addData("CurrentSideClawPosition" + side.toString().charAt(0), currentClawPos);
     }
 
     @Override
@@ -50,21 +45,37 @@ public class SideClaw extends Subsystem {
     }
 
     public void armUp() {
-        setArmPosition(SIDE_ARM_L_UP_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_ARM_L_UP_POS);
+        } else {
+            setArmPosition(SIDE_ARM_R_UP_POS);
+        }
     }
     public void armMid() {
-        setArmPosition(SIDE_ARM_L_MID_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_ARM_L_MID_POS);
+        } else {
+            setArmPosition(SIDE_ARM_R_MID_POS);
+        }
     }
     public void armDown() {
-        setArmPosition(SIDE_ARM_L_DOWN_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_ARM_L_DOWN_POS);
+        } else {
+            setArmPosition(SIDE_ARM_R_DOWN_POS);
+        }
     }
     public void armInit() {
-        setArmPosition(SIDE_ARM_L_INIT_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_ARM_L_INIT_POS);
+        } else {
+            setArmPosition(SIDE_ARM_R_INIT_POS);
+        }
     }
     public void setArmPosition(double pos) {
         currentArmPos = pos;
         changeSideArm.reset();
-        Robot.getInstance().sideClawArm.setPosition(currentArmPos);
+        Robot.getInstance().sideClawArmLeft.setPosition(currentArmPos);
     }
     public double getArmPosition() {
         return currentArmPos;
@@ -74,15 +85,27 @@ public class SideClaw extends Subsystem {
     }
 
     public void clawClose() {
-        setClawPosition(SIDE_CLAW_L_CLOSE_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_CLAW_L_CLOSE_POS);
+        } else {
+            setArmPosition(SIDE_CLAW_R_CLOSE_POS);
+        }
     }
     public void clawOpen() {
-        setClawPosition(SIDE_CLAW_L_OPEN_POS);
+        if (side == SideClawSide.LEFT) {
+            setArmPosition(SIDE_CLAW_L_OPEN_POS);
+        } else {
+            setArmPosition(SIDE_CLAW_R_OPEN_POS);
+        }
     }
     public void setClawPosition(double pos) {
         currentClawPos = pos;
         changeSideClaw.reset();
-        Robot.getInstance().sideClawClaw.setPosition(currentClawPos);
+        if (side == SideClawSide.LEFT) {
+            Robot.getInstance().sideClawClawLeft.setPosition(currentClawPos);
+        } else {
+            Robot.getInstance().sideClawClawRight.setPosition(currentClawPos);
+        }
     }
     public double getClawPosition() {
         return currentClawPos;

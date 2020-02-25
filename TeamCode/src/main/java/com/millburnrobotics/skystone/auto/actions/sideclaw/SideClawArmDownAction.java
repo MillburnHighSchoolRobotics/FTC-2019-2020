@@ -6,7 +6,7 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 public class SideClawArmDownAction implements Action {
     @Override
     public void start() {
-        Robot.getInstance().getSideClaw().armDown();
+        Robot.getInstance().getSideClawLeft().armDown();
     }
 
     @Override
