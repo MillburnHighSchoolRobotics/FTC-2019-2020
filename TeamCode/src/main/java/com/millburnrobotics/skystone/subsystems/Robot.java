@@ -22,7 +22,8 @@ public class Robot {
     public DcMotorEx er, el, eb;
     public Servo chainBarL, chainBarR, claw;
     public Servo hookL, hookR;
-    public Servo sideClawArm, sideClawClaw;
+    public Servo sideClawArmLeft, sideClawClawLeft;
+    public Servo sideClawArmRight, sideClawClawRight;
     public BNO055IMU bno055IMU;
 
     private Drive drive = new Drive();
@@ -96,8 +97,10 @@ public class Robot {
         hookL = hardwareMap.servo.get(Constants.HookConstants._FoundationHookLeft);
         hookR = hardwareMap.servo.get(Constants.HookConstants._FoundationHookRight);
 
-        sideClawArm = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArm);
-        sideClawClaw = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClaw);
+        sideClawArmLeft = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmLeft);
+        sideClawClawLeft = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawLeft);
+        sideClawArmRight = hardwareMap.servo.get(Constants.SideClawConstants._SideClawArmRight);
+        sideClawClawRight = hardwareMap.servo.get(Constants.SideClawConstants._SideClawClawRight);
 
         cameraMonitorViewerID = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 

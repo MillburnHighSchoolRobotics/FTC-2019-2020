@@ -109,16 +109,26 @@ public class Constants {
     }
 
     public static class SideClawConstants {
-        public static final String _SideClawArm = "sideClawArm";
-        public static final String _SideClawClaw = "sideClawClaw";
+        public static final String _SideClawArmLeft = "sideClawArmL";
+        public static final String _SideClawClawLeft = "sideClawClawL";
+        public static final String _SideClawArmRight = "sideClawArmR";
+        public static final String _SideClawClawRight = "sideClawClawR";
 
-        public static final double SIDE_ARM_INIT_POS = 0.6;
-        public static final double SIDE_ARM_UP_POS = 0.5;
-        public static final double SIDE_ARM_MID_POS = 0.2;
-        public static final double SIDE_ARM_DOWN_POS = 0.18;
+        public static final double SIDE_ARM_L_INIT_POS = 0.6;
+        public static final double SIDE_ARM_L_UP_POS = 0.5;
+        public static final double SIDE_ARM_L_MID_POS = 0.2;
+        public static final double SIDE_ARM_L_DOWN_POS = 0.18;
 
-        public static final double SIDE_CLAW_CLOSE_POS = 0.7;
-        public static final double SIDE_CLAW_OPEN_POS = 0;
+        public static final double SIDE_CLAW_L_CLOSE_POS = 0.7;
+        public static final double SIDE_CLAW_L_OPEN_POS = 0;
+
+        public static final double SIDE_ARM_R_INIT_POS = 0.6;
+        public static final double SIDE_ARM_R_UP_POS = 0.5;
+        public static final double SIDE_ARM_R_MID_POS = 0.2;
+        public static final double SIDE_ARM_R_DOWN_POS = 0.18;
+
+        public static final double SIDE_CLAW_R_CLOSE_POS = 0.7;
+        public static final double SIDE_CLAW_R_OPEN_POS = 0;
 
         public static final double SIDE_ARM_INCREMENT = 0.05;
         public static final double SIDE_CLAW_INCREMENT = 0.05;

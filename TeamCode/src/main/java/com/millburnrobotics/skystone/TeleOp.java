@@ -17,9 +17,9 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_LOW;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RAISED_MIN_POS;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_DOWN_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INCREMENT;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_UP_POS;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_INCREMENT;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
@@ -57,9 +57,9 @@ public class TeleOp extends OpMode {
         }
 
         //-------------------------------------------- Side Claw --------------------------------------------//
-        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() > SIDE_ARM_DOWN_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
+        if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() > SIDE_ARM_L_DOWN_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
             Robot.getInstance().getSideClawRight().setArmPosition(Robot.getInstance().getSideClawRight().getArmPosition() - SIDE_ARM_INCREMENT);
-        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() < SIDE_ARM_UP_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
+        } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClawRight().getArmPosition() < SIDE_ARM_L_UP_POS && Robot.getInstance().getSideClawRight().canToggleSideArm()) {
             Robot.getInstance().getSideClawRight().setArmPosition(Robot.getInstance().getSideClawRight().getArmPosition() + SIDE_ARM_INCREMENT);
         }
         if (gamepad2.left_bumper && Robot.getInstance().getSideClawRight().getClawPosition() < 1 && Robot.getInstance().getSideClawRight().canToggleSideClaw()) {

@@ -1,16 +1,15 @@
 package com.millburnrobotics.skystone.subsystems;
 
-import com.millburnrobotics.skystone.Constants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_DOWN_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INIT_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_MID_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_UP_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_CLOSE_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_OPEN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_INIT_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_MID_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_UP_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_CLOSE_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_OPEN_POS;
 
 public class SideClaw extends Subsystem {
     public enum SideClawSide {
@@ -51,16 +50,16 @@ public class SideClaw extends Subsystem {
     }
 
     public void armUp() {
-        setArmPosition(SIDE_ARM_UP_POS);
+        setArmPosition(SIDE_ARM_L_UP_POS);
     }
     public void armMid() {
-        setArmPosition(SIDE_ARM_MID_POS);
+        setArmPosition(SIDE_ARM_L_MID_POS);
     }
     public void armDown() {
-        setArmPosition(SIDE_ARM_DOWN_POS);
+        setArmPosition(SIDE_ARM_L_DOWN_POS);
     }
     public void armInit() {
-        setArmPosition(SIDE_ARM_INIT_POS);
+        setArmPosition(SIDE_ARM_L_INIT_POS);
     }
     public void setArmPosition(double pos) {
         currentArmPos = pos;
@@ -75,10 +74,10 @@ public class SideClaw extends Subsystem {
     }
 
     public void clawClose() {
-        setClawPosition(SIDE_CLAW_CLOSE_POS);
+        setClawPosition(SIDE_CLAW_L_CLOSE_POS);
     }
     public void clawOpen() {
-        setClawPosition(SIDE_CLAW_OPEN_POS);
+        setClawPosition(SIDE_CLAW_L_OPEN_POS);
     }
     public void setClawPosition(double pos) {
         currentClawPos = pos;
