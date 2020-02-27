@@ -16,6 +16,11 @@ import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_CLAW_OPEN;
 
 public class ChainBar extends Subsystem {
+    public enum CapstoneState {
+        CAPSTONE_CLOSE,
+        CAPSTONE_OPEN
+    }
+    private CapstoneState state;
     double currentLeftPos;
     double currentRightPos;
     ElapsedTime changeChainbar = new ElapsedTime();
@@ -97,13 +102,22 @@ public class ChainBar extends Subsystem {
         return changeClaw.milliseconds() > 50;
     }
 
-    public void capstoneClose() { setCapstonePosition(CAPSTONE_CLOSE); }
-    public void capstoneOpen() { setCapstonePosition(CAPSTONE_OPEN); }
+    public void capstoneClose() {
+        state = CapstoneState.CAPSTONE_CLOSE;
+        setCapstonePosition(CAPSTONE_CLOSE);
+    }
+    public void capstoneOpen() {
+        state = CapstoneState.CAPSTONE_OPEN;
+        setCapstonePosition(CAPSTONE_OPEN);
+    }
     public void setCapstonePosition(double pos) {
-        changeCapstone.reset();
         Robot.getInstance().capstone.setPosition(pos);
+        changeCapstone.reset();
     }
     public boolean canToggleCapstone() {
         return (changeCapstone.milliseconds() > 250);
+    }
+    public CapstoneState getState() {
+        return state;
     }
 }

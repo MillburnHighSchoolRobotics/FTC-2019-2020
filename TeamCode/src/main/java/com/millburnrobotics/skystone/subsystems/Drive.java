@@ -84,6 +84,8 @@ public class Drive extends Subsystem {
     public void vectorTo(Pose currentPose, Pose targetPose, double power, double minPower, double maxPower) {
         double[] motorPowers = powerVector(currentPose, targetPose, Math.min(power, maxPower));
 
+        Log.d("powervector", Arrays.toString(motorPowers) +"");
+
         setDrivePower(scalePowerArray(motorPowers, minPower));
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power, double rotationPower) {

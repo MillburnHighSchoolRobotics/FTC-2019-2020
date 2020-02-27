@@ -8,7 +8,7 @@ import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.PATH_HEADING_TIME;
-import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD_DRIVE;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.STRAFE_THRESHOLD;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.TURN_POWER;
 
@@ -19,6 +19,7 @@ public class DriveFollowPathAction implements Action {
     private ElapsedTime rotationTimer;
     private ElapsedTime lastInThreshTimer;
     private double lastTime;
+    double lastError = 0;
 
     private double minPower, maxPower;
 
@@ -59,6 +60,8 @@ public class DriveFollowPathAction implements Action {
                 } else if (lastInThreshTimer.milliseconds() - lastTime > 200) {
                     strafe = false;
                 }
+            } else if (Math.abs(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()) - lastError) < 1) {
+                strafe = false;
             } else {
                 lastTime = -1;
             }
@@ -73,7 +76,7 @@ public class DriveFollowPathAction implements Action {
             } else if (targetHeading - currentHeading > 180) {
                 currentHeading += 360;
             }
-            return MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD);
+            return MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD_DRIVE);
         }
         return false;
     }

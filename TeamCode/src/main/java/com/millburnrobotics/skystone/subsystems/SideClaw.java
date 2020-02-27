@@ -13,13 +13,18 @@ public class SideClaw extends Subsystem {
         RIGHT
     }
     private SideClawSide side;
-    double currentArmPos;
-    double currentClawPos;
     ElapsedTime changeSideArm = new ElapsedTime();
     ElapsedTime changeSideClaw = new ElapsedTime();
+
+    ElapsedTime changeSide = new ElapsedTime();
     @Override
     public void init(boolean auto) {
         if (auto) {
+            if (Robot.getInstance().side == Constants.Side.BLUE) {
+                this.side = SideClawSide.LEFT;
+            } else {
+                this.side = SideClawSide.RIGHT;
+            }
             armInit();
             clawOpen();
         } else {
@@ -27,13 +32,16 @@ public class SideClaw extends Subsystem {
             clawClose();
             changeSideArm.reset();
             changeSideClaw.reset();
+            changeSide.reset();
+            side = SideClawSide.LEFT;
         }
     }
 
     @Override
     public void outputToTelemetry(Telemetry telemetry) {
-        telemetry.addData("CurrentSideArmPosition" + side.toString().charAt(0), currentArmPos);
-        telemetry.addData("CurrentSideClawPosition" + side.toString().charAt(0), currentClawPos);
+        telemetry.addData("CurrentSideArmPosition", getArmPosition());
+        telemetry.addData("CurrentSideClawPosition", getArmPosition());
+        telemetry.addData("SideClawSide", side.toString());
     }
 
     @Override
@@ -46,88 +54,87 @@ public class SideClaw extends Subsystem {
     }
 
     public void toggleSide() {
-        if (side == SideClawSide.LEFT) {
-            side = SideClawSide.RIGHT;
-        } else {
-            side = SideClawSide.LEFT;
+        if (changeSide.milliseconds() > 50) {
+            if (this.side == SideClawSide.LEFT) {
+                side = SideClawSide.RIGHT;
+            } else {
+                side = SideClawSide.LEFT;
+            }
+            changeSide.reset();
         }
     }
 
     public void armUp() {
-        if (side == SideClawSide.LEFT) {
+        if (this.side == SideClawSide.LEFT) {
             setArmPosition(SIDE_ARM_L_UP_POS);
         } else {
             setArmPosition(SIDE_ARM_R_UP_POS);
         }
     }
     public void armMid() {
-        if (side == SideClawSide.LEFT) {
+        if (this.side == SideClawSide.LEFT) {
             setArmPosition(SIDE_ARM_L_MID_POS);
         } else {
             setArmPosition(SIDE_ARM_R_MID_POS);
         }
     }
     public void armDown() {
-        if (side == SideClawSide.LEFT) {
+        if (this.side == SideClawSide.LEFT) {
             setArmPosition(SIDE_ARM_L_DOWN_POS);
         } else {
             setArmPosition(SIDE_ARM_R_DOWN_POS);
         }
     }
     public void armInit() {
-        if (side == SideClawSide.LEFT) {
+        if (this.side == SideClawSide.LEFT) {
             setArmPosition(SIDE_ARM_L_INIT_POS);
         } else {
             setArmPosition(SIDE_ARM_R_INIT_POS);
         }
     }
     public void setArmPosition(double pos) {
-        currentArmPos = pos;
         changeSideArm.reset();
-        if (side == SideClawSide.LEFT) {
-            Robot.getInstance().sideClawArmL.setPosition(currentArmPos);
+        if (this.side == SideClawSide.LEFT) {
+            Robot.getInstance().sideClawArmL.setPosition(pos); // yes bc i reversed it and fuck this
         } else {
-            Robot.getInstance().sideClawArmR.setPosition(currentArmPos);
+            Robot.getInstance().sideClawArmR.setPosition(pos);
         }
     }
     public double getArmPosition() {
-        if (side == SideClawSide.LEFT) {
-            currentArmPos = Robot.getInstance().sideClawArmL.getPosition();
+        if (this.side == SideClawSide.LEFT) {
+            return Robot.getInstance().sideClawArmL.getPosition();
         } else {
-            currentArmPos = Robot.getInstance().sideClawArmR.getPosition();
+            return Robot.getInstance().sideClawArmR.getPosition();
         }
-        return currentArmPos;
     }
     public boolean canToggleSideArm() {
         return changeSideArm.milliseconds() > 25;
     }
 
     public void clawClose() {
-        if (side == SideClawSide.LEFT) {
-            setArmPosition(SIDE_CLAW_L_CLOSE_POS);
+        if (this.side == SideClawSide.LEFT) {
+            setClawPosition(SIDE_CLAW_L_CLOSE_POS);
         } else {
-            setArmPosition(SIDE_CLAW_R_CLOSE_POS);
+            setClawPosition(SIDE_CLAW_R_CLOSE_POS);
         }
     }
     public void clawOpen() {
-        if (side == SideClawSide.LEFT) {
-            setArmPosition(SIDE_CLAW_L_OPEN_POS);
+        if (this.side == SideClawSide.LEFT) {
+            setClawPosition(SIDE_CLAW_L_OPEN_POS);
         } else {
-            setArmPosition(SIDE_CLAW_R_OPEN_POS);
+            setClawPosition(SIDE_CLAW_R_OPEN_POS);
         }
     }
     public void setClawPosition(double pos) {
-        currentClawPos = pos;
         changeSideClaw.reset();
-        if (side == SideClawSide.LEFT) {
-            Robot.getInstance().sideClawClawL.setPosition(currentClawPos);
+        if (this.side == SideClawSide.LEFT) {
+            Robot.getInstance().sideClawClawL.setPosition(pos);
         } else {
-            Robot.getInstance().sideClawClawR.setPosition(currentClawPos);
+            Robot.getInstance().sideClawClawR.setPosition(pos);
         }
     }
     public double getClawPosition() {
-        currentClawPos = (side == SideClawSide.LEFT) ? Robot.getInstance().sideClawClawL.getPosition() : Robot.getInstance().sideClawClawR.getPosition();
-        return currentClawPos;
+        return (this.side == SideClawSide.LEFT) ? Robot.getInstance().sideClawClawL.getPosition() : Robot.getInstance().sideClawClawR.getPosition();
     }
     public boolean canToggleSideClaw() {
         return changeSideClaw.milliseconds() > 25;

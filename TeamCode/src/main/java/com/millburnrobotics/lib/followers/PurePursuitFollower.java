@@ -14,7 +14,7 @@ public class PurePursuitFollower {
     public Path path;
     private double lastOnPath;
     private Pose currentPose = new Pose();
-    private PIDController controller = new PIDController(0.08,0.1,0.18);
+    private PIDController controller = new PIDController(0.033,0.025,0.15);
     private ElapsedTime timer;
 
     public PurePursuitFollower(Path path) {
@@ -70,6 +70,7 @@ public class PurePursuitFollower {
     public double updatePower() {
         Log.d("Desmos", "(" + timer.milliseconds()/100.0 + "," + currentPose.distTo(path.end()) + ")");
         double power = Math.abs(controller.getPIDOutput(currentPose.distTo(path.end())));
+        Log.d("purepursuitpower", power+"");
         return (power > 1 ? 1 : power);
     }
 }

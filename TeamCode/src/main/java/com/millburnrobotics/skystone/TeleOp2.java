@@ -23,7 +23,7 @@ import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_P
 import static com.millburnrobotics.skystone.Constants.SideClawConstants.*;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
-public class TeleOp extends OpMode {
+public class TeleOp2 extends OpMode {
     private ElapsedTime odomUpdate = new ElapsedTime();
     private SideClaw.SideClawSide activeSide;
 
@@ -65,7 +65,7 @@ public class TeleOp extends OpMode {
         if (MathUtils.equals(gamepad2.left_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().canToggleSideArm() && Robot.getInstance().getSideClaw().getArmPosition() > 0) {
             Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() - SIDE_ARM_INCREMENT);
         } else if (MathUtils.equals(gamepad2.right_trigger, 1, 0.05) && Robot.getInstance().getSideClaw().canToggleSideArm() && Robot.getInstance().getSideClaw().getArmPosition() < 1) {
-                Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() + SIDE_ARM_INCREMENT);
+            Robot.getInstance().getSideClaw().setArmPosition(Robot.getInstance().getSideClaw().getArmPosition() + SIDE_ARM_INCREMENT);
         }
         if (gamepad2.left_bumper && Robot.getInstance().getSideClaw().canToggleSideClaw() && Robot.getInstance().getSideClaw().getClawPosition() < 1) {
             Robot.getInstance().getSideClaw().setClawPosition(Robot.getInstance().getSideClaw().getClawPosition() + SIDE_CLAW_INCREMENT);
@@ -85,11 +85,11 @@ public class TeleOp extends OpMode {
                     Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
             );
         } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
-            Robot.getInstance().getChainBar().chainBarUp();
+            Robot.getInstance().getChainBar().chainBarIn();
         } else if (gamepad1.dpad_right) {
-           Robot.getInstance().getChainBar().chainBarInAuto();
+            Robot.getInstance().getChainBar().chainBarInAuto();
         } else if (Robot.getInstance().getChainBar().isChainBarIn()) {
-           Robot.getInstance().getChainBar().chainBarInUpdate();
+            Robot.getInstance().getChainBar().chainBarInUpdate();
         }
         //-------------------------------------------- Capstone ----------------------------------------//
         if (gamepad1.left_stick_button && Robot.getInstance().getChainBar().canToggleCapstone()){ // toggle foundation hook
@@ -106,7 +106,7 @@ public class TeleOp extends OpMode {
         } else if (gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) {
             Robot.getInstance().getChainBar().clawOpen();
         } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
-            Robot.getInstance().getChainBar().clawOpen();
+            Robot.getInstance().getChainBar().clawClose();
         } else if (gamepad1.dpad_right) {
             Robot.getInstance().getChainBar().clawClose();
         }
