@@ -17,12 +17,12 @@ import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmMidAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmUpAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawCloseAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawOpenAction;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import java.util.ArrayList;
 
-@Autonomous(group = "Blue")
+@Autonomous(group = "fourblock")
 public class FourBlockBlueMode extends AutoModeBase {
     @Override
     public void routine() {

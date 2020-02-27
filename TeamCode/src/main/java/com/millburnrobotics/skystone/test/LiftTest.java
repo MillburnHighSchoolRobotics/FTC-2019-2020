@@ -1,9 +1,9 @@
 package com.millburnrobotics.skystone.test;
 
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "test")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "util")
 public class LiftTest extends OpMode {
     @Override
     public void init() {

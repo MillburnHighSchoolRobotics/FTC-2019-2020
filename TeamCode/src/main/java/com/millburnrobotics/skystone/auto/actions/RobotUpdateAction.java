@@ -1,6 +1,6 @@
 package com.millburnrobotics.skystone.auto.actions;
 
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class RobotUpdateAction implements Action {

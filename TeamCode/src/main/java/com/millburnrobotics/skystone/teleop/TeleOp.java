@@ -1,18 +1,18 @@
-package com.millburnrobotics.skystone;
+package com.millburnrobotics.skystone.teleop;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
+import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.subsystems.ChainBar;
 import com.millburnrobotics.skystone.subsystems.Drive;
 import com.millburnrobotics.skystone.subsystems.Hook;
 import com.millburnrobotics.skystone.subsystems.Intake;
 import com.millburnrobotics.skystone.subsystems.Lift;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.millburnrobotics.skystone.subsystems.SideClaw;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CAPSTONE_CLOSE;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_INCREMENT;
@@ -20,7 +20,8 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER
 import static com.millburnrobotics.skystone.Constants.DriveConstants.DRIVE_POWER_LOW;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RAISED_MIN_POS;
 import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_POS;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.*;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_INCREMENT;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_INCREMENT;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "teleop")
 public class TeleOp extends OpMode {

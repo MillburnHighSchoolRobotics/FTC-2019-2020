@@ -1,5 +1,7 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.millburnrobotics.skystone.Robot;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static com.millburnrobotics.skystone.Constants.IntakeConstants.INTAKE_IN_POWER;

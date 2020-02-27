@@ -3,7 +3,7 @@ package com.millburnrobotics.skystone.auto;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.auto.actions.RobotUpdateAction;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 

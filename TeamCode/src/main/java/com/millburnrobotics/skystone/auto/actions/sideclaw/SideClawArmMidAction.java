@@ -1,8 +1,7 @@
 package com.millburnrobotics.skystone.auto.actions.sideclaw;
 
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.subsystems.Robot;
-import com.millburnrobotics.skystone.subsystems.SideClaw;
+import com.millburnrobotics.skystone.Robot;
 
 public class SideClawArmMidAction implements Action {
 

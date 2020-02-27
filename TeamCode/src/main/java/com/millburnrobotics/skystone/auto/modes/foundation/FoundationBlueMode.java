@@ -8,10 +8,10 @@ import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookDownAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookUpAction;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(group = "Red")
+@Autonomous(group = "foundation")
 public class FoundationBlueMode extends AutoModeBase {
 
     @Override

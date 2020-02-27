@@ -1,7 +1,7 @@
 package com.millburnrobotics.skystone.auto.actions.sideclaw;
 
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 
 public class SideClawArmDownAction implements Action {
     @Override

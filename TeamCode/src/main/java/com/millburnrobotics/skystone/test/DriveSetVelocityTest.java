@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.millburnrobotics.skystone.Constants;
 
-@TeleOp(group = "test")
+@TeleOp(group = "util")
 public class DriveSetVelocityTest extends OpMode {
     private DcMotorEx lf;
     private double w_predicted = 0;

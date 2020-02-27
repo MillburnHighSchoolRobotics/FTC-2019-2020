@@ -4,7 +4,7 @@ import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.PATH_HEADING_TIME;
@@ -19,7 +19,7 @@ public class DriveFollowPathAction implements Action {
     private ElapsedTime rotationTimer;
     private ElapsedTime lastInThreshTimer;
     private double lastTime;
-    double lastError = 0;
+    private double strafeThresh, rotationThresh;
 
     private double minPower, maxPower;
 
@@ -27,6 +27,15 @@ public class DriveFollowPathAction implements Action {
         this.current_path = path;
         this.minPower = minPower;
         this.maxPower = maxPower;
+        this.strafeThresh = STRAFE_THRESHOLD;
+        this.rotationThresh = ROTATION_THRESHOLD_DRIVE;
+    }
+    public DriveFollowPathAction(Path path, double minPower, double maxPower, double strafeThresh, double rotationThresh) {
+        this.current_path = path;
+        this.minPower = minPower;
+        this.maxPower = maxPower;
+        this.strafeThresh = strafeThresh;
+        this.rotationThresh = rotationThresh;
     }
 
     @Override
@@ -54,14 +63,12 @@ public class DriveFollowPathAction implements Action {
     @Override
     public boolean isFinished() {
         if (strafe) {
-            if (MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,STRAFE_THRESHOLD)) {
+            if (MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,strafeThresh)) {
                 if (lastTime == -1) {
                     lastTime = lastInThreshTimer.milliseconds();
                 } else if (lastInThreshTimer.milliseconds() - lastTime > 200) {
                     strafe = false;
                 }
-            } else if (Math.abs(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()) - lastError) < 1) {
-                strafe = false;
             } else {
                 lastTime = -1;
             }
@@ -76,7 +83,7 @@ public class DriveFollowPathAction implements Action {
             } else if (targetHeading - currentHeading > 180) {
                 currentHeading += 360;
             }
-            return MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD_DRIVE);
+            return MathUtils.equals(targetHeading, currentHeading, rotationThresh);
         }
         return false;
     }

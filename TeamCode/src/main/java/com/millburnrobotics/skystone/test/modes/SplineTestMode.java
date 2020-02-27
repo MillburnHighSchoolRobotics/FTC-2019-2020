@@ -5,13 +5,12 @@ import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.geometry.Waypoint;
 import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathAction;
-import com.millburnrobotics.skystone.subsystems.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import java.util.ArrayList;
 
 @Autonomous(group = "test")
-public class TestMode extends AutoModeBase {
+public class SplineTestMode extends AutoModeBase {
 
     @Override
     public void routine() {

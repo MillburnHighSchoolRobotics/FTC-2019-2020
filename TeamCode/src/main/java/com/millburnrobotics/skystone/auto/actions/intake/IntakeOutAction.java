@@ -1,7 +1,7 @@
 package com.millburnrobotics.skystone.auto.actions.intake;
 
 import com.millburnrobotics.skystone.auto.actions.Action;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 
 public class IntakeOutAction implements Action {
     @Override

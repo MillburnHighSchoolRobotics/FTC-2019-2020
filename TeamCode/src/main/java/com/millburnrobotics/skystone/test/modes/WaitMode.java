@@ -2,7 +2,7 @@ package com.millburnrobotics.skystone.test.modes;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.auto.AutoModeBase;
-import com.millburnrobotics.skystone.subsystems.Robot;
+import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
