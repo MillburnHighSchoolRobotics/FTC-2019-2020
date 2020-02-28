@@ -15,8 +15,8 @@ public class PurePursuitFollower {
     public Path path;
     private double lastOnPath;
     private Pose currentPose = new Pose();
-//    private PIDController controller = new PIDController(0.033,0.025,0.15);
-    private PIDController controller = new PIDController(0.043,0.033,0.127);
+    private PIDController controller = new PIDController(0.033,0.025,0.15);
+//    private PIDController controller = new PIDController(0.043,0.033,0.127);
     private ElapsedTime timer;
 
     public PurePursuitFollower(Path path) {
