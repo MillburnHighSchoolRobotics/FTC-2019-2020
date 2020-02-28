@@ -14,10 +14,10 @@ public class SideClaw extends Subsystem {
         RIGHT
     }
     private SideClawSide side;
-    ElapsedTime changeSideArm = new ElapsedTime();
-    ElapsedTime changeSideClaw = new ElapsedTime();
+    private ElapsedTime changeSideArm = new ElapsedTime();
+    private ElapsedTime changeSideClaw = new ElapsedTime();
 
-    ElapsedTime changeSide = new ElapsedTime();
+    private ElapsedTime changeSide = new ElapsedTime();
     @Override
     public void init(boolean auto) {
         if (auto) {

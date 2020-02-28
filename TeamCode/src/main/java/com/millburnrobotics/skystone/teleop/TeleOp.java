@@ -104,9 +104,13 @@ public class TeleOp extends OpMode {
         //-------------------------------------------- Claw --------------------------------------------//
         if (gamepad1.a && Robot.getInstance().getChainBar().canToggleClaw()) {
             Robot.getInstance().getChainBar().clawClose();
-        } else if (gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) {
-            Robot.getInstance().getChainBar().clawOpen();
-        } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
+        } else if ((gamepad1.b && Robot.getInstance().getChainBar().canToggleClaw()) || gamepad1.y) {
+            if (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) {
+                Robot.getInstance().getChainBar().clawOpen();
+            } else {
+                Robot.getInstance().getChainBar().clawOpenish();
+            }
+        } else if (Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().clawOpen();
         } else if (gamepad1.dpad_right) {
             Robot.getInstance().getChainBar().clawClose();

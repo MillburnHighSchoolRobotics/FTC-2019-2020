@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 
 import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_JERK_THRESHOLD;
+import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_RECOVERY;
 
 public class IMU extends Subsystem {
     private double maxG = 0;
@@ -17,7 +18,7 @@ public class IMU extends Subsystem {
 
     @Override
     public void init(boolean auto) {
-        collisionDetection = false;
+        collisionDetection = auto && COLLISION_RECOVERY;
         lastAcceleration = new Acceleration();
     }
 

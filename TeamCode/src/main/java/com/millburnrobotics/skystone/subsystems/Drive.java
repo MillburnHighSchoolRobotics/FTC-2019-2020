@@ -185,6 +185,9 @@ public class Drive extends Subsystem {
             vectorTo(currentPose, nextPose, power, minPower, maxPower);
         }
     }
+    public double getPower() {
+        return follower.updatePower();
+    }
     public void setState(DriveState state) {
         if (changeStateTimer.milliseconds() > 250) {
             this.state = state;

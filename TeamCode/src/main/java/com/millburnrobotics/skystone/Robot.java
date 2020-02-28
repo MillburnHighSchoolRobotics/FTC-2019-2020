@@ -136,9 +136,8 @@ public class Robot {
         getSideClaw().init(auto);
         getCamera().init(auto);
         getIMU().init(auto);
-
-        getSideClaw().setSide(SideClaw.SideClawSide.LEFT);
     }
+
     public Drive getDrive() {
         return drive;
     }

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(group = "util")
-public class ChainBarTest extends OpMode {
+public class ChainBarLeftTest extends OpMode {
     double barPos, inc;
     Servo bar;
 

@@ -10,13 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import java.util.ArrayList;
 
 @Autonomous(group = "test")
-public class SplineTestMode extends AutoModeBase {
+public class TestMode extends AutoModeBase {
 
     @Override
     public void routine() {
         ArrayList<Waypoint> w1 = new ArrayList<>();
         w1.add(new Waypoint(new Pose(0, 0,0),0));
         w1.add(new Waypoint(new Pose(0,72,0),0));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1),0.05,0.95));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1),0.15,1));
     }
 }

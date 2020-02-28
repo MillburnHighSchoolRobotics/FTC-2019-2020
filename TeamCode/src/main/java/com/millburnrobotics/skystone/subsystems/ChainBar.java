@@ -15,6 +15,7 @@ import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARR_UP_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_CLAW_CLOSE;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_CLAW_OPEN;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBAR_CLAW_OPENISH;
 
 public class ChainBar extends Subsystem {
     public enum CapstoneState {
@@ -85,6 +86,9 @@ public class ChainBar extends Subsystem {
     }
     public void clawOpen() {
         setClawPosition(CHAINBAR_CLAW_OPEN);
+    }
+    public void clawOpenish() {
+        setClawPosition(CHAINBAR_CLAW_OPENISH);
     }
     public void setClawPosition(double pos) {
         changeClaw.reset();
