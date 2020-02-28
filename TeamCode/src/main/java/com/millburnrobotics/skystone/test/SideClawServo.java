@@ -14,8 +14,8 @@ public class SideClawServo extends OpMode {
 
     @Override
     public void init() {
-        sideClawBar = hardwareMap.servo.get("sideClawArmR");
-        sideClawClamp = hardwareMap.servo.get("sideClawClawR");
+        sideClawBar = hardwareMap.servo.get("sideClawArmL");
+        sideClawClamp = hardwareMap.servo.get("sideClawClawL");
         barPos = clampPos = 0.5;
         inc = 0.1;
     }

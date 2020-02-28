@@ -75,16 +75,21 @@ public class TeleOp extends OpMode {
 
         }
         //-------------------------------------------- ChainBar --------------------------------------------//
-        if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() > CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
-            Robot.getInstance().getChainBar().setChainBarPosition(
-                    Robot.getInstance().getChainBar().getChainBarLPosition() - CHAINBAR_INCREMENT,
-                    Robot.getInstance().getChainBar().getChainBarRPosition() + CHAINBAR_INCREMENT
-            );
-        } else if (gamepad1.left_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_IN_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
-            Robot.getInstance().getChainBar().setChainBarPosition(
-                    Robot.getInstance().getChainBar().getChainBarLPosition() + CHAINBAR_INCREMENT,
-                    Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
-            );
+//        if (gamepad1.right_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() > CHAINBARL_OUT_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+//            Robot.getInstance().getChainBar().setChainBarPosition(
+//                    Robot.getInstance().getChainBar().getChainBarLPosition() - CHAINBAR_INCREMENT,
+//                    Robot.getInstance().getChainBar().getChainBarRPosition() + CHAINBAR_INCREMENT
+//            );
+//        } else if (gamepad1.left_bumper && Robot.getInstance().getChainBar().getChainBarLPosition() < CHAINBARL_IN_POS && Robot.getInstance().getChainBar().canToggleChainBar()) {
+//            Robot.getInstance().getChainBar().setChainBarPosition(
+//                    Robot.getInstance().getChainBar().getChainBarLPosition() + CHAINBAR_INCREMENT,
+//                    Robot.getInstance().getChainBar().getChainBarRPosition() - CHAINBAR_INCREMENT
+//            );
+//        }
+        if (gamepad1.right_bumper) {
+            Robot.getInstance().getChainBar().chainBarOut();
+        } else if (gamepad1.left_bumper) {
+            Robot.getInstance().getChainBar().chainBarIn();
         } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
             Robot.getInstance().getChainBar().chainBarUp();
         } else if (gamepad1.dpad_right) {

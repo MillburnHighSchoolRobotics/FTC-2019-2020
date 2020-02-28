@@ -71,7 +71,7 @@ public abstract class AutoModeBase extends LinearOpMode {
             action.update();
             Robot.getInstance().outputToTelemetry(telemetry);
             telemetry.update();
-            if (time > timer.milliseconds()) {
+            if (time < timer.milliseconds()) {
                 break;
             }
             while (periodTimer.milliseconds() < UPDATE_PERIOD);
