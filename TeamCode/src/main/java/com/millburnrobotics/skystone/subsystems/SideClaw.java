@@ -28,10 +28,10 @@ public class SideClaw extends Subsystem {
             armInit();
             clawOpen();
         } else {
-            side = SideClawSide.LEFT;
+            this.side = SideClawSide.LEFT;
             armUp();
             clawClose();
-            side = SideClawSide.RIGHT;
+            this.side = SideClawSide.RIGHT;
             armUp();
             clawClose();
             changeSideArm.reset();

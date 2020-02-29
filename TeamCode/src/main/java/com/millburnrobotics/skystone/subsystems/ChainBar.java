@@ -7,9 +7,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CAPSTONE_CLOSE;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CAPSTONE_OPEN;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_ALL_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_IN_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARL_UP_POS;
+import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARR_ALL_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARR_IN_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARR_OUT_POS;
 import static com.millburnrobotics.skystone.Constants.ChainBarConstants.CHAINBARR_UP_POS;
@@ -35,6 +37,8 @@ public class ChainBar extends Subsystem {
     public void init(boolean auto) {
         if (!auto) {
             changeChainbar.reset();
+            chainBarUp();
+            clawOpen();
         }
         capstoneClose();
     }
@@ -57,6 +61,9 @@ public class ChainBar extends Subsystem {
     }
     public void chainBarOut() {
         setChainBarPosition(CHAINBARL_OUT_POS, CHAINBARR_OUT_POS);
+    }
+    public void chainBarOutAll() {
+        setChainBarPosition(CHAINBARL_ALL_OUT_POS, CHAINBARR_ALL_OUT_POS);
     }
     public void chainBarInAuto() {
         chainBarIn();

@@ -31,7 +31,7 @@ public class FourBlockBlueMode extends AutoModeBase {
     public void routine() {
         Robot.getInstance().side = Constants.Side.BLUE;
         Robot.getInstance().getSideClaw().updateSide(SideClaw.SideClawSide.LEFT);
-        Robot.getInstance().block = Constants.Block.RIGHT;
+        Robot.getInstance().block = Constants.Block.LEFT;
 //        Robot.getInstance().getCamera().detectBlock();
 
         double minPower = 0.2;
@@ -42,7 +42,7 @@ public class FourBlockBlueMode extends AutoModeBase {
 
 //        double crossY = 2;
 
-        double claw_to_front = 2.75;
+        double claw_to_front = 3.5;
         double claw_extend = 0.5;
 
         double X_BLUE_BLOCK_CLAW = -24-9-claw_extend;
@@ -88,8 +88,8 @@ public class FourBlockBlueMode extends AutoModeBase {
 
         ArrayList<Waypoint> w2 = new ArrayList<>(); // deliver 1
         w2.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(45)));
-        w2.add(new Waypoint(new Pose(-42,y1+8,Math.PI),0));
-        w2.add(new Waypoint(new Pose(-40,0,Math.PI),0));
+        w2.add(new Waypoint(new Pose(-43,y1+8,Math.PI),0));
+        w2.add(new Waypoint(new Pose(-42,0,Math.PI),0));
         w2.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+2,Math.PI),Math.toRadians(330)));
         runAction(new DriveFollowPathAction(PathBuilder.buildPath(w2),minPower, maxPower));
 //        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w2),w2.get(w2.size()-1).pose.y-2,minPower2,maxPower));
@@ -106,8 +106,8 @@ public class FourBlockBlueMode extends AutoModeBase {
 
         ArrayList<Waypoint> w4 = new ArrayList<>(); // deliver 2
         w4.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(45)));
-        w4.add(new Waypoint(new Pose(-42,y2+8,Math.PI),0));
-        w4.add(new Waypoint(new Pose(-40,0,Math.PI),0));
+        w4.add(new Waypoint(new Pose(-43,y2+8,Math.PI),0));
+        w4.add(new Waypoint(new Pose(-42,0,Math.PI),0));
         w4.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+2,Math.PI),Math.toRadians(330)));
         runAction(new DriveFollowPathAction(PathBuilder.buildPath(w4),minPower, maxPower));
 //        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w4),w4.get(w4.size()-1).pose.y-2,minPower2,maxPower));
@@ -124,8 +124,8 @@ public class FourBlockBlueMode extends AutoModeBase {
 
         ArrayList<Waypoint> w6 = new ArrayList<>(); // deliver 3
         w6.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(45)));
-        w6.add(new Waypoint(new Pose(-43,y3+6,Math.PI),0));
-        w6.add(new Waypoint(new Pose(-44,0,Math.PI),0));
+        w6.add(new Waypoint(new Pose(-44,y3+6,Math.PI),0));
+        w6.add(new Waypoint(new Pose(-43,0,Math.PI),0));
         w6.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-8,Math.PI),Math.toRadians(330)));
         runAction(new DriveFollowPathAction(PathBuilder.buildPath(w6),minPower, maxPower));
 //        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w6),w6.get(w6.size()-1).pose.y-2,minPower2,maxPower));
@@ -143,8 +143,8 @@ public class FourBlockBlueMode extends AutoModeBase {
 
             ArrayList<Waypoint> w8 = new ArrayList<>(); // deliver 4
             w8.add(new Waypoint(Robot.getInstance().getOdometry().getPose(), Math.toRadians(45)));
-            w8.add(new Waypoint(new Pose(-43, y4 + 6, Math.PI), 0));
-            w8.add(new Waypoint(new Pose(-44, 0, Math.PI), 0));
+            w8.add(new Waypoint(new Pose(-44, y4 + 6, Math.PI), 0));
+            w8.add(new Waypoint(new Pose(-43, 0, Math.PI), 0));
             w8.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-8, Math.PI), Math.toRadians(330)));
 //            runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w8),w8.get(w8.size()-1).pose.y-2,minPower2, maxPower));
             runAction(new DriveFollowPathAction(PathBuilder.buildPath(w8),minPower, maxPower));
@@ -153,10 +153,11 @@ public class FourBlockBlueMode extends AutoModeBase {
 
         runAction(new HookMidAction());
         timedAction(new DriveRotationAction(90, 0.8, 5),600); // foundation
+        timedAction(new DriveToPoseAction(new Pose(Robot.getInstance().getOdometry().getPose().x,0, Math.PI/2),0.8), 75);
         runAction(new HookDownAction());
         timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),0.7), 500);
         runAction(new WaitAction(50));
-        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y-8,Math.PI/2),1),1000);
+        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),1),1300);
         timedAction(new DriveRotationAction(180, 1, 5),1000);
         runAction(new HookUpAction());
 

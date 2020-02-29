@@ -87,10 +87,12 @@ public class Constants {
 
         public static final double CHAINBARL_IN_POS = 0.9;
         public static final double CHAINBARR_IN_POS = 0.3;
-        public static final double CHAINBARL_OUT_POS = 0.3;
-        public static final double CHAINBARR_OUT_POS = 0.9;
-        public static final double CHAINBARL_UP_POS = 0.8;
-        public static final double CHAINBARR_UP_POS = 0.4;
+        public static final double CHAINBARL_ALL_OUT_POS = 0.3;
+        public static final double CHAINBARR_ALL_OUT_POS = 0.9;
+        public static final double CHAINBARL_OUT_POS = 0.35;
+        public static final double CHAINBARR_OUT_POS = 0.85;
+        public static final double CHAINBARL_UP_POS = 0.87;
+        public static final double CHAINBARR_UP_POS = 0.33;
 
         public static final double CHAINBAR_INCREMENT = 0.05;
 
@@ -114,7 +116,7 @@ public class Constants {
         public static final double LIFT_MAX_POS = 4350;
         public static final double LIFT_MIN_POS = 20;
         public static final double LIFT_RAISED_MIN_POS = 200;
-        public static final double[] LIFT_STONE_POS = {0,350,760,1315,1713,2265,2740,3275,3875};
+        public static final double[] LIFT_STONE_POS = {0,970,1370,2040,2630,3070,3671,4060,4350};
     }
 
     public static class SideClawConstants {

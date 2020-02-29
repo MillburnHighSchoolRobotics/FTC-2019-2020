@@ -87,7 +87,11 @@ public class TeleOp extends OpMode {
 //            );
 //        }
         if (gamepad1.right_bumper) {
-            Robot.getInstance().getChainBar().chainBarOut();
+            if (Robot.getInstance().liftR.getCurrentPosition() > LIFT_RAISED_MIN_POS) {
+                Robot.getInstance().getChainBar().chainBarOut();
+            } else {
+                Robot.getInstance().getChainBar().chainBarOutAll();
+            }
         } else if (gamepad1.left_bumper) {
             Robot.getInstance().getChainBar().chainBarIn();
         } else if (gamepad1.y || Robot.getInstance().getIntake().getState() == Intake.IntakeState.INTAKE_IN) {
