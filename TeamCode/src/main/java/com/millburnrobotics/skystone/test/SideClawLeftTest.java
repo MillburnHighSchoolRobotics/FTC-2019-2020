@@ -7,15 +7,21 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawArmL;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawArmR;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawClawL;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawClawR;
+
+
 @TeleOp(group = "util")
-public class SideClawServo extends OpMode {
+public class SideClawLeftTest extends OpMode {
     double barPos, clampPos, inc;
     Servo sideClawBar, sideClawClamp;
 
     @Override
     public void init() {
-        sideClawBar = hardwareMap.servo.get("sideClawArmL");
-        sideClawClamp = hardwareMap.servo.get("sideClawClawL");
+        sideClawBar = hardwareMap.servo.get(_SideClawArmL);
+        sideClawClamp = hardwareMap.servo.get(_SideClawClawL);
         barPos = clampPos = 0.5;
         inc = 0.1;
     }

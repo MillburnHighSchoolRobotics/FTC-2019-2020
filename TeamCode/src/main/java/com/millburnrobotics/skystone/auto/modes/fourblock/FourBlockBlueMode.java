@@ -31,7 +31,7 @@ public class FourBlockBlueMode extends AutoModeBase {
     public void routine() {
         Robot.getInstance().side = Constants.Side.BLUE;
         Robot.getInstance().getSideClaw().updateSide(SideClaw.SideClawSide.LEFT);
-        Robot.getInstance().block = Constants.Block.CENTER;
+        Robot.getInstance().block = Constants.Block.RIGHT;
 //        Robot.getInstance().getCamera().detectBlock();
 
         double minPower = 0.2;
@@ -154,10 +154,10 @@ public class FourBlockBlueMode extends AutoModeBase {
         runAction(new HookMidAction());
         timedAction(new DriveRotationAction(90, 0.8, 5),600); // foundation
         runAction(new HookDownAction());
-        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y-4,Math.PI/2),0.7), 500);
+        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),0.7), 500);
         runAction(new WaitAction(50));
-        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),1),800);
-        timedAction(new DriveRotationAction(180, 1, 5),800);
+        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y-8,Math.PI/2),1),1000);
+        timedAction(new DriveRotationAction(180, 1, 5),1000);
         runAction(new HookUpAction());
 
         ArrayList<Waypoint> w9 = new ArrayList<>(); // park
@@ -175,7 +175,7 @@ public class FourBlockBlueMode extends AutoModeBase {
     private void drop() {
         runAction(new SideClawArmDownAction());
         runAction(new SideClawOpenAction());
-        runAction(new WaitAction(50));
+        runAction(new WaitAction(150));
         runAction(new SideClawArmUpAction());
     }
 }
