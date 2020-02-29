@@ -21,20 +21,22 @@ public class SideClaw extends Subsystem {
     @Override
     public void init(boolean auto) {
         if (auto) {
-            if (Robot.getInstance().side == Constants.Side.BLUE) {
-                this.side = SideClawSide.LEFT;
-            } else {
-                this.side = SideClawSide.RIGHT;
-            }
+            this.side = SideClawSide.LEFT;
+            armInit();
+            clawOpen();
+            this.side = SideClawSide.RIGHT;
             armInit();
             clawOpen();
         } else {
+            side = SideClawSide.LEFT;
+            armUp();
+            clawClose();
+            side = SideClawSide.RIGHT;
             armUp();
             clawClose();
             changeSideArm.reset();
             changeSideClaw.reset();
             changeSide.reset();
-            side = SideClawSide.LEFT;
         }
     }
 
@@ -51,6 +53,9 @@ public class SideClaw extends Subsystem {
     }
 
     public void setSide(SideClawSide side) {
+        this.side = side;
+    }
+    public void updateSide(SideClawSide side) {
         this.side = side;
     }
 

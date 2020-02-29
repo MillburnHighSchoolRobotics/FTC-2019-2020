@@ -36,8 +36,6 @@ public class ChainBar extends Subsystem {
         if (!auto) {
             changeChainbar.reset();
         }
-        chainBarUp();
-        clawOpen();
         capstoneClose();
     }
 

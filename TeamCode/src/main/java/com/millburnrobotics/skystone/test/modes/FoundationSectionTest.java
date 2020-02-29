@@ -6,6 +6,7 @@ import com.millburnrobotics.lib.geometry.Waypoint;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.Robot;
 import com.millburnrobotics.skystone.auto.AutoModeBase;
+import com.millburnrobotics.skystone.auto.actions.WaitAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveFollowPathAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
@@ -33,12 +34,12 @@ public class FoundationSectionTest extends AutoModeBase {
         runAction(new DriveToPoseAction(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-8,Math.PI), 0.5));
 
         runAction(new HookMidAction());
-        runAction(new DriveRotationAction(90, 0.7, 5)); // foundation
+        timedAction(new DriveRotationAction(90, 0.8, 5),600); // foundation
         runAction(new HookDownAction());
-        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),0.8),400);
-//        runAction(new WaitAction(500));
+        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y-4,Math.PI/2),0.7), 500);
+        runAction(new WaitAction(50));
         timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),1),800);
-        runAction(new DriveRotationAction(180, 0.7, 10));
+        timedAction(new DriveRotationAction(180, 1, 5),800);
         runAction(new HookUpAction());
 
         ArrayList<Waypoint> w9 = new ArrayList<>(); // park

@@ -19,6 +19,7 @@ import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmMidAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawArmUpAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawCloseAction;
 import com.millburnrobotics.skystone.auto.actions.sideclaw.SideClawOpenAction;
+import com.millburnrobotics.skystone.subsystems.SideClaw;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import java.util.ArrayList;
@@ -29,11 +30,12 @@ public class FourBlockBlueMode extends AutoModeBase {
     @Override
     public void routine() {
         Robot.getInstance().side = Constants.Side.BLUE;
+        Robot.getInstance().getSideClaw().updateSide(SideClaw.SideClawSide.LEFT);
         Robot.getInstance().block = Constants.Block.CENTER;
 //        Robot.getInstance().getCamera().detectBlock();
 
         double minPower = 0.2;
-        double maxPower = 0.85;
+        double maxPower = 0.95;
 //        double minPower = 0.15;
 //        double minPower2 = 0.4;
 //        double maxPower = 1;
@@ -150,12 +152,12 @@ public class FourBlockBlueMode extends AutoModeBase {
         }
 
         runAction(new HookMidAction());
-        runAction(new DriveRotationAction(90, 0.7, 5)); // foundation
+        timedAction(new DriveRotationAction(90, 0.8, 5),600); // foundation
         runAction(new HookDownAction());
-        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),0.8),200);
-//        runAction(new WaitAction(500));
-        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),1),700);
-        runAction(new DriveRotationAction(180, 0.7, 10));
+        timedAction(new DriveToPoseAction(new Pose(0, Robot.getInstance().getOdometry().getPose().y-4,Math.PI/2),0.7), 500);
+        runAction(new WaitAction(50));
+        timedAction(new DriveToPoseAction(new Pose(-72, Robot.getInstance().getOdometry().getPose().y,Math.PI/2),1),800);
+        timedAction(new DriveRotationAction(180, 1, 5),800);
         runAction(new HookUpAction());
 
         ArrayList<Waypoint> w9 = new ArrayList<>(); // park

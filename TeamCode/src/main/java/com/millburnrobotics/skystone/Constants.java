@@ -131,10 +131,10 @@ public class Constants {
         public static final double SIDE_CLAW_L_CLOSE_POS = 0;
         public static final double SIDE_CLAW_L_OPEN_POS = 1;
 
-        public static final double SIDE_ARM_R_INIT_POS = 0.6;
-        public static final double SIDE_ARM_R_UP_POS = 0.4;
+        public static final double SIDE_ARM_R_INIT_POS = 0;
+        public static final double SIDE_ARM_R_UP_POS = 0.05;
         public static final double SIDE_ARM_R_MID_POS = 0.15;
-        public static final double SIDE_ARM_R_DOWN_POS = 0.05;
+        public static final double SIDE_ARM_R_DOWN_POS = 0.4;
 
         public static final double SIDE_CLAW_R_CLOSE_POS = 1;
         public static final double SIDE_CLAW_R_OPEN_POS = 0.2;
@@ -149,9 +149,9 @@ public class Constants {
 
         public static final double RIGHT_HOOK_DOWN_POS = 0;
         public static final double RIGHT_HOOK_UP_POS = 1;
-        public static final double RIGHT_HOOK_MID_POS = 0.5;
+        public static final double RIGHT_HOOK_MID_POS = 0.8;
         public static final double LEFT_HOOK_DOWN_POS = 1;
         public static final double LEFT_HOOK_UP_POS = 0;
-        public static final double LEFT_HOOK_MID_POS = 0.5;
+        public static final double LEFT_HOOK_MID_POS = 0.2;
     }
 }
