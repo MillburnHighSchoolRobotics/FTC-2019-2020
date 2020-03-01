@@ -101,7 +101,7 @@ public class Constants {
         public static final double CHAINBAR_CLAW_OPEN = 0.65;
 
         public static final double CAPSTONE_OPEN = 1;
-        public static final double CAPSTONE_CLOSE = .55;
+        public static final double CAPSTONE_CLOSE = .3;
     }
 
     public static class LiftConstants {
@@ -139,7 +139,7 @@ public class Constants {
         public static final double SIDE_ARM_R_DOWN_POS = 0.0;
 
         public static final double SIDE_CLAW_R_CLOSE_POS = 1;
-        public static final double SIDE_CLAW_R_OPEN_POS = 0.5;
+        public static final double SIDE_CLAW_R_OPEN_POS = 0;
 
         public static final double SIDE_ARM_INCREMENT = 0.05;
         public static final double SIDE_CLAW_INCREMENT = 0.05;

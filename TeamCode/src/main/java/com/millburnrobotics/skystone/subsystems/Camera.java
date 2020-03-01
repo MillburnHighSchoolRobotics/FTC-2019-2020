@@ -47,6 +47,7 @@ public class Camera extends Subsystem {
 
     @Override
     public void init(boolean auto) {
+        Robot.getInstance().block = Constants.Block.NULL;
         detectingSkystone = auto;
         if (detectingSkystone) {
             VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(Robot.getInstance().getCameraMonitorViewerID());
@@ -152,11 +153,11 @@ public class Camera extends Subsystem {
                 Robot.getInstance().block = Constants.Block.CENTER;
         } else {
             if (centroid.y > RED_LINE_LEFT && centroid.y < RED_LINE_RIGHT)
-                Robot.getInstance().block = Constants.Block.LEFT;
+                Robot.getInstance().block = Constants.Block.CENTER;
             else if (centroid.y > RED_LINE_RIGHT) {
                 Robot.getInstance().block = Constants.Block.RIGHT;
             } else
-                Robot.getInstance().block = Constants.Block.RIGHT;
+                Robot.getInstance().block = Constants.Block.LEFT;
         }
     }
     public static void recordImg(Mat mat, String name) throws IOException {

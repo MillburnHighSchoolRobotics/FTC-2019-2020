@@ -49,8 +49,8 @@ public class Hook extends Subsystem {
         state = HookState.HOOK_UP;
     }
     public void setHookPosition(double leftPos, double rightPos) {
-        Robot.getInstance().hookL.setPosition(leftPos);
         Robot.getInstance().hookR.setPosition(rightPos);
+        Robot.getInstance().hookL.setPosition(leftPos);
         toggleHook.reset();
     }
     public boolean toggleHook() {

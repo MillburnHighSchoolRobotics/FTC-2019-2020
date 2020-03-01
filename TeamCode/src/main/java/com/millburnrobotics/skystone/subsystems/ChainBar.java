@@ -25,20 +25,22 @@ public class ChainBar extends Subsystem {
         CAPSTONE_OPEN
     }
     private CapstoneState state;
-    double currentLeftPos;
-    double currentRightPos;
-    ElapsedTime changeChainbar = new ElapsedTime();
-    ElapsedTime changeClaw = new ElapsedTime();
-    ElapsedTime changeCapstone = new ElapsedTime();
+    private double currentLeftPos;
+    private double currentRightPos;
+    private ElapsedTime changeChainbar = new ElapsedTime();
+    private ElapsedTime changeClaw = new ElapsedTime();
+    private ElapsedTime changeCapstone = new ElapsedTime();
+    private ElapsedTime chainBarInTimer = new ElapsedTime();
+    private boolean chainBarIn = false;
 
-    boolean chainBarIn = false;
-    ElapsedTime chainBarInTimer = new ElapsedTime();
     @Override
     public void init(boolean auto) {
         if (!auto) {
             changeChainbar.reset();
             chainBarUp();
             clawOpen();
+        } else {
+            clawClose();
         }
         capstoneClose();
     }
