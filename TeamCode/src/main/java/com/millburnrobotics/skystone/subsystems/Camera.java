@@ -41,8 +41,8 @@ public class Camera extends Subsystem {
 
     private final static double BLUE_LINE_LEFT = 215;
     private final static double BLUE_LINE_RIGHT = 515;
-    private final static double RED_LINE_LEFT = 220;
-    private final static double RED_LINE_RIGHT = 490;
+    private final static double RED_LINE_LEFT = 205;
+    private final static double RED_LINE_RIGHT = 505;
     private final static double croppingConstant = 0.4;
 
     @Override
@@ -151,12 +151,12 @@ public class Camera extends Subsystem {
             else
                 Robot.getInstance().block = Constants.Block.CENTER;
         } else {
-            if (centroid.y <= RED_LINE_LEFT)
+            if (centroid.y > RED_LINE_LEFT && centroid.y < RED_LINE_RIGHT)
                 Robot.getInstance().block = Constants.Block.LEFT;
-            else if (centroid.y > RED_LINE_LEFT && centroid.y < RED_LINE_RIGHT) {
+            else if (centroid.y > RED_LINE_RIGHT) {
                 Robot.getInstance().block = Constants.Block.RIGHT;
             } else
-                Robot.getInstance().block = Constants.Block.CENTER;
+                Robot.getInstance().block = Constants.Block.RIGHT;
         }
     }
     public static void recordImg(Mat mat, String name) throws IOException {
