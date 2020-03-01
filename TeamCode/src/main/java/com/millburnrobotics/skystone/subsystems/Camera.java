@@ -39,15 +39,15 @@ public class Camera extends Subsystem {
     private boolean detectingSkystone = false;
     private VuforiaLocalizerImplSubclass vuforiaInstance;
 
-    private final static double BLUE_LINE_1_Y = 215;
-    private final static double BLUE_LINE_3_Y = 515;
-    private final static double RED_LINE_2_Y = 220;
-    private final static double RED_LINE_3_Y = 490;
+    private final static double BLUE_LINE_LEFT = 215;
+    private final static double BLUE_LINE_RIGHT = 515;
+    private final static double RED_LINE_LEFT = 220;
+    private final static double RED_LINE_RIGHT = 490;
     private final static double croppingConstant = 0.4;
 
     @Override
     public void init(boolean auto) {
-        detectingSkystone = false;
+        detectingSkystone = auto;
         if (detectingSkystone) {
             VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(Robot.getInstance().getCameraMonitorViewerID());
             params.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
@@ -124,11 +124,11 @@ public class Camera extends Subsystem {
         Log.d(TAG, "(" + centroid.x + "," + centroid.y + ")");
 
         if (Robot.getInstance().side == Constants.Side.BLUE) {
-            Imgproc.line(crop,new Point(0,BLUE_LINE_1_Y),new Point(height,BLUE_LINE_1_Y),new Scalar(255,0,0),5);
-            Imgproc.line(crop,new Point(0,BLUE_LINE_3_Y),new Point(height,BLUE_LINE_3_Y),new Scalar(255,0,0),5);
+            Imgproc.line(crop,new Point(0, BLUE_LINE_LEFT),new Point(height, BLUE_LINE_LEFT),new Scalar(255,0,0),5);
+            Imgproc.line(crop,new Point(0, BLUE_LINE_RIGHT),new Point(height, BLUE_LINE_RIGHT),new Scalar(255,0,0),5);
         } else {
-            Imgproc.line(crop,new Point(0,RED_LINE_2_Y),new Point(height,RED_LINE_2_Y),new Scalar(255,0,0),5);
-            Imgproc.line(crop,new Point(0,RED_LINE_3_Y),new Point(height,RED_LINE_3_Y),new Scalar(255,0,0),5);
+            Imgproc.line(crop,new Point(0, RED_LINE_LEFT),new Point(height, RED_LINE_LEFT),new Scalar(255,0,0),5);
+            Imgproc.line(crop,new Point(0, RED_LINE_RIGHT),new Point(height, RED_LINE_RIGHT),new Scalar(255,0,0),5);
         }
 
         try {
@@ -143,23 +143,20 @@ public class Camera extends Subsystem {
         for (MatOfPoint mat : contours) {
             mat.release();
         }
-
         if (Robot.getInstance().side == Constants.Side.BLUE) {
-            if (centroid.y < BLUE_LINE_1_Y)
-                Robot.getInstance().block = Constants.Block.LEFT;
-            else if (centroid.y > BLUE_LINE_1_Y && centroid.y < BLUE_LINE_3_Y)
-                Robot.getInstance().block = Constants.Block.CENTER;
-            else if (centroid.y > BLUE_LINE_3_Y) {
+            if (centroid.y > BLUE_LINE_LEFT && centroid.y < BLUE_LINE_RIGHT)
                 Robot.getInstance().block = Constants.Block.RIGHT;
-            }
+            else if (centroid.y > BLUE_LINE_RIGHT)
+                Robot.getInstance().block = Constants.Block.LEFT;
+            else
+                Robot.getInstance().block = Constants.Block.CENTER;
         } else {
-            if (centroid.y <= RED_LINE_2_Y)
+            if (centroid.y <= RED_LINE_LEFT)
                 Robot.getInstance().block = Constants.Block.LEFT;
-            else if (centroid.y >= RED_LINE_3_Y)
-                Robot.getInstance().block = Constants.Block.CENTER;
-            else if (centroid.y > RED_LINE_2_Y && centroid.y < RED_LINE_3_Y) {
+            else if (centroid.y > RED_LINE_LEFT && centroid.y < RED_LINE_RIGHT) {
                 Robot.getInstance().block = Constants.Block.RIGHT;
-            }
+            } else
+                Robot.getInstance().block = Constants.Block.CENTER;
         }
     }
     public static void recordImg(Mat mat, String name) throws IOException {
