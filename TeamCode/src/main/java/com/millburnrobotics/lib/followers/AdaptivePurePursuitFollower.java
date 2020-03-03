@@ -8,7 +8,9 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
 import static java.lang.Math.signum;
 
 public class AdaptivePurePursuitFollower {
-    public Path path;
+    private Path path;
+    private Pose last_lookahead = new Pose();
+    private int check = 0;
     private double lastOnPath;
     public double distAlongPath;
 
@@ -71,10 +73,16 @@ public class AdaptivePurePursuitFollower {
         }
         if (path.size() > 0) {
             Pose end = path.end();
-            if (end.equals(lookahead)) {
+            if (end.equals(lookahead) || last_lookahead.equals(lookahead)) {
+                last_lookahead = end;
                 return end;
             }
         }
+        if (check > 1) {
+            last_lookahead = lookahead;
+            check = 0;
+        }
+        check++;
         return lookahead;
     }
     public Pose updatePose() {

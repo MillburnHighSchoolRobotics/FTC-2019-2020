@@ -5,29 +5,27 @@ import com.millburnrobotics.lib.control.PathBuilder;
 import com.millburnrobotics.lib.followers.AdaptivePurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.geometry.Waypoint;
-import com.millburnrobotics.lib.util.MathUtils;
 
 import java.util.ArrayList;
 
 public class PurePursuitTest {
-    public static void main(String[] args) {
-        ArrayList<Waypoint> waypoints = new ArrayList<>();
-        waypoints.add(new Waypoint(new Pose(0,0,0),0));
-        waypoints.add(new Waypoint(new Pose(48,48,0),0));
-        Path path =  PathBuilder.buildPath(waypoints);
+    public static void main(String[] args) throws InterruptedException {
+        ArrayList<Waypoint> w3 = new ArrayList<>(); // cycle 2
+        w3.add(new Waypoint(new Pose(-24-9-0.5, 72-4-34.5/2.0+(9-3.5)+2,Math.PI),Math.toRadians(150)));
+        w3.add(new Waypoint(new Pose(-40,0,Math.PI),Math.PI));
+        w3.add(new Waypoint(new Pose(-24-9-0.5-4,-24-4+(9-3.5)-8,Math.PI),Math.toRadians(215)));
+        Path path =  PathBuilder.buildPath(w3);
         AdaptivePurePursuitFollower follower = new AdaptivePurePursuitFollower(path);
 
-        double variance = 0.2;
-        double num = 3;
-        Pose p = new Pose(0,0);
-        while (!MathUtils.equals(p.distTo(path.end()),0,1)) {
+        Pose p = new Pose(-24-9-0.5, 72-4-34.5/2.0+(9-3.5)+2,Math.PI);
+        while (!p.equals(path.end())) {
             Pose pose1 = follower.getLookaheadPoint(p);
             System.out.println("(x-" + p.x + ")^{2}+(y-" + p.y + ")^{2}=1");
             if (pose1.equals(path.end())) {
                 break;
             }
-            double multiplier = (Math.random()*variance)+1-variance;
-            p = new Pose(p.x+(Math.abs(pose1.x-p.x)/num)*multiplier,p.y+(Math.abs(pose1.y-p.y)/num)*multiplier);
+            Thread.sleep(5);
+            p = pose1;
         }
     }
 }
