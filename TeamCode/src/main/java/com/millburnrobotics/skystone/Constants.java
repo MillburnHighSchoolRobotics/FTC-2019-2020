@@ -44,6 +44,9 @@ public class Constants {
 
         public static final double PURE_PURSUIT_THRESH = 4;
         public static final long LOOK_AHEAD = 6;
+        public static final double MAX_V = 60;
+        public static final double MAX_A = 65;
+        public static final double MAX_J = 0;
 
         public static double motorTicksToRadians(double ticks) {
             return 2*Math.PI*(ticks/(MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class).getTicksPerRev()));

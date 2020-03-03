@@ -17,6 +17,6 @@ public class TestMode extends AutoModeBase {
         ArrayList<Waypoint> w1 = new ArrayList<>();
         w1.add(new Waypoint(new Pose(0, 0,0),0));
         w1.add(new Waypoint(new Pose(0,72,0),0));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1),0.15,1));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1)));
     }
 }

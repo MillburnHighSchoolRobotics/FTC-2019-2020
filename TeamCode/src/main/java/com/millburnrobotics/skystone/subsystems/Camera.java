@@ -3,6 +3,7 @@ package com.millburnrobotics.skystone.subsystems;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.util.VuforiaLocalizerImplSubclass;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.Robot;
@@ -58,7 +59,7 @@ public class Camera extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData(TAG, Robot.getInstance().block);
     }
 

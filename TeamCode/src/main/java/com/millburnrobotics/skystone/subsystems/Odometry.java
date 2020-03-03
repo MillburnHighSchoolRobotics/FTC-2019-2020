@@ -2,6 +2,9 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.Constants;
@@ -10,12 +13,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.BOT_WIDTH;
+
 public class Odometry extends Subsystem {
     private String TAG = "Odometry";
     private Pose pose;
     private double x, y, heading;
+    private double v_x, v_y, v_angular;
     private double orientation, rotation;
     private double erPosLast, elPosLast, ebPosLast;
+    private ElapsedTime updateTimer = new ElapsedTime();
 
     private ElapsedTime displayTimer = new ElapsedTime();
 
@@ -26,15 +33,20 @@ public class Odometry extends Subsystem {
         this.x = 0;
         this.y = 0;
         this.heading = 0;
+        this.v_x = 0;
+        this.v_y = 0;
+        this.v_angular = 0;
         this.orientation = 0;
         this.rotation = 0;
         this.erPosLast = 0;
         this.elPosLast = 0;
         this.ebPosLast = 0;
+        updateTimer.reset();
+
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("Pose", pose);
         telemetry.addData("er", Robot.getInstance().er.getCurrentPosition());
         telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());
@@ -44,6 +56,16 @@ public class Odometry extends Subsystem {
             Log.d("OdometryDisplay", ""+pose);
             displayTimer.reset();
         }
+        packet.put("x", x);
+        packet.put("y", y);
+        packet.put("heading", heading);
+
+        packet.fieldOverlay().setStroke("#3F51B5");
+        packet.fieldOverlay().strokeCircle(pose.getX(), pose.getY(), BOT_WIDTH/2.0);
+        Pose v = pose.polar(BOT_WIDTH/2.0);
+        double x1 = pose.getX() + v.getX() / 2, y1 = pose.getY() + v.getY() / 2;
+        double x2 = pose.getX() + v.getX(), y2 = pose.getY() + v.getY();
+        packet.fieldOverlay().strokeLine(x1, y1, x2, y2);
     }
 
     @Override
@@ -54,9 +76,16 @@ public class Odometry extends Subsystem {
         Robot.getInstance().savePreference("heading", String.valueOf(Math.toDegrees(pose.heading)));
     }
     private Pose getPoseEstimate() {
+        double prevX = x;
+        double prevY = y;
+        double prevHeading = heading;
+        double time = 0;
+
         double erPos = encoderToDistance(Robot.getInstance().er.getCurrentPosition());
         double elPos = -encoderToDistance(Robot.getInstance().el.getCurrentPosition());
         double ebPos = encoderToDistance(Robot.getInstance().eb.getCurrentPosition());
+        time = updateTimer.seconds();
+        updateTimer.reset();
 
         Log.d(TAG, "er pos (inches): " + erPos);
         Log.d(TAG, "el pos (inches): " + elPos);
@@ -99,6 +128,11 @@ public class Odometry extends Subsystem {
         if (rotation > 0) rotation = Math.floor(rotation);
         else if (rotation < 0) rotation = Math.ceil(rotation);
 
+        v_x = (x-prevX)/time;
+        v_y = (y-prevY)/time;
+        v_angular = (heading-prevHeading)/time;
+        updateTimer.reset();
+
         Log.d(TAG, "rotation: " + rotation);
         Log.d(TAG, "orientation: " + orientation);
 
@@ -127,6 +161,9 @@ public class Odometry extends Subsystem {
     public Pose getPose() {
         return pose;
     }
+    public Pose getVelocity() {
+        return new Pose(v_x, v_y, v_angular);
+    }
     public double getX() {
         return x;
     }
@@ -135,6 +172,15 @@ public class Odometry extends Subsystem {
     }
     public double getHeading() {
         return heading;
+    }
+    public double getVelocityX() {
+        return v_x;
+    }
+    public double getVelocityY() {
+        return v_y;
+    }
+    public double getAngularVelocity() {
+        return v_angular;
     }
 
     public static double encoderToDistance(double ticks) {

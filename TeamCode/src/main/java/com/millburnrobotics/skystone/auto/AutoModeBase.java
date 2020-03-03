@@ -1,5 +1,7 @@
 package com.millburnrobotics.skystone.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.Robot;
 import com.millburnrobotics.skystone.auto.actions.Action;
@@ -17,7 +19,8 @@ public abstract class AutoModeBase extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry.setMsTransmissionInterval(5);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry.setMsTransmissionInterval(25);
         telemetry.addData("startup", "Loading...");
         telemetry.update();
         Robot.getInstance().init(hardwareMap, true);

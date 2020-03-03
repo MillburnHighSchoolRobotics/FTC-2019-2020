@@ -1,7 +1,9 @@
 package com.millburnrobotics.lib.control;
 
+import com.millburnrobotics.lib.followers.AdaptivePurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.geometry.Waypoint;
+import com.millburnrobotics.lib.profile.MotionProfileGenerator;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class PathBuilder {
         } else if (p.endHeading - p.startHeading > Math.PI) {
             p.startHeading += 2*Math.PI;
         }
+        p.follower = new AdaptivePurePursuitFollower(p);
+        p.profile = MotionProfileGenerator.generateProfile(p.length());
 
         return p;
     }

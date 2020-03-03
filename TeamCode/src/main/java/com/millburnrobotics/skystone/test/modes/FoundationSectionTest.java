@@ -45,6 +45,6 @@ public class FoundationSectionTest extends AutoModeBase {
         ArrayList<Waypoint> w9 = new ArrayList<>(); // park
         w9.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
         w9.add(new Waypoint(new Pose(-44, 0,Math.PI),Math.PI));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w9),0.2, 0.85));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w9)));
     }
 }

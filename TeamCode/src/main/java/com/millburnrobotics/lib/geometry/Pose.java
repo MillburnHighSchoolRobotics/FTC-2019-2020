@@ -99,4 +99,8 @@ public class Pose {
     public String toString() {
         return ("("+Math.round(x*1000.0)/1000.0+","+Math.round(y*1000.0)/1000.0+","+Math.round(Math.toDegrees(heading)*1000.0)/1000.0+")");
     }
+    @Override
+    public boolean equals(Object p1) {
+        return MathUtils.equals(x,((Pose)p1).x) && MathUtils.equals(y,((Pose)p1).y);
+    }
 }

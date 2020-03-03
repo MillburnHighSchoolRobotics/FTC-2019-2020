@@ -2,18 +2,24 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.config.ValueProvider;
+import com.acmerobotics.dashboard.config.variable.BasicVariable;
+import com.acmerobotics.dashboard.config.variable.CustomVariable;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.control.Path;
-import com.millburnrobotics.lib.followers.PurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.profile.MotionState;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.lib.util.PIDController;
 import com.millburnrobotics.skystone.Robot;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_V;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
 import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_RECOVERY_TIME;
 
@@ -24,8 +30,12 @@ public class Drive extends Subsystem {
     }
     private DriveState state;
 
-    private PurePursuitFollower follower = null;
-    private PIDController pidController = new PIDController(0.014,0.002,0.004);
+    private PIDController headingController = new PIDController(0.014,0.002,0.004);
+    private double kv = 1.0/MAX_V;
+    private double ka = 0.002;
+    private double kp = 0.01;
+
+    private Pose lookahead = new Pose();
 
     private ElapsedTime changeStateTimer = new ElapsedTime();
 
@@ -36,9 +46,34 @@ public class Drive extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("DriveState", state.name());
+
+        String catName = getClass().getSimpleName();
+        CustomVariable catVar = (CustomVariable) Robot.getInstance().dashboard.getConfigRoot().getVariable(catName);
+        if (catVar == null) {
+            catVar = new CustomVariable();
+            Robot.getInstance().dashboard.getConfigRoot().putVariable(catName, catVar);
+        }
+
+        CustomVariable ff = new CustomVariable();
+        ff.putVariable("kv", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return kv; }
+            @Override public void set(Double value) { kv = value; }
+        }));
+        ff.putVariable("ka", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return ka; }
+            @Override public void set(Double value) { ka = value; }
+        }));
+        ff.putVariable("kp", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return kp; }
+            @Override public void set(Double value) { kp = value; }
+        }));
+
+        catVar.putVariable("FF_CONST", ff);
+        Robot.getInstance().dashboard.updateConfig();
     }
+
 
     @Override
     public void update() {
@@ -65,7 +100,7 @@ public class Drive extends Subsystem {
     }
     public void rotateTo(double target, double power) {
         double targetHeading = Math.toDegrees(MathUtils.normalize(Math.toRadians(target)));
-        pidController.setTarget(targetHeading);
+        headingController.setTarget(targetHeading);
 
         double currentHeading = Math.toDegrees(Robot.getInstance().getOdometry().getPose().getHeading());
         if (currentHeading - targetHeading > 180) {
@@ -73,21 +108,14 @@ public class Drive extends Subsystem {
         } else if (targetHeading - currentHeading > 180) {
             currentHeading += 360;
         }
-        double output = pidController.getPIDOutput(currentHeading);
+        double output = headingController.getPIDOutput(currentHeading);
         Log.d("turn pid", "output - " + output);
         Log.d("turn pid", "current heading - " + currentHeading);
         Log.d("turn pid", "target heading - " + targetHeading);
         setDrivePower(-power*output,power*output);
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power) {
-        vectorTo(currentPose, targetPose, power, 0, 1);
-    }
-    public void vectorTo(Pose currentPose, Pose targetPose, double power, double minPower, double maxPower) {
-        double[] motorPowers = powerVector(currentPose, targetPose, Math.min(power, maxPower));
-
-        Log.d("powervector", Arrays.toString(motorPowers) +"");
-
-        setDrivePower(scalePowerArray(motorPowers, minPower));
+        setDrivePower(powerVector(currentPose,targetPose,power));
     }
     public void vectorTo(Pose currentPose, Pose targetPose, double power, double rotationPower) {
         double[] motorPowers = {0,0,0,0};
@@ -159,7 +187,7 @@ public class Drive extends Subsystem {
         } else if (targetHeading - currentHeading > 180) {
             currentHeading += 360;
         }
-        double u = pidController.getKp()*(targetHeading-currentHeading);
+        double u = headingController.getKp()*(targetHeading-currentHeading);
         if (MathUtils.equals(targetHeading, currentHeading, ROTATION_THRESHOLD)) {
             u = 0;
         }
@@ -171,22 +199,26 @@ public class Drive extends Subsystem {
 
         return new double[] {lf,lb,rf,rb};
     }
-    public void followPath(Path path) {
-        follower = new PurePursuitFollower(path);
-    }
-    public void updatePathFollower(Pose currentPose, double minPower, double maxPower) {
-        Pose nextPose = follower.updatePose(currentPose);
-        double power = follower.updatePower();
+    public void updatePathFollower(Pose currentPose, Pose currentVelocity, Path path) {
+        path.update(currentPose);
+        Pose nextPose = path.nextPose(currentPose);
+        this.lookahead = nextPose;
+
+        MotionState motionState = path.getMotionState();
+        double feedforward = kv * motionState.v + ka * motionState.a;
+        double feedback = kp * (motionState.v-currentVelocity.norm());
+        double power = feedforward+feedback;
+
         if (Robot.getInstance().getIMU().collided()) {
-            vectorTo(nextPose, currentPose, power, minPower, maxPower);
+            vectorTo(nextPose, currentPose, power);
             ElapsedTime collisionWait = new ElapsedTime();
             while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
         } else {
-            vectorTo(currentPose, nextPose, power, minPower, maxPower);
+            vectorTo(currentPose, nextPose, power);
         }
     }
-    public double getPower() {
-        return follower.updatePower();
+    public Pose getLookahead() {
+        return lookahead;
     }
     public void setState(DriveState state) {
         if (changeStateTimer.milliseconds() > 250) {

@@ -31,11 +31,7 @@ public class FourBlockRedMode extends AutoModeBase {
     public void routine() {
         Robot.getInstance().side = Constants.Side.RED;
         Robot.getInstance().getSideClaw().updateSide(SideClaw.SideClawSide.RIGHT);
-//        Robot.getInstance().block = Constants.Block.RIGHT;
         Robot.getInstance().getCamera().detectBlock();
-
-        double minPower = 0.2;
-        double maxPower = 0.95;
 
         double claw_to_front = 3.5;
         double claw_extend = 0.5;
@@ -72,12 +68,11 @@ public class FourBlockRedMode extends AutoModeBase {
         runAction(new SideClawOpenAction());
 
         Robot.getInstance().getOdometry().setPose(new Pose(63, -39,Math.PI));
-
         ArrayList<Waypoint> w1 = new ArrayList<>(); // grab 1
         w1.add(new Waypoint(new Pose(63, -39,Math.PI),Math.PI/2));
         w1.add(new Waypoint(new Pose(59,-39,Math.PI),Math.PI/2));
         w1.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y1,Math.PI),Math.PI/2));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1),0.25, maxPower));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w1)));
 
         grab();
 
@@ -86,8 +81,7 @@ public class FourBlockRedMode extends AutoModeBase {
         w2.add(new Waypoint(new Pose(42,y1+8,Math.PI),0));
         w2.add(new Waypoint(new Pose(40,0,Math.PI),0));
         w2.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+2,Math.PI),Math.toRadians(30)));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w2),minPower, maxPower, 4, 7));
-//        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w2),w2.get(w2.size()-1).pose.y-2,minPower2,maxPower));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w2)));
 
         drop();
 
@@ -95,7 +89,7 @@ public class FourBlockRedMode extends AutoModeBase {
         w3.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(210)));
         w3.add(new Waypoint(new Pose(40,0,Math.PI),Math.PI));
         w3.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y2,Math.PI),Math.toRadians(145)));
-        runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w3),0, minPower, maxPower));
+        runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w3),0));
 
         grab();
 
@@ -104,8 +98,7 @@ public class FourBlockRedMode extends AutoModeBase {
         w4.add(new Waypoint(new Pose(42,y2+8,Math.PI),0));
         w4.add(new Waypoint(new Pose(40,0,Math.PI),0));
         w4.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+2,Math.PI),Math.toRadians(30)));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w4),minPower, maxPower, 4, 7));
-//        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w4),w4.get(w4.size()-1).pose.y-2,minPower2,maxPower));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w4)));
 
         drop();
 
@@ -113,7 +106,7 @@ public class FourBlockRedMode extends AutoModeBase {
         w5.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(210)));
         w5.add(new Waypoint(new Pose(40,0,Math.PI),Math.PI));
         w5.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y3,Math.PI),Math.toRadians(145)));
-        runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w5),0, minPower, maxPower));
+        runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w5),0));
 
         grab();
 
@@ -122,8 +115,7 @@ public class FourBlockRedMode extends AutoModeBase {
         w6.add(new Waypoint(new Pose(43,y3+6,Math.PI),0));
         w6.add(new Waypoint(new Pose(44,0,Math.PI),0));
         w6.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-8,Math.PI),Math.toRadians(30)));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w6),minPower, maxPower, 4, 7));
-//        runAction(new DriveFollowPathStopAction(PathBuilder.buildPath(w6),w6.get(w6.size()-1).pose.y-2,minPower2,maxPower));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w6)));
 
         drop();
 
@@ -132,7 +124,7 @@ public class FourBlockRedMode extends AutoModeBase {
             w7.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.toRadians(210)));
             w7.add(new Waypoint(new Pose(40,0,Math.PI),Math.PI));
             w7.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y4,Math.PI),Math.toRadians(145)));
-            runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w7),0, minPower, maxPower));
+            runAction(new DriveFollowPathArmDownAction(PathBuilder.buildPath(w7),0));
 
             grab();
 
@@ -141,7 +133,7 @@ public class FourBlockRedMode extends AutoModeBase {
             w8.add(new Waypoint(new Pose(43,y4+6,Math.PI),0));
             w8.add(new Waypoint(new Pose(44,0,Math.PI),0));
             w8.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY-8,Math.PI),Math.toRadians(30)));
-            runAction(new DriveFollowPathAction(PathBuilder.buildPath(w8),minPower, maxPower, 4, 7));
+            runAction(new DriveFollowPathAction(PathBuilder.buildPath(w8)));
 
             drop();
         }
@@ -159,7 +151,7 @@ public class FourBlockRedMode extends AutoModeBase {
         ArrayList<Waypoint> w9 = new ArrayList<>(); // park
         w9.add(new Waypoint(Robot.getInstance().getOdometry().getPose(),Math.PI));
         w9.add(new Waypoint(new Pose(44, 0,Math.PI),Math.PI));
-        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w9),minPower, maxPower));
+        runAction(new DriveFollowPathAction(PathBuilder.buildPath(w9)));
     }
     private void grab() {
         runAction(new SideClawArmDownAction());
