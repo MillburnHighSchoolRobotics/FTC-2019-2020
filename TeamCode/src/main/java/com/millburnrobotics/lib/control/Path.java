@@ -29,10 +29,16 @@ public class Path {
         follower.update(p);
     }
     public Pose nextPose(Pose p) {
-        return follower.getLookaheadPoint(p);
+        return follower.updatePose();
     }
     public MotionState getMotionState() {
         return profile.get(MathUtils.map(follower.distAlongPath,0,length(),0,profile.duration()));
+    }
+    public MotionProfile getProfile() {
+        return profile;
+    }
+    public double duration() {
+        return profile.duration();
     }
     public Pose get(double s) {
         double heading = MathUtils.map(s,0,length(),startHeading,endHeading);

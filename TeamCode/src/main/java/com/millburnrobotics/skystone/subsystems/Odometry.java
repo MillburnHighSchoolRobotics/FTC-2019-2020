@@ -2,8 +2,6 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
@@ -48,6 +46,7 @@ public class Odometry extends Subsystem {
     @Override
     public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("Pose", pose);
+        telemetry.addData("velocity", Math.hypot(v_x,v_y));
         telemetry.addData("er", Robot.getInstance().er.getCurrentPosition());
         telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());
         telemetry.addData("eb", Robot.getInstance().eb.getCurrentPosition());
@@ -132,6 +131,10 @@ public class Odometry extends Subsystem {
         v_y = (y-prevY)/time;
         v_angular = (heading-prevHeading)/time;
         updateTimer.reset();
+
+        Log.d(TAG, "vx: " + v_x);
+        Log.d(TAG, "vy: " + v_y);
+        Log.d(TAG, "vang: " + v_angular);
 
         Log.d(TAG, "rotation: " + rotation);
         Log.d(TAG, "orientation: " + orientation);

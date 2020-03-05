@@ -2,6 +2,8 @@ package com.millburnrobotics.lib.geometry;
 
 import com.millburnrobotics.lib.util.MathUtils;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.PURE_PURSUIT_THRESH;
+
 public class Pose {
     public double x = 0;
     public double y = 0;
@@ -101,6 +103,6 @@ public class Pose {
     }
     @Override
     public boolean equals(Object p1) {
-        return MathUtils.equals(x,((Pose)p1).x) && MathUtils.equals(y,((Pose)p1).y);
+        return (distTo((Pose)p1) < PURE_PURSUIT_THRESH);
     }
 }

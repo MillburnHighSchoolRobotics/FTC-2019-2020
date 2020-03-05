@@ -1,5 +1,6 @@
 package com.millburnrobotics.lib.profile;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_A;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_J;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_V;
@@ -14,21 +15,35 @@ public class MotionProfileGenerator {
         MotionProfileGenerator.maxJerk = maxJerk;
     }
     public static MotionProfile generateProfile(double length) {
+        length -= LOOK_AHEAD;
         MotionProfile profile = new MotionProfile();
 
-        double maxV = Math.sqrt(2*maxAccel*length)/2.0;
-        if (maxV > maxVel) maxV = maxVel;
-        MotionSegment accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),(maxV)/maxAccel);
-        MotionSegment deccelProfile = new MotionSegment(new MotionState(length-accelProfile.end().x,maxV,-maxAccel),(maxV)/maxAccel);
+        MotionSegment accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),(maxVel/maxAccel));
+        double dt = (length-(accelProfile.end().x))/accelProfile.end().v;
+        MotionSegment constVelProfile = new MotionSegment(new MotionState(accelProfile.end().x,maxVel,0),dt);
+        MotionSegment deccelProfile = new MotionSegment(new MotionState(constVelProfile.end().x,maxVel,-maxAccel),(maxVel/maxAccel));
 
-        profile.segments.add(accelProfile);
-        if (maxV == maxVel) {
-            double dt = (length-(2*accelProfile.end().x))/maxVel;
-            MotionSegment constVelProvile = new MotionSegment(new MotionState(accelProfile.end().x,maxVel,0),dt);
-            profile.segments.add(constVelProvile);
-        }
+//        if (2*accelProfile.end().x < length) { // 2 do not fit - refactor size
+//            double t = 0.5*length/(maxVel); // one ramp up
+//            accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),t);
+//            MotionSegment deccelProfile = new MotionSegment(new MotionState(length/2.0,accelProfile.end().v,-maxAccel),t);
+//
+//            profile.segments.add(accelProfile);
+//            profile.segments.add(deccelProfile);
+//        } else { // mid section
+//            double dt = (length-(2*accelProfile.end().x))/accelProfile.end().v;
+//            MotionSegment constVelProvile = new MotionSegment(new MotionState(accelProfile.end().x,accelProfile.end().v,0),dt);
+//            MotionSegment deccelProfile = new MotionSegment(new MotionState(length-accelProfile.end().x,accelProfile.end().v,-maxAccel),(maxVel/maxAccel));
+//
+//            profile.segments.add(accelProfile);
+//            profile.segments.add(constVelProvile);
+//            profile.segments.add(deccelProfile);
+//        }
+
+
+//        profile.segments.add(accelProfile);
+        profile.segments.add(constVelProfile);
         profile.segments.add(deccelProfile);
-
         return profile;
     }
 }

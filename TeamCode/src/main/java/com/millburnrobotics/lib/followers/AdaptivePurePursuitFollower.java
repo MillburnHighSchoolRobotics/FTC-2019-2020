@@ -73,7 +73,7 @@ public class AdaptivePurePursuitFollower {
         }
         if (path.size() > 0) {
             Pose end = path.end();
-            if (end.equals(lookahead) || last_lookahead.equals(lookahead)) {
+            if (end.equals(lookahead)) {
                 last_lookahead = end;
                 return end;
             }
@@ -83,6 +83,7 @@ public class AdaptivePurePursuitFollower {
             check = 0;
         }
         check++;
+//        Log.d("pplookahead", ""+lookahead);
         return lookahead;
     }
     public Pose updatePose() {

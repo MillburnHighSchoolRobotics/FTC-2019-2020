@@ -35,14 +35,11 @@ public class Constants {
 
         public static final double DRIVE_POWER_HIGH = 1;
         public static final double DRIVE_POWER_LOW = 0.4;
-        public static final double TURN_POWER = 0.6;
 
-        public static final double PATH_HEADING_TIME = 1000;
         public static final double STRAFE_THRESHOLD = 2;
         public static final double ROTATION_THRESHOLD = 2;
-        public static final double ROTATION_THRESHOLD_DRIVE = 5;
+        public static final double PURE_PURSUIT_THRESH = 0.1;
 
-        public static final double PURE_PURSUIT_THRESH = 4;
         public static final long LOOK_AHEAD = 6;
         public static final double MAX_V = 60;
         public static final double MAX_A = 65;
@@ -50,6 +47,9 @@ public class Constants {
 
         public static double motorTicksToRadians(double ticks) {
             return 2*Math.PI*(ticks/(MotorConfigurationType.getMotorType(NeveRest20Gearmotor.class).getTicksPerRev()));
+        }
+        public static double rpmToVelocity(double rpm) {
+            return rpm * 1 * 2 * Math.PI * 2 / 60.0;
         }
     }
     public static class IMUConstants {
