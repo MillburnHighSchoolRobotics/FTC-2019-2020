@@ -40,7 +40,7 @@ public class Constants {
         public static final double ROTATION_THRESHOLD = 2;
         public static final double PURE_PURSUIT_THRESH = 0.1;
 
-        public static final long LOOK_AHEAD = 6;
+        public static final long LOOK_AHEAD = 12;
         public static final double MAX_V = 60;
         public static final double MAX_A = 65;
         public static final double MAX_J = 0;

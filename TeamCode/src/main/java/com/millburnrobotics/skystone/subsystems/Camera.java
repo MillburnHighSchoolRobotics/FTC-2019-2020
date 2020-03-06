@@ -49,7 +49,7 @@ public class Camera extends Subsystem {
     @Override
     public void init(boolean auto) {
         Robot.getInstance().block = Constants.Block.NULL;
-        detectingSkystone = auto;
+        detectingSkystone = false;
         if (detectingSkystone) {
             VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(Robot.getInstance().getCameraMonitorViewerID());
             params.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;

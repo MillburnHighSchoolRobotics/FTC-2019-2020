@@ -18,6 +18,11 @@ public class Pose {
         this.y = y;
         this.heading = 0;
     }
+    public Pose (Pose p, double heading) {
+        this.x = p.x;
+        this.y = p.y;
+        this.heading = heading;
+    }
     public Pose(double[] vector, double heading) {
         this.x = vector[0];
         this.y = vector[1];
@@ -59,13 +64,22 @@ public class Pose {
         return new Pose(x+p.x,y+p.y, MathUtils.normalize(heading+p.heading));
     }
     public Pose minus(Pose p) {
-        return new Pose(x-p.x,y-p.y,MathUtils.normalize(heading+p.heading));
+        return new Pose(x-p.x,y-p.y,MathUtils.normalize(heading-p.heading));
+    }
+    public Pose times(Pose p) {
+        return new Pose(x*p.x,y*p.y,MathUtils.normalize(heading*p.heading));
+    }
+    public Pose div(Pose p) {
+        return new Pose(x/p.x,y/p.y,MathUtils.normalize(heading/p.heading));
     }
     public Pose times(double k) {
         return new Pose(x*k,y*k,MathUtils.normalize(heading*k));
     }
     public Pose div(double k) {
         return new Pose(x/k,y/k,MathUtils.normalize(heading/k));
+    }
+    public double atan() {
+        return Math.atan2(y,x);
     }
     public double distTo(Pose p) {
         return this.minus(p).norm();
@@ -82,8 +96,8 @@ public class Pose {
     public Pose polar(double r) {
         return new Pose(r*Math.cos(heading),r*Math.sin(heading));
     }
-    private void normalize() {
-        MathUtils.normalize(heading);
+    public double normalize() {
+        return MathUtils.normalize(heading);
     }
     public void setPose(Pose p) {
         this.x = p.x;
@@ -95,6 +109,11 @@ public class Pose {
     }
     public double sin() {
         return Math.sin(heading);
+    }
+    public  Pose relDistanceToTarget(Pose target) {
+        double distance = target.distTo(this);
+        double relAngle = MathUtils.normalize(target.minus(this).atan() - heading);
+        return new Pose(polar(distance),relAngle).rotate(-Math.PI/2);
     }
 
     @Override

@@ -14,7 +14,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_A;
+import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_V;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD;
 import static com.millburnrobotics.skystone.Constants.IMUConstants.COLLISION_RECOVERY_TIME;
 
@@ -29,7 +34,7 @@ public class Drive extends Subsystem {
     public double kv = 0.013069853913931;
     public double ka = 0.00013617775604739;
     public double ks = 0.11659998299699;
-    public double kp = 0.01;
+    public double kp = 0.033;
 
     private Pose lookahead = new Pose();
     private double ffpower;
@@ -45,6 +50,18 @@ public class Drive extends Subsystem {
     @Override
     public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("DriveState", state.name());
+        /*
+        public String toString() {
+        return String.format(
+                "\n" +
+                "(%.1f)---(%.1f)\n" +
+                "|   Front   |\n" +
+                "|           |\n" +
+                "|           |\n" +
+                "(%.1f)---(%.1f)\n"
+                , frontLeft, frontRight, backLeft, backRight);
+    }
+         */
     }
 
 
@@ -67,6 +84,17 @@ public class Drive extends Subsystem {
     }
     public void setDrivePower(double powerLeft, double powerRight) {
         setDrivePower(powerLeft, powerLeft, powerRight, powerRight);
+    }
+    public void setDrivePower(Pose p) {
+        setDrivePower(p.x,p.y,p.heading);
+    }
+    public void setDrivePower(double x, double y, double turnPower) {
+        setDrivePower(scale(new double[]{
+                y + turnPower + x,
+                y + turnPower + x,
+                y - turnPower - x,
+                y - turnPower - x
+        }));
     }
     public void stop() {
         setDrivePower(0);
@@ -114,6 +142,16 @@ public class Drive extends Subsystem {
         }
         for (int x = 0; x < motorPowers.length; x++) {
             motorPowers[x] = MathUtils.sgn(motorPowers[x]) * MathUtils.map(Math.abs(motorPowers[x]),0,maxArrayPower,minPower,1);
+        }
+        return motorPowers;
+    }
+    private double[] scale(double[] motorPowers) {
+        double absMax = MathUtils.maxArray(motorPowers);
+        if (absMax > 1) {
+            motorPowers[0] /= absMax;
+            motorPowers[1] /= absMax;
+            motorPowers[2] /= absMax;
+            motorPowers[3] /= absMax;
         }
         return motorPowers;
     }
@@ -176,22 +214,56 @@ public class Drive extends Subsystem {
         path.update(currentPose);
         Pose nextPose = path.nextPose(currentPose);
         this.lookahead = nextPose;
+        if (currentPose.distTo(path.end()) > 18) {
+//            Pose relPPTarget = currentPose.relDistanceToTarget(nextPose);
+//            Log.d("relPPTarget", relPPTarget+"");
+//            Pose translationPowers = relPPTarget.times(-1).div(new Pose(LOOK_AHEAD, LOOK_AHEAD, Math.PI));
+//            double angleToTarget = MathUtils.normalize(nextPose.heading - currentPose.heading);
+//            translationPowers.heading = angleToTarget / Math.PI;
 
-        MotionState motionState = path.getMotionState();
-        double feedforward = kv * motionState.v + ka * motionState.a;
-        feedforward += (MathUtils.sgn(feedforward) * ks);
-        double feedback = kp * (motionState.v-currentVelocity.norm());
-        double ffpower = feedforward;
-        Log.d("desmosplshelp", "(x-" + Robot.getInstance().timer.milliseconds()/100.0 + ")^{2}+(y-" + motionState.v + ")^{2}=0.2");
-        Log.d("desmosplshelp", "(x-" + Robot.getInstance().timer.milliseconds()/100.0 + ")^{2}+(y-" + currentVelocity.norm() + ")^{2}=0.05");
+            double power;
+            double dist = currentPose.distTo(path.end());
+            if (Math.pow(currentVelocity.norm(),2)/(2*MAX_A) > dist) { // slow down
+                power = kv*Math.sqrt(2*MAX_A*dist)+ka*MAX_A;
+                power += (MathUtils.sgn(power) * ks);
 
-        if (Robot.getInstance().getIMU().collided()) {
-            vectorTo(nextPose, currentPose, ffpower);
-            ElapsedTime collisionWait = new ElapsedTime();
-            while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
+            } else { // max
+                power = kv*MAX_V;
+                power += (MathUtils.sgn(power) * ks);
+            }
+//            Log.d("desmosplshelp", "(x-" + Robot.getInstance().timer.milliseconds()/100.0 + ")^{2}+(y-" + motionState.v + ")^{2}=0.2");
+//            Log.d("desmosplshelp", "(x-" + Robot.getInstance().timer.milliseconds()/100.0 + ")^{2}+(y-" + currentVelocity.norm() + ")^{2}=0.05");
+
+            if (Robot.getInstance().getIMU().collided()) {
+                vectorTo(nextPose, currentPose, power);
+                ElapsedTime collisionWait = new ElapsedTime();
+                while (collisionWait.milliseconds() < COLLISION_RECOVERY_TIME);
+            } else {
+                vectorTo(currentPose, nextPose, power);
+            }
         } else {
-            vectorTo(currentPose, nextPose, ffpower);
+            vectorTo(currentPose,path.end(),0.2);
+//            Pose relAbsTarget = currentPose.relDistanceToTarget(path.end());
+//            double angleToTarget = path.end().minus(currentPose).normalize();
+//            double exp = 1.0/6.0;
+//            Pose dirPowers = new Pose(
+//                    -MathUtils.powRetainingSign(relAbsTarget.x, exp),
+//                    -MathUtils.powRetainingSign(relAbsTarget.y, exp),
+//                    MathUtils.powRetainingSign(angleToTarget, exp)
+//            );
+//            setDrivePower(dirPowers.times(new Pose(0.08,0.12,0.1)));
         }
+
+//        System.out.println(translationPowers.toString());
+
+        // Heading always wants to stop at a point, so we'll treat this the same regardless if we're
+        // at a stop waypoint or a normal one
+//        double forwardAngle = nextPose.minus(currentPose).atan();
+//        double backwardAngle = forwardAngle + Math.PI;
+//        double angleToForward = MathUtils.normalize(forwardAngle - currentPose.heading);
+//        double angleToBackward = MathUtils.normalize(backwardAngle - currentPose.heading);
+//        double autoAngle = Math.abs(angleToForward) < Math.abs(angleToBackward) ? forwardAngle : backwardAngle;
+//        double desiredAngle = nextPose.heading;
     }
     public Pose getLookahead() {
         return lookahead;

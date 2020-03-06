@@ -29,7 +29,8 @@ public class DriveFollowPathAction implements Action {
     @Override
     public boolean isFinished() {
         Log.d("followpathaction", "here");
-        return Robot.getInstance().getDrive().getLookahead().equals(path.end());
+//        return Robot.getInstance().getDrive().getLookahead().equals(path.end());
+        return Robot.getInstance().getOdometry().getPose().distTo(path.end()) < STRAFE_THRESHOLD;
     }
 
     @Override

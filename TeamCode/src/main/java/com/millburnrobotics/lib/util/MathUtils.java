@@ -38,6 +38,12 @@ public class MathUtils {
             return false;
         return Math.abs(d-e) < tolerance;
     }
+    public static double powRetainingSign(double d, double power) {
+        if (Math.abs(d) < 1e-14) {
+            return 0;
+        }
+        return Math.copySign(Math.pow(Math.abs(d), power), d);
+    }
 
     public static double wrap(double d, double min, double max) {
         if (!equals(d, min) &&d < min) {
