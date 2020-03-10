@@ -2,6 +2,14 @@ package com.millburnrobotics.skystone;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.config.ValueProvider;
+import com.acmerobotics.dashboard.config.variable.BasicVariable;
+import com.acmerobotics.dashboard.config.variable.CustomVariable;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.subsystems.Camera;
 import com.millburnrobotics.skystone.subsystems.ChainBar;
 import com.millburnrobotics.skystone.subsystems.Drive;
@@ -12,6 +20,7 @@ import com.millburnrobotics.skystone.subsystems.Lift;
 import com.millburnrobotics.skystone.subsystems.Odometry;
 import com.millburnrobotics.skystone.subsystems.SideClaw;
 import com.millburnrobotics.skystone.subsystems.Subsystem;
+import com.millburnrobotics.skystone.teleop.TeleOp;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,6 +33,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.prefs.Preferences;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.BOT_WIDTH;
+
 public class Robot {
     public DcMotorEx lf,lb,rf,rb;
     public DcMotorEx liftL, liftR;
@@ -35,6 +46,8 @@ public class Robot {
     public Servo sideClawClawL, sideClawClawR;
     public Servo capstone;
     public BNO055IMU bno055IMU;
+
+    public ElapsedTime timer;
 
     private Drive drive = new Drive();
     private Odometry odometry = new Odometry();
@@ -50,6 +63,8 @@ public class Robot {
     private int cameraMonitorViewerID;
 
     public HardwareMap hardwareMap;
+    public FtcDashboard dashboard;
+
     public Constants.Side side;
     public Constants.Block block = Constants.Block.NULL;
 
@@ -136,6 +151,37 @@ public class Robot {
         getSideClaw().init(auto);
         getCamera().init(auto);
         getIMU().init(auto);
+
+        timer = new ElapsedTime();
+
+        dashboard = FtcDashboard.getInstance();
+        dashboard.setTelemetryTransmissionInterval(25);
+
+        addConfiguration();
+    }
+    public void addConfiguration() {
+        String catName = getClass().getSimpleName();
+        CustomVariable catVar = (CustomVariable) dashboard.getConfigRoot().getVariable(catName);
+        if (catVar == null) {
+            catVar = new CustomVariable();
+            dashboard.getConfigRoot().putVariable(catName, catVar);
+        }
+
+        CustomVariable ff = new CustomVariable();
+        ff.putVariable("kv", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return drive.kv; }
+            @Override public void set(Double value) { drive.kv = value; }
+        }));
+        ff.putVariable("ka", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return drive.ka; }
+            @Override public void set(Double value) { drive.ka = value; }
+        }));
+        ff.putVariable("kp", new BasicVariable<>(new ValueProvider<Double>() {
+            @Override public Double get() { return drive.kp; }
+            @Override public void set(Double value) { drive.kp = value; }
+        }));
+        catVar.putVariable("FF_CONST", ff);
+        Robot.getInstance().dashboard.updateConfig();
     }
 
     public Drive getDrive() {
@@ -177,10 +223,20 @@ public class Robot {
         }
         Log.d("Update Timer", ""+updateTimer.milliseconds());
         updateTimer.reset();
+
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay().setStroke("#3F51B5");
+        packet.fieldOverlay().strokeCircle(odometry.getX(), odometry.getY(),BOT_WIDTH/2.0);
+        Pose v = odometry.getPose().polar(BOT_WIDTH/2.0);
+        double x1 = odometry.getX() + v.getX() / 2, y1 = odometry.getY() + v.getY() / 2;
+        double x2 = odometry.getX() + v.getX(), y2 = odometry.getY() + v.getY();
+        packet.fieldOverlay().strokeLine(x1, y1, x2, y2);
+        dashboard.sendTelemetryPacket(packet);
     }
     public void outputToTelemetry(Telemetry telemetry) {
+        TelemetryPacket packet = new TelemetryPacket();
         for (int s = 0; s < subsystems.length; s++) {
-            subsystems[s].outputToTelemetry(telemetry);
+            subsystems[s].outputToTelemetry(telemetry, packet);
         }
     }
 

@@ -2,6 +2,8 @@ package com.millburnrobotics.lib.geometry;
 
 import com.millburnrobotics.lib.util.MathUtils;
 
+import static com.millburnrobotics.skystone.Constants.DriveConstants.PURE_PURSUIT_THRESH;
+
 public class Pose {
     public double x = 0;
     public double y = 0;
@@ -98,5 +100,9 @@ public class Pose {
     @Override
     public String toString() {
         return ("("+Math.round(x*1000.0)/1000.0+","+Math.round(y*1000.0)/1000.0+","+Math.round(Math.toDegrees(heading)*1000.0)/1000.0+")");
+    }
+    @Override
+    public boolean equals(Object p1) {
+        return (distTo((Pose)p1) < PURE_PURSUIT_THRESH);
     }
 }

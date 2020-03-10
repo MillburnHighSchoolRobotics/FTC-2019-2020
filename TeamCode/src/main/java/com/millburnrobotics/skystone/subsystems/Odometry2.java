@@ -2,6 +2,7 @@ package com.millburnrobotics.skystone.subsystems;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.skystone.Constants;
@@ -37,7 +38,7 @@ public class Odometry2 extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("Pose", pose);
         telemetry.addData("er", Robot.getInstance().er.getCurrentPosition());
         telemetry.addData("el", Robot.getInstance().el.getCurrentPosition());

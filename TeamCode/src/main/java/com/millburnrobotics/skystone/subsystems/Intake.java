@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.skystone.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,7 +22,7 @@ public class Intake extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("IntakeState", state.name());
     }
 

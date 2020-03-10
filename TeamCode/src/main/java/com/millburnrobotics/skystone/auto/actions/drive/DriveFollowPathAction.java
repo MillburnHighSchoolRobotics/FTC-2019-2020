@@ -1,95 +1,42 @@
 package com.millburnrobotics.skystone.auto.actions.drive;
 
+import android.util.Log;
+
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
-import com.millburnrobotics.lib.util.MathUtils;
-import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.Robot;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.millburnrobotics.skystone.auto.actions.Action;
 
-import static com.millburnrobotics.skystone.Constants.DriveConstants.PATH_HEADING_TIME;
-import static com.millburnrobotics.skystone.Constants.DriveConstants.ROTATION_THRESHOLD_DRIVE;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.STRAFE_THRESHOLD;
-import static com.millburnrobotics.skystone.Constants.DriveConstants.TURN_POWER;
 
 public class DriveFollowPathAction implements Action {
 
-    private Path current_path;
-    private boolean strafe;
-    private ElapsedTime rotationTimer;
-    private ElapsedTime lastInThreshTimer;
-    private double lastTime;
-    private double strafeThresh, rotationThresh;
-
-    private double minPower, maxPower;
-
-    public DriveFollowPathAction(Path path, double minPower, double maxPower) {
-        this.current_path = path;
-        this.minPower = minPower;
-        this.maxPower = maxPower;
-        this.strafeThresh = STRAFE_THRESHOLD;
-        this.rotationThresh = ROTATION_THRESHOLD_DRIVE;
+    private Path path;
+    public DriveFollowPathAction(Path path) {
+        this.path = path;
     }
-    public DriveFollowPathAction(Path path, double minPower, double maxPower, double strafeThresh, double rotationThresh) {
-        this.current_path = path;
-        this.minPower = minPower;
-        this.maxPower = maxPower;
-        this.strafeThresh = strafeThresh;
-        this.rotationThresh = rotationThresh;
-    }
-
     @Override
     public void start() {
-        strafe = true;
-        lastInThreshTimer = new ElapsedTime();
-        rotationTimer = new ElapsedTime();
-        lastTime = -1;
-        Robot.getInstance().getDrive().followPath(current_path);
     }
 
     @Override
     public void update() {
-        if (strafe) {
-            Pose current = Robot.getInstance().getOdometry().getPose();
-            Robot.getInstance().getDrive().updatePathFollower(current, minPower, maxPower);
-        } else {
-            if (rotationTimer == null) {
-                rotationTimer = new ElapsedTime();
-            }
-            Robot.getInstance().getDrive().rotateTo(Math.toDegrees(current_path.get(current_path.length()).heading), TURN_POWER);
-        }
+        Pose current = Robot.getInstance().getOdometry().getPose();
+        Pose currentVel = Robot.getInstance().getOdometry().getVelocity();
+        Robot.getInstance().getDrive().updatePathFollower(current, currentVel, path);
     }
 
     @Override
     public boolean isFinished() {
-        if (strafe) {
-            if (MathUtils.equals(Robot.getInstance().getOdometry().getPose().distTo(current_path.end()),0,strafeThresh)) {
-                if (lastTime == -1) {
-                    lastTime = lastInThreshTimer.milliseconds();
-                } else if (lastInThreshTimer.milliseconds() - lastTime > 200) {
-                    strafe = false;
-                }
-            } else {
-                lastTime = -1;
-            }
-        } else {
-            if (rotationTimer != null && rotationTimer.milliseconds() > PATH_HEADING_TIME) {
-                return true;
-            }
-            double currentHeading = Math.toDegrees(Robot.getInstance().getOdometry().getPose().getHeading());
-            double targetHeading = Math.toDegrees(current_path.get(current_path.length()).heading);
-            if (currentHeading - targetHeading > 180) {
-                currentHeading -= 360;
-            } else if (targetHeading - currentHeading > 180) {
-                currentHeading += 360;
-            }
-            return MathUtils.equals(targetHeading, currentHeading, rotationThresh);
-        }
-        return false;
+        Log.d("followpathaction", "here");
+        return Robot.getInstance().getDrive().getLookahead().equals(path.end());
     }
 
     @Override
     public void done() {
+//        while (Robot.getInstance().getOdometry().getPose().distTo(path.end()) > STRAFE_THRESHOLD) {
+//            Robot.getInstance().getDrive().vectorTo(Robot.getInstance().getOdometry().getPose(), path.end(), Robot.getInstance().getDrive().getFFpower());
+//        }
         Robot.getInstance().getDrive().stop();
     }
 }

@@ -1,6 +1,9 @@
 package com.millburnrobotics.lib.control;
 
+import com.millburnrobotics.lib.followers.AdaptivePurePursuitFollower;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.profile.MotionProfile;
+import com.millburnrobotics.lib.profile.MotionState;
 import com.millburnrobotics.lib.util.MathUtils;
 
 import java.util.ArrayList;
@@ -11,6 +14,8 @@ public class Path {
     List<PathSegment> segments;
     double startHeading;
     double endHeading;
+    MotionProfile profile;
+    AdaptivePurePursuitFollower follower;
     public Path() {
         this.segments = new ArrayList<>();
     }
@@ -19,6 +24,21 @@ public class Path {
     }
     public Path(List<PathSegment> segments) {
         this.segments = segments;
+    }
+    public void update(Pose p) {
+        follower.update(p);
+    }
+    public Pose nextPose(Pose p) {
+        return follower.updatePose();
+    }
+    public MotionState getMotionState() {
+        return profile.get(MathUtils.map(follower.distAlongPath,0,length(),0,profile.duration()));
+    }
+    public MotionProfile getProfile() {
+        return profile;
+    }
+    public double duration() {
+        return profile.duration();
     }
     public Pose get(double s) {
         double heading = MathUtils.map(s,0,length(),startHeading,endHeading);

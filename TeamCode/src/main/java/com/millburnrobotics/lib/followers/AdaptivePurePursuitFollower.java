@@ -1,38 +1,27 @@
 package com.millburnrobotics.lib.followers;
 
-import android.util.Log;
-
 import com.millburnrobotics.lib.control.Path;
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.lib.util.MathUtils;
 
 import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
-import static com.millburnrobotics.skystone.Constants.DriveConstants.PURE_PURSUIT_THRESH;
 import static java.lang.Math.signum;
 
 public class AdaptivePurePursuitFollower {
-    public Path path;
+    private Path path;
+    private Pose last_lookahead = new Pose();
+    private int check = 0;
     private double lastOnPath;
-    private double posOnPath;
-    private boolean updateProject;
-    private Pose nextPose;
+    public double distAlongPath;
 
     public AdaptivePurePursuitFollower(Path path) {
-        this.path = path;
         lastOnPath = 0.0;
-        posOnPath = 0.0;
-        updateProject = false;
+        this.path = path;
     }
-    public Pose updatePose(Pose currentPose) {
-        Log.d("pure pursuit len","l - " + path.length());
-        updateProject = false;
-
-        nextPose = getLookaheadPoint(currentPose);
-        Log.d("pure pursuit","nextPose - " + nextPose);
-
-        return nextPose;
+    public void update(Pose currentPose) {
+        this.distAlongPath = project(currentPose);
     }
-    private Pose getLookaheadPoint(Pose currentPose) {
+    public Pose getLookaheadPoint(Pose currentPose) {
         double inc = 1;
         Pose lookahead = null;
         Pose lastEnd = path.end();
@@ -79,37 +68,45 @@ public class AdaptivePurePursuitFollower {
             }
         }
 
+        if (lookahead == null) {
+            lookahead = updatePose();
+        }
         if (path.size() > 0) {
             Pose end = path.end();
-            if (end.distTo(currentPose) <= PURE_PURSUIT_THRESH) {
+            if (end.equals(lookahead)) {
+                last_lookahead = end;
                 return end;
             }
         }
-        return lookahead == null ? path.get(project(currentPose)+LOOK_AHEAD) : lookahead;
+        if (check > 1) {
+            last_lookahead = lookahead;
+            check = 0;
+        }
+        check++;
+//        Log.d("pplookahead", ""+lookahead);
+        return lookahead;
     }
-    private double project(Pose currentPos) {
-        updateProject = true;
-        double s = path.length();
-        double prev_ds = 0;
+    public Pose updatePose() {
+        Pose targetPose = path.get(distAlongPath);
+        Pose nextPose = path.get(distAlongPath + LOOK_AHEAD);
+        if (MathUtils.equals(distAlongPath,path.length())) {
+            nextPose = targetPose;
+        }
+        return nextPose;
+    }
+    public double project(Pose currentPos) {
+        double s = Math.floor(path.length()*1000.0)/1000.0;
+
         while (true) {
-//            Log.d("pure pursuit","s - " + s);
             Pose pathPos = path.get(s);
-//            Log.d("pure pursuit","path s pos - " + pathPos);
             Pose derivPos = path.deriv(s);
-//            Log.d("pure pursuit","path deriv s pos - " + derivPos);
             Pose dPos = currentPos.minus(pathPos);
-//            Log.d("pure pursuit","path d pos - " + dPos);
             double ds = dPos.dot(derivPos);
 
-//            Log.d("pure pursuit", "ds - " + ds);
-            if (MathUtils.equals(ds,0.0, PURE_PURSUIT_THRESH)) {
+            if (MathUtils.equals(ds,0.0, 0.25)) {
                 lastOnPath = s;
                 break;
-            } else if (MathUtils.equals(Math.abs(ds),Math.abs(prev_ds))) {
-                break;
             }
-
-            prev_ds = ds;
             s += ds / 2.0;
 
             if (s <= lastOnPath || s >= path.length()) {
@@ -117,20 +114,6 @@ public class AdaptivePurePursuitFollower {
                 break;
             }
         }
-        posOnPath = s;
         return s;
-    }
-//    public double powerAtDistance(double s) {
-//        return path.getPower(s);
-//    }
-//    public double updatePower(Pose pose) {
-//        if (!updateProject) {
-//            return path.getPower(project(pose));
-//        } else {
-//            return path.getPower(posOnPath);
-//        }
-//    }
-    public Pose getNextPose() {
-        return nextPose;
     }
 }

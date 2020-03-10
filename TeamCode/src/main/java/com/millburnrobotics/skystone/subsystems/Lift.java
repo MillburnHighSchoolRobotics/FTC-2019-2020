@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.lib.util.PIDController;
 import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -31,7 +32,7 @@ public class Lift extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("Lift position", Robot.getInstance().liftR.getCurrentPosition());
         telemetry.addData("Target stone", targetLiftBlock);
     }

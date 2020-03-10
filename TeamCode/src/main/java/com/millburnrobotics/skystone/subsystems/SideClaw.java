@@ -1,5 +1,6 @@
 package com.millburnrobotics.skystone.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -41,7 +42,7 @@ public class SideClaw extends Subsystem {
     }
 
     @Override
-    public void outputToTelemetry(Telemetry telemetry) {
+    public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
         telemetry.addData("CurrentSideArmPosition", getArmPosition());
         telemetry.addData("CurrentSideClawPosition", getArmPosition());
         telemetry.addData("SideClawSide", side.toString());
