@@ -1,5 +1,7 @@
 package com.millburnrobotics.lib.profile;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import static com.millburnrobotics.skystone.Constants.DriveConstants.LOOK_AHEAD;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_A;
 import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_J;
@@ -22,7 +24,6 @@ public class MotionProfileGenerator {
         double dt = (length-(accelProfile.end().x))/accelProfile.end().v;
         MotionSegment constVelProfile = new MotionSegment(new MotionState(accelProfile.end().x,maxVel,0),dt);
         MotionSegment deccelProfile = new MotionSegment(new MotionState(constVelProfile.end().x,maxVel,-maxAccel),(maxVel/maxAccel));
-
 //        if (2*accelProfile.end().x < length) { // 2 do not fit - refactor size
 //            double t = 0.5*length/(maxVel); // one ramp up
 //            accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),t);

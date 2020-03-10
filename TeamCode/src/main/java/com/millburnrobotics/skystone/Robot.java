@@ -93,6 +93,7 @@ public class Robot {
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+
         er = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._RightEncoder);
         el = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._LeftEncoder);
         eb = (DcMotorEx) hardwareMap.dcMotor.get(Constants.OdometryConstants._BackEncoder);
