@@ -15,7 +15,7 @@ public class Path {
     double startHeading;
     double endHeading;
     MotionProfile profile;
-    AdaptivePurePursuitFollower follower;
+    public AdaptivePurePursuitFollower follower;
     public Path() {
         this.segments = new ArrayList<>();
     }
