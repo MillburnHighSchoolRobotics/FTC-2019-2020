@@ -35,8 +35,8 @@ public class MotionState {
     }
     public MotionState get(double t) {
         return new MotionState(
-                x + v * t + a / 2 * t * t + j / 6 * t * t * t,
-                v + a * t + j / 2 * t * t,
+                x + v * t + a / 2.0 * t * t + j / 6.0 * t * t * t,
+                v + a * t + j / 2.0 * t * t,
                 a + j * t,
                 j
         );

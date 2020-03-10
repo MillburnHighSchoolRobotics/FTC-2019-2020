@@ -13,9 +13,9 @@ import static com.millburnrobotics.skystone.Constants.DriveConstants.MAX_V;
 
 public class PurePursuitTest {
     public static void main(String[] args) throws InterruptedException {
-        double kv = 0.01439;
-        double ka = 0.000146;
-        double ks = 0.04712;;
+        double kv = 0.013069853913931;
+        double ka = 0;
+        double ks = 0.11659998299699;
 
         double claw_to_front = 3.5;
         double claw_extend = 0.5;
@@ -30,37 +30,43 @@ public class PurePursuitTest {
 
         ArrayList<Waypoint> w3 = new ArrayList<>(); // cycle 2
         w3.add(new Waypoint(new Pose(X_BLUE_DELIVERY, Y_BLUE_DELIVERY+2,Math.PI),Math.toRadians(150)));
-        w3.add(new Waypoint(new Pose(-40,0,Math.PI),Math.PI));
-        w3.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y2,Math.PI),Math.toRadians(215)));
+        w3.add(new Waypoint(new Pose(-40,24,Math.PI),Math.PI));
+//        w3.add(new Waypoint(new Pose(X_BLUE_BLOCK_CLAW,y2,Math.PI),Math.toRadians(215)));
 
         Path path =  PathBuilder.buildPath(w3);
 
         Pose p = new Pose(-24-9-0.5, 72-4-34.5/2.0+(9-3.5)+2,Math.PI);
         double v = path.length()/(path.duration());
-        int x = 0;
-        graphField();
+        double x = 0;
+//        graphField();
         while (!p.equals(path.end())) {
-            path.update(p);
-            Pose pose1 = path.nextPose(p);
-            System.out.println("(x-" + p.x + ")^{2}+(y-" + p.y + ")^{2}=0.2");
-            System.out.println("(x-" + (pose1.x) + ")^{2}+(y-" + pose1.y + ")^{2}=0.05");
+            path.update(path.get(x));
+//            Pose pose1 = path.nextPose(p);
+//            System.out.println("(x-" + p.x + ")^{2}+(y-" + p.y + ")^{2}=0.2");
+//            System.out.println("(x-" + (pose1.x) + ")^{2}+(y-" + pose1.y + ")^{2}=0.05");
 
             double basepower = path.getMotionState().v*kv+path.getMotionState().a*ka;
             double power = basepower+MathUtils.sgn(basepower)*ks;
-            System.out.println("(" + (x/150.0) + "," + power + ")");
-//            System.out.println(pose1.distTo(p));
-            if (pose1.equals(path.end())) {
+            System.out.println("(" + x/100.0 + "," + power + ")");
+            if (x > path.length()) {
                 break;
             }
-            double dx = pose1.x-p.x;
-            double dy = pose1.y-p.y;
-            double alpha = Math.atan2(dy,dx);
-            double dx1 = v*Math.cos(alpha)/100.0;
-            double dy1 = v*Math.sin(alpha)/100.0;
+//            System.out.println(pose1.distTo(p));
+//            if (pose1.equals(path.end())) {
+//                break;
+//            }
+//            double dx = pose1.x-p.x;
+//            double dy = pose1.y-p.y;
+//            double alpha = Math.atan2(dy,dx);
+//            double dx1 = v*Math.cos(alpha)/100.0;
+//            double dy1 = v*Math.sin(alpha)/100.0;
+//
+//            p = new Pose(p.x+dx1,p.y+dy1);
+            x+=0.2;
 
-            p = new Pose(p.x+dx1,p.y+dy1);
-            x++;
+            Thread.sleep(10);
         }
+        System.out.println("x="+(path.length()/100.0));
     }
     public static void graphField() {
         System.out.println("x=-24\\left\\{-72<y<-24\\right\\}");

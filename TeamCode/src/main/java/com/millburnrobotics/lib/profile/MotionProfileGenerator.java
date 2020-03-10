@@ -17,13 +17,24 @@ public class MotionProfileGenerator {
         MotionProfileGenerator.maxJerk = maxJerk;
     }
     public static MotionProfile generateProfile(double length) {
+        double v0 = 45.0;
         length -= LOOK_AHEAD;
         MotionProfile profile = new MotionProfile();
 
-        MotionSegment accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),(maxVel/maxAccel));
-        double dt = (length-(accelProfile.end().x))/accelProfile.end().v;
+        MotionSegment accelProfile = new MotionSegment(new MotionState(0,v0, maxAccel),(maxVel-v0)/maxAccel);
+        MotionSegment tempProfile = new MotionSegment(new MotionState(0,maxVel,-maxAccel),(maxVel-15.0)/maxAccel);
+        double dt = (length-tempProfile.end().x-accelProfile.end().x)/accelProfile.end().v;
         MotionSegment constVelProfile = new MotionSegment(new MotionState(accelProfile.end().x,maxVel,0),dt);
+<<<<<<< HEAD
         MotionSegment deccelProfile = new MotionSegment(new MotionState(constVelProfile.end().x,maxVel,-maxAccel),(maxVel/maxAccel));
+=======
+        MotionSegment deccelProfile = new MotionSegment(new MotionState(constVelProfile.end().x,maxVel,-maxAccel),(maxVel-15)/maxAccel);
+
+        if (dt < 0) {
+
+        }
+
+>>>>>>> b1e57df00b059d239940c9a93d4318e59c78eaec
 //        if (2*accelProfile.end().x < length) { // 2 do not fit - refactor size
 //            double t = 0.5*length/(maxVel); // one ramp up
 //            accelProfile = new MotionSegment(new MotionState(0,0,maxAccel),t);
@@ -42,7 +53,7 @@ public class MotionProfileGenerator {
 //        }
 
 
-//        profile.segments.add(accelProfile);
+        profile.segments.add(accelProfile);
         profile.segments.add(constVelProfile);
         profile.segments.add(deccelProfile);
         return profile;
