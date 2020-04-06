@@ -44,8 +44,6 @@ public class IMU extends Subsystem {
                 maxG = Math.max(Math.abs(currentJerkX), Math.abs(currentJerkY));
                 Log.d("CurrentJerk", ""+maxG);
             }
-
-
             lastAcceleration = newAccel;
         }
     }
@@ -53,6 +51,6 @@ public class IMU extends Subsystem {
         return collisionDetection;
     }
     public boolean collided() {
-        return collided;
+        return collided && collisionDetection;
     }
 }

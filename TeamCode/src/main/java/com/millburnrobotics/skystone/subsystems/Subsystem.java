@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public abstract class Subsystem {
-    public String TAG;
+    String TAG;
     public abstract void init(boolean auto);
 
     public abstract void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet);

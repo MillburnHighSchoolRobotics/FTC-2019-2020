@@ -36,8 +36,7 @@ public class Camera extends Subsystem {
             Log.d("opencv","nope it doesnt work");
         }
     }
-    private String TAG = "BarkerClass";
-    private boolean detectingSkystone = false;
+    private boolean detectingSkystone = true;
     private VuforiaLocalizerImplSubclass vuforiaInstance;
 
     private final static double BLUE_LINE_LEFT = 215;
@@ -49,7 +48,6 @@ public class Camera extends Subsystem {
     @Override
     public void init(boolean auto) {
         Robot.getInstance().block = Constants.Block.NULL;
-        detectingSkystone = false;
         if (detectingSkystone) {
             VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(Robot.getInstance().getCameraMonitorViewerID());
             params.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
@@ -60,7 +58,7 @@ public class Camera extends Subsystem {
 
     @Override
     public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
-        telemetry.addData(TAG, Robot.getInstance().block);
+        telemetry.addData("Block", Robot.getInstance().block);
     }
 
     @Override

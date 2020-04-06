@@ -22,12 +22,10 @@ public class AdaptivePurePursuitFollower {
     public Pose getLookaheadPoint(Pose currentPose) {
         double inc = 1;
         Pose lookahead = null;
-        Pose lastEnd = path.end();
 
-        for (double i = path.length(); i > inc; i-=inc) {
-            Pose end = lastEnd;
-            Pose start = path.get(i-inc);
-            lastEnd = start;
+        for (double i = 0; i < path.length()-1; i+=inc) {
+            Pose start = path.get(i);
+            Pose end = path.get(i+inc);
 
             Pose p1 = start.minus(currentPose);
             Pose p2 = end.minus(currentPose);
@@ -53,6 +51,8 @@ public class AdaptivePurePursuitFollower {
             boolean validIntersection2 = (Math.min(p1.x, p2.x) < intersection2.x && intersection2.x < Math.max(p1.x, p2.x))
                     || (Math.min(p1.y, p2.y) < intersection2.y && intersection2.y < Math.max(p1.y, p2.y));
 
+            if (validIntersection1 || validIntersection2) lookahead = null;
+
             if (validIntersection1) {
                 lookahead = intersection1.plus(currentPose);
             }
@@ -61,29 +61,17 @@ public class AdaptivePurePursuitFollower {
                     lookahead = intersection2.plus(currentPose);
                 }
             }
-            if (lookahead != null) {
-                break;
-            }
         }
-
         if (lookahead == null) {
-            lookahead = updatePose();
+            lookahead = path.get(distAlongPath+LOOK_AHEAD);
         }
         if (path.size() > 0) {
             Pose end = path.end();
-            if (end.equals(lookahead)) {
+            if (end.distTo(lookahead) <= LOOK_AHEAD) {
                 return end;
             }
         }
         return lookahead;
-    }
-    public Pose updatePose() {
-        Pose targetPose = path.get(distAlongPath);
-        Pose nextPose = path.get(distAlongPath + LOOK_AHEAD);
-        if (MathUtils.equals(distAlongPath,path.length())) {
-            nextPose = targetPose;
-        }
-        return nextPose;
     }
     public double project(Pose currentPos) {
         double s = Math.floor(path.length()*1000.0)/1000.0;

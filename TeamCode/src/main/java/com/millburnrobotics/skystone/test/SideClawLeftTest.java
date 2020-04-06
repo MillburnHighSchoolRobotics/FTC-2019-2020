@@ -8,9 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawArmL;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawArmR;
 import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawClawL;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawClawR;
 
 
 @TeleOp(group = "util")

@@ -1,9 +1,5 @@
 package com.millburnrobotics.lib.util;
 
-/**
- * Created by 17osullivand on 9/26/16.
- * Various mathematical tools.
- */
 public class MathUtils {
     private static final double epsilon = 0.000001;
 

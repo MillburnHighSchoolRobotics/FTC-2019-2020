@@ -3,8 +3,6 @@ package com.millburnrobotics.skystone;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.canvas.Canvas;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.config.ValueProvider;
 import com.acmerobotics.dashboard.config.variable.BasicVariable;
 import com.acmerobotics.dashboard.config.variable.CustomVariable;
@@ -20,7 +18,6 @@ import com.millburnrobotics.skystone.subsystems.Lift;
 import com.millburnrobotics.skystone.subsystems.Odometry;
 import com.millburnrobotics.skystone.subsystems.SideClaw;
 import com.millburnrobotics.skystone.subsystems.Subsystem;
-import com.millburnrobotics.skystone.teleop.TeleOp;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;

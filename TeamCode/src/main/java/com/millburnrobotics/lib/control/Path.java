@@ -15,7 +15,7 @@ public class Path {
     double startHeading;
     double endHeading;
     MotionProfile profile;
-    public AdaptivePurePursuitFollower follower;
+    AdaptivePurePursuitFollower follower;
     public Path() {
         this.segments = new ArrayList<>();
     }
@@ -33,6 +33,9 @@ public class Path {
     }
     public MotionState getMotionState() {
         return profile.get(MathUtils.map(follower.distAlongPath,0,length(),0,profile.duration()));
+    }
+    public AdaptivePurePursuitFollower getFollower() {
+        return follower;
     }
     public MotionProfile getProfile() {
         return profile;

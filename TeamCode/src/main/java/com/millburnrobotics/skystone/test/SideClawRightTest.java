@@ -6,7 +6,9 @@ import com.millburnrobotics.lib.util.MathUtils;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.*;
+
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawArmR;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants._SideClawClawR;
 
 
 @TeleOp(group = "util")

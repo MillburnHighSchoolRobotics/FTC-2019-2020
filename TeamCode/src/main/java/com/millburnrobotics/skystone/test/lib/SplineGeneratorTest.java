@@ -24,8 +24,6 @@ public class SplineGeneratorTest {
         waypoints.add(new Waypoint(new Pose(18,18,0),5*Math.PI/4));
         waypoints.add(new Waypoint(new Pose(12,6,0),5*Math.PI/4));
         waypoints.add(new Waypoint(new Pose(0,0,0),Math.PI));
-//        waypoints.add(new Waypoint(new Pose(0,0,0),0));
-//        waypoints.add(new Waypoint(new Pose(48,48,0),0));
 
         timer.reset();
         Path path =  PathBuilder.buildPath(waypoints);
@@ -40,17 +38,14 @@ public class SplineGeneratorTest {
         timer.reset();
 
         for (double x = 0; x < path.length(); x+=inc1) {
-            Pose p = path.get(x);
-//            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
+            System.out.println("(" + path.get(x).x + "," + path.get(x).y + ")");
             s1++;
-//            System.out.println(path.getPower(x));
         }
         sTime = timer.milliseconds();
         timer.reset();
 
         for (double x = 0; x < waypoints.size()-1; x+=inc2) {
-            Pose p = path._get(x);
-//            System.out.println("(" + path._get(x).x + "," + path._get(x).y + ")");
+            System.out.println("(" + path._get(x).x + "," + path._get(x).y + ")");
             t1++;
         }
         tTime = timer.milliseconds();

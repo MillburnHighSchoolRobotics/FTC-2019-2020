@@ -42,7 +42,6 @@ public class MotionState {
         );
     }
 
-
     @Override
     public String toString() {
         return "(x=" + x + ", v=" + v + ", a=" + a + ", j=" + j + ")";

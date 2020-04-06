@@ -23,7 +23,7 @@ public class Intake extends Subsystem {
 
     @Override
     public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
-        telemetry.addData("IntakeState", state.name());
+
     }
 
     @Override

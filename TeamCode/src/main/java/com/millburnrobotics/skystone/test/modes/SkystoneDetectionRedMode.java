@@ -1,8 +1,8 @@
 package com.millburnrobotics.skystone.test.modes;
 
 import com.millburnrobotics.skystone.Constants;
-import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.millburnrobotics.skystone.Robot;
+import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(group = "test")

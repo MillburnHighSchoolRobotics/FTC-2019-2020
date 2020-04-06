@@ -1,7 +1,7 @@
 package com.millburnrobotics.skystone.auto.actions.chainbar;
 
-import com.millburnrobotics.skystone.auto.actions.Action;
 import com.millburnrobotics.skystone.Robot;
+import com.millburnrobotics.skystone.auto.actions.Action;
 
 public class ChainBarOutAction implements Action {
     @Override

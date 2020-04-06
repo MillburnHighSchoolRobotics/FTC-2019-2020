@@ -122,6 +122,6 @@ public class Pose {
     }
     @Override
     public boolean equals(Object p1) {
-        return (distTo((Pose)p1) < PURE_PURSUIT_THRESH);
+        return (distTo((Pose)p1) <= PURE_PURSUIT_THRESH);
     }
 }

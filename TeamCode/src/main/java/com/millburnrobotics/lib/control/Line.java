@@ -1,7 +1,7 @@
 package com.millburnrobotics.lib.control;
 
-import com.millburnrobotics.lib.util.MathUtils;
 import com.millburnrobotics.lib.geometry.Pose;
+import com.millburnrobotics.lib.util.MathUtils;
 
 public class Line extends PathSegment {
     public Line(Pose start, Pose end) {

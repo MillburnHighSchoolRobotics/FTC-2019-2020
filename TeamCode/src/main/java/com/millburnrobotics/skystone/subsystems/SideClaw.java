@@ -1,13 +1,23 @@
 package com.millburnrobotics.skystone.subsystems;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.millburnrobotics.skystone.Constants;
 import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import static com.millburnrobotics.skystone.Constants.SideClawConstants.*;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_INIT_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_MID_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_L_UP_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_R_DOWN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_R_INIT_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_R_MID_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_ARM_R_UP_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_CLOSE_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_L_OPEN_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_R_CLOSE_POS;
+import static com.millburnrobotics.skystone.Constants.SideClawConstants.SIDE_CLAW_R_OPEN_POS;
 
 public class SideClaw extends Subsystem {
     public enum SideClawSide {
@@ -43,8 +53,8 @@ public class SideClaw extends Subsystem {
 
     @Override
     public void outputToTelemetry(Telemetry telemetry, TelemetryPacket packet) {
-        telemetry.addData("CurrentSideArmPosition", getArmPosition());
-        telemetry.addData("CurrentSideClawPosition", getArmPosition());
+        telemetry.addData("SideArmPosition", getArmPosition());
+        telemetry.addData("SideClawPosition", getArmPosition());
         telemetry.addData("SideClawSide", side.toString());
     }
 

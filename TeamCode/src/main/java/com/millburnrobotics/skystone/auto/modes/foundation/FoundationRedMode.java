@@ -2,13 +2,13 @@ package com.millburnrobotics.skystone.auto.modes.foundation;
 
 import com.millburnrobotics.lib.geometry.Pose;
 import com.millburnrobotics.skystone.Constants;
+import com.millburnrobotics.skystone.Robot;
 import com.millburnrobotics.skystone.auto.AutoModeBase;
 import com.millburnrobotics.skystone.auto.actions.WaitAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveRotationAction;
 import com.millburnrobotics.skystone.auto.actions.drive.DriveToPoseAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookDownAction;
 import com.millburnrobotics.skystone.auto.actions.hook.HookUpAction;
-import com.millburnrobotics.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(group = "foundation")

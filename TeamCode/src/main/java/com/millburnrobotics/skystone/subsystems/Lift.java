@@ -8,7 +8,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import static com.millburnrobotics.skystone.Constants.LiftConstants.*;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_AUTO_RESET_POWER;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_DAMPEN_POWER;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_EXTENSION_POWER;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_MAX_POS;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_MIN_POS;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_RETRACTION_POWER;
+import static com.millburnrobotics.skystone.Constants.LiftConstants.LIFT_STONE_POS;
 
 public class Lift extends Subsystem {
     public enum LiftState {
